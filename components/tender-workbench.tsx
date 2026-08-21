@@ -28,7 +28,6 @@ import {
   Lock,
   MessageSquareText,
   PanelRight,
-  Play,
   RefreshCcw,
   Search,
   Settings2,
@@ -58,6 +57,7 @@ import {
 } from '@/lib/traceli-demo-data'
 
 type View =
+  | 'demo'
   | 'portfolio'
   | 'draft'
   | 'overview'
@@ -112,34 +112,6 @@ const navigation: Array<{ label: string; items: NavigationItem[] }> = [
   },
 ]
 
-const guideSteps = [
-  {
-    title: 'Portfolio risk',
-    body: 'Start above the tender: identify the award that would be hardest to defend tomorrow.',
-    cta: 'Open blocked procurement',
-  },
-  {
-    title: 'Decision blockers',
-    body: 'Separate evidence coverage, decision readiness and record status. Nothing is called complete early.',
-    cta: 'Open the evidence gap',
-  },
-  {
-    title: 'Golden thread',
-    body: 'Trace one obligation from tender clause to evidence gap and human determination.',
-    cta: 'Trace the governing rule',
-  },
-  {
-    title: 'Closed-loop clarification',
-    body: 'Receive the supplier response and watch the requirement, evidence coverage and chronology update together.',
-    cta: 'Open supplier response',
-  },
-  {
-    title: 'Defensible outcome',
-    body: 'Resolve human sign-off, lock the record and inspect the immutable audit event.',
-    cta: 'Complete sign-off',
-  },
-] as const
-
 const auditFilters: Array<'All' | AuditCategory> = [
   'All',
   'Human action',
@@ -183,7 +155,7 @@ function SourceLink({ children, onClick }: { children: ReactNode; onClick: () =>
 }
 
 export default function TenderWorkbench() {
-  const [view, setView] = useState<View>('portfolio')
+  const [view, setView] = useState<View>('demo')
   const [drawer, setDrawer] = useState<Drawer>(null)
   const [scenario, setScenario] = useState<Scenario>(defaultScenario)
   const [clarificationReceived, setClarificationReceived] = useState(false)
@@ -193,8 +165,7 @@ export default function TenderWorkbench() {
   const [query, setQuery] = useState('')
   const [submissionFilter, setSubmissionFilter] = useState<'all' | 'missing' | 'clarification' | 'owner'>('all')
   const [auditFilter, setAuditFilter] = useState<'All' | AuditCategory>('All')
-  const [guidedActive, setGuidedActive] = useState(false)
-  const [guidedStep, setGuidedStep] = useState(0)
+  const [demoStage, setDemoStage] = useState<0 | 1 | 2>(0)
   const [notice, setNotice] = useState('')
   const [draftText, setDraftText] = useState(
     'The supplier shall demonstrate the capacity to deliver emergency shelter kits within 72 hours in each named country, supported by warehouse, partner or distribution-plan evidence.',
@@ -326,8 +297,9 @@ export default function TenderWorkbench() {
     window.scrollTo(0, 0)
   }
 
-  const resetDemo = (keepGuide = false) => {
-    navigate('portfolio')
+  const resetDemo = () => {
+    navigate('demo')
+    setDemoStage(0)
     setClarificationReceived(false)
     setApprovalsRemaining(2)
     setDeclarationOutstanding(true)
@@ -341,25 +313,13 @@ export default function TenderWorkbench() {
     setPolicyChecked(true)
     setHumanApproved(false)
     setCriteriaLocked(false)
-    setNotice('Scenario reset to the cached DIHAD starting state.')
-    if (!keepGuide) {
-      setGuidedActive(false)
-      setGuidedStep(0)
-    }
-  }
-
-  const startGuidedDemo = () => {
-    resetDemo(true)
-    setGuidedStep(0)
-    setGuidedActive(true)
-    setNotice('Guided demo started. The sample data is cached and resettable.')
+    setNotice('')
   }
 
   const receiveClarification = () => {
     setClarificationReceived(true)
     navigate('overview')
     setNotice('Clarification attached: REQ-07, evidence coverage and audit chronology updated together.')
-    if (guidedActive) setGuidedStep(4)
   }
 
   const completeSignOff = () => {
@@ -372,34 +332,21 @@ export default function TenderWorkbench() {
   const lockDecision = () => {
     setDecisionLocked(true)
     navigate('audit')
-    setGuidedActive(false)
     setNotice('Decision record locked. The immutable event is now visible in the audit chronology.')
   }
 
-  const advanceGuide = () => {
-    if (guidedStep === 0) {
-      navigate('overview')
-      setGuidedStep(1)
-      return
-    }
-    if (guidedStep === 1) {
-      navigate('golden')
-      setDrawer({ type: 'evidence' })
-      setGuidedStep(2)
-      return
-    }
-    if (guidedStep === 2) {
-      navigate('rules')
-      setDrawer({ type: 'why', subject: 'requirement' })
-      setGuidedStep(3)
-      return
-    }
-    if (guidedStep === 3) {
-      navigate('clarifications')
-      setDrawer({ type: 'clarification' })
-      return
-    }
-    completeSignOff()
+  const showSupplierResponse = () => {
+    setDemoStage(1)
+    setNotice('')
+  }
+
+  const completeSimpleDemo = () => {
+    setClarificationReceived(true)
+    setApprovalsRemaining(0)
+    setDeclarationOutstanding(false)
+    setDecisionLocked(true)
+    setDemoStage(2)
+    setNotice('')
   }
 
   const updateScenario = <K extends keyof Scenario>(key: K, value: Scenario[K]) => {
@@ -434,7 +381,7 @@ export default function TenderWorkbench() {
 
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 lg:px-7">
-          <button type="button" onClick={() => navigate('portfolio')} className="flex items-center gap-3 text-left">
+          <button type="button" onClick={() => resetDemo()} className="flex items-center gap-3 text-left">
             <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <ShieldCheck className="size-5" aria-hidden="true" />
             </span>
@@ -447,18 +394,39 @@ export default function TenderWorkbench() {
           <div className="flex items-center gap-2 sm:gap-3">
             <Pill tone="teal">
               <span className="size-1.5 rounded-full bg-accent-foreground" aria-hidden="true" />
-              <span className="hidden sm:inline">Cached DIHAD scenario</span>
-              <span className="sm:hidden">Demo ready</span>
+              <span className="hidden sm:inline">DIHAD demo · cached</span>
+              <span className="sm:hidden">Demo</span>
             </Pill>
-            <button
-              type="button"
-              onClick={startGuidedDemo}
-              className="inline-flex items-center gap-2 bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 sm:px-4 sm:text-sm"
-            >
-              <Play className="size-4" aria-hidden="true" />
-              <span className="hidden sm:inline">Start guided demo</span>
-              <span className="sm:hidden">Guide</span>
-            </button>
+            {view === 'demo' ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => resetDemo()}
+                  aria-label="Reset demo"
+                  className="inline-flex items-center gap-2 border border-border px-3 py-2 text-xs font-semibold text-primary hover:bg-secondary sm:text-sm"
+                >
+                  <RefreshCcw className="size-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Reset</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('portfolio')}
+                  className="hidden items-center gap-2 text-xs font-semibold text-primary hover:underline md:inline-flex"
+                >
+                  Explore product
+                  <ArrowRight className="size-3.5" aria-hidden="true" />
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => resetDemo()}
+                className="inline-flex items-center gap-2 bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 sm:px-4 sm:text-sm"
+              >
+                <Sparkles className="size-4" aria-hidden="true" />
+                Back to demo
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setDrawer({ type: 'settings' })}
@@ -467,13 +435,12 @@ export default function TenderWorkbench() {
             >
               <Settings2 className="size-4" aria-hidden="true" />
             </button>
-            <div className="hidden size-8 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground md:flex">AM</div>
           </div>
         </div>
       </header>
 
       <div className="mx-auto flex max-w-[1600px]">
-        <aside className="hidden w-64 shrink-0 border-r border-border px-4 py-5 lg:block">
+        {view !== 'demo' ? <aside className="hidden w-64 shrink-0 border-r border-border px-4 py-5 lg:block">
           <div className="mb-5 border border-border bg-secondary p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
@@ -524,10 +491,16 @@ export default function TenderWorkbench() {
               Why this boundary matters
             </button>
           </div>
-        </aside>
+        </aside> : null}
 
-        <main id="main-content" className="min-w-0 flex-1 px-4 py-5 sm:px-6 lg:px-9 lg:py-7">
-          <nav aria-label="Mobile navigation" className="-mx-4 mb-5 flex gap-1 overflow-x-auto border-b border-border px-4 pb-3 lg:hidden">
+        <main
+          id="main-content"
+          className={cn(
+            'min-w-0 flex-1',
+            view === 'demo' ? 'px-4 py-6 sm:px-8 lg:px-12 lg:py-10' : 'px-4 py-5 sm:px-6 lg:px-9 lg:py-7',
+          )}
+        >
+          {view !== 'demo' ? <nav aria-label="Mobile navigation" className="-mx-4 mb-5 flex gap-1 overflow-x-auto border-b border-border px-4 pb-3 lg:hidden">
             {navigation.flatMap((section) => section.items).map(({ id, label }) => (
               <button
                 type="button"
@@ -542,9 +515,9 @@ export default function TenderWorkbench() {
                 {label}
               </button>
             ))}
-          </nav>
+          </nav> : null}
 
-          {view !== 'portfolio' && view !== 'draft' && view !== 'models' ? (
+          {view !== 'demo' && view !== 'portfolio' && view !== 'draft' && view !== 'models' ? (
             <CaseHeader
               caseTitle={caseTitle}
               organization={scenario.organization}
@@ -554,6 +527,18 @@ export default function TenderWorkbench() {
             />
           ) : null}
 
+          {view === 'demo' ? (
+            <DemoScreen
+              stage={demoStage}
+              scenario={scenario}
+              onShowResponse={showSupplierResponse}
+              onComplete={completeSimpleDemo}
+              onSource={() => setDrawer({ type: 'why', subject: 'requirement' })}
+              onExplore={() => navigate('portfolio')}
+              onAudit={() => navigate('audit')}
+              onReset={resetDemo}
+            />
+          ) : null}
           {view === 'portfolio' ? (
             <PortfolioScreen
               activeEvidenceCoverage={evidenceCoverage}
@@ -638,17 +623,8 @@ export default function TenderWorkbench() {
         </main>
       </div>
 
-      {guidedActive ? (
-        <GuidedDemoBar
-          step={guidedStep}
-          onAdvance={advanceGuide}
-          onReset={startGuidedDemo}
-          onClose={() => setGuidedActive(false)}
-        />
-      ) : null}
-
       <div aria-live="polite" className="pointer-events-none fixed bottom-3 left-3 z-[60] max-w-sm sm:bottom-5 sm:left-5">
-        {notice ? <div className="border border-primary/20 bg-primary px-4 py-3 text-xs font-medium text-primary-foreground shadow-lg">{notice}</div> : null}
+        {notice && view !== 'demo' ? <div className="border border-primary/20 bg-primary px-4 py-3 text-xs font-medium text-primary-foreground shadow-lg">{notice}</div> : null}
       </div>
 
       {drawer ? (
@@ -670,10 +646,268 @@ export default function TenderWorkbench() {
             onLockDecision={lockDecision}
             onUpdateScenario={updateScenario}
             onCopyScenario={copyScenarioLink}
-            onReset={() => resetDemo(false)}
+            onReset={resetDemo}
           />
         </DrawerFrame>
       ) : null}
+    </div>
+  )
+}
+
+function DemoScreen({
+  stage,
+  scenario,
+  onShowResponse,
+  onComplete,
+  onSource,
+  onExplore,
+  onAudit,
+  onReset,
+}: {
+  stage: 0 | 1 | 2
+  scenario: Scenario
+  onShowResponse: () => void
+  onComplete: () => void
+  onSource: () => void
+  onExplore: () => void
+  onAudit: () => void
+  onReset: () => void
+}) {
+  const stages = ['Gap found', 'Evidence linked', 'Record locked']
+
+  return (
+    <section aria-labelledby="demo-heading" className="mx-auto max-w-6xl">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <Eyebrow>Live pre-award check</Eyebrow>
+          <Pill tone="neutral">RFP-2026-041 · {scenario.geography}</Pill>
+          <Pill tone="neutral">{scenario.policy}</Pill>
+        </div>
+        <p className="text-xs font-medium text-muted-foreground">Fictional cached data · safe for meetings</p>
+      </div>
+
+      <div aria-live="polite" className="mt-7">
+        {stage === 0 ? (
+          <>
+            <Pill tone="amber">
+              <AlertCircle className="size-3.5" aria-hidden="true" />
+              One material evidence gap
+            </Pill>
+            <h1 id="demo-heading" className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.03] tracking-tight sm:text-5xl lg:text-6xl">
+              The tender says Ethiopia. The bid doesn&apos;t.
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              Traceli found the missing proof before award—and kept the exact clause, supplier evidence and next human action attached.
+            </p>
+          </>
+        ) : null}
+
+        {stage === 1 ? (
+          <>
+            <Pill tone="blue">
+              <MessageSquareText className="size-3.5" aria-hidden="true" />
+              Supplier response received
+            </Pill>
+            <h1 id="demo-heading" className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.03] tracking-tight sm:text-5xl lg:text-6xl">
+              The missing proof arrived. Traceli put it in the right place.
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              The response is linked to REQ-07, its governing clause and the reviewer who must decide whether it is sufficient.
+            </p>
+          </>
+        ) : null}
+
+        {stage === 2 ? (
+          <>
+            <Pill tone="teal">
+              <CheckCircle2 className="size-3.5" aria-hidden="true" />
+              Decision record locked
+            </Pill>
+            <h1 id="demo-heading" className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.03] tracking-tight sm:text-5xl lg:text-6xl">
+              Now the decision can survive an audit.
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              One evidence gap became a clarification, a human determination and a locked record—without losing the reason behind any step.
+            </p>
+          </>
+        ) : null}
+      </div>
+
+      <ol aria-label="Demo progress" className="mt-6 grid gap-2 sm:grid-cols-3">
+        {stages.map((label, index) => {
+          const active = index === stage
+          const complete = index < stage
+          return (
+            <li
+              key={label}
+              aria-current={active ? 'step' : undefined}
+              className={cn(
+                'flex items-center gap-3 border px-4 py-3 text-sm font-semibold',
+                active ? 'border-primary bg-primary text-primary-foreground' : complete ? 'border-accent-foreground/30 bg-accent/60 text-accent-foreground' : 'border-border bg-card text-muted-foreground',
+              )}
+            >
+              <span className={cn('flex size-6 items-center justify-center rounded-full text-xs', active ? 'bg-primary-foreground text-primary' : complete ? 'bg-accent-foreground text-primary-foreground' : 'bg-secondary text-muted-foreground')}>
+                {complete ? <Check className="size-3.5" aria-hidden="true" /> : index + 1}
+              </span>
+              {label}
+            </li>
+          )
+        })}
+      </ol>
+
+      {stage === 0 ? (
+        <div className="mt-4 border border-border bg-card shadow-sm">
+          <div className="grid lg:grid-cols-2">
+            <article className="border-b border-border p-6 lg:border-b-0 lg:border-r lg:p-8">
+              <div className="flex items-center justify-between gap-3">
+                <Eyebrow>Tender requirement</Eyebrow>
+                <SourceLink onClick={onSource}>RFP §4.2 · p.14</SourceLink>
+              </div>
+              <blockquote className="mt-6 border-l-2 border-primary pl-5 text-xl font-medium leading-8">
+                “The supplier must demonstrate capacity to deliver within 72 hours across Kenya, Somalia and Ethiopia.”
+              </blockquote>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Pill tone="teal"><Check className="size-3" aria-hidden="true" />Kenya required</Pill>
+                <Pill tone="teal"><Check className="size-3" aria-hidden="true" />Somalia required</Pill>
+                <Pill tone="teal"><Check className="size-3" aria-hidden="true" />Ethiopia required</Pill>
+              </div>
+            </article>
+
+            <article className="p-6 lg:p-8">
+              <div className="flex items-center justify-between gap-3">
+                <Eyebrow>Supplier evidence</Eyebrow>
+                <span className="text-xs font-medium text-muted-foreground">SUB-014 · p.38</span>
+              </div>
+              <blockquote className="mt-6 border-l-2 border-border pl-5 text-xl leading-8 text-muted-foreground">
+                “We maintain regional stock and partner capacity for rapid deployment across the Horn of Africa.”
+              </blockquote>
+              <div className="mt-5 divide-y divide-border border border-border">
+                <DemoEvidenceLine label="Kenya" value="Warehouse certificate found" passing />
+                <DemoEvidenceLine label="Somalia" value="Partner agreement found" passing />
+                <DemoEvidenceLine label="Ethiopia" value="No warehouse, partner or route plan found" passing={false} />
+              </div>
+            </article>
+          </div>
+
+          <div className="flex flex-col gap-5 border-t border-[#c69a3a] bg-[#fff7dd] p-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+            <div className="flex max-w-3xl items-start gap-3">
+              <AlertCircle className="mt-1 size-5 shrink-0 text-[#8b6014]" aria-hidden="true" />
+              <div>
+                <p className="font-semibold text-[#60420d]">“Regional capacity” is not evidence of Ethiopia.</p>
+                <p className="mt-1 text-sm leading-6 text-[#755516]">Traceli will not infer compliance. It preserves the gap and drafts the next source-linked action.</p>
+              </div>
+            </div>
+            <button type="button" onClick={onShowResponse} className="inline-flex shrink-0 items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+              Ask the supplier
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {stage === 1 ? (
+        <div className="mt-6 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <article className="border border-border bg-secondary p-6 lg:p-8">
+            <Eyebrow>Why the clarification exists</Eyebrow>
+            <h2 className="mt-3 text-2xl font-semibold">REQ-07 · Emergency delivery capacity</h2>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">The tender names three countries. The original supplier response provided evidence for only Kenya and Somalia.</p>
+            <div className="mt-6 border-l-2 border-primary pl-4 text-sm leading-6">“Please provide evidence demonstrating operational capacity in Ethiopia under RFP §4.2.”</div>
+            <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-primary">
+              <Link2 className="size-4" aria-hidden="true" />
+              Request, response and requirement remain linked
+            </div>
+          </article>
+
+          <article className="border border-accent-foreground/30 bg-card p-6 shadow-sm lg:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <Eyebrow>Supplier response · received 19 Aug</Eyebrow>
+                <h2 className="mt-3 text-2xl font-semibold">Ethiopia distribution plan</h2>
+              </div>
+              <Pill tone="teal">Linked to REQ-07</Pill>
+            </div>
+            <p className="mt-5 text-base leading-7 text-muted-foreground">Northstar attached its Addis Ababa partner agreement, dispatch roster and country-specific 72-hour route plan.</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <StatusLine label="Evidence file" value="CLR-004-R1.pdf · 3 pages" passing />
+              <StatusLine label="Source check" value="Supplier-signed · scan passed" passing />
+            </div>
+            <div className="mt-6 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-md text-sm leading-6 text-muted-foreground">
+                <strong className="text-foreground">Human decision:</strong> Sarah Ahmed must determine whether the new evidence satisfies the requirement.
+                <span className="mt-1 block text-xs">Panel approvals and declarations are already complete in this cached scenario.</span>
+              </p>
+              <button type="button" onClick={onComplete} className="inline-flex shrink-0 items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                Confirm evidence & lock record
+                <FileLock2 className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </article>
+        </div>
+      ) : null}
+
+      {stage === 2 ? (
+        <div className="mt-6 border border-accent-foreground/30 bg-card shadow-sm">
+          <div className="grid gap-px bg-border sm:grid-cols-3">
+            <div className="bg-card p-6 lg:p-8">
+              <p className="text-sm text-muted-foreground">Evidence coverage</p>
+              <p className="mt-3 text-4xl font-semibold">100%</p>
+              <p className="mt-3 text-sm text-muted-foreground">27 of 27 links resolved</p>
+            </div>
+            <div className="bg-card p-6 lg:p-8">
+              <p className="text-sm text-muted-foreground">Human determination</p>
+              <p className="mt-3 text-2xl font-semibold">REQ-07 satisfied</p>
+              <p className="mt-3 text-sm text-muted-foreground">Sarah Ahmed · reviewer</p>
+            </div>
+            <div className="bg-card p-6 lg:p-8">
+              <p className="text-sm text-muted-foreground">Decision record</p>
+              <p className="mt-3 text-2xl font-semibold">DR-041 · Locked</p>
+              <p className="mt-3 text-sm text-muted-foreground">19 Aug · 10:18</p>
+            </div>
+          </div>
+
+          <div className="p-6 lg:p-8">
+            <h2 className="text-xl font-semibold">The proof is the product.</h2>
+            <div className="mt-5 grid gap-3 md:grid-cols-3">
+              <StatusLine label="09:26 · Supplier event" value="Ethiopia plan received and linked" passing />
+              <StatusLine label="09:41 · Human action" value="Reviewer marked REQ-07 satisfied" passing />
+              <StatusLine label="10:18 · Approval" value="Decision record locked with sources" passing />
+            </div>
+            <div className="mt-7 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-2xl text-sm leading-6 text-muted-foreground">Traceli did not score the bid or choose a winner. It made the evidence, judgment and chronology impossible to lose.</p>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" onClick={onReset} className="inline-flex items-center gap-2 border border-border px-4 py-3 text-sm font-semibold text-primary hover:bg-secondary">
+                  <RefreshCcw className="size-4" aria-hidden="true" />
+                  Run again
+                </button>
+                <button type="button" onClick={onAudit} className="inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                  Inspect full audit trail
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mt-6 flex flex-col items-start justify-between gap-3 border-t border-border pt-5 sm:flex-row sm:items-center">
+        <p className="text-sm leading-6 text-muted-foreground"><strong className="text-foreground">Traceli finds and preserves the proof.</strong> People determine compliance and award.</p>
+        <button type="button" onClick={onExplore} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+          Explore the full assurance workspace
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </button>
+      </div>
+    </section>
+  )
+}
+
+function DemoEvidenceLine({ label, value, passing }: { label: string; value: string; passing: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-4 px-4 py-3">
+      <div>
+        <p className="text-xs font-semibold text-muted-foreground">{label}</p>
+        <p className="mt-1 text-sm font-medium">{value}</p>
+      </div>
+      {passing ? <CheckCircle2 className="size-4 shrink-0 text-accent-foreground" aria-hidden="true" /> : <AlertCircle className="size-4 shrink-0 text-[#8b6014]" aria-hidden="true" />}
     </div>
   )
 }
@@ -1150,16 +1384,6 @@ function ModelLedgerScreen() {
 
 function Panel({ title, eyebrow, action, children }: { title: string; eyebrow: string; action?: ReactNode; children: ReactNode }) {
   return <section className="border border-border bg-card p-5"><div className="mb-4 flex items-start justify-between gap-3"><div><p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">{eyebrow}</p><h3 className="mt-1 font-semibold">{title}</h3></div>{action}</div>{children}</section>
-}
-
-function GuidedDemoBar({ step, onAdvance, onReset, onClose }: { step: number; onAdvance: () => void; onReset: () => void; onClose: () => void }) {
-  const item = guideSteps[step]
-  return (
-    <section aria-label="Guided demo" className="fixed bottom-4 right-4 z-40 w-[calc(100%-2rem)] max-w-xl border border-primary/20 bg-card p-4 shadow-2xl sm:bottom-6 sm:right-6 sm:p-5">
-      <div className="flex items-start justify-between gap-4"><div><div className="flex items-center gap-2"><Pill tone="ink">Guided demo · {step + 1} / 5</Pill><span className="text-[11px] text-muted-foreground">Five-minute path</span></div><h2 className="mt-3 font-semibold">{item.title}</h2><p className="mt-1 text-xs leading-5 text-muted-foreground">{item.body}</p></div><button type="button" onClick={onClose} aria-label="Close guided demo" className="p-1.5 text-muted-foreground hover:bg-secondary"><X className="size-4" aria-hidden="true" /></button></div>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3"><div className="flex gap-1" aria-label={`Step ${step + 1} of 5`}>{guideSteps.map((guide, index) => <span key={guide.title} className={cn('h-1 w-8', index <= step ? 'bg-primary' : 'bg-secondary')} />)}</div><div className="flex gap-2"><button type="button" onClick={onReset} className="inline-flex items-center gap-1 border border-border px-3 py-2 text-xs font-semibold"><RefreshCcw className="size-3.5" aria-hidden="true" />Reset</button><button type="button" onClick={onAdvance} className="inline-flex items-center gap-1 bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground">{item.cta}<ArrowRight className="size-3.5" aria-hidden="true" /></button></div></div>
-    </section>
-  )
 }
 
 function DrawerFrame({ drawer, onClose, children }: { drawer: Exclude<Drawer, null>; onClose: () => void; children: ReactNode }) {
