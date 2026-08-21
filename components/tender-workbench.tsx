@@ -71,12 +71,15 @@ type View =
 
 type WhySubject = 'requirement' | 'exception' | 'source' | 'coverage' | 'governance'
 
+type DemoChallenge = 'annex' | 'regional' | 'waiver'
+
 type Drawer =
   | { type: 'evidence' }
   | { type: 'why'; subject: WhySubject }
   | { type: 'clarification' }
   | { type: 'decision' }
   | { type: 'event'; eventId: string }
+  | { type: 'backtest' }
   | { type: 'settings' }
   | null
 
@@ -120,6 +123,45 @@ const auditFilters: Array<'All' | AuditCategory> = [
   'Policy change',
   'Supplier event',
 ]
+
+const demoChallenges: Array<{ id: DemoChallenge; title: string; detail: string }> = [
+  { id: 'annex', title: 'Evidence is in Annex 7', detail: 'Point Traceli to a source it may have missed.' },
+  { id: 'regional', title: 'Regional capacity is enough', detail: 'Challenge the interpretation of the requirement.' },
+  { id: 'waiver', title: 'The requirement was waived', detail: 'Test whether the decision record contains the exception.' },
+]
+
+const demoChallengeOutcomes: Record<DemoChallenge, { status: string; tone: Tone; title: string; body: string; source: string; outcome: string }> = {
+  annex: {
+    status: 'Finding retracted',
+    tone: 'teal',
+    title: 'You found evidence Traceli missed.',
+    body: 'Annex 7 contains a country-specific route plan that was not included in the original evidence map.',
+    source: '“Addis Ababa partner stock can be dispatched to the named hubs within 72 hours.” · Annex 7, p.3',
+    outcome: 'The Ethiopia gap is withdrawn. The buyer challenge and correction remain in the chronology.',
+  },
+  regional: {
+    status: 'Finding survives challenge',
+    tone: 'amber',
+    title: 'The objection does not match the cited requirement.',
+    body: '“Regional capacity” describes a broad capability. The locked requirement asks for evidence tied to each named country.',
+    source: 'Required: Kenya, Somalia and Ethiopia · Found: general Horn of Africa statement',
+    outcome: 'The gap remains. A reviewer can override it only by recording a reason and taking ownership of the exception.',
+  },
+  waiver: {
+    status: 'Finding survives challenge',
+    tone: 'amber',
+    title: 'No signed waiver is in the decision record.',
+    body: 'Traceli checked the approval register, donor exceptions and clarification log. None removes the Ethiopia obligation.',
+    source: 'Exception search · 0 signed waivers linked to REQ-07',
+    outcome: 'The gap remains. Add the approved waiver or record a new human exception before award.',
+  },
+}
+
+const blindBacktestSteps = [
+  ['1 · Withhold the outcome', 'Use a completed tender. Keep the audit memo, protest result or final rationale hidden from Traceli.'],
+  ['2 · Rebuild the record', 'Traceli maps clauses, evidence, exceptions and missing links from the source documents alone.'],
+  ['3 · Reveal and challenge', 'Compare the known outcome with every hit, miss and retraction—then let your team attack the reasoning.'],
+] as const
 
 function Pill({ children, tone = 'neutral' }: { children: ReactNode; tone?: Tone }) {
   const styles: Record<Tone, string> = {
@@ -166,6 +208,8 @@ export default function TenderWorkbench() {
   const [submissionFilter, setSubmissionFilter] = useState<'all' | 'missing' | 'clarification' | 'owner'>('all')
   const [auditFilter, setAuditFilter] = useState<'All' | AuditCategory>('All')
   const [demoStage, setDemoStage] = useState<0 | 1 | 2>(0)
+  const [challengeOpen, setChallengeOpen] = useState(false)
+  const [challengeResult, setChallengeResult] = useState<DemoChallenge | null>(null)
   const [notice, setNotice] = useState('')
   const [draftText, setDraftText] = useState(
     'The supplier shall demonstrate the capacity to deliver emergency shelter kits within 72 hours in each named country, supported by warehouse, partner or distribution-plan evidence.',
@@ -208,6 +252,14 @@ export default function TenderWorkbench() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [drawer])
+
+  useEffect(() => {
+    if (!challengeOpen || view !== 'demo' || demoStage !== 0) return
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById('challenge-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [challengeOpen, demoStage, view])
 
   const evidenceCoverage = clarificationReceived ? 100 : 86
   const blockerCount = (clarificationReceived ? 0 : 1) + approvalsRemaining + (declarationOutstanding ? 1 : 0)
@@ -300,6 +352,8 @@ export default function TenderWorkbench() {
   const resetDemo = () => {
     navigate('demo')
     setDemoStage(0)
+    setChallengeOpen(false)
+    setChallengeResult(null)
     setClarificationReceived(false)
     setApprovalsRemaining(2)
     setDeclarationOutstanding(true)
@@ -336,8 +390,15 @@ export default function TenderWorkbench() {
   }
 
   const showSupplierResponse = () => {
+    setChallengeOpen(false)
     setDemoStage(1)
     setNotice('')
+  }
+
+  const startBlindBacktest = () => {
+    resetDemo()
+    setChallengeOpen(true)
+    setDrawer(null)
   }
 
   const completeSimpleDemo = () => {
@@ -531,11 +592,23 @@ export default function TenderWorkbench() {
             <DemoScreen
               stage={demoStage}
               scenario={scenario}
+              challengeOpen={challengeOpen}
+              challengeResult={challengeResult}
               onShowResponse={showSupplierResponse}
               onComplete={completeSimpleDemo}
+              onOpenChallenge={() => {
+                setChallengeOpen(true)
+                setChallengeResult(null)
+              }}
+              onChallenge={setChallengeResult}
+              onResetChallenge={() => setChallengeResult(null)}
+              onCloseChallenge={() => {
+                setChallengeOpen(false)
+                setChallengeResult(null)
+              }}
               onSource={() => setDrawer({ type: 'why', subject: 'requirement' })}
-              onExplore={() => navigate('portfolio')}
               onAudit={() => navigate('audit')}
+              onBacktest={() => setDrawer({ type: 'backtest' })}
               onReset={resetDemo}
             />
           ) : null}
@@ -647,6 +720,7 @@ export default function TenderWorkbench() {
             onUpdateScenario={updateScenario}
             onCopyScenario={copyScenarioLink}
             onReset={resetDemo}
+            onStartBacktest={startBlindBacktest}
           />
         </DrawerFrame>
       ) : null}
@@ -657,20 +731,32 @@ export default function TenderWorkbench() {
 function DemoScreen({
   stage,
   scenario,
+  challengeOpen,
+  challengeResult,
   onShowResponse,
   onComplete,
+  onOpenChallenge,
+  onChallenge,
+  onResetChallenge,
+  onCloseChallenge,
   onSource,
-  onExplore,
   onAudit,
+  onBacktest,
   onReset,
 }: {
   stage: 0 | 1 | 2
   scenario: Scenario
+  challengeOpen: boolean
+  challengeResult: DemoChallenge | null
   onShowResponse: () => void
   onComplete: () => void
+  onOpenChallenge: () => void
+  onChallenge: (challenge: DemoChallenge) => void
+  onResetChallenge: () => void
+  onCloseChallenge: () => void
   onSource: () => void
-  onExplore: () => void
   onAudit: () => void
+  onBacktest: () => void
   onReset: () => void
 }) {
   const stages = ['Gap found', 'Evidence linked', 'Record locked']
@@ -756,6 +842,7 @@ function DemoScreen({
       </ol>
 
       {stage === 0 ? (
+        <>
         <div className="mt-4 border border-border bg-card shadow-sm">
           <div className="grid lg:grid-cols-2">
             <article className="border-b border-border p-6 lg:border-b-0 lg:border-r lg:p-8">
@@ -794,15 +881,35 @@ function DemoScreen({
               <AlertCircle className="mt-1 size-5 shrink-0 text-[#8b6014]" aria-hidden="true" />
               <div>
                 <p className="font-semibold text-[#60420d]">“Regional capacity” is not evidence of Ethiopia.</p>
-                <p className="mt-1 text-sm leading-6 text-[#755516]">Traceli will not infer compliance. It preserves the gap and drafts the next source-linked action.</p>
+                <p className="mt-1 text-sm leading-6 text-[#755516]">Do not trust the finding. Challenge the clause, the evidence or the exception—Traceli must defend the link or retract it.</p>
               </div>
             </div>
-            <button type="button" onClick={onShowResponse} className="inline-flex shrink-0 items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-              Ask the supplier
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </button>
+            {challengeOpen ? (
+              <Pill tone="ink">Challenge mode open</Pill>
+            ) : (
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <button type="button" onClick={onShowResponse} className="inline-flex items-center justify-center border border-[#8b6014]/30 bg-card px-4 py-3 text-sm font-semibold text-primary hover:bg-secondary">
+                  Continue: ask supplier
+                </button>
+                <button type="button" onClick={onOpenChallenge} className="inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                  Try to break this finding
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
+        {challengeOpen ? (
+          <ChallengePanel
+            result={challengeResult}
+            onChallenge={onChallenge}
+            onReset={onResetChallenge}
+            onClose={onCloseChallenge}
+            onContinue={onShowResponse}
+            onBacktest={onBacktest}
+          />
+        ) : null}
+        </>
       ) : null}
 
       {stage === 1 ? (
@@ -868,7 +975,11 @@ function DemoScreen({
           <div className="p-6 lg:p-8">
             <h2 className="text-xl font-semibold">The proof is the product.</h2>
             <div className="mt-5 grid gap-3 md:grid-cols-3">
-              <StatusLine label="09:26 · Supplier event" value="Ethiopia plan received and linked" passing />
+              <StatusLine
+                label={challengeResult ? '09:21 · Buyer challenge' : '09:26 · Supplier event'}
+                value={challengeResult === 'regional' ? 'Interpretation challenged and source-tested' : challengeResult === 'waiver' ? 'Waiver claim checked against the record' : 'Ethiopia plan received and linked'}
+                passing
+              />
               <StatusLine label="09:41 · Human action" value="Reviewer marked REQ-07 satisfied" passing />
               <StatusLine label="10:18 · Approval" value="Decision record locked with sources" passing />
             </div>
@@ -891,11 +1002,88 @@ function DemoScreen({
 
       <div className="mt-6 flex flex-col items-start justify-between gap-3 border-t border-border pt-5 sm:flex-row sm:items-center">
         <p className="text-sm leading-6 text-muted-foreground"><strong className="text-foreground">Traceli finds and preserves the proof.</strong> People determine compliance and award.</p>
-        <button type="button" onClick={onExplore} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-          Explore the full assurance workspace
+        <button type="button" onClick={onBacktest} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+          Don&apos;t trust the sample · backtest a closed tender
           <ArrowRight className="size-4" aria-hidden="true" />
         </button>
       </div>
+    </section>
+  )
+}
+
+function ChallengePanel({
+  result,
+  onChallenge,
+  onReset,
+  onClose,
+  onContinue,
+  onBacktest,
+}: {
+  result: DemoChallenge | null
+  onChallenge: (challenge: DemoChallenge) => void
+  onReset: () => void
+  onClose: () => void
+  onContinue: () => void
+  onBacktest: () => void
+}) {
+  const outcome = result ? demoChallengeOutcomes[result] : null
+
+  return (
+    <section id="challenge-panel" aria-labelledby="challenge-heading" className="scroll-mt-20 mt-4 border border-primary/25 bg-card p-6 shadow-sm lg:p-8">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <Eyebrow>Challenge mode · buyer controls the test</Eyebrow>
+          <h2 id="challenge-heading" className="mt-3 text-2xl font-semibold sm:text-3xl">Try to prove Traceli wrong.</h2>
+        </div>
+        <button type="button" onClick={onClose} aria-label="Close challenge mode" className="p-2 text-muted-foreground hover:bg-secondary">
+          <X className="size-4" aria-hidden="true" />
+        </button>
+      </div>
+
+      {!outcome ? (
+        <>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">Pick the strongest objection. Traceli has to show the source behind its answer—and is allowed to lose.</p>
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            {demoChallenges.map((challenge) => (
+              <button key={challenge.id} type="button" onClick={() => onChallenge(challenge.id)} className="border border-border bg-secondary p-5 text-left hover:border-primary hover:bg-card focus-visible:outline-2 focus-visible:outline-offset-2">
+                <span className="text-sm font-semibold">{challenge.title}</span>
+                <span className="mt-2 block text-xs leading-5 text-muted-foreground">{challenge.detail}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div aria-live="polite" className="mt-6">
+          <Pill tone={outcome.tone}>{outcome.status}</Pill>
+          <h3 className="mt-4 text-2xl font-semibold">{outcome.title}</h3>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">{outcome.body}</p>
+          <div className="mt-5 grid gap-px border border-border bg-border sm:grid-cols-2">
+            <div className="bg-card p-5">
+              <p className="text-xs font-semibold text-muted-foreground">Source check</p>
+              <p className="mt-2 text-sm leading-6">{outcome.source}</p>
+            </div>
+            <div className="bg-card p-5">
+              <p className="text-xs font-semibold text-muted-foreground">Recorded outcome</p>
+              <p className="mt-2 text-sm leading-6">{outcome.outcome}</p>
+            </div>
+          </div>
+          <div className="mt-6 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <button type="button" onClick={onBacktest} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+              <Eye className="size-4" aria-hidden="true" />
+              Backtest a closed tender
+            </button>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={onReset} className="border border-border px-4 py-3 text-sm font-semibold text-primary hover:bg-secondary">Try another objection</button>
+              {result !== 'annex' ? (
+                <button type="button" onClick={onContinue} className="inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                  Continue to clarification
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
@@ -1393,6 +1581,7 @@ function DrawerFrame({ drawer, onClose, children }: { drawer: Exclude<Drawer, nu
     clarification: ['Clarification response · CLR-004', 'Close the evidence gap'],
     decision: ['Decision record', 'Readiness-gated decision record'],
     event: ['Audit event snapshot', 'What existed at this moment'],
+    backtest: ['Blind validation', 'Test Traceli against a decision you already made'],
     settings: ['DIHAD meeting controls', 'Personalize this cached scenario'],
   } as const
   const [eyebrow, title] = labels[drawer.type]
@@ -1420,6 +1609,7 @@ function DrawerContent({
   onUpdateScenario,
   onCopyScenario,
   onReset,
+  onStartBacktest,
 }: {
   drawer: Exclude<Drawer, null>
   clarificationReceived: boolean
@@ -1438,6 +1628,7 @@ function DrawerContent({
   onUpdateScenario: <K extends keyof Scenario>(key: K, value: Scenario[K]) => void
   onCopyScenario: () => void
   onReset: () => void
+  onStartBacktest: () => void
 }) {
   if (drawer.type === 'evidence') {
     return <div className="flex flex-col gap-5"><Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Evidence attached and reviewed' : 'Required evidence not located'}</Pill><div className="border border-border bg-secondary p-5"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{clarificationReceived ? 'Clarification response · p.2' : 'Supplier response · p.38'}</p><p className="mt-3 text-sm leading-6">{clarificationReceived ? '“Our Addis Ababa partner holds 1,200 shelter kits and can dispatch to the named distribution hubs within 72 hours.”' : '“We maintain regional stock and partner capacity for rapid deployment across the Horn of Africa.”'}</p></div>{clarificationReceived ? <div className="border border-accent-foreground/30 bg-accent/60 p-5"><p className="text-sm font-semibold">Human determination recorded</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Sarah Ahmed confirmed the passage and attached documents satisfy the Ethiopia-specific obligation.</p></div> : <div className="border border-[#c9b15b] bg-[#fbf5df] p-5"><p className="text-sm font-semibold">Evidence gap</p><p className="mt-2 text-sm leading-6 text-muted-foreground">No passage names an Ethiopia warehouse, partner or distribution plan. Traceli will not infer this from general regional language.</p></div>}<button type="button" onClick={onOpenClarification} className="bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground">{clarificationReceived ? 'Open resolved clarification' : 'Open supplier clarification'}</button></div>
@@ -1455,6 +1646,10 @@ function DrawerContent({
     return <div className="flex flex-col gap-5"><Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Resolved and attached' : 'Supplier response received'}</Pill><div className="border border-border bg-secondary p-5"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Request · CLR-004</p><p className="mt-3 text-sm leading-6">Please provide evidence demonstrating operational capacity in Ethiopia as required under Section 4.2 of the RFP.</p></div><div className="border border-accent-foreground/30 bg-accent/60 p-5"><p className="text-sm font-semibold">CLR-004-R1 · Ethiopia distribution plan</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Addis Ababa partner agreement, dispatch roster and country-specific 72-hour route plan attached.</p></div>{clarificationReceived ? <p className="text-sm leading-6 text-muted-foreground">The response is linked to REQ-07, the reviewer determination and the event chronology.</p> : <button type="button" onClick={onReceiveClarification} className="bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">Attach response and update readiness</button>}</div>
   }
 
+  if (drawer.type === 'backtest') {
+    return <BlindBacktestContent onStart={onStartBacktest} />
+  }
+
   if (drawer.type === 'decision') {
     const locked = decisionState === 'Locked'
     const ready = decisionState === 'Ready to lock'
@@ -1466,6 +1661,35 @@ function DrawerContent({
   }
 
   return <SettingsContent scenario={scenario} queryString={queryString} onUpdate={onUpdateScenario} onCopy={onCopyScenario} onReset={onReset} />
+}
+
+function BlindBacktestContent({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="flex flex-col gap-5">
+      <Pill tone="blue"><Eye className="size-3.5" aria-hidden="true" />Run blind · reveal later</Pill>
+      <div>
+        <p className="text-2xl font-semibold">Do not trust Traceli.</p>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">Prove it on a procurement where you already know what happened. The withheld outcome never enters the analysis.</p>
+      </div>
+      <div className="divide-y divide-border border border-border">
+        {blindBacktestSteps.map(([title, body]) => (
+          <div key={title} className="p-4">
+            <p className="text-sm font-semibold">{title}</p>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">{body}</p>
+          </div>
+        ))}
+      </div>
+      <div className="border border-accent-foreground/30 bg-accent/60 p-4">
+        <p className="text-sm font-semibold">Best first case</p>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">A closed tender with one known audit finding, clarification dispute or protest issue and a clean document set.</p>
+      </div>
+      <div className="border-l-2 border-primary pl-4 text-sm leading-6">“Give us one old tender and the answer key. Keep the answer key hidden until Traceli commits to its evidence map.”</div>
+      <button type="button" onClick={onStart} className="inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+        Run the cached blind test
+        <ArrowRight className="size-4" aria-hidden="true" />
+      </button>
+    </div>
+  )
 }
 
 function WhyRequirement() {
