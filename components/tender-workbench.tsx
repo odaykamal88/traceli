@@ -377,36 +377,45 @@ export default function TenderWorkbench() {
       )}>
         <div className={cn(
           'mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-7',
-          view === 'demo' ? 'py-4' : 'py-3',
+          view === 'demo' ? 'py-5' : 'py-3',
         )}>
-          <button type="button" onClick={() => resetDemo()} className="flex items-center gap-3 text-left">
+          <button type="button" onClick={() => resetDemo()} className={cn('flex items-center text-left', view === 'demo' ? 'gap-4' : 'gap-3')}>
             <span className={cn(
               'flex items-center justify-center rounded-lg',
               view === 'demo' ? 'size-10' : 'size-9',
-              view === 'demo' ? 'border border-white/20 bg-white/5 text-[#fbf5ea]' : 'bg-primary text-primary-foreground',
+              view === 'demo' ? 'text-[#fbf5ea]' : 'bg-primary text-primary-foreground',
             )}>
-              <ShieldCheck className="size-5" aria-hidden="true" />
+              <ShieldCheck className={cn(view === 'demo' ? 'size-9 stroke-[1.6]' : 'size-5')} aria-hidden="true" />
             </span>
-            <span>
-              <span className={cn('block font-mono text-[11px] font-semibold uppercase tracking-[0.2em]', view === 'demo' ? 'text-[#fbf5ea]' : 'text-primary')}>traceli</span>
-              <span className={cn('hidden text-xs sm:block', view === 'demo' ? 'text-white/55' : 'text-muted-foreground')}>Continuous procurement assurance</span>
+            <span className={cn(view === 'demo' && 'flex items-center gap-6')}>
+              <span className={cn('block font-mono font-semibold uppercase', view === 'demo' ? 'text-base tracking-[0.32em] text-[#fbf5ea]' : 'text-[11px] tracking-[0.2em] text-primary')}>traceli</span>
+              {view === 'demo' ? <span className="hidden h-7 w-px bg-white/35 sm:block" aria-hidden="true" /> : null}
+              <span className={cn('hidden sm:block', view === 'demo' ? 'text-[17px] text-white/70' : 'text-xs text-muted-foreground')}>Continuous procurement assurance</span>
             </span>
           </button>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <Pill tone="teal">
-              <span className="size-1.5 rounded-full bg-accent-foreground" aria-hidden="true" />
-              <span className="hidden sm:inline">DIHAD · 90-second story</span>
-              <span className="sm:hidden">90 sec</span>
-            </Pill>
+            {view === 'demo' ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#53cbb5]/60 bg-[#0b2943]/70 px-3 py-1.5 text-xs font-semibold text-[#76dec9] sm:px-4 sm:text-base">
+                <span className="size-2 rounded-full bg-[#76dec9]" aria-hidden="true" />
+                <span className="hidden sm:inline">DIHAD · 90-second story</span>
+                <span className="sm:hidden">90 sec</span>
+              </span>
+            ) : (
+              <Pill tone="teal">
+                <span className="size-1.5 rounded-full bg-accent-foreground" aria-hidden="true" />
+                <span className="hidden sm:inline">DIHAD · 90-second story</span>
+                <span className="sm:hidden">90 sec</span>
+              </Pill>
+            )}
             {view === 'demo' ? (
               <button
                 type="button"
                 onClick={() => navigate('portfolio')}
-                className="hidden items-center gap-2 text-xs font-semibold text-[#fbf5ea] hover:text-white hover:underline md:inline-flex"
+                className="hidden items-center gap-4 text-base font-medium text-[#fbf5ea] hover:text-white hover:underline md:inline-flex"
               >
                 Open live workspace
-                <ArrowRight className="size-3.5" aria-hidden="true" />
+                <ArrowRight className="size-6" aria-hidden="true" />
               </button>
             ) : (
               <>
@@ -672,53 +681,53 @@ function DemoScreen({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
         />
-        <div className="mx-auto flex min-h-[calc(100vh-73px)] max-w-[1440px] flex-col items-center px-4 pt-16 sm:px-8 sm:pt-20 lg:px-14 lg:pt-[5.25rem]">
+        <div className="mx-auto flex min-h-[calc(100vh-81px)] max-w-none flex-col items-center px-4 pt-16 sm:px-8 sm:pt-20 lg:px-14 lg:pt-[4.25rem]">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 id="story-heading" className="font-display text-[clamp(4.4rem,8vw,7.4rem)] leading-[0.82] tracking-[-0.035em] text-[#fbf5ea]">
+            <h1 id="story-heading" className="origin-center font-display text-[clamp(3.9rem,8vw,7.4rem)] leading-[0.79] tracking-[-0.005em] text-[#fbf5ea] lg:[transform:translateY(0.625rem)_scaleX(0.88)]">
               Every award,
-              <span className="block">audit ready.</span>
+              <span className="block lg:[transform:scaleX(0.96)]">audit ready.</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/65 sm:text-lg sm:leading-8">
+            <p className="mx-auto mt-7 max-w-[570px] text-base leading-7 text-white/65 sm:text-lg sm:leading-8 lg:text-[1.35rem] lg:leading-[1.45]">
               Traceli keeps every rule, bid, question, approval and risk signal linked—so you can explain exactly why a supplier won without rebuilding the story.
             </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <a href="#proof" className="inline-flex items-center justify-center gap-3 rounded-lg bg-[#fbf5ea] px-6 py-3.5 text-sm font-semibold text-[#071d39] shadow-lg shadow-black/15 transition hover:-translate-y-0.5 hover:bg-white">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-7">
+              <a href="#proof" className="inline-flex min-h-16 min-w-[230px] items-center justify-center gap-8 rounded-lg bg-[#fbf5ea] px-8 py-4 text-base font-semibold text-[#071d39] shadow-lg shadow-black/15 transition hover:-translate-y-0.5 hover:bg-white">
                 See the proof
-                <ArrowRight className="size-4" aria-hidden="true" />
+                <ArrowRight className="size-6" aria-hidden="true" />
               </a>
-              <button type="button" onClick={onOpenWorkspace} className="inline-flex items-center justify-center gap-3 rounded-lg border border-white/45 px-6 py-3.5 text-sm font-semibold text-[#fbf5ea] transition hover:-translate-y-0.5 hover:bg-white/10">
+              <button type="button" onClick={onOpenWorkspace} className="inline-flex min-h-16 min-w-[275px] items-center justify-center gap-8 rounded-lg border border-white/55 px-8 py-4 text-base font-semibold text-[#fbf5ea] transition hover:-translate-y-0.5 hover:bg-white/10">
                 Open live workspace
-                <ArrowRight className="size-4" aria-hidden="true" />
+                <ArrowRight className="size-6" aria-hidden="true" />
               </button>
             </div>
           </div>
 
-          <aside aria-label="Source-linked award answer" className="mt-12 w-full max-w-[1280px] overflow-hidden rounded-t-[28px] border border-white/55 bg-[#fbf7ef] text-[#071d39] shadow-[0_0_90px_rgba(45,109,255,0.28)] sm:mt-14 lg:[transform:perspective(1400px)_rotateX(1.6deg)] lg:[transform-origin:bottom_center]">
-            <div className="flex items-center justify-between gap-4 border-b border-[#cdd4dd] px-6 py-5 sm:px-8">
+          <aside aria-label="Source-linked award answer" className="mt-12 w-full overflow-hidden rounded-t-[28px] border border-white/55 bg-[#fbf7ef] text-[#071d39] shadow-[0_0_90px_rgba(45,109,255,0.28)] sm:mt-12 lg:mt-[3.15rem] lg:max-w-[1244px] lg:[transform:perspective(900px)_rotateX(12deg)] lg:[transform-origin:top_center]">
+            <div className="flex items-center justify-between gap-4 border-b border-[#cdd4dd] px-6 py-6 sm:px-8 lg:px-10 lg:py-[1.45rem]">
               <div>
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#53657a]">Award record · DR-041</p>
-                <p className="mt-1 text-sm font-semibold">Emergency logistics · Horn of Africa</p>
+                <p className="mt-1 text-sm font-semibold lg:text-base">Emergency logistics · Horn of Africa</p>
               </div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#c6eadc] px-3 py-1.5 text-xs font-semibold text-[#0d5647]">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#c6eadc] px-3 py-1.5 text-xs font-semibold text-[#0d5647] lg:px-4 lg:py-2 lg:text-sm">
                 <CheckCircle2 className="size-4" aria-hidden="true" />
                 Ready
               </span>
             </div>
 
-            <div className="px-6 pb-0 pt-5 sm:px-8 sm:pt-6">
+            <div className="px-6 pb-0 pt-6 sm:px-8 sm:pt-6 lg:px-10 lg:pt-[1.35rem]">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4179b2]">Ask Traceli</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Why did Northstar Relief win?</h2>
-              <p className="mt-2 text-sm leading-6 text-[#65758a]">Eligible. Highest evaluated compliant offer. All approvals complete.</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl lg:text-[2.1rem]">Why did Northstar Relief win?</h2>
+              <p className="mt-2 text-sm leading-6 text-[#65758a] sm:text-base">Eligible. Highest evaluated compliant offer. All approvals complete.</p>
 
-              <div className="mt-5 grid border-y border-[#cdd4dd] sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-7 grid border-y border-[#cdd4dd] sm:grid-cols-2 lg:grid-cols-4">
                 {answerSignals.map(({ label, value, detail, icon: Icon }, index) => (
-                  <div key={label} className={cn('flex items-center gap-4 px-3 py-6 sm:px-5', index > 0 && 'lg:border-l lg:border-[#cdd4dd]', index % 2 === 1 && 'border-l border-[#cdd4dd] lg:border-l')}>
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#071d39] text-[#78d8c4]">
-                      <Icon className="size-5" aria-hidden="true" />
+                  <div key={label} className={cn('flex items-center gap-4 px-3 py-5 sm:px-5 lg:py-3', index > 0 && 'lg:border-l lg:border-[#cdd4dd]', index % 2 === 1 && 'border-l border-[#cdd4dd] lg:border-l')}>
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#071d39] text-[#78d8c4] lg:size-14">
+                      <Icon className="size-5 lg:size-6" aria-hidden="true" />
                     </span>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#53657a]">{label}</p>
-                      <p className="mt-1 text-xl font-semibold">{value}</p>
+                      <p className="mt-1 text-xl font-semibold lg:text-2xl">{value}</p>
                       <p className="mt-0.5 text-xs leading-5 text-[#65758a]">{detail}</p>
                     </div>
                   </div>
@@ -726,14 +735,14 @@ function DemoScreen({
               </div>
             </div>
 
-            <button type="button" onClick={onOpenAudit} className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-[#efe8db] sm:px-8">
+            <button type="button" onClick={onOpenAudit} className="flex w-full items-center justify-between gap-4 px-6 py-6 text-left transition hover:bg-[#efe8db] sm:px-8 lg:px-14 lg:py-3">
               <span className="flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-full bg-[#071d39] text-[#fbf5ea]">
                   <Search className="size-4" aria-hidden="true" />
                 </span>
                 <span>
-                  <span className="block text-sm font-semibold">Open the proof</span>
-                  <span className="mt-0.5 block text-xs text-[#65758a]">Every claim opens its source</span>
+                  <span className="block text-sm font-semibold lg:text-base">Open the proof</span>
+                  <span className="mt-0.5 block text-xs text-[#65758a] lg:text-sm">Every claim opens its source</span>
                 </span>
               </span>
               <ArrowRight className="size-5" aria-hidden="true" />
