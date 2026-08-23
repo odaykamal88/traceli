@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/next'
-import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
+import { IBM_Plex_Mono, IBM_Plex_Sans, Instrument_Serif } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
@@ -13,6 +13,13 @@ const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: ['400', '600'],
   variable: '--font-plex-mono',
+  display: 'swap',
+})
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-instrument-serif',
   display: 'swap',
 })
 
@@ -50,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable} ${instrumentSerif.variable}`}>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

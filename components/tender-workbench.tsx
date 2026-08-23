@@ -363,7 +363,7 @@ export default function TenderWorkbench() {
   const selectedEvent = drawer?.type === 'event' ? auditEvents.find((event) => event.id === drawer.eventId) : undefined
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className={cn('min-h-screen', view === 'demo' ? 'bg-[#061a33] text-[#fbf5ea]' : 'bg-background text-foreground')}>
       <a
         href="#main-content"
         className="sr-only z-[70] bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
@@ -371,15 +371,25 @@ export default function TenderWorkbench() {
         Skip to main content
       </a>
 
-      <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 lg:px-7">
+      <header className={cn(
+        'sticky top-0 z-30 border-b backdrop-blur',
+        view === 'demo' ? 'border-white/15 bg-[#061a33]/95 text-[#fbf5ea]' : 'border-border bg-card/95',
+      )}>
+        <div className={cn(
+          'mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-7',
+          view === 'demo' ? 'py-4' : 'py-3',
+        )}>
           <button type="button" onClick={() => resetDemo()} className="flex items-center gap-3 text-left">
-            <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <span className={cn(
+              'flex items-center justify-center rounded-lg',
+              view === 'demo' ? 'size-10' : 'size-9',
+              view === 'demo' ? 'border border-white/20 bg-white/5 text-[#fbf5ea]' : 'bg-primary text-primary-foreground',
+            )}>
               <ShieldCheck className="size-5" aria-hidden="true" />
             </span>
             <span>
-              <span className="block font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">traceli</span>
-              <span className="hidden text-xs text-muted-foreground sm:block">Continuous procurement assurance</span>
+              <span className={cn('block font-mono text-[11px] font-semibold uppercase tracking-[0.2em]', view === 'demo' ? 'text-[#fbf5ea]' : 'text-primary')}>traceli</span>
+              <span className={cn('hidden text-xs sm:block', view === 'demo' ? 'text-white/55' : 'text-muted-foreground')}>Continuous procurement assurance</span>
             </span>
           </button>
 
@@ -393,7 +403,7 @@ export default function TenderWorkbench() {
               <button
                 type="button"
                 onClick={() => navigate('portfolio')}
-                className="hidden items-center gap-2 text-xs font-semibold text-primary hover:underline md:inline-flex"
+                className="hidden items-center gap-2 text-xs font-semibold text-[#fbf5ea] hover:text-white hover:underline md:inline-flex"
               >
                 Open live workspace
                 <ArrowRight className="size-3.5" aria-hidden="true" />
@@ -422,7 +432,7 @@ export default function TenderWorkbench() {
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1600px]">
+      <div className={cn('mx-auto flex', view === 'demo' ? 'max-w-none' : 'max-w-[1600px]')}>
         {view !== 'demo' ? <aside className="hidden w-64 shrink-0 border-r border-border px-4 py-5 lg:block">
           <div className="mb-5 border border-border bg-secondary p-4">
             <div className="flex items-start justify-between gap-2">
@@ -480,7 +490,7 @@ export default function TenderWorkbench() {
           id="main-content"
           className={cn(
             'min-w-0 flex-1',
-            view === 'demo' ? 'px-4 py-6 sm:px-8 lg:px-12 lg:py-10' : 'px-4 py-5 sm:px-6 lg:px-9 lg:py-7',
+            view === 'demo' ? 'p-0' : 'px-4 py-5 sm:px-6 lg:px-9 lg:py-7',
           )}
         >
           {view !== 'demo' ? <nav aria-label="Mobile navigation" className="-mx-4 mb-5 flex gap-1 overflow-x-auto border-b border-border px-4 pb-3 lg:hidden">
@@ -638,11 +648,11 @@ function DemoScreen({
   onOpenWorkspace: () => void
   onOpenAudit: () => void
 }) {
-  const answerSignals = [
-    ['Requirements', '27 / 27', 'Every finding evidenced'],
-    ['Panel evaluation', '91 / 100', 'Named reviewers'],
-    ['Approvals', '4 / 4', 'Declarations complete'],
-    ['Integrity review', 'Resolved', 'Concern and response retained'],
+  const answerSignals: Array<{ label: string; value: string; detail: string; icon: LucideIcon }> = [
+    { label: 'Requirements', value: '27 / 27', detail: 'Every finding evidenced', icon: FileText },
+    { label: 'Panel evaluation', value: '91 / 100', detail: 'Named reviewers', icon: Users },
+    { label: 'Approvals', value: '4 / 4', detail: 'Declarations complete', icon: BadgeCheck },
+    { label: 'Integrity review', value: 'Resolved', detail: 'Concern and response retained', icon: ShieldCheck },
   ]
 
   const lifecycle = [
@@ -654,127 +664,135 @@ function DemoScreen({
   ]
 
   return (
-    <section aria-labelledby="story-heading" className="mx-auto max-w-6xl">
-      <section className="flex min-h-[calc(100vh-9rem)] flex-col justify-center py-5 sm:py-8">
-        <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-16">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Eyebrow>Continuous procurement assurance</Eyebrow>
-              <Pill tone="neutral">For UN agencies & NGOs</Pill>
-            </div>
-            <Pill tone="amber">
-              <AlertCircle className="size-3.5" aria-hidden="true" />
-              Before the auditor—or headline—asks
-            </Pill>
-            <h1 id="story-heading" className="mt-5 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
+    <section aria-labelledby="story-heading">
+      <section className="relative isolate overflow-hidden bg-[#061a33]">
+        <img
+          src="/traceli-proof-console-bg.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        <div className="mx-auto flex min-h-[calc(100vh-73px)] max-w-[1440px] flex-col items-center px-4 pt-16 sm:px-8 sm:pt-20 lg:px-14 lg:pt-[5.25rem]">
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 id="story-heading" className="font-display text-[clamp(4.4rem,8vw,7.4rem)] leading-[0.82] tracking-[-0.035em] text-[#fbf5ea]">
               Every award,
-              <span className="block text-primary">audit ready.</span>
+              <span className="block">audit ready.</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/65 sm:text-lg sm:leading-8">
               Traceli keeps every rule, bid, question, approval and risk signal linked—so you can explain exactly why a supplier won without rebuilding the story.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#proof" className="inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <a href="#proof" className="inline-flex items-center justify-center gap-3 rounded-lg bg-[#fbf5ea] px-6 py-3.5 text-sm font-semibold text-[#071d39] shadow-lg shadow-black/15 transition hover:-translate-y-0.5 hover:bg-white">
                 See the proof
                 <ArrowRight className="size-4" aria-hidden="true" />
               </a>
-              <button type="button" onClick={onOpenWorkspace} className="px-4 py-3 text-sm font-semibold text-primary hover:bg-secondary">
+              <button type="button" onClick={onOpenWorkspace} className="inline-flex items-center justify-center gap-3 rounded-lg border border-white/45 px-6 py-3.5 text-sm font-semibold text-[#fbf5ea] transition hover:-translate-y-0.5 hover:bg-white/10">
                 Open live workspace
+                <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
           </div>
 
-          <aside aria-label="Source-linked award answer" className="overflow-hidden border border-border bg-card shadow-[0_24px_70px_-40px_rgba(22,49,78,0.55)]">
-            <div className="flex items-center justify-between gap-4 border-b border-border bg-secondary/60 px-5 py-4">
+          <aside aria-label="Source-linked award answer" className="mt-12 w-full max-w-[1280px] overflow-hidden rounded-t-[28px] border border-white/55 bg-[#fbf7ef] text-[#071d39] shadow-[0_0_90px_rgba(45,109,255,0.28)] sm:mt-14 lg:[transform:perspective(1400px)_rotateX(1.6deg)] lg:[transform-origin:bottom_center]">
+            <div className="flex items-center justify-between gap-4 border-b border-[#cdd4dd] px-6 py-5 sm:px-8">
               <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Award record · DR-041</p>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#53657a]">Award record · DR-041</p>
                 <p className="mt-1 text-sm font-semibold">Emergency logistics · Horn of Africa</p>
               </div>
-              <Pill tone="teal">
-                <CheckCircle2 className="size-3.5" aria-hidden="true" />
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#c6eadc] px-3 py-1.5 text-xs font-semibold text-[#0d5647]">
+                <CheckCircle2 className="size-4" aria-hidden="true" />
                 Ready
-              </Pill>
+              </span>
             </div>
 
-            <div className="p-6 sm:p-7">
-              <Eyebrow>Ask Traceli</Eyebrow>
-              <h2 className="mt-3 text-2xl font-semibold leading-9">Why did Northstar Relief win?</h2>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                Eligible. Highest evaluated compliant offer. All approvals complete.
-              </p>
+            <div className="px-6 pb-0 pt-5 sm:px-8 sm:pt-6">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4179b2]">Ask Traceli</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Why did Northstar Relief win?</h2>
+              <p className="mt-2 text-sm leading-6 text-[#65758a]">Eligible. Highest evaluated compliant offer. All approvals complete.</p>
 
-              <div className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2">
-                {answerSignals.map(([label, value, detail]) => (
-                  <div key={label} className="bg-card p-4">
-                    <p className="text-xs font-semibold text-muted-foreground">{label}</p>
-                    <p className="mt-2 text-xl font-semibold">{value}</p>
-                    <p className="mt-1 text-xs leading-5 text-muted-foreground">{detail}</p>
+              <div className="mt-5 grid border-y border-[#cdd4dd] sm:grid-cols-2 lg:grid-cols-4">
+                {answerSignals.map(({ label, value, detail, icon: Icon }, index) => (
+                  <div key={label} className={cn('flex items-center gap-4 px-3 py-6 sm:px-5', index > 0 && 'lg:border-l lg:border-[#cdd4dd]', index % 2 === 1 && 'border-l border-[#cdd4dd] lg:border-l')}>
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#071d39] text-[#78d8c4]">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#53657a]">{label}</p>
+                      <p className="mt-1 text-xl font-semibold">{value}</p>
+                      <p className="mt-0.5 text-xs leading-5 text-[#65758a]">{detail}</p>
+                    </div>
                   </div>
                 ))}
               </div>
-
-              <button type="button" onClick={onOpenAudit} className="mt-5 flex w-full items-center justify-between gap-4 bg-primary px-4 py-3 text-left text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-                <span>
-                  Open the proof
-                  <span className="mt-0.5 block text-xs font-normal text-primary-foreground/65">Every claim opens its source</span>
-                </span>
-                <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
-              </button>
-              <p className="mt-3 text-center text-[11px] text-muted-foreground">Fictional cached record · no live data required</p>
             </div>
+
+            <button type="button" onClick={onOpenAudit} className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-[#efe8db] sm:px-8">
+              <span className="flex items-center gap-3">
+                <span className="flex size-9 items-center justify-center rounded-full bg-[#071d39] text-[#fbf5ea]">
+                  <Search className="size-4" aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block text-sm font-semibold">Open the proof</span>
+                  <span className="mt-0.5 block text-xs text-[#65758a]">Every claim opens its source</span>
+                </span>
+              </span>
+              <ArrowRight className="size-5" aria-hidden="true" />
+            </button>
           </aside>
         </div>
       </section>
 
-      <section id="proof" aria-labelledby="proof-heading" className="scroll-mt-20 flex min-h-[calc(100vh-5rem)] flex-col justify-center border-t border-border py-16">
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-          <div>
-            <Eyebrow>One golden thread</Eyebrow>
-            <h2 id="proof-heading" className="mt-3 max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-              The portal runs the tender.
-              <span className="block text-primary">Traceli keeps the proof.</span>
-            </h2>
-          </div>
-          <p className="max-w-xl text-base leading-7 text-muted-foreground">
-            Across your knowledge base, tender portals, inboxes and evaluation process, one record builds itself as the work happens.
-          </p>
-        </div>
-
-        <ol className="mt-10 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-5" aria-label="Procurement assurance lifecycle">
-          {lifecycle.map(([number, title, detail], index) => (
-            <li key={title} className="relative bg-card p-5 sm:p-6">
-              <div className="flex items-center justify-between gap-3">
-                <span className="font-mono text-[11px] font-semibold text-muted-foreground">{number}</span>
-                <CheckCircle2 className="size-4 text-accent-foreground" aria-hidden="true" />
-              </div>
-              <h3 className="mt-8 text-xl font-semibold">{title}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">{detail}</p>
-              {index < lifecycle.length - 1 ? (
-                <ArrowRight className="absolute -right-2.5 top-1/2 z-10 hidden size-5 -translate-y-1/2 bg-background text-primary md:block" aria-hidden="true" />
-              ) : null}
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-6 grid overflow-hidden bg-primary text-primary-foreground lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="p-7 sm:p-9">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">The category</p>
-            <h3 className="mt-3 text-3xl font-semibold leading-tight">Not another tender portal.</h3>
-            <p className="mt-3 max-w-xl text-base leading-7 text-primary-foreground/70">
-              Traceli is the assurance layer across all of them: the permanent, source-linked record of what happened, who decided and why.
+      <section id="proof" aria-labelledby="proof-heading" className="scroll-mt-20 bg-background text-foreground">
+        <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-6xl flex-col justify-center px-4 py-16 sm:px-8">
+          <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+            <div>
+              <Eyebrow>One golden thread</Eyebrow>
+              <h2 id="proof-heading" className="mt-3 max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+                The portal runs the tender.
+                <span className="block text-primary">Traceli keeps the proof.</span>
+              </h2>
+            </div>
+            <p className="max-w-xl text-base leading-7 text-muted-foreground">
+              Across your knowledge base, tender portals, inboxes and evaluation process, one record builds itself as the work happens.
             </p>
           </div>
-          <div className="flex flex-col justify-center border-t border-primary-foreground/15 bg-primary-foreground/[0.06] p-7 sm:p-9 lg:border-l lg:border-t-0">
-            <p className="text-sm text-primary-foreground/65">The result</p>
-            <p className="mt-2 text-2xl font-semibold">Run procurement once. Defend it whenever scrutiny arrives.</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button type="button" onClick={onOpenAudit} className="inline-flex items-center gap-2 bg-card px-5 py-3 text-sm font-semibold text-primary hover:bg-card/90">
-                Inspect the audit record
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </button>
-              <button type="button" onClick={onOpenWorkspace} className="px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10">
-                Explore the workspace
-              </button>
+
+          <ol className="mt-10 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-5" aria-label="Procurement assurance lifecycle">
+            {lifecycle.map(([number, title, detail], index) => (
+              <li key={title} className="relative bg-card p-5 sm:p-6">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-[11px] font-semibold text-muted-foreground">{number}</span>
+                  <CheckCircle2 className="size-4 text-accent-foreground" aria-hidden="true" />
+                </div>
+                <h3 className="mt-8 text-xl font-semibold">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{detail}</p>
+                {index < lifecycle.length - 1 ? (
+                  <ArrowRight className="absolute -right-2.5 top-1/2 z-10 hidden size-5 -translate-y-1/2 bg-background text-primary md:block" aria-hidden="true" />
+                ) : null}
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-6 grid overflow-hidden rounded-xl bg-primary text-primary-foreground lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="p-7 sm:p-9">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">The category</p>
+              <h3 className="mt-3 text-3xl font-semibold leading-tight">Not another tender portal.</h3>
+              <p className="mt-3 max-w-xl text-base leading-7 text-primary-foreground/70">
+                Traceli is the assurance layer across all of them: the permanent, source-linked record of what happened, who decided and why.
+              </p>
+            </div>
+            <div className="flex flex-col justify-center border-t border-primary-foreground/15 bg-primary-foreground/[0.06] p-7 sm:p-9 lg:border-l lg:border-t-0">
+              <p className="text-sm text-primary-foreground/65">The result</p>
+              <p className="mt-2 text-2xl font-semibold">Run procurement once. Defend it whenever scrutiny arrives.</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button type="button" onClick={onOpenAudit} className="inline-flex items-center gap-2 rounded-lg bg-card px-5 py-3 text-sm font-semibold text-primary hover:bg-card/90">
+                  Inspect the audit record
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </button>
+                <button type="button" onClick={onOpenWorkspace} className="rounded-lg px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10">
+                  Explore the workspace
+                </button>
+              </div>
             </div>
           </div>
         </div>
