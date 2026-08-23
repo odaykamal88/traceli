@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/next'
-import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
+import { IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
@@ -16,10 +16,17 @@ const plexMono = IBM_Plex_Mono({
   display: 'swap',
 })
 
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-newsreader',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
-  title: 'traceli — Defensible humanitarian procurement',
-  description: 'Turn published humanitarian tenders into cited compliance matrices and panel-owned evaluation grids.',
-  generator: 'v0.app',
+  title: 'Traceli — Continuous procurement assurance',
+  description:
+    'Policy-grounded drafting, evidence-linked evaluation, human approvals and locked decision records for humanitarian procurement.',
   icons: {
     icon: [
       {
@@ -40,11 +47,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4efe4' },
-    { media: '(prefers-color-scheme: dark)', color: '#182f45' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#f4efe4',
 }
 
 export default function RootLayout({
@@ -53,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable} ${newsreader.variable}`}>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
