@@ -638,205 +638,150 @@ function DemoScreen({
   onOpenWorkspace: () => void
   onOpenAudit: () => void
 }) {
-  const scatteredRecord = [
-    'Knowledge folders',
-    'Tender portals',
-    'Bidder emails & Q&A',
-    'Score sheets',
-    'Approvals',
-    'Supplier checks',
+  const answerSignals = [
+    ['Requirements', '27 / 27', 'Every finding evidenced'],
+    ['Panel evaluation', '91 / 100', 'Named reviewers'],
+    ['Approvals', '4 / 4', 'Declarations complete'],
+    ['Integrity review', 'Resolved', 'Concern and response retained'],
   ]
 
-  const process = [
-    {
-      number: '01',
-      title: 'Prepare',
-      icon: BookOpen,
-      body: 'Traceli uses your policies, templates and past tenders to draft the structure, criteria and compliance checks—then prepares it for the right portals.',
-      steps: ['Infer', 'Validate', 'Publish'],
-    },
-    {
-      number: '02',
-      title: 'Run',
-      icon: MessageSquareText,
-      body: 'Track every bidder and submission in one place. Keep comments, questions and answers accessible, consistent and linked to the record.',
-      steps: ['Receive', 'Compare', 'Collaborate'],
-    },
-    {
-      number: '03',
-      title: 'Defend',
-      icon: ShieldCheck,
-      body: 'Preserve evaluation, approvals and chronology. Capture supplier-integrity or collusion concerns without turning an AI finding into the decision.',
-      steps: ['Review', 'Approve', 'Prove'],
-    },
-  ]
-
-  const answerRecord = [
-    'The exact tender rule and governing policy',
-    'Every submission and the evidence received',
-    'Bidder questions, answers and reviewer comments',
-    'Evaluations, declarations and approvals',
-    'Supplier-integrity and collusion concerns',
+  const lifecycle = [
+    ['01', 'Plan', 'Policy and past tenders applied'],
+    ['02', 'Publish', 'Criteria and matrix locked'],
+    ['03', 'Receive', 'Bids, questions and answers linked'],
+    ['04', 'Decide', 'Evidence, comments and approvals retained'],
+    ['05', 'Prove', 'Audit-ready record already complete'],
   ]
 
   return (
     <section aria-labelledby="story-heading" className="mx-auto max-w-6xl">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <Eyebrow>Procurement assurance for UN agencies & NGOs</Eyebrow>
-          <Pill tone="neutral">One procurement · end to end</Pill>
-        </div>
-        <p className="text-xs font-medium text-muted-foreground">Fictional cached data · safe for meetings</p>
-      </div>
-
-      <div className="mt-10 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14">
-        <div>
-          <Pill tone="amber">
-            <AlertCircle className="size-3.5" aria-hidden="true" />
-            When scrutiny arrives
-          </Pill>
-          <h1 id="story-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
-            Can you defend this award six months from now?
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground sm:text-xl">
-            A donor, auditor or journalist asks why a supplier won. Traceli gives you the source-linked answer—without rebuilding it from emails, portals and spreadsheets.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href="#story-process" className="inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-              See the whole procurement
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </a>
-            <button type="button" onClick={onOpenWorkspace} className="px-4 py-3 text-sm font-semibold text-primary hover:bg-secondary">
-              Open live workspace
-            </button>
-          </div>
-        </div>
-
-        <aside aria-label="The scrutiny question" className="border border-border bg-card p-6 shadow-sm sm:p-8">
-          <Eyebrow>The question you must answer</Eyebrow>
-          <blockquote className="mt-5 border-l-2 border-primary pl-5 text-2xl font-semibold leading-9">
-            “Why was this supplier eligible, selected and approved?”
-          </blockquote>
-          <div className="mt-7 divide-y divide-border border-y border-border">
-            {[
-              ['Tender & governing rules', 'Linked'],
-              ['Bid evidence, Q&A & comments', 'Linked'],
-              ['Evaluation, approvals & risk checks', 'Linked'],
-            ].map(([label, status]) => (
-              <div key={label} className="flex items-center justify-between gap-4 py-4">
-                <p className="text-sm font-medium">{label}</p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-foreground">
-                  <CheckCircle2 className="size-4" aria-hidden="true" />
-                  {status}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 bg-accent/70 px-4 py-3 text-sm font-semibold text-accent-foreground">
-            Audit-ready from day one—not assembled after the allegation.
-          </div>
-        </aside>
-      </div>
-
-      <section aria-labelledby="pain-heading" className="mt-20 border-y border-border py-12 sm:py-14">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+      <section className="flex min-h-[calc(100vh-9rem)] flex-col justify-center py-5 sm:py-8">
+        <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-16">
           <div>
-            <Eyebrow>The pain</Eyebrow>
-            <h2 id="pain-heading" className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-              Without Traceli, the record is assembled after the fact.
+            <div className="flex flex-wrap items-center gap-2">
+              <Eyebrow>Continuous procurement assurance</Eyebrow>
+              <Pill tone="neutral">For UN agencies & NGOs</Pill>
+            </div>
+            <Pill tone="amber">
+              <AlertCircle className="size-3.5" aria-hidden="true" />
+              Before the auditor—or headline—asks
+            </Pill>
+            <h1 id="story-heading" className="mt-5 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
+              Every award,
+              <span className="block text-primary">audit ready.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              Traceli keeps every rule, bid, question, approval and risk signal linked—so you can explain exactly why a supplier won without rebuilding the story.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#proof" className="inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                See the proof
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </a>
+              <button type="button" onClick={onOpenWorkspace} className="px-4 py-3 text-sm font-semibold text-primary hover:bg-secondary">
+                Open live workspace
+              </button>
+            </div>
+          </div>
+
+          <aside aria-label="Source-linked award answer" className="overflow-hidden border border-border bg-card shadow-[0_24px_70px_-40px_rgba(22,49,78,0.55)]">
+            <div className="flex items-center justify-between gap-4 border-b border-border bg-secondary/60 px-5 py-4">
+              <div>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Award record · DR-041</p>
+                <p className="mt-1 text-sm font-semibold">Emergency logistics · Horn of Africa</p>
+              </div>
+              <Pill tone="teal">
+                <CheckCircle2 className="size-3.5" aria-hidden="true" />
+                Ready
+              </Pill>
+            </div>
+
+            <div className="p-6 sm:p-7">
+              <Eyebrow>Ask Traceli</Eyebrow>
+              <h2 className="mt-3 text-2xl font-semibold leading-9">Why did Northstar Relief win?</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                Eligible. Highest evaluated compliant offer. All approvals complete.
+              </p>
+
+              <div className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2">
+                {answerSignals.map(([label, value, detail]) => (
+                  <div key={label} className="bg-card p-4">
+                    <p className="text-xs font-semibold text-muted-foreground">{label}</p>
+                    <p className="mt-2 text-xl font-semibold">{value}</p>
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">{detail}</p>
+                  </div>
+                ))}
+              </div>
+
+              <button type="button" onClick={onOpenAudit} className="mt-5 flex w-full items-center justify-between gap-4 bg-primary px-4 py-3 text-left text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                <span>
+                  Open the proof
+                  <span className="mt-0.5 block text-xs font-normal text-primary-foreground/65">Every claim opens its source</span>
+                </span>
+                <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
+              </button>
+              <p className="mt-3 text-center text-[11px] text-muted-foreground">Fictional cached record · no live data required</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="proof" aria-labelledby="proof-heading" className="scroll-mt-20 flex min-h-[calc(100vh-5rem)] flex-col justify-center border-t border-border py-16">
+        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+          <div>
+            <Eyebrow>One golden thread</Eyebrow>
+            <h2 id="proof-heading" className="mt-3 max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+              The portal runs the tender.
+              <span className="block text-primary">Traceli keeps the proof.</span>
             </h2>
           </div>
-          <p className="max-w-2xl text-base leading-7 text-muted-foreground">
-            When a contract is questioned, someone has to reconstruct what happened, who decided and why. That costs time, confidence and reputation—while making every procurement more laborious.
+          <p className="max-w-xl text-base leading-7 text-muted-foreground">
+            Across your knowledge base, tender portals, inboxes and evaluation process, one record builds itself as the work happens.
           </p>
         </div>
-        <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
-          {scatteredRecord.map((item) => (
-            <div key={item} className="flex min-h-24 items-center justify-center bg-card px-3 text-center text-sm font-semibold">
-              {item}
-            </div>
+
+        <ol className="mt-10 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-5" aria-label="Procurement assurance lifecycle">
+          {lifecycle.map(([number, title, detail], index) => (
+            <li key={title} className="relative bg-card p-5 sm:p-6">
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-mono text-[11px] font-semibold text-muted-foreground">{number}</span>
+                <CheckCircle2 className="size-4 text-accent-foreground" aria-hidden="true" />
+              </div>
+              <h3 className="mt-8 text-xl font-semibold">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{detail}</p>
+              {index < lifecycle.length - 1 ? (
+                <ArrowRight className="absolute -right-2.5 top-1/2 z-10 hidden size-5 -translate-y-1/2 bg-background text-primary md:block" aria-hidden="true" />
+              ) : null}
+            </li>
           ))}
-        </div>
-        <div className="mt-4 flex items-start gap-3 border border-[#c9b15b] bg-[#fbf5df] p-4 text-[#60420d] sm:items-center">
-          <AlertCircle className="mt-0.5 size-5 shrink-0 sm:mt-0" aria-hidden="true" />
-          <p className="text-sm font-semibold leading-6">The proof exists. The problem is that it is scattered, inconsistent and expensive to defend.</p>
-        </div>
-      </section>
+        </ol>
 
-      <section id="story-process" aria-labelledby="process-heading" className="scroll-mt-24 mt-20">
-        <Eyebrow>One simple process</Eyebrow>
-        <div className="mt-3 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-          <h2 id="process-heading" className="text-3xl font-semibold tracking-tight sm:text-4xl">Prepare it. Run it. Defend it.</h2>
-          <p className="max-w-xl text-sm leading-6 text-muted-foreground">Everything stays linked as the procurement moves—from institutional knowledge to final audit trail.</p>
-        </div>
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {process.map((item) => {
-            const Icon = item.icon
-            return (
-              <article key={item.title} className="flex min-h-[330px] flex-col border border-border bg-card p-6 shadow-sm sm:p-7">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-xs font-semibold text-muted-foreground">{item.number}</span>
-                  <span className="flex size-10 items-center justify-center bg-secondary text-primary">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-                </div>
-                <h3 className="mt-8 text-3xl font-semibold">{item.title}</h3>
-                <p className="mt-4 flex-1 text-sm leading-6 text-muted-foreground">{item.body}</p>
-                <div className="mt-7 flex items-center gap-2 border-t border-border pt-5 text-xs font-semibold text-primary">
-                  {item.steps.map((step, index) => (
-                    <span key={step} className="inline-flex items-center gap-2">
-                      {index > 0 ? <ArrowRight className="size-3 text-muted-foreground" aria-hidden="true" /> : null}
-                      {step}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            )
-          })}
-        </div>
-      </section>
-
-      <section aria-labelledby="answer-heading" className="mt-20 overflow-hidden bg-primary text-primary-foreground">
-        <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="p-7 sm:p-10 lg:p-12">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">The outcome</p>
-            <h2 id="answer-heading" className="mt-4 max-w-xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-              One answer when the hard questions come.
-            </h2>
-            <blockquote className="mt-7 max-w-xl border-l-2 border-accent pl-5 text-xl leading-8 text-primary-foreground/90">
-              “Show me why this award was fair, compliant and free from undisclosed influence.”
-            </blockquote>
-            <button type="button" onClick={onOpenAudit} className="mt-8 inline-flex items-center justify-center gap-2 bg-card px-5 py-3 text-sm font-semibold text-primary hover:bg-card/90">
-              Open the audit-ready record
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </button>
+        <div className="mt-6 grid overflow-hidden bg-primary text-primary-foreground lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-7 sm:p-9">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">The category</p>
+            <h3 className="mt-3 text-3xl font-semibold leading-tight">Not another tender portal.</h3>
+            <p className="mt-3 max-w-xl text-base leading-7 text-primary-foreground/70">
+              Traceli is the assurance layer across all of them: the permanent, source-linked record of what happened, who decided and why.
+            </p>
           </div>
-          <div className="border-t border-primary-foreground/15 bg-primary-foreground/[0.06] p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
-            <p className="text-sm font-semibold text-primary-foreground/65">The record already contains</p>
-            <div className="mt-5 divide-y divide-primary-foreground/15 border-y border-primary-foreground/15">
-              {answerRecord.map((item) => (
-                <div key={item} className="flex items-start gap-3 py-4 text-sm leading-6">
-                  <Check className="mt-1 size-4 shrink-0 text-accent" aria-hidden="true" />
-                  {item}
-                </div>
-              ))}
+          <div className="flex flex-col justify-center border-t border-primary-foreground/15 bg-primary-foreground/[0.06] p-7 sm:p-9 lg:border-l lg:border-t-0">
+            <p className="text-sm text-primary-foreground/65">The result</p>
+            <p className="mt-2 text-2xl font-semibold">Run procurement once. Defend it whenever scrutiny arrives.</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button type="button" onClick={onOpenAudit} className="inline-flex items-center gap-2 bg-card px-5 py-3 text-sm font-semibold text-primary hover:bg-card/90">
+                Inspect the audit record
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </button>
+              <button type="button" onClick={onOpenWorkspace} className="px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10">
+                Explore the workspace
+              </button>
             </div>
-            <p className="mt-6 text-sm leading-6 text-primary-foreground/65">Traceli preserves the evidence. Named people still decide compliance and award.</p>
           </div>
         </div>
       </section>
-
-      <div className="mt-8 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 sm:flex-row sm:items-center">
-        <p className="text-sm leading-6 text-muted-foreground"><strong className="text-foreground">The hook is simple:</strong> run procurement once; defend it whenever scrutiny arrives.</p>
-        <button type="button" onClick={onOpenWorkspace} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-          Explore the live workspace
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </button>
-      </div>
     </section>
   )
 }
-
 function CaseHeader({
   caseTitle,
   organization,
