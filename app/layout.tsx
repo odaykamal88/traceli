@@ -1,6 +1,8 @@
 import { Analytics } from '@vercel/analytics/next'
+import { AuthKitProvider } from '@workos-inc/authkit-nextjs/components'
 import { IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
+import { isWorkOSConfigured } from '@/lib/workspace-access'
 import './globals.css'
 
 const plexSans = IBM_Plex_Sans({
@@ -56,10 +58,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const content = isWorkOSConfigured() ? (
+    <AuthKitProvider>{children}</AuthKitProvider>
+  ) : (
+    children
+  )
+
   return (
     <html lang="en" className={`${plexSans.variable} ${plexMono.variable} ${newsreader.variable}`}>
       <body className="font-sans antialiased">
-        {children}
+        {content}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

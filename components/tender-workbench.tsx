@@ -41,6 +41,12 @@ import {
 
 import { cn } from '@/lib/utils'
 import {
+  buildAuditHashChain,
+  verifyAuditHashChain,
+  type AuditIntegrityRecord,
+} from '@/lib/audit-integrity'
+import type { WorkspaceViewer } from '@/lib/workspace-viewer'
+import {
   baseAuditEvents,
   defaultScenario,
   draftingSources,
@@ -154,8 +160,16 @@ function SourceLink({ children, onClick }: { children: ReactNode; onClick: () =>
   )
 }
 
-export default function TenderWorkbench() {
-  const [view, setView] = useState<View>('demo')
+export default function TenderWorkbench({
+  initialView = 'demo',
+  viewer,
+  workspaceMode = false,
+}: {
+  initialView?: View
+  viewer?: WorkspaceViewer
+  workspaceMode?: boolean
+}) {
+  const [view, setView] = useState<View>(initialView)
   const [drawer, setDrawer] = useState<Drawer>(null)
   const [scenario, setScenario] = useState<Scenario>(defaultScenario)
   const [clarificationReceived, setClarificationReceived] = useState(false)
@@ -165,6 +179,10 @@ export default function TenderWorkbench() {
   const [query, setQuery] = useState('')
   const [submissionFilter, setSubmissionFilter] = useState<'all' | 'missing' | 'clarification' | 'owner'>('all')
   const [auditFilter, setAuditFilter] = useState<'All' | AuditCategory>('All')
+  const [auditIntegrity, setAuditIntegrity] = useState<{
+    records: AuditIntegrityRecord[]
+    verified: boolean
+  }>({ records: [], verified: false })
   const [notice, setNotice] = useState('')
   const [draftText, setDraftText] = useState(
     'The supplier shall demonstrate the capacity to deliver emergency shelter kits within 72 hours in each named country, supported by warehouse, partner or distribution-plan evidence.',
@@ -279,6 +297,31 @@ export default function TenderWorkbench() {
     [auditEvents, auditFilter],
   )
 
+  useEffect(() => {
+    let active = true
+
+    const calculateIntegrity = async () => {
+      try {
+        const records = await buildAuditHashChain(auditEvents)
+        const verified = await verifyAuditHashChain(auditEvents, records)
+
+        if (active) setAuditIntegrity({ records, verified })
+      } catch {
+        if (active) setAuditIntegrity({ records: [], verified: false })
+      }
+    }
+
+    void calculateIntegrity()
+    return () => {
+      active = false
+    }
+  }, [auditEvents])
+
+  const auditIntegrityByEvent = useMemo(
+    () => new Map(auditIntegrity.records.map((record) => [record.eventId, record])),
+    [auditIntegrity.records],
+  )
+
   const queryString = useMemo(() => {
     return new URLSearchParams({
       org: scenario.organization,
@@ -297,7 +340,7 @@ export default function TenderWorkbench() {
   }
 
   const resetDemo = () => {
-    navigate('demo')
+    navigate(workspaceMode ? 'portfolio' : 'demo')
     setClarificationReceived(false)
     setApprovalsRemaining(2)
     setDeclarationOutstanding(true)
@@ -313,6 +356,17 @@ export default function TenderWorkbench() {
     setCriteriaLocked(false)
     setNotice('')
   }
+
+  const returnToStory = () => {
+    if (workspaceMode) {
+      window.location.assign('/')
+      return
+    }
+
+    resetDemo()
+  }
+
+  const openWorkspace = () => window.location.assign('/workspace')
 
   const receiveClarification = () => {
     setClarificationReceived(true)
@@ -361,6 +415,7 @@ export default function TenderWorkbench() {
   const caseTitle = `${scenario.procurement.startsWith('Emergency') ? 'Emergency ' : ''}Shelter & NFI Logistics — ${scenario.geography}`
   const exceptionThreshold = scenario.currency === 'EUR' ? '€150,000' : '$165,000'
   const selectedEvent = drawer?.type === 'event' ? auditEvents.find((event) => event.id === drawer.eventId) : undefined
+  const selectedIntegrity = selectedEvent ? auditIntegrityByEvent.get(selectedEvent.id) : undefined
 
   return (
     <div className={cn('min-h-screen', view === 'demo' ? 'bg-[#061a33] text-[#fbf5ea]' : 'bg-background text-foreground')}>
@@ -379,7 +434,7 @@ export default function TenderWorkbench() {
           'mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-7',
           view === 'demo' ? 'py-5' : 'py-3',
         )}>
-          <button type="button" onClick={() => resetDemo()} className={cn('flex items-center text-left', view === 'demo' ? 'gap-4' : 'gap-3')}>
+          <button type="button" onClick={returnToStory} className={cn('flex items-center text-left', view === 'demo' ? 'gap-4' : 'gap-3')}>
             <span className={cn(
               'flex items-center justify-center rounded-lg',
               view === 'demo' ? 'size-10' : 'size-9',
@@ -411,7 +466,7 @@ export default function TenderWorkbench() {
             {view === 'demo' ? (
               <button
                 type="button"
-                onClick={() => navigate('portfolio')}
+                onClick={openWorkspace}
                 className="hidden items-center gap-4 text-base font-medium text-[#fbf5ea] hover:text-white hover:underline md:inline-flex"
               >
                 Open live workspace
@@ -419,9 +474,16 @@ export default function TenderWorkbench() {
               </button>
             ) : (
               <>
+                {viewer ? (
+                  <span className="hidden border border-border bg-card px-3 py-2 text-xs text-muted-foreground xl:inline-flex">
+                    <span className="font-semibold text-foreground">{viewer.name}</span>
+                    <span className="mx-2 text-border">/</span>
+                    {viewer.role}
+                  </span>
+                ) : null}
                 <button
                   type="button"
-                  onClick={() => resetDemo()}
+                  onClick={returnToStory}
                   className="inline-flex items-center gap-2 bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 sm:px-4 sm:text-sm"
                 >
                   <Sparkles className="size-4" aria-hidden="true" />
@@ -443,6 +505,24 @@ export default function TenderWorkbench() {
 
       <div className={cn('mx-auto flex', view === 'demo' ? 'max-w-none' : 'max-w-[1600px]')}>
         {view !== 'demo' ? <aside className="hidden w-64 shrink-0 border-r border-border px-4 py-5 lg:block">
+          {viewer ? (
+            <div className="mb-4 border border-border bg-card p-4">
+              <div className="flex items-center gap-2">
+                <Lock className="size-4 text-primary" aria-hidden="true" />
+                <p className="text-xs font-semibold">Access envelope</p>
+              </div>
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                {viewer.mode === 'workos'
+                  ? 'Authenticated through WorkOS. Access is scoped to this organization and role.'
+                  : 'Meeting-safe mode. Fictional procurement data only; no customer documents are loaded.'}
+              </p>
+              <div className="mt-3 border-t border-border pt-3">
+                <Pill tone={viewer.mode === 'workos' ? 'teal' : 'blue'}>
+                  {viewer.mode === 'workos' ? 'Authenticated' : 'Fictional demo'}
+                </Pill>
+              </div>
+            </div>
+          ) : null}
           <div className="mb-5 border border-border bg-secondary p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
@@ -531,7 +611,7 @@ export default function TenderWorkbench() {
 
           {view === 'demo' ? (
             <DemoScreen
-              onOpenWorkspace={() => navigate('portfolio')}
+              onOpenWorkspace={openWorkspace}
               onOpenAudit={openExampleAuditRecord}
             />
           ) : null}
@@ -605,7 +685,15 @@ export default function TenderWorkbench() {
             <ClarificationsScreen clarificationReceived={clarificationReceived} onReceive={receiveClarification} />
           ) : null}
           {view === 'audit' ? (
-            <AuditScreen events={visibleAuditEvents} filter={auditFilter} setFilter={setAuditFilter} onOpen={openAuditEvent} />
+            <AuditScreen
+              events={visibleAuditEvents}
+              filter={auditFilter}
+              setFilter={setAuditFilter}
+              onOpen={openAuditEvent}
+              integrityByEvent={auditIntegrityByEvent}
+              integrityVerified={auditIntegrity.verified}
+              totalEventCount={auditEvents.length}
+            />
           ) : null}
           {view === 'rules' ? (
             <RulesScreen
@@ -633,6 +721,7 @@ export default function TenderWorkbench() {
             readinessDetail={readinessDetail}
             decisionState={decisionState}
             selectedEvent={selectedEvent}
+            selectedIntegrity={selectedIntegrity}
             scenario={scenario}
             queryString={queryString}
             threshold={exceptionThreshold}
@@ -1251,11 +1340,12 @@ function ClarificationsScreen({ clarificationReceived, onReceive }: { clarificat
   )
 }
 
-function AuditScreen({ events, filter, setFilter, onOpen }: { events: AuditEvent[]; filter: 'All' | AuditCategory; setFilter: (filter: 'All' | AuditCategory) => void; onOpen: (id: string) => void }) {
+function AuditScreen({ events, filter, setFilter, onOpen, integrityByEvent, integrityVerified, totalEventCount }: { events: AuditEvent[]; filter: 'All' | AuditCategory; setFilter: (filter: 'All' | AuditCategory) => void; onOpen: (id: string) => void; integrityByEvent: ReadonlyMap<string, AuditIntegrityRecord>; integrityVerified: boolean; totalEventCount: number }) {
   return (
     <div className="flex flex-col gap-5"><div><Eyebrow>Forensic audit trail</Eyebrow><h2 className="mt-2 text-2xl font-semibold">A chronology someone can inspect and defend.</h2><p className="mt-2 text-sm text-muted-foreground">Every event opens the exact snapshot, source and actor preserved at that moment.</p></div>
+      <section className="flex flex-col justify-between gap-4 border border-accent-foreground/30 bg-accent/60 p-5 sm:flex-row sm:items-center"><div className="flex items-start gap-3"><span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"><ShieldCheck className="size-5" aria-hidden="true" /></span><div><p className="text-sm font-semibold">Tamper-evident event chain</p><p className="mt-1 text-xs leading-5 text-muted-foreground">Each snapshot includes the previous event hash, so an edited or missing event breaks the chain.</p></div></div><Pill tone={integrityVerified ? 'teal' : 'neutral'}>{integrityVerified ? `Verified · ${totalEventCount} events` : 'Calculating integrity'}</Pill></section>
       <div className="flex flex-wrap gap-2" aria-label="Filter audit trail"><Filter className="mt-2 size-4 text-muted-foreground" aria-hidden="true" />{auditFilters.map((item) => <button type="button" key={item} onClick={() => setFilter(item)} className={cn('px-3 py-2 text-xs font-semibold', filter === item ? 'bg-primary text-primary-foreground' : 'border border-border bg-card')}>{item}</button>)}</div>
-      <section className="border border-border bg-card p-5"><div className="flex flex-col">{events.map((event, index) => <button type="button" key={event.id} onClick={() => onOpen(event.id)} className="group flex gap-4 text-left"><div className="flex flex-col items-center"><span className={cn('mt-2 size-2 rounded-full', event.category === 'Traceli finding' ? 'bg-[#a9781e]' : event.category === 'Approval' ? 'bg-primary' : 'bg-accent-foreground')} />{index < events.length - 1 ? <span className="mt-2 h-full min-h-16 w-px bg-border" /> : null}</div><div className="flex-1 border-b border-border pb-5 group-last:border-0 group-last:pb-0"><div className="flex flex-col justify-between gap-2 sm:flex-row"><div><p className="text-sm font-semibold group-hover:text-primary">{event.title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{event.actor} · {event.source}</p></div><div className="flex items-center gap-2"><Pill tone={event.category === 'Traceli finding' ? 'amber' : event.category === 'Approval' ? 'blue' : 'teal'}>{event.category}</Pill><span className="text-xs text-muted-foreground">{event.time}</span></div></div><p className="mt-2 line-clamp-2 text-xs leading-5 text-muted-foreground">{event.snapshot}</p><span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary">Inspect event snapshot <Eye className="size-3.5" aria-hidden="true" /></span></div></button>)}</div></section>
+      <section className="border border-border bg-card p-5"><div className="flex flex-col">{events.map((event, index) => { const integrity = integrityByEvent.get(event.id); return <button type="button" key={event.id} onClick={() => onOpen(event.id)} className="group flex gap-4 text-left"><div className="flex flex-col items-center"><span className={cn('mt-2 size-2 rounded-full', event.category === 'Traceli finding' ? 'bg-[#a9781e]' : event.category === 'Approval' ? 'bg-primary' : 'bg-accent-foreground')} />{index < events.length - 1 ? <span className="mt-2 h-full min-h-16 w-px bg-border" /> : null}</div><div className="flex-1 border-b border-border pb-5 group-last:border-0 group-last:pb-0"><div className="flex flex-col justify-between gap-2 sm:flex-row"><div><p className="text-sm font-semibold group-hover:text-primary">{event.title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{event.actor} · {event.source}</p></div><div className="flex items-center gap-2"><Pill tone={event.category === 'Traceli finding' ? 'amber' : event.category === 'Approval' ? 'blue' : 'teal'}>{event.category}</Pill><span className="text-xs text-muted-foreground">{event.time}</span></div></div><p className="mt-2 line-clamp-2 text-xs leading-5 text-muted-foreground">{event.snapshot}</p><div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1"><span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">Inspect event snapshot <Eye className="size-3.5" aria-hidden="true" /></span>{integrity ? <span className="font-mono text-[10px] text-muted-foreground">SHA-256 · {integrity.hash.slice(0, 12)}…</span> : null}</div></div></button> })}</div></section>
     </div>
   )
 }
@@ -1307,6 +1397,7 @@ function DrawerContent({
   readinessDetail,
   decisionState,
   selectedEvent,
+  selectedIntegrity,
   scenario,
   queryString,
   threshold,
@@ -1325,6 +1416,7 @@ function DrawerContent({
   readinessDetail: string
   decisionState: string
   selectedEvent?: AuditEvent
+  selectedIntegrity?: AuditIntegrityRecord
   scenario: Scenario
   queryString: string
   threshold: string
@@ -1359,7 +1451,7 @@ function DrawerContent({
   }
 
   if (drawer.type === 'event') {
-    return selectedEvent ? <div className="flex flex-col gap-5"><div className="flex items-center justify-between gap-3"><Pill tone={selectedEvent.category === 'Traceli finding' ? 'amber' : selectedEvent.category === 'Approval' ? 'blue' : 'teal'}>{selectedEvent.category}</Pill><span className="font-mono text-[11px] text-muted-foreground">{selectedEvent.time}</span></div><div><p className="text-xs font-semibold text-muted-foreground">Event</p><p className="mt-2 text-lg font-semibold">{selectedEvent.title}</p></div><div className="grid gap-3 sm:grid-cols-2"><div className="bg-secondary p-4"><p className="text-xs font-semibold">Actor</p><p className="mt-2 text-sm">{selectedEvent.actor}</p></div><div className="bg-secondary p-4"><p className="text-xs font-semibold">Preserved source</p><p className="mt-2 text-sm">{selectedEvent.source}</p></div></div><div className="border-l-2 border-primary pl-4"><p className="text-xs font-semibold text-muted-foreground">Snapshot at event time</p><p className="mt-2 text-sm leading-6">{selectedEvent.snapshot}</p></div><button type="button" className="inline-flex items-center gap-2 text-xs font-semibold text-primary"><PanelRight className="size-4" aria-hidden="true" />Open versioned source record</button></div> : <p className="text-sm text-muted-foreground">Event snapshot not found.</p>
+    return selectedEvent ? <div className="flex flex-col gap-5"><div className="flex items-center justify-between gap-3"><Pill tone={selectedEvent.category === 'Traceli finding' ? 'amber' : selectedEvent.category === 'Approval' ? 'blue' : 'teal'}>{selectedEvent.category}</Pill><span className="font-mono text-[11px] text-muted-foreground">{selectedEvent.time}</span></div><div><p className="text-xs font-semibold text-muted-foreground">Event</p><p className="mt-2 text-lg font-semibold">{selectedEvent.title}</p></div><div className="grid gap-3 sm:grid-cols-2"><div className="bg-secondary p-4"><p className="text-xs font-semibold">Actor</p><p className="mt-2 text-sm">{selectedEvent.actor}</p></div><div className="bg-secondary p-4"><p className="text-xs font-semibold">Preserved source</p><p className="mt-2 text-sm">{selectedEvent.source}</p></div></div><div className="border-l-2 border-primary pl-4"><p className="text-xs font-semibold text-muted-foreground">Snapshot at event time</p><p className="mt-2 text-sm leading-6">{selectedEvent.snapshot}</p></div>{selectedIntegrity ? <div className="border border-accent-foreground/30 bg-accent/60 p-4"><div className="flex items-center gap-2"><ShieldCheck className="size-4 text-accent-foreground" aria-hidden="true" /><p className="text-xs font-semibold">Integrity link verified</p></div><dl className="mt-3 space-y-3 font-mono text-[10px] leading-5 text-muted-foreground"><div><dt className="font-sans font-semibold text-foreground">Content hash</dt><dd className="break-all">{selectedIntegrity.hash}</dd></div><div><dt className="font-sans font-semibold text-foreground">Previous event hash</dt><dd className="break-all">{selectedIntegrity.previousHash}</dd></div></dl></div> : null}<button type="button" className="inline-flex items-center gap-2 text-xs font-semibold text-primary"><PanelRight className="size-4" aria-hidden="true" />Open versioned source record</button></div> : <p className="text-sm text-muted-foreground">Event snapshot not found.</p>
   }
 
   return <SettingsContent scenario={scenario} queryString={queryString} onUpdate={onUpdateScenario} onCopy={onCopyScenario} onReset={onReset} />
