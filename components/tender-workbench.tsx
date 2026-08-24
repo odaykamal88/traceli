@@ -683,9 +683,9 @@ function DemoScreen({
         />
         <div className="mx-auto flex min-h-[calc(100vh-81px)] max-w-none flex-col items-center px-4 pt-16 sm:px-8 sm:pt-20 lg:px-14 lg:pt-[4.25rem]">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 id="story-heading" className="origin-center font-display text-[clamp(3.9rem,8vw,7.4rem)] leading-[0.79] tracking-[-0.005em] text-[#fbf5ea] lg:[transform:translateY(0.625rem)_scaleX(0.88)]">
+            <h1 id="story-heading" className="origin-center font-display text-[clamp(3.9rem,8vw,7.4rem)] leading-none tracking-[-0.005em] text-[#fbf5ea] lg:[transform:translateY(0.625rem)_scaleX(0.88)]">
               Every award,
-              <span className="block lg:[transform:scaleX(0.96)]">audit ready.</span>
+              <span className="relative top-[0.18em] block lg:top-0 lg:[transform:scaleX(0.96)]">audit ready.</span>
             </h1>
             <p className="mx-auto mt-7 max-w-[570px] text-base leading-7 text-white/65 sm:text-lg sm:leading-8 lg:text-[1.35rem] lg:leading-[1.45]">
               Traceli keeps every rule, bid, question, approval and risk signal linked—so you can explain exactly why a supplier won without rebuilding the story.
