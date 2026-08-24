@@ -6,7 +6,7 @@ export type Scenario = {
   policy: 'ECHO conditions' | 'Internal procurement manual' | 'World Bank conditions'
   geography: 'Horn of Africa' | 'MENA' | 'West Africa'
   currency: 'EUR' | 'USD'
-  role: 'Procurement Director' | 'Panel Member' | 'Auditor'
+  role: 'Procurement Officer' | 'Procurement Director' | 'Panel Member' | 'Auditor'
 }
 
 export const defaultScenario: Scenario = {
@@ -15,7 +15,7 @@ export const defaultScenario: Scenario = {
   policy: 'ECHO conditions',
   geography: 'Horn of Africa',
   currency: 'EUR',
-  role: 'Procurement Director',
+  role: 'Procurement Officer',
 }
 
 export const scenarioOptions = {
@@ -24,7 +24,7 @@ export const scenarioOptions = {
   policy: ['ECHO conditions', 'Internal procurement manual', 'World Bank conditions'],
   geography: ['Horn of Africa', 'MENA', 'West Africa'],
   currency: ['EUR', 'USD'],
-  role: ['Procurement Director', 'Panel Member', 'Auditor'],
+  role: ['Procurement Officer', 'Procurement Director', 'Panel Member', 'Auditor'],
 } as const
 
 export const portfolioCases = [

@@ -118,6 +118,31 @@ const navigation: Array<{ label: string; items: NavigationItem[] }> = [
   },
 ]
 
+const officerNavigation: Array<{ label: string; items: NavigationItem[] }> = [
+  {
+    label: 'My work',
+    items: [
+      { id: 'overview', label: 'Today', icon: LayoutDashboard },
+      { id: 'draft', label: 'Plan & draft', icon: WandSparkles },
+    ],
+  },
+  {
+    label: 'Tender work',
+    items: [
+      { id: 'submissions', label: 'Submissions', icon: FileCheck2 },
+      { id: 'requirements', label: 'Requirements', icon: ClipboardCheck },
+      { id: 'clarifications', label: 'Clarifications', icon: MessageSquareText },
+    ],
+  },
+  {
+    label: 'Assurance',
+    items: [
+      { id: 'audit', label: 'Audit trail', icon: History },
+      { id: 'rules', label: 'Governing rules', icon: BookOpen },
+    ],
+  },
+]
+
 const auditFilters: Array<'All' | AuditCategory> = [
   'All',
   'Human action',
@@ -190,6 +215,8 @@ export default function TenderWorkbench({
   const [policyChecked, setPolicyChecked] = useState(true)
   const [humanApproved, setHumanApproved] = useState(false)
   const [criteriaLocked, setCriteriaLocked] = useState(false)
+  const isProcurementOfficer = viewer?.role.toLowerCase().includes('officer') ?? false
+  const activeNavigation = isProcurementOfficer ? officerNavigation : navigation
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -340,7 +367,7 @@ export default function TenderWorkbench({
   }
 
   const resetDemo = () => {
-    navigate(workspaceMode ? 'portfolio' : 'demo')
+    navigate(workspaceMode ? initialView : 'demo')
     setClarificationReceived(false)
     setApprovalsRemaining(2)
     setDeclarationOutstanding(true)
@@ -457,10 +484,12 @@ export default function TenderWorkbench({
                 <span className="sm:hidden">90 sec</span>
               </span>
             ) : (
-              <Pill tone="teal">
-                <span className="size-1.5 rounded-full bg-accent-foreground" aria-hidden="true" />
-                <span className="hidden sm:inline">DIHAD · 90-second story</span>
-                <span className="sm:hidden">90 sec</span>
+              <Pill tone={viewer?.mode === 'workos' ? 'teal' : 'blue'}>
+                <Lock className="size-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">
+                  {viewer?.mode === 'workos' ? 'Authenticated workspace' : 'Safe demo · fictional data'}
+                </span>
+                <span className="sm:hidden">Safe workspace</span>
               </Pill>
             )}
             {view === 'demo' ? (
@@ -536,7 +565,7 @@ export default function TenderWorkbench({
           </div>
 
           <nav aria-label="Primary navigation" className="space-y-5">
-            {navigation.map((section) => (
+            {activeNavigation.map((section) => (
               <div key={section.label}>
                 <p className="mb-1 px-3 font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{section.label}</p>
                 <div className="flex flex-col gap-1">
@@ -583,7 +612,7 @@ export default function TenderWorkbench({
           )}
         >
           {view !== 'demo' ? <nav aria-label="Mobile navigation" className="-mx-4 mb-5 flex gap-1 overflow-x-auto border-b border-border px-4 pb-3 lg:hidden">
-            {navigation.flatMap((section) => section.items).map(({ id, label }) => (
+            {activeNavigation.flatMap((section) => section.items).map(({ id, label }) => (
               <button
                 type="button"
                 key={id}
@@ -603,7 +632,7 @@ export default function TenderWorkbench({
             <CaseHeader
               caseTitle={caseTitle}
               organization={scenario.organization}
-              role={scenario.role}
+              role={viewer?.role ?? scenario.role}
               decisionState={decisionState}
               onDecision={() => setDrawer({ type: 'decision' })}
             />
@@ -621,7 +650,7 @@ export default function TenderWorkbench({
               activeReadiness={readinessState}
               activeBlocker={readinessDetail}
               policy={scenario.policy}
-              role={scenario.role}
+              role={viewer?.role ?? scenario.role}
               onOpenCase={() => navigate('overview')}
               onOpenAudit={() => navigate('audit')}
               onOpenRules={() => navigate('rules')}
@@ -655,6 +684,7 @@ export default function TenderWorkbench({
               onNavigate={navigate}
               onCoverage={() => setDrawer({ type: 'why', subject: 'coverage' })}
               onDecision={() => setDrawer({ type: 'decision' })}
+              onEvidence={() => setDrawer({ type: 'evidence' })}
             />
           ) : null}
           {view === 'golden' ? (
@@ -907,7 +937,7 @@ function CaseHeader({
 }: {
   caseTitle: string
   organization: Scenario['organization']
-  role: Scenario['role']
+  role: string
   decisionState: string
   onDecision: () => void
 }) {
@@ -947,7 +977,7 @@ function PortfolioScreen({
   activeReadiness: string
   activeBlocker: string
   policy: Scenario['policy']
-  role: Scenario['role']
+  role: string
   onOpenCase: () => void
   onOpenAudit: () => void
   onOpenRules: () => void
@@ -1202,6 +1232,7 @@ function OverviewScreen({
   onNavigate,
   onCoverage,
   onDecision,
+  onEvidence,
 }: {
   evidenceCoverage: number
   readinessState: string
@@ -1213,9 +1244,95 @@ function OverviewScreen({
   onNavigate: (view: View) => void
   onCoverage: () => void
   onDecision: () => void
+  onEvidence: () => void
 }) {
+  const nextAction = !clarificationReceived
+    ? {
+        title: 'Review the missing Ethiopia evidence',
+        detail: 'Traceli found regional language, but no Ethiopia-specific proof. Nothing has been marked compliant.',
+        label: 'Inspect evidence gap',
+        reassurance: 'Opens the cited supplier passage. It does not change supplier status.',
+        action: onEvidence,
+      }
+    : approvalsRemaining > 0 || declarationOutstanding
+      ? {
+          title: 'Record the human sign-off',
+          detail: 'The evidence gap is resolved. Panel approvals and the final conflict declaration still block the award record.',
+          label: 'Open sign-off controls',
+          reassurance: 'Only named reviewers can approve or complete a declaration.',
+          action: onDecision,
+        }
+      : decisionState !== 'Locked'
+        ? {
+            title: 'Lock the decision record',
+            detail: 'Evidence and human controls are complete. Locking seals the source and actor chronology.',
+            label: 'Review before lock',
+            reassurance: 'A named human owner must confirm the final lock.',
+            action: onDecision,
+          }
+        : {
+            title: 'Decision record is audit ready',
+            detail: 'The award record is sealed with its source snapshots, human approvals and event chain.',
+            label: 'Inspect audit trail',
+            reassurance: 'Corrections create a new event; they do not rewrite the locked history.',
+            action: () => onNavigate('audit'),
+          }
+
+  const workflowSteps = [
+    { label: 'Evidence', complete: clarificationReceived, current: !clarificationReceived },
+    { label: 'Panel review', complete: approvalsRemaining === 0, current: clarificationReceived && approvalsRemaining > 0 },
+    { label: 'Declarations', complete: !declarationOutstanding, current: clarificationReceived && approvalsRemaining === 0 && declarationOutstanding },
+    { label: 'Lock record', complete: decisionState === 'Locked', current: decisionState !== 'Locked' && clarificationReceived && approvalsRemaining === 0 && !declarationOutstanding },
+  ]
+
   return (
     <div className="flex flex-col gap-6">
+      <div className="grid gap-5 xl:grid-cols-[1.35fr_0.65fr]">
+        <section className="border border-primary/25 bg-card p-5 shadow-sm sm:p-6" aria-live="polite">
+          <div className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-[#a9781e]" aria-hidden="true" />
+            <Eyebrow>Your next safe action</Eyebrow>
+          </div>
+          <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">{nextAction.title}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{nextAction.detail}</p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <button type="button" onClick={nextAction.action} className="inline-flex min-h-12 items-center justify-center gap-3 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+              {nextAction.label}
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </button>
+            <p className="flex max-w-md items-start gap-2 text-xs leading-5 text-muted-foreground">
+              <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent-foreground" aria-hidden="true" />
+              {nextAction.reassurance}
+            </p>
+          </div>
+        </section>
+
+        <section className="border border-accent-foreground/25 bg-accent/50 p-5 sm:p-6" aria-labelledby="protected-by-design">
+          <div className="flex items-center gap-2">
+            <Lock className="size-4 text-accent-foreground" aria-hidden="true" />
+            <h2 id="protected-by-design" className="text-sm font-semibold">Protected by design</h2>
+          </div>
+          <div className="mt-5 space-y-4">
+            <SafetyPromise icon={Link2} title="Source linked" detail="Every finding opens its exact passage or attachment." />
+            <SafetyPromise icon={Users} title="Human decided" detail="Traceli never makes the compliance or award decision." />
+            <SafetyPromise icon={History} title="Activity retained" detail="Clarifications, determinations and approvals join the chronology." />
+          </div>
+        </section>
+      </div>
+
+      <ol className="grid overflow-hidden border border-border bg-border sm:grid-cols-4" aria-label="Award readiness workflow">
+        {workflowSteps.map((step, index) => (
+          <li key={step.label} className={cn('bg-card p-4', step.current && 'bg-[#fbf5df]')} aria-current={step.current ? 'step' : undefined}>
+            <div className="flex items-center justify-between gap-3">
+              <span className="font-mono text-[10px] font-semibold text-muted-foreground">0{index + 1}</span>
+              {step.complete ? <CheckCircle2 className="size-4 text-accent-foreground" aria-hidden="true" /> : step.current ? <AlertCircle className="size-4 text-[#8b6014]" aria-hidden="true" /> : <Clock3 className="size-4 text-muted-foreground" aria-hidden="true" />}
+            </div>
+            <p className="mt-3 text-sm font-semibold">{step.label}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{step.complete ? 'Complete' : step.current ? 'Needs attention' : 'Waiting'}</p>
+          </li>
+        ))}
+      </ol>
+
       <div className="grid gap-4 md:grid-cols-3" aria-live="polite">
         <Metric label="Evidence coverage" value={`${evidenceCoverage}%`} detail={`${clarificationReceived ? '27' : '23'} of 27 required evidence links resolved`} tone={clarificationReceived ? 'teal' : 'blue'} action="Explain denominator" onAction={onCoverage} />
         <Metric label="Decision readiness" value={readinessState} detail={readinessDetail} tone={readinessState === 'Blocked' ? 'amber' : 'teal'} />
@@ -1240,18 +1357,24 @@ function OverviewScreen({
       </div>
 
       <section className="border border-border bg-card">
-        <div className="flex items-center justify-between border-b border-border p-5"><div><h2 className="font-semibold">What needs attention</h2><p className="mt-1 text-xs text-muted-foreground">Every blocker has an owner, source and next action.</p></div><button type="button" onClick={() => onNavigate('submissions')} className="text-xs font-semibold text-primary">Review submissions</button></div>
+        <div className="flex items-center justify-between border-b border-border p-5"><div><h2 className="font-semibold">What comes next</h2><p className="mt-1 text-xs text-muted-foreground">The remaining controls stay visible without competing with your current task.</p></div><button type="button" onClick={() => onNavigate('submissions')} className="text-xs font-semibold text-primary">Review all submissions</button></div>
         <div className="grid gap-3 p-5 md:grid-cols-3">
-          <Attention title="Northstar Relief · REQ-07" body={clarificationReceived ? 'Clarification attached and reviewer determination updated' : 'Ethiopia distribution evidence not located'} tone={clarificationReceived ? 'teal' : 'amber'} onClick={() => onNavigate('golden')} />
           <Attention title="Panel approvals" body={approvalsRemaining ? `${approvalsRemaining} reviewer approvals remain outstanding` : 'All reviewer approvals recorded'} tone={approvalsRemaining ? 'amber' : 'teal'} onClick={onDecision} />
           <Attention title="Conflict declaration" body={declarationOutstanding ? 'One signed declaration is still required' : 'All declarations complete'} tone={declarationOutstanding ? 'amber' : 'teal'} onClick={() => onNavigate('requirements')} />
+          <Attention title="Audit chronology" body="Every source, clarification and human action is retained" tone="teal" onClick={() => onNavigate('audit')} />
         </div>
       </section>
+    </div>
+  )
+}
 
-      <div className="grid gap-5 md:grid-cols-2">
-        <Panel title="Donor threshold exception" eyebrow="Process control"><p className="text-sm leading-6 text-muted-foreground">Procurement value exceeds the prepared donor threshold. Additional grants approval must be attached before lock.</p><button type="button" onClick={() => onNavigate('rules')} className="mt-4 text-xs font-semibold text-primary">Open governing rule</button></Panel>
-        <Panel title="Kenya Shelter RFP 2025" eyebrow="Related precedent"><p className="text-sm leading-6 text-muted-foreground">The same geographic-capacity wording produced a clarification. Traceli preserved the approved resolution for reuse, not blind copying.</p><button type="button" onClick={() => onNavigate('draft')} className="mt-4 text-xs font-semibold text-primary">Inspect drafting trace</button></Panel>
-      </div>
+function SafetyPromise({ icon: Icon, title, detail }: { icon: LucideIcon; title: string; detail: string }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-card text-primary">
+        <Icon className="size-3.5" aria-hidden="true" />
+      </span>
+      <div><p className="text-xs font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{detail}</p></div>
     </div>
   )
 }

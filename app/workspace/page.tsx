@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function WorkspacePage() {
   const viewer = await getWorkspaceViewer()
+  const initialView = viewer.role.toLowerCase().includes('officer') ? 'overview' : 'portfolio'
 
-  return <TenderWorkbench initialView="portfolio" viewer={viewer} workspaceMode />
+  return <TenderWorkbench initialView={initialView} viewer={viewer} workspaceMode />
 }

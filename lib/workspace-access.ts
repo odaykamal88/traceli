@@ -11,6 +11,16 @@ const requiredWorkOSEnvironmentVariables = [
   'NEXT_PUBLIC_WORKOS_REDIRECT_URI',
 ] as const
 
+const roleLabels: Record<string, string> = {
+  'procurement-officer': 'Procurement Officer',
+  'panel-member': 'Panel Member',
+  'procurement-director': 'Procurement Director',
+  auditor: 'Auditor',
+  'workspace-admin': 'Workspace Admin',
+  admin: 'Admin',
+  member: 'Member',
+}
+
 export function isWorkOSConfigured() {
   return requiredWorkOSEnvironmentVariables.every((name) => Boolean(process.env[name]))
 }
@@ -18,11 +28,11 @@ export function isWorkOSConfigured() {
 export async function getWorkspaceViewer(): Promise<WorkspaceViewer> {
   if (!isWorkOSConfigured()) {
     return {
-      id: 'demo-user-procurement-director',
-      name: 'Amina Malik',
+      id: 'demo-user-procurement-officer',
+      name: 'Leila Mansour',
       email: 'fictional.demo@traceli.app',
       organizationId: 'demo-humanitarian-organization',
-      role: 'Procurement Director',
+      role: 'Procurement Officer',
       mode: 'demo',
     }
   }
@@ -35,7 +45,7 @@ export async function getWorkspaceViewer(): Promise<WorkspaceViewer> {
     name: fullName || user.email,
     email: user.email,
     organizationId: organizationId ?? 'unassigned-organization',
-    role: role ?? 'member',
+    role: role ? (roleLabels[role] ?? role) : 'Member',
     mode: 'workos',
   }
 }
