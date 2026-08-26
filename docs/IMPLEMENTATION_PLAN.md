@@ -2,7 +2,7 @@
 
 Updated: 26 August 2026
 
-Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md).
+Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md).
 
 ## The product we are building
 
@@ -102,6 +102,8 @@ This is a public-story refinement before the next product iteration. It does not
 - Treat the strip as biography, not customer proof, partnership, UN endorsement, or product adoption. Use monochrome marks and a short non-endorsement note where required.
 - If any affiliation or logo permission is uncertain, use a plain-text credibility line without the affected mark until it is cleared.
 
+Brand gate: maintain an affiliation register containing the mark owner, the named person's verified relationship, the permission-policy source, written approval status where required, approved asset, and review date. Passing code review does not clear a mark for public use.
+
 **Three service outcomes**
 
 - Show three icon-led modules, not a feature catalogue:
@@ -135,7 +137,7 @@ Recommended 90-second page order:
 
 Exit gate: five procurement or audit professionals can explain Traceli as `the proof behind the award` after one scroll; at least three choose the walkthrough or pilot action without prompting; every affiliation and availability claim has an owner and evidence.
 
-Implementation status: the left-led landing composition, single primary walkthrough action, three outcome modules, deterministic 90-second tender journey, public documentation route, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses an affiliation-safe text treatment pending confirmation of each relationship and permission to use official marks. The remaining gate is interview conversion evidence and logo clearance—not another UI feature.
+Implementation status: the left-led landing composition, single primary walkthrough action, three outcome modules, deterministic 90-second tender journey, public documentation route, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses a monochrome, equal-block treatment and explicit non-endorsement language. Relationship verification and mark permission remain separate release gates under [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). The remaining gate is interview conversion evidence and logo clearance—not another UI feature.
 
 ### Sprint 1 — tenant-safe data spine (in progress)
 
