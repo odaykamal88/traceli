@@ -102,7 +102,7 @@ This is a public-story refinement before the next product iteration. It does not
 - Treat the strip as biography, not customer proof, partnership, UN endorsement, or product adoption. Use monochrome marks and a short non-endorsement note where required.
 - If any affiliation or logo permission is uncertain, use a plain-text credibility line without the affected mark until it is cleared.
 
-Brand gate: maintain an affiliation register containing the mark owner, the named person's verified relationship, the permission-policy source, written approval status where required, approved asset, and review date. Passing code review does not clear a mark for public use.
+Brand gate: maintain [AFFILIATION_REGISTER.md](./AFFILIATION_REGISTER.md) with the mark owner, the named person's verified relationship, the permission-policy source, written approval status where required, approved asset, and review date. Passing code review does not clear a mark for public use.
 
 **Three service outcomes**
 

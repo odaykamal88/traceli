@@ -35,14 +35,14 @@ The public page uses a dark assurance field around the promise and an ivory oper
 
 ## Core palette
 
-| Role | Token | Hex | Use |
+| Role | Token | Value | Use |
 | --- | --- | --- | --- |
 | Deep field | Navy 950 | `#061a33` | Public hero, header, high-trust backgrounds |
 | Primary ink | Navy 900 | `#071d39` | Text, controls, product framing |
 | Warm paper | Ivory 50 | `#fbf5ea` | Wordmark, primary light surfaces, hero type |
 | Assurance signal | Mint 400 | `#78d8c4` | Verified states, trace nodes, restrained accents |
 | Operational paper | Ivory 100 | `#f7f3eb` | Content sections and product explanation |
-| Quiet logo field | Grey 50 | `#f4f4f8` | Affiliation-mark blocks |
+| Affiliation glass | White 5.5 | `rgba(255,255,255,0.055)` | Translucent experience-mark blocks over the navy gradient |
 
 Mint signals assurance or linked evidence; it is not general decoration. Red and amber are reserved for genuine risk, exception, or blocked states.
 
@@ -89,7 +89,7 @@ The experience strip is biography, not customer proof.
 - Verify the named person's genuine relationship before adding a mark.
 - Record written mark-use approval where an organization's policy requires it. If affiliation or permission is unresolved, remove the mark and use plain text until cleared.
 
-The initial candidate set is WFP, UN Climate Change, Oxfam, Google, and Careem. Inclusion in code is not evidence that the relationship or permission gate has passed.
+The initial candidate set is WFP, UN Climate Change, Oxfam, Google, and Careem. Inclusion in code is not evidence that the relationship or permission gate has passed. Track the gate in [AFFILIATION_REGISTER.md](./AFFILIATION_REGISTER.md); do not put private employment evidence or personal records in the public repository.
 
 ## Demonstration and evidence rules
 
@@ -119,3 +119,11 @@ Before a public brand release:
 4. The product film returns `200`, supports byte ranges, plays from a clean state, and retains its fictional-data disclosure.
 5. Keyboard focus, contrast, reduced motion, alt text, and responsive overflow checks pass.
 6. Any deliberate exception is documented in the implementation plan before release.
+
+## Build-system ownership
+
+- `components/landing-page.tsx` is the current executable public expression of this system.
+- `docs/IMPLEMENTATION_PLAN.md` owns sequencing, maturity, and honest capability boundaries.
+- `docs/AFFILIATION_REGISTER.md` owns mark-clearance state.
+- `.github/PULL_REQUEST_TEMPLATE.md` turns the release gates into a repeatable review step for future public UI changes.
+- Visual QA evidence may live under `docs/audits/`, but historical screenshots do not override this canonical reference.
