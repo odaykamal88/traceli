@@ -325,6 +325,7 @@ export default function LandingPage() {
             <h2 className="mx-auto mt-4 max-w-3xl font-display text-5xl leading-[0.94] tracking-[-0.025em] sm:text-6xl">Bring one completed tender.</h2>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#52696a]">Reconstruct the decision under an agreed NDA and see whether the proof behind the award can be found without rebuilding it from folders and email.</p>
             <Link href="/demo" className="group mt-8 inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#071d39] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0d3057]">Open the demo workspace<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></Link>
+            <p className="mt-5 text-xs text-[#52696a]">Prefer email? <a href="mailto:hello@trace-li.com" className="font-semibold text-[#1f6f61] underline decoration-[#1f6f61]/30 underline-offset-4 transition hover:text-[#124c43] hover:decoration-current">hello@trace-li.com</a></p>
           </div>
         </section>
       </main>
@@ -332,7 +333,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/10 bg-[#061a33] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1320px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <TraceliMark compact />
-          <div className="flex items-center gap-5 text-xs text-white/45"><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Interactive demo</Link><span>Continuous procurement assurance</span></div>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Interactive demo</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Continuous procurement assurance</span></div>
         </div>
       </footer>
     </div>

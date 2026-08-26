@@ -100,6 +100,15 @@ The initial candidate set is WFP, UN Climate Change, Oxfam, Google, and Careem. 
 - Do not imply that a staged import, integration, risk signal, or audit export is live when it is not.
 - Every consequential product claim should eventually open its source, actor, and chronology.
 
+## Contact placement
+
+The canonical public contact address is `hello@trace-li.com`.
+
+- Place it beneath the final pilot invitation and in the global footer, where contact intent is highest.
+- Keep it out of the first viewport so the ten-second promise and primary walkthrough action remain dominant.
+- Use a direct `mailto:` link and display the full address.
+- Do not publish an alternate spelling or mailbox domain without confirming that its MX records and delivery path are active.
+
 ## Release gates
 
 Before a public brand release:
