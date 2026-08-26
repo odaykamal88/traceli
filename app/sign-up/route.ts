@@ -5,7 +5,7 @@ import { isWorkOSConfigured } from '@/lib/workspace-access'
 
 export const GET = async () => {
   if (!isWorkOSConfigured()) {
-    redirect('/workspace')
+    redirect('/demo?auth=unavailable')
   }
 
   redirect(await getSignUpUrl())

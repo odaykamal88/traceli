@@ -1,6 +1,8 @@
 # Traceli pilot implementation plan
 
-Updated: 24 August 2026
+Updated: 26 August 2026
+
+Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md).
 
 ## The product we are building
 
@@ -27,13 +29,16 @@ If this journey is not obvious without explanation, we simplify it before adding
 
 | Capability | Current state | Honest boundary |
 | --- | --- | --- |
-| Public story | Complete | Static, fictional DIHAD scenario |
-| Protected workspace route | Complete | WorkOS staging AuthKit; production credentials not provisioned |
-| Identity roles | Configured in WorkOS staging | App-level permission enforcement is Sprint 1 |
-| Decision workflow | Interactive demo | State is browser-local, not persisted |
-| Source and actor chronology | Interactive demo | Sources are fictional fixtures |
-| Event integrity | SHA-256 chain calculated and verified | Browser demonstration; server-side signing and durable storage are Sprint 1 |
+| Public story | Core promise complete; conversion refinement queued | Static, fictional DIHAD scenario; no customer or endorsement claims |
+| Fictional interactive demo | Complete | Explicit `/demo`; state remains browser-local |
+| Protected workspace route | Complete | Fails closed without WorkOS, a Traceli role, and a provisioned tenant; production credentials not provisioned |
+| Identity roles | Configured in WorkOS staging | First finding command is role-enforced on the server; remaining commands follow in Sprint 1 |
+| Tenant-safe data spine | First vertical slice complete | Non-production Postgres only; one fictional award is persisted |
+| Decision workflow | Partially persistent | Authenticated clarification determination persists; approvals and lock remain browser-local |
+| Source and actor chronology | Partially persistent | One source version, requirement, finding and server chronology are durable; broader fixtures remain static |
+| Event integrity | Server event chain begun | Finding determination writes hash-linked audit and outbox events transactionally; managed signing remains outstanding |
 | Type/build safety | Complete | Strict type-check and Next.js production build pass |
+| Autonomous operations | Strategy defined; automation not yet implemented | Begin with deterministic CI, security scanning, external probes, and normalized findings; agents remain advisory or pull-request-only |
 
 ### WorkOS staging access model
 
@@ -49,6 +54,22 @@ The default `Member` and `Admin` roles remain untouched. Pilot users must be ass
 
 ## Execution sequence
 
+The immediate sequence is Sprint 0.5 → resume Sprint 1. The critical path to the first live pilot remains Sprint 1 → Sprint 2 → Sprint 3 → Sprint 5 → Sprint 6. The operations track runs in parallel: O0 begins during Sprint 1; O1 must pass before sensitive pilot data; O2 arrives with durable document and AI workflows; O3 arrives before a consequential live pilot. Sprint 4 (MCP) is a parallel distribution track that may start after the tenant and secure-document boundaries pass, but it must not delay a design partner's submissions and clarification journey. Sprint 7 begins only when a signed pilot identifies the first real source system.
+
+### Operations track — autonomous assurance without autonomous control
+
+Outcome: Traceli continuously detects failures, security risks, dependency drift, performance regressions, workflow stalls, and model-cost anomalies while every claim remains machine-verifiable and every consequential change remains controlled.
+
+- Use GitHub Actions, CodeQL, Dependabot, and branch protection for repository assurance.
+- Use an independent synthetic monitor for outside-in availability; a scheduler inside Vercel cannot prove that Vercel itself is reachable.
+- Use authenticated Vercel Cron only as a trigger and Vercel Workflow for durable multi-step jobs; store canonical run and finding state in Postgres.
+- Route model-backed tasks by evaluated capability tier, data policy, latency, and cost—not a hard-coded vendor or model name.
+- Give every job versioned structured inputs/outputs, idempotency, budgets, evidence hashes, test gates, and a kill switch.
+- Keep the supervisory agent read-only. Deterministic policy assigns P0–P3; the agent explains, correlates, and recommends.
+- Let coding agents open bounded pull requests from disposable worktrees; never let them merge, deploy production, rotate secrets, alter access, or repair customer data autonomously.
+
+Immediate O0 gate: pull-request type/build/tenant tests, CodeQL and dependency monitoring, external site health, post-deploy smoke tests, versioned run/finding schemas, and a human-reviewed weekly brief are working. See [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md) for the job catalogue and phased gates.
+
 ### Sprint 0 — credible conversation baseline (complete)
 
 Outcome: a prospect can understand the promise in ten seconds and interrogate the core claim in ninety.
@@ -61,7 +82,62 @@ Outcome: a prospect can understand the promise in ten seconds and interrogate th
 
 Exit gate: public story, protected route, audit interaction, strict types, and production build all pass.
 
-### Sprint 1 — tenant-safe data spine
+### Sprint 0.5 — conversation-to-pilot conversion surface (implemented; interview validation pending)
+
+Outcome: a procurement officer understands the promise in ten seconds, sees the complete tender-to-proof journey in ninety seconds, and has one obvious next action.
+
+This is a public-story refinement before the next product iteration. It does not widen the production data boundary or delay the tenant-safe data spine.
+
+**Landing hierarchy**
+
+- Replace the centered hero with a WorkOS-style split: left-aligned promise and actions; a restrained product/video surface on the right.
+- Keep the headline `Every award, audit ready.` and shorten the supporting copy to one procurement outcome.
+- Remove `See the proof`. Use one dominant action—`Watch the 90-second tender walkthrough`—and one lower-emphasis path to `Open demo workspace`.
+- Remove duplicate or competing above-the-fold explanations. The product visual should demonstrate the claim rather than restate it.
+
+**Credibility strip**
+
+- Use `Built by people with experience at` or `Experience shaped at`, never `Trusted by` and never a bare `Built by` beside organization marks.
+- Candidate marks are WFP, UNFCCC, Oxfam, Google, and Careem only after verifying that a named team member genuinely worked with or at each organization and that the mark may be used in this context.
+- Treat the strip as biography, not customer proof, partnership, UN endorsement, or product adoption. Use monochrome marks and a short non-endorsement note where required.
+- If any affiliation or logo permission is uncertain, use a plain-text credibility line without the affected mark until it is cleared.
+
+**Three service outcomes**
+
+- Show three icon-led modules, not a feature catalogue:
+  1. `Draft from your rules` — turn approved policy, donor conditions, and past tenders into a cited tender and matrix draft.
+  2. `Run the evaluation` — keep submissions, Q&A, reviewer judgments, and exceptions in one controlled process.
+  3. `Defend the award` — preserve approvals, integrity concerns, and source-linked proof in an audit-ready decision record.
+- Use the existing icon library and one visual grammar. Each module gets one sentence and one destination at most.
+
+**Tender-to-proof video**
+
+- Embed a 60–90 second, captioned, click-to-play product walkthrough inspired by Vanta's demo-led proof. Do not autoplay sound.
+- Use a public, completed tender from an authoritative portal, or a buyer-approved irreversibly sanitized tender. Cache the demonstration pack so DIHAD playback does not depend on portal availability.
+- Until secure ingestion and the shown workflow are live, label the asset `Illustrative product walkthrough`; never present a staged import as a live customer integration.
+- Script the sequence as: fetch or upload tender pack → infer cited requirements and matrix → confirm the human-controlled draft → track submissions and Q&A → surface an evidence or integrity concern for human review → record approvals → ask `Why did this supplier win?` → open the audit-ready record.
+- Make the final frame invite one low-friction pilot action: `Bring one completed tender`.
+
+**Documentation surface**
+
+- Add a lightweight public documentation entry point modelled on WorkOS's progressive disclosure: `How Traceli works`, `Security and data handling`, `Procurement workflows`, `Integrations`, and `MCP`.
+- Publish workflow and security documentation as soon as it is accurate. Label unshipped interfaces `Planned` or `Private alpha`; do not imply that MCP, ERP connectors, or live tender fetching are already available.
+- Design the MCP documentation structure now—authorization, scopes, tool catalogue, citations, human confirmation, client setup, and audit semantics—but publish usable setup instructions only when the Sprint 4 read-only alpha passes its isolation and exfiltration tests.
+
+Recommended 90-second page order:
+
+1. Left-aligned promise plus product walkthrough.
+2. Verified team-experience strip.
+3. Three icon-led outcomes.
+4. Tender-to-proof video with chapters and transcript.
+5. Documentation/security entry point.
+6. `Bring one completed tender` call to action.
+
+Exit gate: five procurement or audit professionals can explain Traceli as `the proof behind the award` after one scroll; at least three choose the walkthrough or pilot action without prompting; every affiliation and availability claim has an owner and evidence.
+
+Implementation status: the left-led landing composition, single primary walkthrough action, three outcome modules, deterministic 90-second tender journey, public documentation route, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses an affiliation-safe text treatment pending confirmation of each relationship and permission to use official marks. The remaining gate is interview conversion evidence and logo clearance—not another UI feature.
+
+### Sprint 1 — tenant-safe data spine (in progress)
 
 Outcome: the demo becomes a persistent multi-tenant pilot without yet ingesting sensitive bid files.
 
@@ -74,6 +150,8 @@ Outcome: the demo becomes a persistent multi-tenant pilot without yet ingesting 
 - Add request, authorization, and audit-log tests for cross-tenant denial.
 
 Exit gate: two seeded organizations cannot read, mutate, search, or export each other’s data, including by guessed IDs.
+
+Implemented first slice: a free non-production Postgres sandbox, organization-scoped control-graph tables, a restricted application role plus row-level policies, server-only DTO reads, optimistic finding updates, transactional audit/outbox writes, and automated cross-tenant denial checks. Remaining Sprint 1 work is to move approvals and decision locking to the same command boundary, add idempotency keys, and broaden denial tests across every resource and export.
 
 ### Sprint 2 — secure document room and NDA boundary
 
@@ -104,7 +182,23 @@ Outcome: Traceli infers a first tender structure from approved institutional kno
 
 Exit gate: every generated clause opens its approved sources; unsupported claims are blocked or visibly unresolved.
 
-### Sprint 4 — submissions and clarification loop
+### Sprint 4 — permissioned MCP alpha
+
+Outcome: approved AI clients can interrogate Traceli's control graph without bypassing tenant, document, or human-decision boundaries.
+
+- Expose a remote MCP server as a thin adapter over the same domain services and authorization policies used by the Traceli application; do not create a second business-logic layer.
+- Authenticate through an OAuth 2.1-compatible flow and bind every request to one user, organization, role, and intended Traceli resource.
+- Start with a small allowlist of read-only tools: `list_procurements`, `get_procurement_status`, `get_requirement`, `search_approved_sources`, `get_evidence_gap`, `get_audit_events`, and `verify_decision_record`.
+- Return permission-checked citations, metadata, and minimal redacted excerpts by default—not raw document bodies or unrestricted signed URLs.
+- Add draft-only tools such as `draft_tender_structure`, `prepare_clarification`, and `preview_audit_pack` only after the read boundary passes testing.
+- Require explicit in-product confirmation for any mutation; never permit an MCP client to publish criteria, alter a locked matrix, resolve a finding, approve, exclude a supplier, or award a contract autonomously.
+- Record client, tool, arguments digest, actor, tenant, sources accessed, result classification, denial reason, and timestamp as append-only audit events.
+- Add per-tool scopes, rate limits, token revocation, prompt-injection tests, client conformance tests, and a kill switch by organization and client.
+- Validate the private alpha with Codex and at least one second client among Claude Code, Cursor, or GitHub Copilot before publishing setup instructions.
+
+Exit gate: two seeded organizations remain isolated through MCP; every invocation is traceable; raw restricted documents cannot be exfiltrated through tool output; and the read-only golden journey works in two supported clients.
+
+### Sprint 5 — submissions and clarification loop
 
 Outcome: evaluators can see who is coming through, where evidence is missing, and how a gap was resolved.
 
@@ -117,7 +211,7 @@ Outcome: evaluators can see who is coming through, where evidence is missing, an
 
 Exit gate: a reviewer can resolve one evidence gap end to end, and an auditor can reconstruct both the original gap and the human resolution.
 
-### Sprint 5 — approvals, locked record, and audit export
+### Sprint 6 — approvals, locked record, and audit export
 
 Outcome: the complete decision can be defended without rebuilding it from email and folders.
 
@@ -130,7 +224,7 @@ Outcome: the complete decision can be defended without rebuilding it from email 
 
 Exit gate: an independent reviewer can answer why the supplier won using only the export and its linked evidence package.
 
-### Sprint 6 — ERP and tender-portal boundary
+### Sprint 7 — ERP and tender-portal boundary
 
 Outcome: Traceli complements systems of record rather than trying to replace them.
 
@@ -148,10 +242,15 @@ Exit gate: one pilot procurement moves from source system to Traceli and back wi
 - Authorization is checked on the server for every read, write, search, export, and generated URL.
 - A retrieved passage inherits the document’s access boundary; citations do not bypass permissions.
 - Model providers receive the minimum required text, not the full workspace by default.
+- MCP is another Traceli access channel, not a privileged bypass: every tool call uses the same server-side tenant, role, source, and retention policies as the product UI.
+- MCP tools are read-only by default; consequential actions require a named human to confirm them inside Traceli.
 - Supplier documents are untrusted inputs and cannot issue tool instructions or alter policy.
 - Traceli surfaces evidence and risk signals; named humans retain compliance and award decisions.
 - Locked records are append-only. Corrections create a linked superseding event rather than rewriting history.
 - No production buyer data enters a staging environment.
+- Operations agents receive minimized metadata and evidence references, not raw tender or supplier content; their structured outputs cannot mutate procurement decisions.
+- Runtime health and security findings are operational records, separate from the procurement decision-event chain.
+- No model may lower a deterministic severity, suppress a P0/P1, or bypass a failing CI or isolation gate.
 
 ## First pilot definition
 
@@ -178,8 +277,10 @@ Success measures:
 - Autonomous bid scoring or award recommendation.
 - A general-purpose supplier marketplace.
 - Broad ERP coverage before the first paid pilot.
+- A public, anonymous, or unrestricted MCP server and generic tools such as `search_everything`, `download_document`, or direct database access.
+- Autonomous award, exclusion, approval, criteria publishing, or locked-record mutation through MCP.
 - Custom model training on buyer documents.
 - Continuous web investigations presented as facts without human verification.
 - Replacing the buyer’s tender portal, ERP, document repository, or SIEM.
 
-This sequencing protects the moat: the accumulating control graph, source permissions, verified evidence links, human resolutions, and decision chronology—not allegiance to any single frontier model.
+This sequencing protects the moat: MCP distributes access to Traceli, but the accumulating control graph, source permissions, verified evidence links, human resolutions, and decision chronology remain inside Traceli—not inside any client or single frontier model.

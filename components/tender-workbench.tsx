@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, useTransition, type ReactNode } from 'react'
 import {
   AlertCircle,
   ArrowRight,
@@ -40,12 +40,14 @@ import {
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { confirmClarificationAction } from '@/app/workspace/actions'
 import {
   buildAuditHashChain,
   verifyAuditHashChain,
   type AuditIntegrityRecord,
 } from '@/lib/audit-integrity'
 import type { WorkspaceViewer } from '@/lib/workspace-viewer'
+import type { WorkspaceSnapshot } from '@/lib/workspace-snapshot'
 import {
   baseAuditEvents,
   defaultScenario,
@@ -94,51 +96,39 @@ type NavigationItem = {
 
 const navigation: Array<{ label: string; items: NavigationItem[] }> = [
   {
-    label: 'Assurance portfolio',
-    items: [
-      { id: 'portfolio', label: 'Portfolio home', icon: BriefcaseBusiness },
-      { id: 'draft', label: 'Plan & draft', icon: WandSparkles },
-    ],
-  },
-  {
-    label: 'Active procurement',
-    items: [
-      { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-      { id: 'golden', label: 'Golden thread', icon: GitBranch },
-      { id: 'submissions', label: 'Submissions', icon: FileCheck2 },
-      { id: 'requirements', label: 'Requirements', icon: ClipboardCheck },
-      { id: 'clarifications', label: 'Clarifications', icon: MessageSquareText },
-      { id: 'audit', label: 'Audit trail', icon: History },
-      { id: 'rules', label: 'Governing rules', icon: BookOpen },
-    ],
-  },
-  {
-    label: 'Administration',
-    items: [{ id: 'models', label: 'Model ledger', icon: Database }],
-  },
-]
-
-const officerNavigation: Array<{ label: string; items: NavigationItem[] }> = [
-  {
-    label: 'My work',
+    label: 'Workspace',
     items: [
       { id: 'overview', label: 'Today', icon: LayoutDashboard },
+      { id: 'portfolio', label: 'Procurements', icon: BriefcaseBusiness },
       { id: 'draft', label: 'Plan & draft', icon: WandSparkles },
-    ],
-  },
-  {
-    label: 'Tender work',
-    items: [
-      { id: 'submissions', label: 'Submissions', icon: FileCheck2 },
-      { id: 'requirements', label: 'Requirements', icon: ClipboardCheck },
-      { id: 'clarifications', label: 'Clarifications', icon: MessageSquareText },
+      { id: 'submissions', label: 'Suppliers', icon: Users },
+      { id: 'audit', label: 'Audit', icon: History },
     ],
   },
   {
     label: 'Assurance',
     items: [
-      { id: 'audit', label: 'Audit trail', icon: History },
-      { id: 'rules', label: 'Governing rules', icon: BookOpen },
+      { id: 'rules', label: 'Controls', icon: ShieldCheck },
+      { id: 'models', label: 'Model ledger', icon: Database },
+    ],
+  },
+]
+
+const officerNavigation: Array<{ label: string; items: NavigationItem[] }> = [
+  {
+    label: 'Workspace',
+    items: [
+      { id: 'overview', label: 'Today', icon: LayoutDashboard },
+      { id: 'portfolio', label: 'Procurements', icon: BriefcaseBusiness },
+      { id: 'draft', label: 'Plan & draft', icon: WandSparkles },
+      { id: 'submissions', label: 'Suppliers', icon: Users },
+      { id: 'audit', label: 'Audit', icon: History },
+    ],
+  },
+  {
+    label: 'Assurance',
+    items: [
+      { id: 'rules', label: 'Controls', icon: ShieldCheck },
     ],
   },
 ]
@@ -189,15 +179,23 @@ export default function TenderWorkbench({
   initialView = 'demo',
   viewer,
   workspaceMode = false,
+  workspaceSnapshot,
 }: {
   initialView?: View
   viewer?: WorkspaceViewer
   workspaceMode?: boolean
+  workspaceSnapshot?: WorkspaceSnapshot
 }) {
   const [view, setView] = useState<View>(initialView)
   const [drawer, setDrawer] = useState<Drawer>(null)
   const [scenario, setScenario] = useState<Scenario>(defaultScenario)
-  const [clarificationReceived, setClarificationReceived] = useState(false)
+  const [clarificationReceived, setClarificationReceived] = useState(
+    workspaceSnapshot?.primaryFinding?.status === 'satisfied',
+  )
+  const [findingVersion, setFindingVersion] = useState(
+    workspaceSnapshot?.primaryFinding?.version ?? 1,
+  )
+  const [clarificationPending, startClarificationTransition] = useTransition()
   const [approvalsRemaining, setApprovalsRemaining] = useState(2)
   const [declarationOutstanding, setDeclarationOutstanding] = useState(true)
   const [decisionLocked, setDecisionLocked] = useState(false)
@@ -253,7 +251,9 @@ export default function TenderWorkbench({
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [drawer])
 
-  const evidenceCoverage = clarificationReceived ? 100 : 86
+  const evidenceCoverage = clarificationReceived
+    ? 100
+    : (workspaceSnapshot?.procurement.evidenceCoverage ?? 86)
   const blockerCount = (clarificationReceived ? 0 : 1) + approvalsRemaining + (declarationOutstanding ? 1 : 0)
   const readinessState = decisionLocked ? 'Decision locked' : blockerCount === 0 ? 'Ready to lock' : 'Blocked'
   const decisionState = decisionLocked ? 'Locked' : blockerCount === 0 ? 'Ready to lock' : 'Draft'
@@ -368,7 +368,8 @@ export default function TenderWorkbench({
 
   const resetDemo = () => {
     navigate(workspaceMode ? initialView : 'demo')
-    setClarificationReceived(false)
+    setClarificationReceived(workspaceSnapshot?.primaryFinding?.status === 'satisfied')
+    setFindingVersion(workspaceSnapshot?.primaryFinding?.version ?? 1)
     setApprovalsRemaining(2)
     setDeclarationOutstanding(true)
     setDecisionLocked(false)
@@ -393,9 +394,31 @@ export default function TenderWorkbench({
     resetDemo()
   }
 
-  const openWorkspace = () => window.location.assign('/workspace')
+  const openWorkspace = () => window.location.assign('/demo')
 
   const receiveClarification = () => {
+    const finding = workspaceSnapshot?.primaryFinding
+
+    if (workspaceMode && viewer?.mode === 'workos' && finding) {
+      startClarificationTransition(async () => {
+        try {
+          const result = await confirmClarificationAction({
+            findingId: finding.id,
+            expectedVersion: findingVersion,
+          })
+          setFindingVersion(result.findingVersion)
+          setClarificationReceived(true)
+          navigate('overview')
+          setNotice(
+            `Human determination recorded as server audit event ${result.auditSequence}.`,
+          )
+        } catch {
+          setNotice('The finding changed or could not be updated. Refresh before trying again.')
+        }
+      })
+      return
+    }
+
     setClarificationReceived(true)
     navigate('overview')
     setNotice('Clarification attached: REQ-07, evidence coverage and audit chronology updated together.')
@@ -439,10 +462,20 @@ export default function TenderWorkbench({
 
   const openAuditEvent = (eventId: string) => setDrawer({ type: 'event', eventId })
 
-  const caseTitle = `${scenario.procurement.startsWith('Emergency') ? 'Emergency ' : ''}Shelter & NFI Logistics — ${scenario.geography}`
+  const caseTitle = workspaceSnapshot
+    ? `${workspaceSnapshot.procurement.title} — ${workspaceSnapshot.procurement.region}`
+    : `${scenario.procurement.startsWith('Emergency') ? 'Emergency ' : ''}Shelter & NFI Logistics — ${scenario.geography}`
   const exceptionThreshold = scenario.currency === 'EUR' ? '€150,000' : '$165,000'
   const selectedEvent = drawer?.type === 'event' ? auditEvents.find((event) => event.id === drawer.eventId) : undefined
   const selectedIntegrity = selectedEvent ? auditIntegrityByEvent.get(selectedEvent.id) : undefined
+  const viewerName = viewer?.name ?? 'Leila Mansour'
+  const viewerFirstName = viewerName.split(' ')[0] || 'Leila'
+  const viewerInitials = viewerName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('') || 'LM'
 
   return (
     <div className={cn('min-h-screen', view === 'demo' ? 'bg-[#061a33] text-[#fbf5ea]' : 'bg-background text-foreground')}>
@@ -453,26 +486,31 @@ export default function TenderWorkbench({
         Skip to main content
       </a>
 
-      <header className={cn(
-        'sticky top-0 z-30 border-b backdrop-blur',
-        view === 'demo' ? 'border-white/15 bg-[#061a33]/95 text-[#fbf5ea]' : 'border-border bg-card/95',
-      )}>
+      <header
+        className={cn(
+          'sticky top-0 z-30 border-b backdrop-blur',
+          view === 'demo'
+            ? 'border-white/15 bg-[#061a33]/95 text-[#fbf5ea]'
+            : 'border-white/10 bg-[#071d39]/[0.98] text-[#fbf7ef] shadow-[0_1px_0_rgba(255,255,255,0.04)]',
+        )}
+      >
         <div className={cn(
-          'mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-7',
-          view === 'demo' ? 'py-5' : 'py-3',
+          'mx-auto flex items-center justify-between gap-4 px-4 lg:px-7',
+          view === 'demo' ? 'max-w-[1600px] py-5' : 'max-w-none py-3.5',
         )}>
           <button type="button" onClick={returnToStory} className={cn('flex items-center text-left', view === 'demo' ? 'gap-4' : 'gap-3')}>
             <span className={cn(
               'flex items-center justify-center rounded-lg',
               view === 'demo' ? 'size-10' : 'size-9',
-              view === 'demo' ? 'text-[#fbf5ea]' : 'bg-primary text-primary-foreground',
+              view === 'demo' ? 'text-[#fbf5ea]' : 'border border-white/15 bg-white/[0.06] text-[#a8eadc]',
             )}>
               <ShieldCheck className={cn(view === 'demo' ? 'size-9 stroke-[1.6]' : 'size-5')} aria-hidden="true" />
             </span>
-            <span className={cn(view === 'demo' && 'flex items-center gap-6')}>
-              <span className={cn('block font-mono font-semibold uppercase', view === 'demo' ? 'text-base tracking-[0.32em] text-[#fbf5ea]' : 'text-[11px] tracking-[0.2em] text-primary')}>traceli</span>
+            <span className={cn('flex items-center', view === 'demo' ? 'gap-6' : 'gap-4')}>
+              <span className={cn('block font-mono font-semibold uppercase', view === 'demo' ? 'text-base tracking-[0.32em] text-[#fbf5ea]' : 'text-[12px] tracking-[0.24em] text-white')}>traceli</span>
               {view === 'demo' ? <span className="hidden h-7 w-px bg-white/35 sm:block" aria-hidden="true" /> : null}
-              <span className={cn('hidden sm:block', view === 'demo' ? 'text-[17px] text-white/70' : 'text-xs text-muted-foreground')}>Continuous procurement assurance</span>
+              {view !== 'demo' ? <span className="hidden h-5 w-px bg-white/20 sm:block" aria-hidden="true" /> : null}
+              <span className={cn('hidden sm:block', view === 'demo' ? 'text-[17px] text-white/70' : 'text-xs text-white/55')}>{view === 'demo' ? 'Continuous procurement assurance' : (workspaceSnapshot?.organization.name ?? 'Relief Operations')}</span>
             </span>
           </button>
 
@@ -484,13 +522,11 @@ export default function TenderWorkbench({
                 <span className="sm:hidden">90 sec</span>
               </span>
             ) : (
-              <Pill tone={viewer?.mode === 'workos' ? 'teal' : 'blue'}>
-                <Lock className="size-3.5" aria-hidden="true" />
-                <span className="hidden sm:inline">
-                  {viewer?.mode === 'workos' ? 'Authenticated workspace' : 'Safe demo · fictional data'}
-                </span>
-                <span className="sm:hidden">Safe workspace</span>
-              </Pill>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[11px] font-semibold text-[#a8eadc]">
+                <span className="size-1.5 rounded-full bg-[#64cdb9] shadow-[0_0_0_3px_rgba(100,205,185,0.12)]" aria-hidden="true" />
+                <span className="hidden sm:inline">{viewer?.mode === 'workos' ? (workspaceSnapshot ? `Tenant isolated · ${workspaceSnapshot.assurance.auditEventCount} server events` : 'Authenticated workspace') : 'Fictional demo data'}</span>
+                <span className="sm:hidden">Demo</span>
+              </span>
             )}
             {view === 'demo' ? (
               <button
@@ -498,31 +534,30 @@ export default function TenderWorkbench({
                 onClick={openWorkspace}
                 className="hidden items-center gap-4 text-base font-medium text-[#fbf5ea] hover:text-white hover:underline md:inline-flex"
               >
-                Open live workspace
+                Open demo workspace
                 <ArrowRight className="size-6" aria-hidden="true" />
               </button>
             ) : (
               <>
-                {viewer ? (
-                  <span className="hidden border border-border bg-card px-3 py-2 text-xs text-muted-foreground xl:inline-flex">
-                    <span className="font-semibold text-foreground">{viewer.name}</span>
-                    <span className="mx-2 text-border">/</span>
-                    {viewer.role}
-                  </span>
-                ) : null}
                 <button
                   type="button"
                   onClick={returnToStory}
-                  className="inline-flex items-center gap-2 bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 sm:px-4 sm:text-sm"
+                  className="hidden rounded-lg px-3 py-2 text-xs font-medium text-white/65 transition hover:bg-white/[0.06] hover:text-white md:inline-flex"
                 >
-                  <Sparkles className="size-4" aria-hidden="true" />
                   Back to story
                 </button>
+                <div className="hidden items-center gap-2 border-l border-white/15 pl-3 sm:flex">
+                  <span className="flex size-8 items-center justify-center rounded-full bg-[#dff3ec] text-[10px] font-bold text-[#173f4a]">{viewerInitials}</span>
+                  <span className="hidden text-left xl:block">
+                    <span className="block text-xs font-semibold text-white">{viewerName}</span>
+                    <span className="block text-[10px] text-white/50">{viewer?.role ?? scenario.role}</span>
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => setDrawer({ type: 'settings' })}
                   aria-label="Open DIHAD demo settings"
-                  className="border border-border p-2 text-primary hover:bg-secondary"
+                  className="rounded-lg border border-white/15 p-2 text-white/60 transition hover:bg-white/[0.08] hover:text-white"
                 >
                   <Settings2 className="size-4" aria-hidden="true" />
                 </button>
@@ -532,42 +567,12 @@ export default function TenderWorkbench({
         </div>
       </header>
 
-      <div className={cn('mx-auto flex', view === 'demo' ? 'max-w-none' : 'max-w-[1600px]')}>
-        {view !== 'demo' ? <aside className="hidden w-64 shrink-0 border-r border-border px-4 py-5 lg:block">
-          {viewer ? (
-            <div className="mb-4 border border-border bg-card p-4">
-              <div className="flex items-center gap-2">
-                <Lock className="size-4 text-primary" aria-hidden="true" />
-                <p className="text-xs font-semibold">Access envelope</p>
-              </div>
-              <p className="mt-3 text-xs leading-5 text-muted-foreground">
-                {viewer.mode === 'workos'
-                  ? 'Authenticated through WorkOS. Access is scoped to this organization and role.'
-                  : 'Meeting-safe mode. Fictional procurement data only; no customer documents are loaded.'}
-              </p>
-              <div className="mt-3 border-t border-border pt-3">
-                <Pill tone={viewer.mode === 'workos' ? 'teal' : 'blue'}>
-                  {viewer.mode === 'workos' ? 'Authenticated' : 'Fictional demo'}
-                </Pill>
-              </div>
-            </div>
-          ) : null}
-          <div className="mb-5 border border-border bg-secondary p-4">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Active procurement</p>
-                <p className="mt-3 text-sm font-semibold leading-5">{caseTitle}</p>
-              </div>
-              <Pill tone={readinessState === 'Blocked' ? 'amber' : 'teal'}>{readinessState}</Pill>
-            </div>
-            <p className="mt-2 text-xs text-muted-foreground">RFP-2026-041 · {scenario.organization}</p>
-            <p className="mt-3 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">{readinessDetail}</p>
-          </div>
-
-          <nav aria-label="Primary navigation" className="space-y-5">
+      <div className={cn('mx-auto flex', view === 'demo' ? 'max-w-none' : 'max-w-[1680px]')}>
+        {view !== 'demo' ? <aside className="sticky top-[65px] hidden h-[calc(100vh-65px)] w-[224px] shrink-0 flex-col border-r border-[#d8d5cc] bg-[#fbf8f1] px-4 py-6 lg:flex">
+          <nav aria-label="Primary navigation" className="space-y-7">
             {activeNavigation.map((section) => (
               <div key={section.label}>
-                <p className="mb-1 px-3 font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{section.label}</p>
+                <p className="mb-2 px-3 font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#707a80]">{section.label}</p>
                 <div className="flex flex-col gap-1">
                   {section.items.map(({ id, label, icon: Icon }) => (
                     <button
@@ -576,13 +581,14 @@ export default function TenderWorkbench({
                       onClick={() => navigate(id)}
                       aria-current={view === id ? 'page' : undefined}
                       className={cn(
-                        'flex items-center gap-3 px-3 py-2.5 text-left text-sm',
+                        'group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-left text-[13px] font-medium transition',
                         view === id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
+                          ? 'bg-[#e0f1eb] text-[#071d39] shadow-[inset_0_0_0_1px_rgba(48,128,112,0.08)]'
+                          : 'text-[#667078] hover:bg-[#f0ece2] hover:text-[#071d39]',
                       )}
                     >
-                      <Icon className="size-4" aria-hidden="true" />
+                      <span className={cn('absolute left-0 h-5 w-[3px] rounded-full bg-[#2f8876] transition-opacity', view === id ? 'opacity-100' : 'opacity-0')} aria-hidden="true" />
+                      <Icon className={cn('size-4 transition', view === id ? 'text-[#2f8876]' : 'text-[#7b858b] group-hover:text-[#34454f]')} aria-hidden="true" />
                       {label}
                     </button>
                   ))}
@@ -590,17 +596,14 @@ export default function TenderWorkbench({
               </div>
             ))}
           </nav>
-
-          <div className="mt-7 border border-border bg-card p-4">
-            <p className="text-xs font-semibold">Governance boundary</p>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">Traceli finds, links and challenges evidence. People determine compliance and award.</p>
-            <button
-              type="button"
-              onClick={() => setDrawer({ type: 'why', subject: 'governance' })}
-              className="mt-3 text-xs font-semibold text-primary"
-            >
-              Why this boundary matters
-            </button>
+          <div className="mt-auto rounded-xl border border-[#d8d5cc] bg-white/70 p-3.5">
+            <div className="flex items-center gap-2">
+              <span className="flex size-7 items-center justify-center rounded-lg bg-[#e0f1eb] text-[#237161]"><ShieldCheck className="size-3.5" aria-hidden="true" /></span>
+              <div>
+                <p className="text-[11px] font-semibold text-[#071d39]">Assurance active</p>
+                <p className="text-[10px] text-[#707a80]">{workspaceSnapshot ? `${workspaceSnapshot.assurance.auditEventCount} server events retained` : '7 controls monitored'}</p>
+              </div>
+            </div>
           </div>
         </aside> : null}
 
@@ -608,10 +611,10 @@ export default function TenderWorkbench({
           id="main-content"
           className={cn(
             'min-w-0 flex-1',
-            view === 'demo' ? 'p-0' : 'px-4 py-5 sm:px-6 lg:px-9 lg:py-7',
+            view === 'demo' ? 'p-0' : 'bg-[#f7f4ed] px-4 py-5 sm:px-6 lg:px-10 lg:py-9 xl:px-14',
           )}
         >
-          {view !== 'demo' ? <nav aria-label="Mobile navigation" className="-mx-4 mb-5 flex gap-1 overflow-x-auto border-b border-border px-4 pb-3 lg:hidden">
+          {view !== 'demo' ? <nav aria-label="Mobile navigation" className="-mx-4 mb-6 flex gap-2 overflow-x-auto border-b border-[#d8d5cc] px-4 pb-3 lg:hidden">
             {activeNavigation.flatMap((section) => section.items).map(({ id, label }) => (
               <button
                 type="button"
@@ -619,8 +622,8 @@ export default function TenderWorkbench({
                 onClick={() => navigate(id)}
                 aria-current={view === id ? 'page' : undefined}
                 className={cn(
-                  'shrink-0 px-3 py-2 text-xs font-semibold',
-                  view === id ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground',
+                  'shrink-0 rounded-lg px-3 py-2 text-xs font-semibold transition',
+                  view === id ? 'bg-[#071d39] text-white' : 'bg-white text-[#667078]',
                 )}
               >
                 {label}
@@ -628,7 +631,7 @@ export default function TenderWorkbench({
             ))}
           </nav> : null}
 
-          {view !== 'demo' && view !== 'portfolio' && view !== 'draft' && view !== 'models' ? (
+          {view !== 'demo' && view !== 'overview' && view !== 'portfolio' && view !== 'draft' && view !== 'models' ? (
             <CaseHeader
               caseTitle={caseTitle}
               organization={scenario.organization}
@@ -674,6 +677,7 @@ export default function TenderWorkbench({
           ) : null}
           {view === 'overview' ? (
             <OverviewScreen
+              viewerFirstName={viewerFirstName}
               evidenceCoverage={evidenceCoverage}
               readinessState={readinessState}
               readinessDetail={readinessDetail}
@@ -681,6 +685,7 @@ export default function TenderWorkbench({
               clarificationReceived={clarificationReceived}
               approvalsRemaining={approvalsRemaining}
               declarationOutstanding={declarationOutstanding}
+              workspaceSnapshot={workspaceSnapshot}
               onNavigate={navigate}
               onCoverage={() => setDrawer({ type: 'why', subject: 'coverage' })}
               onDecision={() => setDrawer({ type: 'decision' })}
@@ -712,7 +717,7 @@ export default function TenderWorkbench({
             />
           ) : null}
           {view === 'clarifications' ? (
-            <ClarificationsScreen clarificationReceived={clarificationReceived} onReceive={receiveClarification} />
+            <ClarificationsScreen clarificationReceived={clarificationReceived} pending={clarificationPending} onReceive={receiveClarification} />
           ) : null}
           {view === 'audit' ? (
             <AuditScreen
@@ -756,6 +761,7 @@ export default function TenderWorkbench({
             queryString={queryString}
             threshold={exceptionThreshold}
             onReceiveClarification={receiveClarification}
+            clarificationPending={clarificationPending}
             onOpenClarification={() => setDrawer({ type: 'clarification' })}
             onCompleteSignOff={completeSignOff}
             onLockDecision={lockDecision}
@@ -815,7 +821,7 @@ function DemoScreen({
                 <ArrowRight className="size-6" aria-hidden="true" />
               </a>
               <button type="button" onClick={onOpenWorkspace} className="inline-flex min-h-16 min-w-[275px] items-center justify-center gap-8 rounded-lg border border-white/55 px-8 py-4 text-base font-semibold text-[#fbf5ea] transition hover:-translate-y-0.5 hover:bg-white/10">
-                Open live workspace
+                Open interactive demo
                 <ArrowRight className="size-6" aria-hidden="true" />
               </button>
             </div>
@@ -1222,6 +1228,7 @@ function PlanDraftScreen({
 }
 
 function OverviewScreen({
+  viewerFirstName,
   evidenceCoverage,
   readinessState,
   readinessDetail,
@@ -1229,11 +1236,13 @@ function OverviewScreen({
   clarificationReceived,
   approvalsRemaining,
   declarationOutstanding,
+  workspaceSnapshot,
   onNavigate,
   onCoverage,
   onDecision,
   onEvidence,
 }: {
+  viewerFirstName: string
   evidenceCoverage: number
   readinessState: string
   readinessDetail: string
@@ -1241,141 +1250,199 @@ function OverviewScreen({
   clarificationReceived: boolean
   approvalsRemaining: number
   declarationOutstanding: boolean
+  workspaceSnapshot?: WorkspaceSnapshot
   onNavigate: (view: View) => void
   onCoverage: () => void
   onDecision: () => void
   onEvidence: () => void
 }) {
+  const procurementReference = workspaceSnapshot?.procurement.reference ?? 'RFP-2026-041'
+  const procurementTitle = workspaceSnapshot?.procurement.title ?? 'Emergency Shelter & NFI Logistics'
   const nextAction = !clarificationReceived
     ? {
-        title: 'Review the missing Ethiopia evidence',
-        detail: 'Traceli found regional language, but no Ethiopia-specific proof. Nothing has been marked compliant.',
-        label: 'Inspect evidence gap',
-        reassurance: 'Opens the cited supplier passage. It does not change supplier status.',
+        kicker: `Evidence gap · ${procurementReference}`,
+        title: 'Missing delivery evidence',
+        detail: 'Northstar Relief references regional logistics experience, but no Ethiopia-specific capacity evidence is linked. No compliance decision has been made.',
+        label: 'Review evidence',
+        status: 'Needs attention',
         action: onEvidence,
       }
     : approvalsRemaining > 0 || declarationOutstanding
       ? {
-          title: 'Record the human sign-off',
-          detail: 'The evidence gap is resolved. Panel approvals and the final conflict declaration still block the award record.',
-          label: 'Open sign-off controls',
-          reassurance: 'Only named reviewers can approve or complete a declaration.',
+          kicker: `Human control · ${procurementReference}`,
+          title: 'Panel sign-off is incomplete',
+          detail: 'The evidence gap is resolved. Named panel approvals and the final conflict declaration still block the award record.',
+          label: 'Review sign-off',
+          status: 'Human action',
           action: onDecision,
         }
       : decisionState !== 'Locked'
         ? {
-            title: 'Lock the decision record',
+            kicker: `Decision record · ${procurementReference}`,
+            title: 'The record is ready to lock',
             detail: 'Evidence and human controls are complete. Locking seals the source and actor chronology.',
             label: 'Review before lock',
-            reassurance: 'A named human owner must confirm the final lock.',
+            status: 'Ready to lock',
             action: onDecision,
           }
         : {
+            kicker: `Decision record · ${procurementReference}`,
             title: 'Decision record is audit ready',
             detail: 'The award record is sealed with its source snapshots, human approvals and event chain.',
-            label: 'Inspect audit trail',
-            reassurance: 'Corrections create a new event; they do not rewrite the locked history.',
+            label: 'Open audit trail',
+            status: 'Audit ready',
             action: () => onNavigate('audit'),
           }
 
-  const workflowSteps = [
-    { label: 'Evidence', complete: clarificationReceived, current: !clarificationReceived },
-    { label: 'Panel review', complete: approvalsRemaining === 0, current: clarificationReceived && approvalsRemaining > 0 },
-    { label: 'Declarations', complete: !declarationOutstanding, current: clarificationReceived && approvalsRemaining === 0 && declarationOutstanding },
-    { label: 'Lock record', complete: decisionState === 'Locked', current: decisionState !== 'Locked' && clarificationReceived && approvalsRemaining === 0 && !declarationOutstanding },
-  ]
-
   return (
-    <div className="flex flex-col gap-6">
-      <div className="grid gap-5 xl:grid-cols-[1.35fr_0.65fr]">
-        <section className="border border-primary/25 bg-card p-5 shadow-sm sm:p-6" aria-live="polite">
-          <div className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-[#a9781e]" aria-hidden="true" />
-            <Eyebrow>Your next safe action</Eyebrow>
-          </div>
-          <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">{nextAction.title}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{nextAction.detail}</p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <button type="button" onClick={nextAction.action} className="inline-flex min-h-12 items-center justify-center gap-3 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-              {nextAction.label}
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </button>
-            <p className="flex max-w-md items-start gap-2 text-xs leading-5 text-muted-foreground">
-              <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent-foreground" aria-hidden="true" />
-              {nextAction.reassurance}
-            </p>
-          </div>
-        </section>
-
-        <section className="border border-accent-foreground/25 bg-accent/50 p-5 sm:p-6" aria-labelledby="protected-by-design">
-          <div className="flex items-center gap-2">
-            <Lock className="size-4 text-accent-foreground" aria-hidden="true" />
-            <h2 id="protected-by-design" className="text-sm font-semibold">Protected by design</h2>
-          </div>
-          <div className="mt-5 space-y-4">
-            <SafetyPromise icon={Link2} title="Source linked" detail="Every finding opens its exact passage or attachment." />
-            <SafetyPromise icon={Users} title="Human decided" detail="Traceli never makes the compliance or award decision." />
-            <SafetyPromise icon={History} title="Activity retained" detail="Clarifications, determinations and approvals join the chronology." />
-          </div>
-        </section>
-      </div>
-
-      <ol className="grid overflow-hidden border border-border bg-border sm:grid-cols-4" aria-label="Award readiness workflow">
-        {workflowSteps.map((step, index) => (
-          <li key={step.label} className={cn('bg-card p-4', step.current && 'bg-[#fbf5df]')} aria-current={step.current ? 'step' : undefined}>
-            <div className="flex items-center justify-between gap-3">
-              <span className="font-mono text-[10px] font-semibold text-muted-foreground">0{index + 1}</span>
-              {step.complete ? <CheckCircle2 className="size-4 text-accent-foreground" aria-hidden="true" /> : step.current ? <AlertCircle className="size-4 text-[#8b6014]" aria-hidden="true" /> : <Clock3 className="size-4 text-muted-foreground" aria-hidden="true" />}
-            </div>
-            <p className="mt-3 text-sm font-semibold">{step.label}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{step.complete ? 'Complete' : step.current ? 'Needs attention' : 'Waiting'}</p>
-          </li>
-        ))}
-      </ol>
-
-      <div className="grid gap-4 md:grid-cols-3" aria-live="polite">
-        <Metric label="Evidence coverage" value={`${evidenceCoverage}%`} detail={`${clarificationReceived ? '27' : '23'} of 27 required evidence links resolved`} tone={clarificationReceived ? 'teal' : 'blue'} action="Explain denominator" onAction={onCoverage} />
-        <Metric label="Decision readiness" value={readinessState} detail={readinessDetail} tone={readinessState === 'Blocked' ? 'amber' : 'teal'} />
-        <Metric label="Decision record" value={decisionState} detail={decisionState === 'Draft' ? 'Preview only · export remains gated' : decisionState === 'Ready to lock' ? 'All blockers resolved · human lock required' : 'Locked with immutable chronology'} tone={decisionState === 'Draft' ? 'blue' : 'teal'} action="Open record" onAction={onDecision} />
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <section className="border border-border bg-card">
-          <div className="flex items-center justify-between border-b border-border p-5"><div><h2 className="font-semibold">Golden thread</h2><p className="mt-1 text-xs text-muted-foreground">One obligation from clause to evidence to human judgment.</p></div><button type="button" onClick={() => onNavigate('golden')} className="inline-flex items-center gap-1 text-xs font-semibold text-primary">Open REQ-07 <ArrowRight className="size-3.5" aria-hidden="true" /></button></div>
-          <div className="flex flex-wrap items-center gap-2 p-5 text-xs">
-            {['Tender §4.2', 'REQ-07', 'Criterion 3', 'Northstar Relief', clarificationReceived ? 'Evidence attached' : 'Evidence gap', clarificationReceived ? 'Satisfied' : 'Clarify'].map((item, index, items) => (
-              <span key={item} className="flex items-center gap-2"><span className={cn('rounded px-2.5 py-2', index === items.length - 1 ? (clarificationReceived ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground') : 'bg-secondary')}>{item}</span>{index < items.length - 1 ? <ArrowRight className="size-3 text-muted-foreground" aria-hidden="true" /> : null}</span>
-            ))}
-          </div>
-        </section>
-        <Panel title="Human controls" eyebrow="Decision readiness">
-          <ControlState label="Correct procurement method" state="Pass" />
-          <ControlState label="Criteria locked before opening" state="Pass" />
-          <ControlState label="Panel approvals" state={approvalsRemaining ? `${approvalsRemaining} outstanding` : 'Complete'} />
-          <ControlState label="Conflict declarations" state={declarationOutstanding ? '1 outstanding' : 'Complete'} />
-        </Panel>
-      </div>
-
-      <section className="border border-border bg-card">
-        <div className="flex items-center justify-between border-b border-border p-5"><div><h2 className="font-semibold">What comes next</h2><p className="mt-1 text-xs text-muted-foreground">The remaining controls stay visible without competing with your current task.</p></div><button type="button" onClick={() => onNavigate('submissions')} className="text-xs font-semibold text-primary">Review all submissions</button></div>
-        <div className="grid gap-3 p-5 md:grid-cols-3">
-          <Attention title="Panel approvals" body={approvalsRemaining ? `${approvalsRemaining} reviewer approvals remain outstanding` : 'All reviewer approvals recorded'} tone={approvalsRemaining ? 'amber' : 'teal'} onClick={onDecision} />
-          <Attention title="Conflict declaration" body={declarationOutstanding ? 'One signed declaration is still required' : 'All declarations complete'} tone={declarationOutstanding ? 'amber' : 'teal'} onClick={() => onNavigate('requirements')} />
-          <Attention title="Audit chronology" body="Every source, clarification and human action is retained" tone="teal" onClick={() => onNavigate('audit')} />
+    <div className="workspace-enter mx-auto flex w-full max-w-[1180px] flex-col gap-8">
+      <header className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Today · 25 August</p>
+          <h1 className="mt-2 text-[clamp(2rem,4vw,3.15rem)] font-semibold leading-[1.05] tracking-[-0.045em] text-[#071d39]">Good morning, {viewerFirstName}.</h1>
+          <p className="mt-3 text-[15px] text-[#657078]">One tender needs your attention.</p>
         </div>
+        <div className="flex items-center gap-5 rounded-xl border border-[#dedbd2] bg-white/70 px-4 py-3 sm:text-right">
+          <div>
+            <p className="font-mono text-[11px] font-semibold text-[#071d39]">3 active</p>
+            <p className="mt-0.5 text-[11px] text-[#a46c13]">1 needs attention</p>
+          </div>
+          <span className="h-8 w-px bg-[#dedbd2]" aria-hidden="true" />
+          <button type="button" onClick={() => onNavigate('portfolio')} className="text-xs font-semibold text-[#071d39] hover:underline">View all</button>
+        </div>
+      </header>
+
+      <section className="relative overflow-hidden rounded-2xl border border-[#dacda9] bg-white shadow-[0_22px_60px_rgba(7,29,57,0.08)]" aria-live="polite">
+        <span className="absolute inset-y-0 left-0 w-1 bg-[#b27c24]" aria-hidden="true" />
+        <div className="grid lg:grid-cols-[minmax(0,1fr)_260px]">
+          <div className="p-6 sm:p-8 lg:p-9">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#f7ead0] px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[#7a5416]">
+                <span className="size-1.5 rounded-full bg-[#b27c24]" aria-hidden="true" />
+                {nextAction.status}
+              </span>
+              <span className="font-mono text-[10px] text-[#7d868b]">{nextAction.kicker}</span>
+            </div>
+            <h2 className="mt-6 max-w-2xl text-[clamp(1.65rem,3vw,2.45rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-[#071d39]">{nextAction.title}</h2>
+            <p className="mt-4 max-w-3xl text-[15px] leading-7 text-[#58656d]">{nextAction.detail}</p>
+            <div className="mt-7 flex flex-wrap items-center gap-4">
+              <button type="button" onClick={nextAction.action} className="group inline-flex min-h-11 items-center justify-center gap-3 rounded-[10px] bg-[#071d39] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_18px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0c2a4d] hover:shadow-[0_12px_24px_rgba(7,29,57,0.2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2f8876]">
+                {nextAction.label}
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              </button>
+              <button type="button" onClick={() => onNavigate('golden')} className="inline-flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold text-[#385466] transition hover:bg-[#eef0eb] hover:text-[#071d39]">
+                Trace requirement
+                <Link2 className="size-3.5" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+
+          <div className="border-t border-[#e3e0d8] bg-[#faf8f2] p-6 lg:border-l lg:border-t-0 lg:p-7">
+            <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#7d868b]">Requirement 07</p>
+            <p className="mt-3 text-sm font-semibold leading-5 text-[#071d39]">Country-specific delivery capacity</p>
+            <div className="mt-6 space-y-4 text-xs">
+              <div className="flex items-center justify-between gap-4 border-b border-[#e3e0d8] pb-3"><span className="text-[#727b80]">Evidence linked</span><strong className="font-mono text-[#071d39]">{clarificationReceived ? '27 / 27' : '23 / 27'}</strong></div>
+              <div className="flex items-center justify-between gap-4 border-b border-[#e3e0d8] pb-3"><span className="text-[#727b80]">Coverage</span><strong className="font-mono text-[#071d39]">{evidenceCoverage}%</strong></div>
+              <div className="flex items-center justify-between gap-4"><span className="text-[#727b80]">Owner</span><strong className="text-[#071d39]">Sarah Ahmed</strong></div>
+            </div>
+            <button type="button" onClick={onCoverage} className="mt-6 text-[11px] font-semibold text-[#2a6f61] hover:underline">How coverage is calculated</button>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-[#e3e0d8] bg-[#fdfcf8] px-6 py-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7 lg:px-9">
+          <AssuranceSignal icon={Link2} label="Source linked" />
+          <AssuranceSignal icon={Users} label="Human decision required" tone="amber" />
+          <AssuranceSignal icon={History} label={workspaceSnapshot ? `${workspaceSnapshot.assurance.auditEventCount} server events retained` : 'Activity retained'} />
+        </div>
+      </section>
+
+      <section aria-labelledby="your-procurements-title">
+        <div className="mb-4 flex items-end justify-between gap-4">
+          <div>
+            <h2 id="your-procurements-title" className="text-lg font-semibold tracking-[-0.02em] text-[#071d39]">Your procurements</h2>
+            <p className="mt-1 text-xs text-[#737d82]">Ordered by what needs judgment.</p>
+          </div>
+          <button type="button" onClick={() => onNavigate('portfolio')} className="group inline-flex items-center gap-2 text-xs font-semibold text-[#071d39] hover:underline">
+            View all
+            <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </button>
+        </div>
+        <div className="overflow-hidden rounded-2xl border border-[#d8d5cc] bg-white shadow-[0_10px_35px_rgba(7,29,57,0.045)]">
+          <ProcurementRow
+            title={procurementTitle}
+            detail={`Evidence review · ${procurementReference}`}
+            status={clarificationReceived ? 'Panel review' : 'Needs attention'}
+            tone={clarificationReceived ? 'blue' : 'amber'}
+            action="Review"
+            onClick={nextAction.action}
+          />
+          <ProcurementRow
+            title="Solar Cold-Chain Services"
+            detail="Panel review · RFP-2026-036"
+            status={approvalsRemaining ? '2 approvals' : 'Approved'}
+            tone={approvalsRemaining ? 'blue' : 'teal'}
+            action="Open"
+            onClick={() => onNavigate('portfolio')}
+          />
+          <ProcurementRow
+            title="WASH Rehabilitation Works"
+            detail="Record locked · RFP-2026-029"
+            status="Audit ready"
+            tone="teal"
+            action="View"
+            onClick={() => onNavigate('audit')}
+          />
+        </div>
+        <p className="mt-4 text-[11px] leading-5 text-[#7b8489]">{readinessState === 'Blocked' ? readinessDetail : 'All visible controls are current.'} · Decision record: {decisionState}</p>
       </section>
     </div>
   )
 }
 
-function SafetyPromise({ icon: Icon, title, detail }: { icon: LucideIcon; title: string; detail: string }) {
+function AssuranceSignal({ icon: Icon, label, tone = 'teal' }: { icon: LucideIcon; label: string; tone?: 'teal' | 'amber' }) {
   return (
-    <div className="flex items-start gap-3">
-      <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-card text-primary">
-        <Icon className="size-3.5" aria-hidden="true" />
+    <span className="inline-flex items-center gap-2 text-[11px] font-medium text-[#637078]">
+      <span className={cn('flex size-5 items-center justify-center rounded-full', tone === 'amber' ? 'bg-[#f7ead0] text-[#966719]' : 'bg-[#e0f1eb] text-[#247160]')}>
+        <Icon className="size-3" aria-hidden="true" />
       </span>
-      <div><p className="text-xs font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{detail}</p></div>
-    </div>
+      {label}
+    </span>
+  )
+}
+
+function ProcurementRow({
+  title,
+  detail,
+  status,
+  tone,
+  action,
+  onClick,
+}: {
+  title: string
+  detail: string
+  status: string
+  tone: 'amber' | 'blue' | 'teal'
+  action: string
+  onClick: () => void
+}) {
+  const statusStyles = {
+    amber: 'bg-[#f7ead0] text-[#7a5416]',
+    blue: 'bg-[#e8eef2] text-[#385466]',
+    teal: 'bg-[#e0f1eb] text-[#246d5f]',
+  }
+
+  return (
+    <button type="button" onClick={onClick} className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-[#e3e0d8] px-5 py-4 text-left transition last:border-b-0 hover:bg-[#faf8f2] sm:grid-cols-[minmax(0,1fr)_auto_84px] sm:px-6">
+      <span className="min-w-0">
+        <span className="block truncate text-sm font-semibold text-[#071d39]">{title}</span>
+        <span className="mt-1 block truncate text-[11px] text-[#768086]">{detail}</span>
+      </span>
+      <span className={cn('inline-flex w-fit rounded-full px-2.5 py-1 font-mono text-[10px] font-semibold', statusStyles[tone])}>{status}</span>
+      <span className="hidden items-center justify-end gap-2 text-xs font-semibold text-[#071d39] sm:flex">
+        {action}
+        <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+      </span>
+    </button>
   )
 }
 
@@ -1388,15 +1455,6 @@ function Metric({ label, value, detail, tone, action, onAction }: { label: strin
       <div className="mt-4 flex items-end justify-between gap-3"><div className={cn('h-1 w-16', tone === 'teal' ? 'bg-accent-foreground' : tone === 'amber' ? 'bg-[#a9781e]' : 'bg-primary')} />{action && onAction ? <button type="button" onClick={onAction} className="text-[11px] font-semibold text-primary">{action}</button> : null}</div>
     </div>
   )
-}
-
-function ControlState({ label, state }: { label: string; state: string }) {
-  const passing = state === 'Pass' || state === 'Complete'
-  return <div className="flex items-center justify-between gap-3 border-b border-border py-3 first:pt-0 last:border-0 last:pb-0"><span className="flex items-center gap-2 text-sm">{passing ? <Check className="size-4 text-accent-foreground" aria-hidden="true" /> : <AlertCircle className="size-4 text-[#8b6014]" aria-hidden="true" />}{label}</span><span className="text-xs text-muted-foreground">{state}</span></div>
-}
-
-function Attention({ title, body, tone, onClick }: { title: string; body: string; tone: 'amber' | 'teal'; onClick: () => void }) {
-  return <button type="button" onClick={onClick} className="border border-border p-4 text-left hover:bg-secondary"><div className="flex items-start justify-between gap-3"><p className="text-sm font-semibold">{title}</p>{tone === 'teal' ? <CheckCircle2 className="size-4 shrink-0 text-accent-foreground" aria-hidden="true" /> : <AlertCircle className="size-4 shrink-0 text-[#8b6014]" aria-hidden="true" />}</div><p className="mt-2 text-xs leading-5 text-muted-foreground">{body}</p></button>
 }
 
 function GoldenThreadScreen({ clarificationReceived, onEvidence, onWhyRequirement, onClarification }: { clarificationReceived: boolean; onEvidence: () => void; onWhyRequirement: () => void; onClarification: () => void }) {
@@ -1452,12 +1510,12 @@ function RequirementsScreen({ query, setQuery, clarificationReceived, onWhy }: {
   )
 }
 
-function ClarificationsScreen({ clarificationReceived, onReceive }: { clarificationReceived: boolean; onReceive: () => void }) {
+function ClarificationsScreen({ clarificationReceived, pending, onReceive }: { clarificationReceived: boolean; pending: boolean; onReceive: () => void }) {
   return (
     <div className="flex flex-col gap-5"><div><Eyebrow>Clarification queue</Eyebrow><h2 className="mt-2 text-2xl font-semibold">Close the gap without losing the reason.</h2><p className="mt-2 text-sm text-muted-foreground">Source requirement, supplier evidence and human action remain visible in one workspace.</p></div>
       <section className="border border-border bg-card"><div className="flex flex-col justify-between gap-3 border-b border-border p-5 sm:flex-row sm:items-center"><div><p className="text-sm font-semibold">Northstar Relief Logistics · CLR-004</p><p className="mt-1 text-xs text-muted-foreground">Owner · Amina Malik · Due 19 Aug 2026</p></div><Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Resolved and attached' : 'Response received · review required'}</Pill></div>
         <div className="grid gap-0 lg:grid-cols-2"><div className="border-b border-border p-5 lg:border-b-0 lg:border-r"><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Why the clarification exists</p><h3 className="mt-2 font-semibold">REQ-07 · Emergency delivery capacity</h3><blockquote className="mt-4 border-l-2 border-primary pl-4 text-sm leading-6">“Capacity to deliver within 72 hours across Kenya, Somalia and Ethiopia.”</blockquote><div className="mt-4 bg-secondary p-4"><p className="text-xs font-semibold">Supplier response · p.38</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Regional capacity was described, but no Ethiopia warehouse, partner or distribution plan was named.</p></div></div>
-          <div className="p-5"><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Supplier response · received 19 Aug</p><h3 className="mt-2 font-semibold">Ethiopia distribution plan</h3><p className="mt-4 text-sm leading-6">Northstar attached its Addis Ababa partner agreement, dispatch roster and a country-specific 72-hour delivery route plan.</p><div className="mt-4 flex items-center gap-3 border border-accent-foreground/30 bg-accent/60 p-4"><FileCheck2 className="size-5 text-accent-foreground" aria-hidden="true" /><div><p className="text-sm font-semibold">CLR-004-R1.pdf</p><p className="mt-1 text-xs text-muted-foreground">3 pages · supplier-signed · malware scan passed</p></div></div>{clarificationReceived ? <div className="mt-5 flex items-start gap-3"><CheckCircle2 className="mt-0.5 size-5 text-accent-foreground" aria-hidden="true" /><div><p className="text-sm font-semibold">Attached to REQ-07 and reviewed</p><p className="mt-1 text-xs leading-5 text-muted-foreground">Evidence coverage, requirement state and audit chronology were updated together.</p></div></div> : <button type="button" onClick={onReceive} className="mt-5 w-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">Attach response to REQ-07 and record determination</button>}</div></div>
+          <div className="p-5"><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Supplier response · received 19 Aug</p><h3 className="mt-2 font-semibold">Ethiopia distribution plan</h3><p className="mt-4 text-sm leading-6">Northstar attached its Addis Ababa partner agreement, dispatch roster and a country-specific 72-hour delivery route plan.</p><div className="mt-4 flex items-center gap-3 border border-accent-foreground/30 bg-accent/60 p-4"><FileCheck2 className="size-5 text-accent-foreground" aria-hidden="true" /><div><p className="text-sm font-semibold">CLR-004-R1.pdf</p><p className="mt-1 text-xs text-muted-foreground">3 pages · supplier-signed · malware scan passed</p></div></div>{clarificationReceived ? <div className="mt-5 flex items-start gap-3"><CheckCircle2 className="mt-0.5 size-5 text-accent-foreground" aria-hidden="true" /><div><p className="text-sm font-semibold">Attached to REQ-07 and reviewed</p><p className="mt-1 text-xs leading-5 text-muted-foreground">Evidence coverage, requirement state and audit chronology were updated together.</p></div></div> : <button type="button" disabled={pending} onClick={onReceive} className="mt-5 w-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground disabled:cursor-wait disabled:opacity-60">{pending ? 'Recording determination…' : 'Attach response to REQ-07 and record determination'}</button>}</div></div>
       </section>
     </div>
   )
@@ -1508,7 +1566,21 @@ function DrawerFrame({ drawer, onClose, children }: { drawer: Exclude<Drawer, nu
   const [eyebrow, title] = labels[drawer.type]
 
   return (
-    <div className="fixed inset-0 z-50"><button type="button" onClick={onClose} aria-label="Close side panel" className="absolute inset-0 bg-foreground/25" /><aside role="dialog" aria-modal="true" aria-labelledby="drawer-title" className="absolute right-0 top-0 flex h-full w-full max-w-2xl flex-col border-l border-border bg-card shadow-2xl"><div className="flex items-start justify-between border-b border-border p-5"><div><p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">{eyebrow}</p><h2 id="drawer-title" className="mt-1 text-xl font-semibold">{title}</h2></div><button type="button" autoFocus onClick={onClose} aria-label="Close side panel" className="p-2 text-muted-foreground hover:bg-secondary"><X className="size-4" aria-hidden="true" /></button></div><div className="flex-1 overflow-y-auto p-5 sm:p-6">{children}</div></aside></div>
+    <div className="fixed inset-0 z-50">
+      <button type="button" onClick={onClose} aria-label="Close side panel" className="absolute inset-0 bg-[#071d39]/30 backdrop-blur-[2px]" />
+      <aside role="dialog" aria-modal="true" aria-labelledby="drawer-title" className="absolute right-0 top-0 flex h-full w-full max-w-[620px] flex-col border-l border-[#d8d5cc] bg-[#fbf8f1] shadow-[-22px_0_70px_rgba(7,29,57,0.18)]">
+        <div className="flex items-start justify-between border-b border-[#dedbd2] px-6 py-5 sm:px-8 sm:py-6">
+          <div>
+            <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">{eyebrow}</p>
+            <h2 id="drawer-title" className="mt-2 text-xl font-semibold tracking-[-0.025em] text-[#071d39]">{title}</h2>
+          </div>
+          <button type="button" autoFocus onClick={onClose} aria-label="Close side panel" className="rounded-lg border border-[#d8d5cc] bg-white p-2.5 text-[#667078] transition hover:border-[#aeb7b4] hover:text-[#071d39]">
+            <X className="size-4" aria-hidden="true" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">{children}</div>
+      </aside>
+    </div>
   )
 }
 
@@ -1525,6 +1597,7 @@ function DrawerContent({
   queryString,
   threshold,
   onReceiveClarification,
+  clarificationPending,
   onOpenClarification,
   onCompleteSignOff,
   onLockDecision,
@@ -1544,6 +1617,7 @@ function DrawerContent({
   queryString: string
   threshold: string
   onReceiveClarification: () => void
+  clarificationPending: boolean
   onOpenClarification: () => void
   onCompleteSignOff: () => void
   onLockDecision: () => void
@@ -1552,7 +1626,35 @@ function DrawerContent({
   onReset: () => void
 }) {
   if (drawer.type === 'evidence') {
-    return <div className="flex flex-col gap-5"><Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Evidence attached and reviewed' : 'Required evidence not located'}</Pill><div className="border border-border bg-secondary p-5"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{clarificationReceived ? 'Clarification response · p.2' : 'Supplier response · p.38'}</p><p className="mt-3 text-sm leading-6">{clarificationReceived ? '“Our Addis Ababa partner holds 1,200 shelter kits and can dispatch to the named distribution hubs within 72 hours.”' : '“We maintain regional stock and partner capacity for rapid deployment across the Horn of Africa.”'}</p></div>{clarificationReceived ? <div className="border border-accent-foreground/30 bg-accent/60 p-5"><p className="text-sm font-semibold">Human determination recorded</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Sarah Ahmed confirmed the passage and attached documents satisfy the Ethiopia-specific obligation.</p></div> : <div className="border border-[#c9b15b] bg-[#fbf5df] p-5"><p className="text-sm font-semibold">Evidence gap</p><p className="mt-2 text-sm leading-6 text-muted-foreground">No passage names an Ethiopia warehouse, partner or distribution plan. Traceli will not infer this from general regional language.</p></div>}<button type="button" onClick={onOpenClarification} className="bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground">{clarificationReceived ? 'Open resolved clarification' : 'Open supplier clarification'}</button></div>
+    return (
+      <div className="flex flex-col gap-5">
+        <Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Evidence attached and reviewed' : 'Required evidence not located'}</Pill>
+        <div className="rounded-xl border border-[#d8d5cc] bg-white p-5 shadow-[0_8px_24px_rgba(7,29,57,0.04)]">
+          <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#7a8489]">{clarificationReceived ? 'Clarification response · p.2' : 'Supplier response · p.38'}</p>
+          <blockquote className="mt-4 border-l-2 border-[#2f8876] pl-4 text-sm leading-7 text-[#263c49]">{clarificationReceived ? '“Our Addis Ababa partner holds 1,200 shelter kits and can dispatch to the named distribution hubs within 72 hours.”' : '“We maintain regional stock and partner capacity for rapid deployment across the Horn of Africa.”'}</blockquote>
+        </div>
+        {clarificationReceived ? (
+          <div className="rounded-xl border border-[#a9d4c8] bg-[#e6f3ee] p-5">
+            <p className="text-sm font-semibold text-[#173f4a]">Human determination recorded</p>
+            <p className="mt-2 text-sm leading-6 text-[#52676d]">Sarah Ahmed confirmed the passage and attached documents satisfy the Ethiopia-specific obligation.</p>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-[#d8bd7d] bg-[#fbf4df] p-5">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="mt-0.5 size-4 shrink-0 text-[#966719]" aria-hidden="true" />
+              <div>
+                <p className="text-sm font-semibold text-[#473716]">Evidence gap</p>
+                <p className="mt-2 text-sm leading-6 text-[#6d6554]">No passage names an Ethiopia warehouse, partner or distribution plan. Traceli will not infer this from general regional language.</p>
+              </div>
+            </div>
+          </div>
+        )}
+        <button type="button" onClick={onOpenClarification} className="group inline-flex min-h-11 items-center justify-center gap-3 rounded-[10px] bg-[#071d39] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_18px_rgba(7,29,57,0.16)] transition hover:-translate-y-0.5 hover:bg-[#0c2a4d]">
+          {clarificationReceived ? 'Open resolved clarification' : 'Open supplier clarification'}
+          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        </button>
+      </div>
+    )
   }
 
   if (drawer.type === 'why') {
@@ -1564,7 +1666,7 @@ function DrawerContent({
   }
 
   if (drawer.type === 'clarification') {
-    return <div className="flex flex-col gap-5"><Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Resolved and attached' : 'Supplier response received'}</Pill><div className="border border-border bg-secondary p-5"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Request · CLR-004</p><p className="mt-3 text-sm leading-6">Please provide evidence demonstrating operational capacity in Ethiopia as required under Section 4.2 of the RFP.</p></div><div className="border border-accent-foreground/30 bg-accent/60 p-5"><p className="text-sm font-semibold">CLR-004-R1 · Ethiopia distribution plan</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Addis Ababa partner agreement, dispatch roster and country-specific 72-hour route plan attached.</p></div>{clarificationReceived ? <p className="text-sm leading-6 text-muted-foreground">The response is linked to REQ-07, the reviewer determination and the event chronology.</p> : <button type="button" onClick={onReceiveClarification} className="bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">Attach response and update readiness</button>}</div>
+    return <div className="flex flex-col gap-5"><Pill tone={clarificationReceived ? 'teal' : 'amber'}>{clarificationReceived ? 'Resolved and attached' : 'Supplier response received'}</Pill><div className="border border-border bg-secondary p-5"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Request · CLR-004</p><p className="mt-3 text-sm leading-6">Please provide evidence demonstrating operational capacity in Ethiopia as required under Section 4.2 of the RFP.</p></div><div className="border border-accent-foreground/30 bg-accent/60 p-5"><p className="text-sm font-semibold">CLR-004-R1 · Ethiopia distribution plan</p><p className="mt-2 text-sm leading-6 text-muted-foreground">Addis Ababa partner agreement, dispatch roster and country-specific 72-hour route plan attached.</p></div>{clarificationReceived ? <p className="text-sm leading-6 text-muted-foreground">The response is linked to REQ-07, the reviewer determination and the event chronology.</p> : <button type="button" disabled={clarificationPending} onClick={onReceiveClarification} className="bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground disabled:cursor-wait disabled:opacity-60">{clarificationPending ? 'Recording determination…' : 'Attach response and update readiness'}</button>}</div>
   }
 
   if (drawer.type === 'decision') {

@@ -10,12 +10,20 @@ const workOSConfigured = Boolean(
 )
 
 export default async function proxy(request: NextRequest) {
+  const isProtectedWorkspace = request.nextUrl.pathname.startsWith('/workspace')
+
   if (!workOSConfigured) {
+    if (isProtectedWorkspace) {
+      const demoUrl = new URL('/demo', request.url)
+      demoUrl.search = request.nextUrl.search
+      demoUrl.searchParams.set('workspace', 'unavailable')
+      return NextResponse.redirect(demoUrl)
+    }
+
     return NextResponse.next()
   }
 
   const { session, headers, authorizationUrl } = await authkit(request)
-  const isProtectedWorkspace = request.nextUrl.pathname.startsWith('/workspace')
 
   if (isProtectedWorkspace && !session.user && authorizationUrl) {
     return handleAuthkitHeaders(request, headers, { redirect: authorizationUrl })

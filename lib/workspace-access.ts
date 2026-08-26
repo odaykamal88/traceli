@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { withAuth } from '@workos-inc/authkit-nextjs'
+import { redirect } from 'next/navigation'
 
 import type { WorkspaceViewer } from '@/lib/workspace-viewer'
 
@@ -21,31 +22,37 @@ const roleLabels: Record<string, string> = {
   member: 'Member',
 }
 
+const allowedWorkspaceRoles = new Set([
+  'procurement-officer',
+  'panel-member',
+  'procurement-director',
+  'auditor',
+  'workspace-admin',
+])
+
 export function isWorkOSConfigured() {
   return requiredWorkOSEnvironmentVariables.every((name) => Boolean(process.env[name]))
 }
 
 export async function getWorkspaceViewer(): Promise<WorkspaceViewer> {
   if (!isWorkOSConfigured()) {
-    return {
-      id: 'demo-user-procurement-officer',
-      name: 'Leila Mansour',
-      email: 'fictional.demo@traceli.app',
-      organizationId: 'demo-humanitarian-organization',
-      role: 'Procurement Officer',
-      mode: 'demo',
-    }
+    redirect('/demo?workspace=unavailable')
   }
 
   const { user, organizationId, role } = await withAuth({ ensureSignedIn: true })
+
+  if (!organizationId || !role || !allowedWorkspaceRoles.has(role)) {
+    redirect('/workspace/access-required')
+  }
+
   const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ')
 
   return {
     id: user.id,
     name: fullName || user.email,
     email: user.email,
-    organizationId: organizationId ?? 'unassigned-organization',
-    role: role ? (roleLabels[role] ?? role) : 'Member',
+    organizationId,
+    role: roleLabels[role] ?? role,
     mode: 'workos',
   }
 }

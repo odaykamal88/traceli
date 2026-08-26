@@ -6,11 +6,12 @@ Traceli is a continuous procurement-assurance workspace. It keeps the rules, ten
 
 - A public 90-second DIHAD story at `/`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
+- A non-production Lakebase Postgres control graph with tenant-scoped reads, a restricted application role, and row-level isolation.
 - Source-linked requirements, submissions, clarifications, approvals, and audit chronology using fictional demo data.
-- A SHA-256 event chain that makes an edited or missing audit snapshot visibly detectable.
+- A SHA-256 event chain that makes an edited or missing audit snapshot visibly detectable, with the first authenticated human determination persisted as a server audit/outbox transaction.
 - Strict TypeScript and production-build checks.
 
-This is a demonstration baseline, not yet a production document system. Workspace state is currently fictional and browser-local. Server-side persistence, tenant isolation, document encryption, malware scanning, retention controls, and signed event seals are sequenced in [the implementation plan](./docs/IMPLEMENTATION_PLAN.md).
+This is a demonstration baseline, not yet a production document system. One fictional award and clarification finding now persist in a non-production tenant-safe sandbox; the remaining workflow is still browser-local. Document encryption, malware scanning, retention controls, broader command persistence, and signed event seals are sequenced in [the implementation plan](./docs/IMPLEMENTATION_PLAN.md).
 
 ## Local development
 
@@ -20,13 +21,16 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-WorkOS variables are required for the real login boundary. Without them, the app intentionally falls back to a clearly labelled fictional workspace so the public demo remains portable.
+WorkOS and database variables are required for the protected workspace. Without them, the app fails closed and keeps the clearly labelled fictional demo separate and portable.
 
 ## Verification
 
 ```bash
 pnpm exec next typegen
 pnpm exec tsc --noEmit
+pnpm db:migrate
+pnpm db:seed
+pnpm test:tenant
 pnpm build
 npx workos doctor --json --skip-ai
 npx workos verify-login --json
