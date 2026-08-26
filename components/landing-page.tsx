@@ -262,18 +262,18 @@ export default function LandingPage() {
           <div className="mx-auto max-w-[1500px] border-t border-white/10 px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
             <div className="grid gap-7 lg:grid-cols-[280px_1fr] lg:items-center lg:gap-12">
               <div className="max-w-[270px]">
-                <p className="font-display text-[1.7rem] leading-[1.02] tracking-[-0.025em] text-[#fbf5ea]">Built by people with experience at</p>
+                <p className="font-display text-[1.7rem] leading-[1.02] tracking-[-0.025em] text-[#fbf5ea]">Built by the people from</p>
                 <p className="mt-3 text-[10px] leading-5 text-white/42">Individual prior experience—not customers, partners or endorsements.</p>
               </div>
-              <ul aria-label="Organizations where the Traceli team has prior professional experience" className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 shadow-[0_14px_38px_rgba(0,0,0,0.12)] sm:grid-cols-5">
+              <ul aria-label="Organizations where the Traceli team has prior professional experience" className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/14 bg-white/14 shadow-[0_14px_38px_rgba(0,0,0,0.12)] sm:grid-cols-5">
                 {experienceMarks.map(({ name, src, className }) => (
-                  <li key={name} className="group flex min-h-24 items-center justify-center bg-[#f4f4f8] px-5 py-6 transition-colors last:col-span-2 hover:bg-[#fafafd] sm:min-h-28 sm:last:col-span-1">
+                  <li key={name} className="group flex min-h-24 items-center justify-center bg-white/[0.055] px-5 py-6 backdrop-blur-[5px] transition-colors last:col-span-2 hover:bg-white/[0.09] sm:min-h-28 sm:last:col-span-1">
                     <img
                       src={src}
                       alt={name}
                       loading="lazy"
                       decoding="async"
-                      className={cn('w-auto object-contain brightness-0 opacity-45 grayscale transition duration-300 group-hover:scale-[1.025] group-hover:opacity-60', className)}
+                      className={cn('w-auto object-contain brightness-0 invert opacity-75 grayscale drop-shadow-[0_1px_8px_rgba(6,26,51,0.28)] transition duration-300 group-hover:scale-[1.025] group-hover:opacity-90', className)}
                     />
                   </li>
                 ))}

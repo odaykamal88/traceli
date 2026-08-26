@@ -81,10 +81,10 @@ External brands recede; Traceli product capabilities receive the richer visual t
 
 The experience strip is biography, not customer proof.
 
-- Approved language: `Built by people with experience at`.
+- Approved language: `Built by the people from`.
 - Required qualifier: `Individual prior experience—not customers, partners or endorsements.`
 - Never use `Trusted by`, customer language, or an unqualified `Built by` beside these marks.
-- Render all marks in one monochrome grey treatment on equal quiet-grey blocks. Traceli remains the only full brand expression in the section.
+- Render all marks in one monochrome ivory-grey treatment on equal translucent blocks so the Traceli field remains visible. Keep sufficient mark opacity for legibility; Traceli remains the only full brand expression in the section.
 - Keep the marks optically balanced rather than forcing identical pixel dimensions.
 - Verify the named person's genuine relationship before adding a mark.
 - Record written mark-use approval where an organization's policy requires it. If affiliation or permission is unresolved, remove the mark and use plain text until cleared.

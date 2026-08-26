@@ -97,7 +97,7 @@ This is a public-story refinement before the next product iteration. It does not
 
 **Credibility strip**
 
-- Use `Built by people with experience at` or `Experience shaped at`, never `Trusted by` and never a bare `Built by` beside organization marks.
+- Use `Built by the people from`, never `Trusted by` and never a bare `Built by` beside organization marks.
 - Candidate marks are WFP, UNFCCC, Oxfam, Google, and Careem only after verifying that a named team member genuinely worked with or at each organization and that the mark may be used in this context.
 - Treat the strip as biography, not customer proof, partnership, UN endorsement, or product adoption. Use monochrome marks and a short non-endorsement note where required.
 - If any affiliation or logo permission is uncertain, use a plain-text credibility line without the affected mark until it is cleared.
