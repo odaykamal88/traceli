@@ -42,6 +42,30 @@ The message should connect a procurement control failure to an executive consequ
 
 Lead with the controllable executive outcome: **protect funding eligibility and keep awards moving.** Use specific consequence examples only when an approved primary source supports the claim. Never imply that every documentation gap causes funding suspension or that Traceli prevents corruption.
 
+## Stewardship and professional dignity
+
+The emotional centre of the brand is stewardship: public and donor-restricted resources are held in trust, and the people responsible for an award deserve a record that makes their careful judgment legible.
+
+Approved supporting ideas:
+
+- `Make careful judgment visible.`
+- `A decision your team can stand behind.`
+- `Treat the award record with the care the public resources deserve.`
+- `Make the rules, evidence and human judgment clear enough to defend years later.`
+
+This is a supporting layer, not the primary category statement. Keep it quiet, specific, and respectful. Do not claim that Traceli `restores dignity`, contrast a prospect's `carelessness` with Traceli's `care`, aestheticize compliance as moral purity, or imply that weak records make the people involved unworthy. The product supports professional judgment; it does not replace or morally grade it.
+
+## Value and ROI expression
+
+Traceli's public value story follows an evidence ladder:
+
+1. Show the fragmented work the buyer recognizes.
+2. Show the measurable operating result the pilot tests.
+3. Show the governed Award Assurance Pack and remaining gaps.
+4. Discuss financial-risk scenarios only with customer-confirmed inputs.
+
+Present measured facts, customer inputs, scenario assumptions, and public consequence examples as visually distinct evidence types. Never place a headline recovery amount beside the pilot price in a way that implies causation or guaranteed avoidance. Do not publish a generic ROI percentage, payback period, `typical finding cost`, `one finding pays`, or `cheap insurance` claim without an approved methodology and evidence under [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md).
+
 ## The 10/90 interaction rule
 
 - The first viewport earns attention in ten seconds: one promise, one supporting sentence, one dominant walkthrough action, and one secondary workspace path.
@@ -168,6 +192,7 @@ Before a public brand release:
 5. Keyboard focus, contrast, reduced motion, alt text, and responsive overflow checks pass.
 6. Any deliberate exception is documented in the implementation plan before release.
 7. Every public failure example is present in the case-study register with a primary source and approved claim language.
+8. Every quantified value claim identifies whether it is measured, customer-provided, assumed, or sourced; no scenario output is presented as a Traceli benchmark.
 
 ## Build-system ownership
 
@@ -175,6 +200,7 @@ Before a public brand release:
 - `docs/IMPLEMENTATION_PLAN.md` owns sequencing, maturity, and honest capability boundaries.
 - `docs/AFFILIATION_REGISTER.md` owns mark-clearance state.
 - `docs/PUBLIC_CASE_STUDY_REGISTER.md` owns public consequence claims, source status, review gates and the research sprint.
+- `docs/ROI_VALUE_CASE.md` owns economic-value logic, evidence labels, formulas, measurement, and ROI claim boundaries.
 - `docs/GTM_MESSAGING.md` owns reusable category, persona, campaign, email and objection language.
 - `.github/PULL_REQUEST_TEMPLATE.md` turns the release gates into a repeatable review step for future public UI changes.
 - Visual QA evidence may live under `docs/audits/`, but historical screenshots do not override this canonical reference.

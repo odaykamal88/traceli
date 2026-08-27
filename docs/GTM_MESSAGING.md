@@ -2,7 +2,7 @@
 
 Updated: 27 August 2026
 
-This document turns the Traceli category and must-have thesis into reusable marketing and sales language. Product truth and claim boundaries remain governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md); public consequence examples remain governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md).
+This document turns the Traceli category and must-have thesis into reusable marketing and sales language. Product truth and claim boundaries remain governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md); public consequence examples remain governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md); economic claims and pilot measurement remain governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md).
 
 ## Message hierarchy
 
@@ -56,7 +56,26 @@ Traceli does not become necessary by describing more features. It becomes necess
 | Supplier complaint or integrity concern | Before response or escalation | Source-linked chronology and human dispositions | Procurement, legal, investigations |
 | ERP or portal transformation | Before the new workflow becomes authoritative | Cross-system assurance control | CFO, transformation lead, IT and procurement |
 
-Do not ask the prospect to invent a `procurement assurance software` budget line. Find the owner of the existing consequence and contract one defined assurance outcome from programme assurance, audit remediation, internal controls, procurement improvement or technical assistance. If no owner, consequence or budget route exists, the account is not currently qualified.
+Do not ask the prospect to invent a `procurement assurance software` budget line. Find the owner of the existing consequence and contract one defined assurance outcome from programme assurance, audit remediation, internal controls, procurement improvement, fiduciary strengthening or technical assistance. These are possible discovery routes, not automatic funding-eligibility claims. If no owner, consequence or customer-approved budget route exists, the account is not currently qualified.
+
+## ROI message hierarchy
+
+Lead with what the pilot can measure, then discuss what the buyer can model:
+
+1. **Operating value:** fewer staff and reviewer hours spent finding, reconstructing, and explaining award evidence.
+2. **Cycle value:** fewer evidence questions and faster movement through the relevant review, approval, no-objection, or closeout step where the customer can document the link.
+3. **Assurance value:** unresolved proof becomes visible before the next live award.
+4. **Risk value:** a customer-specific scenario only; never a universal Traceli percentage or an expected loss borrowed from a public failure case.
+
+Approved spoken version:
+
+> We will establish what one defensible award record costs your team today, then test whether Traceli reduces that work, shortens independent review, and makes unresolved exposure visible before the next live award.
+
+Approved executive version:
+
+> The first return is operational: less reconstruction and a faster independent answer to why the supplier won. The second is assurance: missing or ambiguous proof becomes visible before sign-off. Any financial-risk case should use your own history and assumptions.
+
+Public pages may describe the categories of value, but must not publish an ROI percentage, payback period, `typical finding cost`, or `one avoided finding pays` claim until evidence and methodology pass review.
 
 ## Persona emphasis
 
@@ -84,6 +103,9 @@ Use one territory at a time so the category remains memorable.
 4. **Your ERP records the commitment. Traceli proves the decision.**
    - Hook: direct answer to the `ERP feature` objection.
    - CTA: `See the control model.`
+5. **What does one defensible award cost today?**
+   - Hook: `Measure the work before you model the risk.`
+   - CTA: `Baseline one completed tender.`
 
 ## Follow-up email for DIHAD contacts
 
@@ -95,7 +117,7 @@ At DIHAD, we discussed the gap between the procurement record organizations are 
 
 Traceli is award assurance for donor-funded procurement. The first paid pilot is deliberately bounded: bring one completed tender, and in six weeks we reconstruct its rules-to-award evidence chain and test whether an independent reviewer can defend the decision.
 
-On our call, I suggest we use one real completed procurement to answer four questions: what governed it, where the proof sits today, what happens if it is incomplete, and who owns that exposure. If there is no clear consequence or budget route, we will say so rather than force a platform sale.
+On our call, I suggest we use one real completed procurement to answer five questions: what governed it, where the proof sits today, who spent time reconstructing it, what happens if it is incomplete, and who owns that exposure. We will use your baseline rather than ask you to accept a generic ROI percentage. If there is no clear consequence or budget route, we will say so rather than force a platform sale.
 
 Best,
 
@@ -107,6 +129,7 @@ Use:
 
 - `award assurance`, `award readiness`, `source-linked proof`, `configured control profile`;
 - `designed to surface earlier`, `supports`, `connects`, `preserves`;
+- `measure the work before you model the risk`, `customer-confirmed baseline`, `customer-specific value case`;
 - the exact procedural language and amounts in the public evidence register.
 
 Do not use:
@@ -114,6 +137,9 @@ Do not use:
 - `certifies compliance`, `guarantees audit success`, `fraud-proof`, `prevents corruption`;
 - `funding was suspended` when the source says an investigator recommended preventing future undue spending;
 - `trusted by` for team experience marks or public-source institutions;
+- `one avoided finding pays for Traceli`, `cheap insurance`, a universal risk-reduction percentage, or an unmeasured payback period;
+- a public-case amount presented as the prospect's expected loss or a `typical` finding cost;
+- automatic eligibility under Incremental Operating Costs, Project Management Costs, a donor agreement, or a purchasing threshold;
 - `Vanta for procurement` in public category language. Internally, the useful analogy is the operating model: defined controls, continuous evidence, a shareable assurance artifact and a recurring gate.
 
 ## Conversion measurement
@@ -124,6 +150,7 @@ For the twelve calls, measure message quality by buying movement:
 - named consequence and trigger date;
 - named accountable sponsor;
 - named existing budget route;
+- named baseline owner and at least one quantifiable operating measure;
 - proposal requested or accepted;
 - security, legal or procurement owner introduced;
 - decision date agreed.

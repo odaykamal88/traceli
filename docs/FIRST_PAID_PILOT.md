@@ -12,7 +12,7 @@ The pilot promise is:
 
 > Bring one completed tender. Traceli will reconstruct the rules-to-award evidence chain, expose where the decision record is incomplete, and test whether an independent reviewer can defend the award without rebuilding it from folders and email.
 
-The software remains the durable product, but the first contract is a time-boxed assurance engagement delivered through a controlled Traceli workspace. This gives the customer a concrete outcome that can be funded from an audit, programme-assurance, internal-control, procurement-improvement, or technical-assistance budget.
+The software remains the durable product, but the first contract is a time-boxed assurance engagement delivered through a controlled Traceli workspace. This gives the customer a concrete outcome that may have an existing owner in audit remediation, programme assurance, internal controls, procurement improvement, fiduciary strengthening, or technical assistance. The customer must confirm the permitted budget and purchasing route.
 
 ## Evidence posture
 
@@ -137,6 +137,18 @@ Agree baselines during kickoff. Do not promise invented percentages.
 - whether an independent reviewer can explain the recommendation from the resulting record;
 - customer decision to run Traceli alongside one live tender or expand to another programme.
 
+### ROI posture
+
+Sell a measured value case, not an avoided-loss promise. The first call should establish the people, hours, review loops, external support, award volume, and operational consequence involved in defending one completed award. The pilot then measures reconstruction effort, independent-review time, evidence readiness, and remaining questions against that baseline.
+
+Use this language:
+
+> I would not ask you to accept a generic ROI percentage. Let us establish what one defensible award record costs your team today, then test whether Traceli reduces that work, shortens independent review, and makes unresolved exposure visible before the next live award.
+
+The pilot's fixed fee is the known investment. Customer-confirmed labour rates, award volume, external spend, and delay costs can support a break-even or operating-value model. Risk-adjusted value is a separate scenario and requires the customer's incident history, severity basis, and an agreed attribution factor; do not default to a 40–60% reduction or turn a public case amount into the prospect's expected loss.
+
+Use [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md) for the evidence labels, value buckets, formulas, measurement schedule, discovery prompts, and claim guardrails.
+
 ### Commercial hypothesis
 
 - Founding-pilot fee: **USD 15,000 / AED 55,000**, fixed for the defined scope.
@@ -178,12 +190,13 @@ The objective of every call is a decision about a specific pilot path, not anoth
 
 1. “Which completed procurement from the last twelve months would be hardest to defend if a donor or auditor asked for the full reasoning next week?”
 2. “What rule sets governed it, and where are the criteria, evidence, clarifications and approvals stored today?”
-3. “How was the last audit, complaint or management review assembled, and who carried that work?”
-4. “What happens operationally or financially when the evidence is incomplete or late?”
+3. “How was the last audit, complaint or management review assembled, who carried that work, and roughly how many hours or days did it take?”
+4. “What happens operationally or financially when the evidence is incomplete or late, and which part can you document?”
 5. “Which system is authoritative for the award, and what material reasoning still sits outside it?”
 6. “Who owns this exposure beyond procurement, and who would approve a six-week assurance pilot?”
-7. “Which existing budget could fund a bounded pilot: programme assurance, audit remediation, internal controls, procurement improvement, or technical assistance?”
+7. “Where do you currently budget for procurement compliance support, audit preparation, programme assurance, internal controls, procurement improvement, fiduciary strengthening, or technical assistance—and who decides whether that route may fund this pilot?”
 8. “Could one completed tender be made available under an NDA and an agreed data-classification route?”
+9. “How many material awards follow a comparable process each year, and what measured result would justify a live-tender or portfolio deployment?”
 
 ### Closing ask
 
@@ -199,6 +212,7 @@ Do not end with “I will send more information.” End with a dated mutual acti
 | --- | --- |
 | “Our ERP already has an audit log.” | “That log is one source. The pilot tests whether it can explain the governing rule, evidence, clarification, judgment and approval across every place they actually occurred.” |
 | “There is no budget for procurement assurance software.” | “The pilot does not require a new platform programme. It produces one defined assurance artifact against a completed funded procurement. Let us identify whether the accountable owner already sits in programme assurance, audit remediation, internal controls, procurement improvement or technical assistance—and stop if none owns the consequence.” |
+| “What is the ROI?” | “We will not give you a universal risk-reduction percentage. We will baseline the people, time, review loops and documented external cost involved in defending one award, measure the same work in the pilot, and keep any customer-specific risk scenario separate.” |
 | “Internal audit already does this.” | “Audit should remain independent. Traceli helps the operating team maintain a testable record before audit and gives audit a faster record to inspect.” |
 | “The documents are too sensitive.” | “The contract can be agreed now; no sensitive file enters Traceli until the NDA, classification, approved transfer route and technical gate pass.” |
 | “The product is early.” | “That is why the first scope is retrospective, bounded and human-owned. The acceptance test is the record produced, not a claim of enterprise-wide automation.” |
@@ -222,6 +236,7 @@ By the end of the follow-up cycle, success is:
 
 - all twelve accounts classified and scored;
 - at least four buyer-side accounts with a named completed tender and consequence;
+- at least two accounts with a named baseline owner and one quantifiable operating measure;
 - at least two sponsor or economic-buyer meetings;
 - at least two written paid-pilot proposals;
 - at least one signed pilot contract or a documented contracting path with named approvers and dates.
@@ -232,19 +247,19 @@ If the calls produce interest but no named tender, consequence, sponsor, or budg
 
 Use one row per DIHAD follow-up. Keep the score evidence-backed and replace `TBD` only with facts stated by the account.
 
-| # | Account | Type | Contact / role | Score | Named trigger | Completed tender | Sponsor / budget | Data route | Next action / date |
-| --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- |
-| 1 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 2 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 3 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 4 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 5 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 6 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 7 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 8 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 9 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 10 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 11 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
-| 12 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD |
+| # | Account | Type | Contact / role | Score | Named trigger | Completed tender | Value baseline | Sponsor / budget | Data route | Next action / date |
+| --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- |
+| 1 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 2 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 3 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 4 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 5 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 6 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 7 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 8 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 9 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 10 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 11 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
+| 12 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
 
 Use [AWARD_ASSURANCE_PILOT_SOW.md](./AWARD_ASSURANCE_PILOT_SOW.md) to turn a qualified account into a written proposal within 24 hours.

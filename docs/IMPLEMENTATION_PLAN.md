@@ -2,7 +2,7 @@
 
 Updated: 27 August 2026
 
-Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). Reusable campaign and call language lives in [GTM_MESSAGING.md](./GTM_MESSAGING.md). Public consequence claims and the case-study authority sprint are governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md). The ICP, first commercial offer, twelve-call qualification method, and contract path are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
+Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). Reusable campaign and call language lives in [GTM_MESSAGING.md](./GTM_MESSAGING.md). Public consequence claims and the case-study authority sprint are governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md). Economic-value logic, pilot measurement, and ROI claim boundaries are governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md). The ICP, first commercial offer, twelve-call qualification method, and contract path are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
 
 ## The product we are building
 
@@ -75,13 +75,14 @@ The operations track runs in parallel: O0 continues during Sprint 1; O1 must pas
 Outcome: at least one of the twelve DIHAD follow-ups signs a paid retrospective pilot, and the implementation backlog becomes accountable to that contract's acceptance criteria.
 
 - Classify every follow-up as buyer/implementer, potential channel, or supplier-only before pitching.
-- Qualify one completed procurement, governing rule sets, evidence locations, consequence, accountable sponsor, secure data route, budget owner, and buying process.
+- Qualify one completed procurement, governing rule sets, evidence locations, consequence, accountable sponsor, secure data route, budget owner, buying process, and at least one customer-owned value baseline.
 - Demonstrate only the rule → evidence → human judgment → approval → decision-record journey relevant to that account.
 - Ask directly for the six-week paid pilot; do not substitute an unpaid innovation workshop for willingness-to-pay validation.
 - Send a short proposal/SOW within 24 hours of a qualified call and maintain a mutual action plan through sponsor, security/legal, procurement, and signature.
 - Keep the founding commercial hypothesis, qualification score, discovery questions, objection posture, and contract contents in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
+- Keep operating value, cycle value, and customer-modelled risk visibly separate; do not use public-case amounts as expected loss or promise a generic risk-reduction percentage.
 
-Commercial gate: all twelve accounts are classified; at least four buyer-side accounts name a completed tender and consequence; at least two proposals reach a sponsor or economic buyer; and at least one paid pilot is signed or has a documented contracting path with named approvers and dates.
+Commercial gate: all twelve accounts are classified; at least four buyer-side accounts name a completed tender and consequence; at least two name a baseline owner and one quantifiable operating measure; at least two proposals reach a sponsor or economic buyer; and at least one paid pilot is signed or has a documented contracting path with named approvers and dates.
 
 ### Operations track — autonomous assurance without autonomous control
 
@@ -221,6 +222,7 @@ Outcome: the signed pilot's completed tender can be reconstructed in Traceli wit
 - Allow assisted and manual mapping from governing obligations to criteria, supplier evidence, reviewer judgments, exceptions, and approvals.
 - Keep `supported`, `not found`, `ambiguous`, `customer confirmed`, and `not available` visibly distinct.
 - Record the customer's current reconstruction workflow and baseline time before presenting Traceli's result.
+- Record the people involved, staff hours, review loops, external support where documented, and relevant cycle-time baseline before presenting Traceli's result.
 - Require named customer confirmation for every consequential interpretation; Traceli may organize and challenge the record but may not rewrite the historical decision.
 
 Exit gate: one completed procurement has a navigable rules-to-award chain, every sampled material claim opens an accepted source or explicit gap, and no uncontrolled file path exists.
@@ -232,6 +234,7 @@ Outcome: the customer can judge the paid pilot against an assurance result rathe
 - Provide a reviewer view that starts with “why did this supplier win?” and opens the supporting rule, evidence, judgment, clarification, exception, and approval.
 - Run a structured review with a customer-selected person who did not assemble the record.
 - Capture review time, unsupported claims, missing controls, and questions that still require institutional judgment.
+- Calculate operating-value and break-even views only from customer-confirmed inputs; keep any risk-adjusted scenario separate and labelled.
 - Produce a minimum human-readable decision pack plus a machine-readable manifest when the export boundary passes security and integrity checks.
 - Deliver a results brief comparing the baseline with the reconstructed record and recommend either stop, repeat on another completed tender, or accompany one live tender.
 
@@ -344,6 +347,7 @@ Success measures:
 - reviewer agreement after examining Traceli’s source link;
 - independent reviewer can explain the recommendation from the reconstructed record;
 - customer makes an explicit decision to stop, repeat, or accompany one live tender.
+- results brief separates measured operating value, measured or pending cycle value, external-cost evidence, and any customer-owned risk scenario.
 
 ## What we deliberately defer
 
