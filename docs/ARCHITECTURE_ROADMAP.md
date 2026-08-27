@@ -1,6 +1,8 @@
 # Traceli staged architecture and pilot roadmap
 
-Updated: 26 August 2026
+Updated: 27 August 2026
+
+For the current deployed-state architecture, technology stack, trust boundaries, and IT security review, see [SOLUTION_ARCHITECTURE.md](./SOLUTION_ARCHITECTURE.md).
 
 ## Executive decision
 
@@ -37,9 +39,9 @@ This preserves the simple “proof behind the award” experience while the oper
 | Audit integrity | Browser demonstration plus server hash-linked events and transactional outbox for the first finding command | Durable chronology begun, not yet a sealed decision record | Move approvals/lock server-side and sign sealed decision roots with a managed key |
 | AI | No production model path | Healthy at this stage | Task-specific model gateway, grounded inputs, structured outputs, invocation ledger, evaluations, and human confirmation |
 | Background work | No queue or durable workflow | Missing before ingestion | Durable, idempotent upload/extraction/indexing jobs; keep canonical job and domain state in Postgres |
-| Autonomous operations | No repository CI, normalized operations ledger, external availability probe, or supervisory brief | Strategy is defined; implementation should start now without delaying product work | Deterministic CI/security/health signals first, then normalized findings, bounded task workers, and a read-only supervisor |
+| Autonomous operations | Deterministic CI/security gates and a scheduled external production smoke probe; no normalized operations ledger or supervisory brief | Baseline signals are in place | Persist normalized findings next, then add bounded task workers and a read-only supervisor |
 | Integrations | No ERP, tender portal, SIEM, or MCP implementation | Appropriate | Add adapters only after the core service boundary exists and a design partner identifies the first actual system |
-| Testing and operations | Type/build checks plus seeded two-tenant read/write denial and append-only audit tests | Adequate for the first sandbox slice, insufficient for buyer files | Expand command/invariant tests, add file threat tests, backup/restore exercise, E2E pilot journey, and production monitoring |
+| Testing and operations | Type/build, migration, secret, dependency, two-tenant denial, append-only audit, and scheduled production smoke checks | Adequate for the first sandbox slice, insufficient for buyer files | Expand command/invariant tests, add file threat tests, backup/restore exercise, E2E pilot journey, and dependency-aware production monitoring |
 | Environments | Vercel production currently serves the marketing site and fictional demo; it has no WorkOS variables, and WorkOS production is empty | Safe for interviews, not buyer data | Provision isolated staging/production data and credentials before onboarding; never silently downgrade a protected environment to demo mode |
 
 ### What is already strategically correct
