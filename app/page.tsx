@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 import LandingPage from '@/components/landing-page'
 
 export const metadata: Metadata = {
-  title: 'Traceli — Every award, audit ready',
+  title: 'Traceli — Prove the award before you sign it',
   description:
-    'Draft from your rules, run the evaluation and preserve the source-linked proof behind every procurement award.',
+    'Award assurance for donor-funded procurement: connect governing rules, supplier evidence, human judgment and approvals before sign-off.',
 }
 
 export default function Page() {

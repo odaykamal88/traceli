@@ -19,13 +19,14 @@ import {
 import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
-  title: 'Documentation — Traceli',
-  description: 'How Traceli connects procurement rules, evidence, human decisions and audit-ready records.',
+  title: 'Award assurance documentation',
+  description: 'How Traceli tests award readiness and connects procurement rules, evidence, human decisions and approvals.',
 }
 type Availability = 'Demo available' | 'In implementation' | 'Private alpha planned' | 'Pilot dependent'
 
 const sections = [
-  { href: '#how-it-works', label: 'How Traceli works' },
+  { href: '#why-assurance', label: 'Why award assurance' },
+  { href: '#control-model', label: 'Control model' },
   { href: '#security', label: 'Security and data' },
   { href: '#workflow', label: 'Procurement workflow' },
   { href: '#integrations', label: 'Integrations' },
@@ -33,11 +34,42 @@ const sections = [
 ]
 
 const workflow = [
-  ['01', 'Connect approved knowledge', 'Policy, donor conditions, templates and selected precedents are versioned and permissioned.'],
-  ['02', 'Draft and confirm', 'Traceli proposes cited requirements and a matrix; a named officer confirms consequential content.'],
-  ['03', 'Evaluate against locked criteria', 'Submissions, Q&A, reviewer judgments, gaps and exceptions stay linked to the same record.'],
-  ['04', 'Approve and lock', 'Required declarations and approvals gate a canonical decision record.'],
-  ['05', 'Explain the award', 'Every material answer opens the exact source, actor and event that supports it.'],
+  ['01', 'Map governing controls', 'Donor conditions, institutional policy, local rules and tender commitments become one versioned control profile.'],
+  ['02', 'Lock criteria and ownership', 'A named officer confirms the criteria, evidence requirements, decision rights and required approvals.'],
+  ['03', 'Link the award evidence', 'Supplier proof, reviewer judgments, clarifications, integrity concerns and exceptions stay connected to each control.'],
+  ['04', 'Resolve or explicitly except', 'Unsupported and ambiguous claims remain visible until a named human resolves or accepts the exception.'],
+  ['05', 'Approve and issue the pack', 'The canonical record preserves who decided, what supported the decision and what remained open at sign-off.'],
+] as const
+
+const publicCases = [
+  {
+    metric: 'Audit finding',
+    title: 'Incomplete bid evaluation files',
+    detail: 'UN OIOS found that bid evaluations at UNMISS were not timely and their documentation was inadequate, and recommended complete evaluation files and delay justifications.',
+    source: 'UN OIOS · Report 2024/064',
+    href: 'https://oios.un.org/file/10525/download?token=XrBorFi3',
+  },
+  {
+    metric: '€7.5m',
+    title: 'Irregular procurement and ineligible payments',
+    detail: 'OLAF found that an EU agency tender breached sound financial management and prevented proper competition; the resulting payments were considered ineligible.',
+    source: 'European Anti-Fraud Office · 2025',
+    href: 'https://ec.europa.eu/olaf-report/2025/investigative-activities/protection-of-eu-funds_en.html#an-irregular-tender-procedure',
+  },
+  {
+    metric: '€112m',
+    title: 'Future funding behind remediation',
+    detail: 'After finding contracts awarded without competition or through rigged competition, fake offers and inflated prices, OLAF recommended protecting future IPARD funding until remedial measures were in place.',
+    source: 'European Anti-Fraud Office · 2023',
+    href: 'https://ec.europa.eu/olaf-report/2023/investigative-activities/preventing-undue-expenditure_en.html#serious-misuse-of-eu-pre-accession-agricultural-funds',
+  },
+  {
+    metric: '63 months',
+    title: 'Debarment for false bid experience',
+    detail: 'The World Bank debarred a supplier for fraudulent practices after it falsely claimed past experience in bids for two financed projects in Afghanistan.',
+    source: 'World Bank Group · 2025',
+    href: 'https://www.worldbank.org/en/news/press-release/2025/06/18/world-bank-group-debars-pars-tableau-company-jsc',
+  },
 ] as const
 
 function TraceliMark() {
@@ -109,17 +141,36 @@ export default function DocsPage() {
         <main id="docs-content" className="min-w-0 px-5 py-12 sm:px-8 lg:px-12 lg:py-16 xl:px-16">
           <div className="max-w-5xl">
             <div className="max-w-4xl border-b border-[#d8d5cc] pb-14">
-              <div className="flex flex-wrap items-center gap-2"><AvailabilityPill status="Demo available" /><span className="text-xs text-[#7a858b]">Last reviewed 25 August 2026</span></div>
-              <h1 className="mt-6 font-display text-6xl leading-[0.9] tracking-[-0.035em] sm:text-7xl">The proof behind the award.</h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#5f6f77]">Traceli is the permissioned assurance layer that links procurement rules, tender criteria, supplier evidence, reviewer judgment, exceptions, approvals and chronology.</p>
+              <div className="flex flex-wrap items-center gap-2"><AvailabilityPill status="Demo available" /><span className="text-xs text-[#7a858b]">Last reviewed 27 August 2026</span></div>
+              <h1 className="mt-6 font-display text-6xl leading-[0.9] tracking-[-0.035em] sm:text-7xl">Prove the award before you sign it.</h1>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#5f6f77]">Traceli is the award-assurance layer for donor-funded procurement. It connects governing rules, supplier evidence, human judgment and required approval before donor review, complaint or audit.</p>
             </div>
 
-            <section id="how-it-works" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
-              <SectionHeading eyebrow="Product model" title="One answer. One golden thread." description="Open an award and answer why the supplier won with every material claim linked to the exact source, actor and event that supports it." />
+            <section id="why-assurance" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
+              <SectionHeading eyebrow="Why award assurance" title="The cost of missing proof appears after the decision." description="Public institutional records show four consequence categories: audit findings, ineligible spend, funding conditions and integrity sanctions. Award assurance moves the proof test before sign-off." />
+              <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-[#d8d5cc] bg-[#d8d5cc] sm:grid-cols-2">
+                {publicCases.map(({ metric, title, detail, source, href }) => (
+                  <article key={title} className="flex min-h-[250px] flex-col bg-white p-5 sm:p-6">
+                    <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#2f8876]">{metric}</p>
+                    <h3 className="mt-5 text-base font-semibold">{title}</h3>
+                    <p className="mt-2 text-xs leading-6 text-[#617078]">{detail}</p>
+                    <a href={href} target="_blank" rel="noreferrer" className="mt-auto inline-flex items-center gap-1.5 pt-6 text-[11px] font-semibold text-[#2f8876] hover:underline">{source}<ExternalLink className="size-3" aria-hidden="true" /></a>
+                  </article>
+                ))}
+              </div>
+              <p className="mt-5 text-[11px] leading-5 text-[#748087]">These are public records from the issuing institutions. They are not Traceli customers or endorsements, and Traceli does not claim it would have prevented the outcomes. See the governed research register in the repository for claim status and review rules.</p>
+            </section>
+
+            <section id="control-model" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
+              <SectionHeading eyebrow="Control model" title="A pre-award gate, not another system of record." description="The tender portal runs the procedure and the ERP records the commitment. Traceli tests whether each material award claim is supported, unresolved or explicitly excepted, then assembles the Traceli Award Assurance Pack." />
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                <PrincipleCard icon={BookOpenCheck} title="Rules stay visible">Approved policies and tender sources remain versioned and cited.</PrincipleCard>
-                <PrincipleCard icon={UserCheck} title="Humans own judgment">Models can locate and challenge evidence; named reviewers decide.</PrincipleCard>
-                <PrincipleCard icon={FileLock2} title="Records do not rewrite">Locked decisions are append-only; corrections create linked superseding events.</PrincipleCard>
+                <PrincipleCard icon={BookOpenCheck} title="Map the controls">Approved donor, institutional, local and tender rules remain versioned and cited.</PrincipleCard>
+                <PrincipleCard icon={UserCheck} title="Resolve the gaps">Models can locate and challenge evidence; named humans decide, approve and accept exceptions.</PrincipleCard>
+                <PrincipleCard icon={FileLock2} title="Issue the pack">The signed decision record preserves the rule, evidence, judgment, approval and chronology behind the award.</PrincipleCard>
+              </div>
+              <div className="mt-5 rounded-2xl border border-[#a5d3c8] bg-[#e6f3ee] p-5">
+                <p className="text-sm font-semibold">Readiness language is bounded</p>
+                <p className="mt-2 text-xs leading-6 text-[#55716b]">`Ready` means the configured control profile is complete or has named, approved exceptions. It is not legal advice, a compliance certification or a guarantee that an audit or donor will accept the award.</p>
               </div>
             </section>
 
@@ -139,7 +190,7 @@ export default function DocsPage() {
             </section>
 
             <section id="workflow" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
-              <div className="flex flex-wrap items-start justify-between gap-4"><SectionHeading eyebrow="Procurement workflow" title="From approved knowledge to defensible award." description="Traceli complements the buyer's existing tender portal and ERP. It keeps the assurance record across the process." /><AvailabilityPill status="Demo available" /></div>
+              <div className="flex flex-wrap items-start justify-between gap-4"><SectionHeading eyebrow="Procurement workflow" title="From governing controls to signed proof." description="Traceli complements the buyer's existing tender portal and ERP. It keeps the assurance record across the process and exposes unresolved claims before approval." /><AvailabilityPill status="Demo available" /></div>
               <ol className="mt-8 overflow-hidden rounded-2xl border border-[#d8d5cc] bg-white">
                 {workflow.map(([number, title, detail], index) => <li key={number} className={cn('grid gap-3 p-5 sm:grid-cols-[48px_220px_1fr] sm:items-start', index > 0 && 'border-t border-[#e1ded5]')}><span className="font-mono text-[10px] font-semibold text-[#2f8876]">{number}</span><span className="text-sm font-semibold">{title}</span><span className="text-xs leading-6 text-[#617078]">{detail}</span></li>)}
               </ol>
@@ -168,11 +219,11 @@ export default function DocsPage() {
             </section>
 
             <div className="rounded-[26px] bg-[#dff1eb] p-7 sm:p-9">
-              <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">See it in context</p>
-              <div className="mt-3 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><h2 className="text-2xl font-semibold tracking-[-0.03em]">Bring one completed tender.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#52696a]">The safest first pilot is a retrospective exercise under an agreed NDA and data classification.</p></div><Link href="/demo" className="group inline-flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-xl bg-[#071d39] px-5 py-3 text-sm font-semibold text-white">Open the demo<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></Link></div>
+              <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Founding paid pilot</p>
+              <div className="mt-3 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><h2 className="text-2xl font-semibold tracking-[-0.03em]">Bring one completed tender.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#52696a]">Run a six-week retrospective assurance pilot. Traceli reconstructs the rules-to-award record and tests it with an independent reviewer; sensitive documents move only after the contractual and security gate passes.</p></div><a href="mailto:hello@trace-li.com?subject=Award%20Assurance%20Pilot" className="group inline-flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-xl bg-[#071d39] px-5 py-3 text-sm font-semibold text-white">Discuss a paid pilot<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></a></div>
             </div>
 
-            <footer className="mt-14 flex flex-col gap-4 border-t border-[#d8d5cc] pt-7 text-xs text-[#758087] sm:flex-row sm:items-center sm:justify-between"><span>Traceli · Continuous procurement assurance</span><a href="https://www.ungm.org/Public/Notice/254522" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-[#2f8876] hover:underline">Walkthrough tender source<ExternalLink className="size-3" aria-hidden="true" /></a></footer>
+            <footer className="mt-14 flex flex-col gap-4 border-t border-[#d8d5cc] pt-7 text-xs text-[#758087] sm:flex-row sm:items-center sm:justify-between"><span>Traceli · Award assurance for donor-funded procurement</span><a href="https://www.ungm.org/Public/Notice/254522" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-[#2f8876] hover:underline">Walkthrough tender source<ExternalLink className="size-3" aria-hidden="true" /></a></footer>
           </div>
         </main>
       </div>
