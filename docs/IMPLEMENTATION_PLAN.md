@@ -1,8 +1,8 @@
 # Traceli pilot implementation plan
 
-Updated: 27 August 2026
+Updated: 28 August 2026
 
-Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). Reusable campaign and call language lives in [GTM_MESSAGING.md](./GTM_MESSAGING.md). Public consequence claims and the case-study authority sprint are governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md). Economic-value logic, pilot measurement, and ROI claim boundaries are governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md). The ICP, first commercial offer, twelve-call qualification method, and contract path are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
+Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). The current solution, technology stack, trust boundaries, security posture, and provider-evidence requirements are documented in [SOLUTION_ARCHITECTURE.md](./SOLUTION_ARCHITECTURE.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). Reusable campaign and call language lives in [GTM_MESSAGING.md](./GTM_MESSAGING.md). Public consequence claims and the case-study authority sprint are governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md). Economic-value logic, pilot measurement, and ROI claim boundaries are governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md). The ICP, first commercial offer, twelve-call qualification method, and contract path are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
 
 ## The product we are building
 
@@ -167,6 +167,36 @@ Recommended 90-second page order:
 Exit gate: five procurement or audit professionals can explain Traceli as `the proof behind the award` after one scroll; at least three choose the walkthrough or pilot action without prompting; every affiliation and availability claim has an owner and evidence.
 
 Implementation status: the left-led landing composition, category and must-have promise, single primary walkthrough action, four governed consequence examples, three assurance outcome modules, deterministic 90-second tender journey, public control-model documentation, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses a monochrome, equal-block treatment and explicit non-endorsement language. Relationship verification, mark permission and long-form consequence-claim review remain separate release gates under [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). The remaining gate is interview conversion evidence, case-study authority and logo clearance—not another UI feature.
+
+### Sprint 0.6 — public trust surface and controlled documentation (queued)
+
+Outcome: a serious prospect or IT/security reviewer can understand Traceli's current data boundary and request deeper evidence without turning the website into an internal engineering repository.
+
+This work is queued, not a reason to delay the twelve follow-up calls. Implement it before the first formal customer security review, or after two relevant prospects independently ask the same security or data-handling question—whichever comes first.
+
+**Publish on the website**
+
+- Add one concise `/trust` page; do not add another broad documentation hub.
+- Explain hosting and material provider categories, organization isolation, server-side role checks, human-owned decisions, audit evidence, and the separation between the fictional public demo and protected workspace.
+- State the current boundary plainly: Traceli does not yet accept real procurement documents, and no runtime AI model processes customer data.
+- Show `Implemented`, `Provider evidence required`, and `Planned` labels wherever readers could otherwise mistake a target control for a live capability.
+- Summarize the security gates that must pass before sensitive documents or consequential live decisions enter Traceli.
+- Link to the existing six-week retrospective pilot explanation and use one contact action: `Request the security architecture` or `Discuss a paid pilot`.
+- Keep the existing public workflow, control-model, availability, and primary-source evidence pages as the progressive-disclosure layer; avoid duplicating them on `/trust`.
+
+**Share selectively during a qualified deal**
+
+- Provide a reviewed, date-stamped copy of [SOLUTION_ARCHITECTURE.md](./SOLUTION_ARCHITECTURE.md), or a sanitized customer edition, when a named IT/security stakeholder enters the pilot process.
+- Attach provider-console and contractual evidence only after it is captured and reviewed; repository code alone does not prove region, encryption at rest, backup window, MFA, WAF, retention, or subprocessor terms.
+- Keep the detailed threat model, unresolved gaps, implementation roadmap, model economics, autonomous-operations plan, SOW/pricing logic, GTM language, and internal evidence registers out of the public website. Share only the parts required for a scoped diligence process.
+
+**Publish later only when evidence supports it**
+
+- Publish a short ROI/value summary only after customer-owned baselines validate the assumptions; never expose the internal modelling framework as a generic savings claim.
+- Publish model-provider or open-model details only after an approved runtime path exists and its data, retention, evaluation, and cost controls are evidenced.
+- Publish MCP setup instructions only after the read-only alpha passes tenant-isolation and exfiltration tests.
+
+Exit gate: an external reviewer can distinguish current controls from roadmap claims, no secret or exploitable operational detail is exposed, every provider claim has current evidence, and the page gives qualified buyers one obvious path to request the deeper security pack.
 
 ### Sprint 0.75 — must-have evidence and case-study authority (recommended)
 
