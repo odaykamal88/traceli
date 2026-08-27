@@ -1,6 +1,6 @@
 # Traceli
 
-Traceli is a continuous procurement-assurance workspace. It keeps the rules, tender criteria, supplier evidence, reviewer judgment, clarifications, approvals, and decision chronology connected so a buyer can answer one question quickly: **why did this supplier win?**
+Traceli is the award-assurance layer for donor-funded procurement. It keeps the rules, tender criteria, supplier evidence, reviewer judgment, clarifications, approvals, and decision chronology connected so an accountable buyer can **prove the award before signing it**.
 
 ## Current pilot baseline
 
@@ -13,7 +13,7 @@ Traceli is a continuous procurement-assurance workspace. It keeps the rules, ten
 
 This is a demonstration baseline, not yet a production document system. One fictional award and clarification finding now persist in a non-production tenant-safe sandbox; the remaining workflow is still browser-local. Document encryption, malware scanning, retention controls, broader command persistence, and signed event seals are sequenced in [the implementation plan](./docs/IMPLEMENTATION_PLAN.md).
 
-The canonical public-message, visual-identity, iconography, affiliation, and demonstration rules live in [the Traceli brand system](./docs/BRAND_SYSTEM.md).
+The canonical public-message, visual-identity, iconography, affiliation, and demonstration rules live in [the Traceli brand system](./docs/BRAND_SYSTEM.md). Reusable category, campaign and call language lives in [the GTM messaging guide](./docs/GTM_MESSAGING.md). Public consequence claims and the recommended ten-day case-study sprint live in [the evidence register](./docs/PUBLIC_CASE_STUDY_REGISTER.md).
 
 ## Local development
 

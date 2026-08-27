@@ -1,25 +1,53 @@
 # Traceli brand and product-expression system
 
-Updated: 26 August 2026
+Updated: 27 August 2026
 
 This is the canonical reference for Traceli's public story, visual language, product iconography, affiliation treatment, and demonstration assets. New screens and marketing surfaces should extend this system rather than inventing a parallel one.
 
-## The promise
+## Category and promise
+
+Category:
+
+> Award assurance for donor-funded procurement.
 
 Primary statement:
 
-> Every award, audit ready.
+> Prove the award before you sign it.
 
-Traceli should be understood in ten seconds as the assurance layer that keeps procurement rules, evidence, human decisions, exceptions, approvals, and chronology connected. The first useful demonstration must answer one question: **why did this supplier win?**
+Supporting line:
 
-Use plain procurement outcomes before technical mechanisms. Prefer `Draft from your rules`, `Run the evaluation`, and `Defend the award` over a feature catalogue. Do not describe Traceli as autonomous decision-making, an AI scoring engine, or another tender portal.
+> Traceli shows whether every material award decision is connected to the governing rule, supplier evidence, human judgment and required approval—before donor review, complaint or audit.
+
+Traceli should be understood in ten seconds as the pre-award control gate that protects funding eligibility and keeps awards moving. It sits beside the tender portal and ERP; it does not compete to become either system of record. Its named output is the **Traceli Award Assurance Pack**: the source-linked record of the rules, evidence, judgments, exceptions, approvals and chronology behind an award.
+
+The first useful demonstration must answer one question: **why did this supplier win?** The stronger commercial question is: **can the accountable team prove that answer before it signs?**
+
+Internal operating principle:
+
+> No proof, no award readiness.
+
+Do not publish the shortened phrase `No proof, no award` as an absolute compliance promise. In public language, `ready` means that the buyer's configured control profile is complete or has named, approved exceptions. It does not mean certified compliant, legally approved, fraud-free, donor-approved or guaranteed to pass an audit.
+
+Use plain procurement outcomes before technical mechanisms. Prefer `Map the award controls`, `Close the evidence gaps`, and `Issue the assurance pack` over a feature catalogue. Do not describe Traceli as autonomous decision-making, an AI scoring engine, another tender portal, an auditor or a compliance certification.
+
+## Must-have narrative
+
+The message should connect a procurement control failure to an executive consequence without fearmongering:
+
+1. A material award claim is not connected to its rule, evidence, judgment or approval.
+2. The gap survives sign-off because the proof is distributed across portals, ERP records, shared files and email.
+3. The gap becomes expensive when a donor, auditor, complainant or investigator asks the organization to reconstruct the decision.
+4. The consequence can be delay, an audit finding, ineligible expenditure, remediation conditions, sanction exposure or loss of trust.
+5. Traceli moves the proof test before sign-off and preserves the answer in one governed record.
+
+Lead with the controllable executive outcome: **protect funding eligibility and keep awards moving.** Use specific consequence examples only when an approved primary source supports the claim. Never imply that every documentation gap causes funding suspension or that Traceli prevents corruption.
 
 ## The 10/90 interaction rule
 
 - The first viewport earns attention in ten seconds: one promise, one supporting sentence, one dominant walkthrough action, and one secondary workspace path.
 - The next ninety seconds show one deterministic tender-to-proof story. Avoid carousels, competing dashboards, or explanations that duplicate the product visual.
 - Start the walkthrough from a clean tender workspace. Show information appearing only when the corresponding action occurs.
-- End with a low-friction pilot request: `Bring one completed tender.`
+- End with a low-friction pilot request: `Bring one completed tender.` The retrospective pilot proves whether the organization can reconstruct an accepted Award Assurance Pack before Traceli accompanies a live award.
 - Label fictional, staged, sanitized, and not-yet-live behavior explicitly.
 
 ## Visual hierarchy
@@ -100,6 +128,26 @@ The initial candidate set is WFP, UN Climate Change, Oxfam, Google, and Careem. 
 - Do not imply that a staged import, integration, risk signal, or audit export is live when it is not.
 - Every consequential product claim should eventually open its source, actor, and chronology.
 
+## Public consequence evidence and case studies
+
+Public failure examples are category evidence, not customer stories. Every published example must:
+
+- Use the issuing institution's original audit, investigation, sanctions notice or official decision as the primary source.
+- Distinguish an allegation, audit observation, investigative finding, recommendation, final decision and sanction. Do not collapse these into the word `corruption`.
+- Preserve the source's dates, amounts, actors, geography and procedural status precisely.
+- State the control or evidence failure and the institutional consequence separately.
+- Avoid saying Traceli would have prevented the event. At most, explain which proof or control question the Traceli model is designed to surface earlier.
+- Avoid implying that the named institution is a Traceli customer, prospect, partner or endorser.
+- Pass a factual review and a legal/comms review before moving from the research register to public marketing.
+- Carry an owner, source URL, retrieval date, claim status and review date in [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md).
+
+Prefer four consequence families so the category remains broad but coherent:
+
+1. Auditability — the record was incomplete or the process could not be adequately assessed.
+2. Financial eligibility — payments or expenditure were considered ineligible or recommended for recovery.
+3. Funding continuity — future funding was held behind remediation or stronger controls.
+4. Integrity exposure — false statements, rigging, conflicts or other sanctionable practices led to discipline or debarment.
+
 ## Contact placement
 
 The canonical public contact address is `hello@trace-li.com`.
@@ -119,11 +167,14 @@ Before a public brand release:
 4. The product film returns `200`, supports byte ranges, plays from a clean state, and retains its fictional-data disclosure.
 5. Keyboard focus, contrast, reduced motion, alt text, and responsive overflow checks pass.
 6. Any deliberate exception is documented in the implementation plan before release.
+7. Every public failure example is present in the case-study register with a primary source and approved claim language.
 
 ## Build-system ownership
 
 - `components/landing-page.tsx` is the current executable public expression of this system.
 - `docs/IMPLEMENTATION_PLAN.md` owns sequencing, maturity, and honest capability boundaries.
 - `docs/AFFILIATION_REGISTER.md` owns mark-clearance state.
+- `docs/PUBLIC_CASE_STUDY_REGISTER.md` owns public consequence claims, source status, review gates and the research sprint.
+- `docs/GTM_MESSAGING.md` owns reusable category, persona, campaign, email and objection language.
 - `.github/PULL_REQUEST_TEMPLATE.md` turns the release gates into a repeatable review step for future public UI changes.
 - Visual QA evidence may live under `docs/audits/`, but historical screenshots do not override this canonical reference.

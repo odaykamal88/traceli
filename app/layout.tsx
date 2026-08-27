@@ -26,9 +26,23 @@ const newsreader = Newsreader({
 })
 
 export const metadata: Metadata = {
-  title: 'Traceli — Continuous procurement assurance',
+  metadataBase: new URL('https://trace-li.com'),
+  title: {
+    default: 'Traceli — Prove the award before you sign it',
+    template: '%s — Traceli',
+  },
   description:
-    'Policy-grounded drafting, evidence-linked evaluation, human approvals and locked decision records for humanitarian procurement.',
+    'Award assurance for donor-funded procurement: connect governing rules, supplier evidence, human judgment and approvals before sign-off.',
+  openGraph: {
+    type: 'website',
+    title: 'Traceli — Prove the award before you sign it',
+    description: 'Award assurance for donor-funded procurement.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Traceli — Prove the award before you sign it',
+    description: 'Award assurance for donor-funded procurement.',
+  },
   icons: {
     icon: [
       {

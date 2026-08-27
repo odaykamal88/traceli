@@ -1,18 +1,30 @@
 # Traceli pilot implementation plan
 
-Updated: 26 August 2026
+Updated: 27 August 2026
 
-Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md).
+Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). Reusable campaign and call language lives in [GTM_MESSAGING.md](./GTM_MESSAGING.md). Public consequence claims and the case-study authority sprint are governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md). The ICP, first commercial offer, twelve-call qualification method, and contract path are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
 
 ## The product we are building
 
-Traceli is not another tender portal and not an AI scoring feature. It is the permissioned assurance layer that preserves the governing rules, criteria, evidence, human decisions, exceptions, approvals, and chronology behind an award.
+Traceli is not another tender portal and not an AI scoring feature. It is the award-assurance layer for donor-funded procurement: a pre-award control gate that preserves the governing rules, criteria, evidence, human decisions, exceptions, approvals, and chronology behind an award.
 
 The initial product promise is deliberately narrow:
 
-> Open an award and answer “why did this supplier win?” with every claim linked to the exact source, actor, and event that supports it.
+> Prove the award before you sign it—with every material claim linked to the exact source, actor, and event that supports it.
 
 That answer is the hook. The durable product is the procurement control graph and decision record that accumulate while work happens.
+
+## Commercial focus through the first paid pilot
+
+The immediate target is not every procurement team and not every DIHAD exhibitor. It is a buyer-side humanitarian or development organization that manages donor-restricted, grant-funded, public, or otherwise ring-fenced procurement; applies overlapping donor, institutional, and local rules; and reconstructs material award evidence across an ERP or portal, shared files, and email.
+
+DIHAD conversations provide first-party evidence that this problem is recognizable, and twelve follow-up calls are scheduled for the week of 31 August 2026. They do not yet prove that every contact is a buyer, has authority, or can fund a pilot. Relief-aid suppliers seeking help to submit bids are outside the current direct-customer ICP unless they also operate accountable restricted-funded procurement.
+
+The current offer is a **paid six-week Award Assurance Pilot**:
+
+> Bring one completed tender. Traceli reconstructs the rules-to-award evidence chain, exposes missing proof, and tests whether an independent reviewer can defend the award without rebuilding it from folders and email.
+
+The pilot is retrospective, bounded, and human-owned. It does not replace the customer's system of record, certify compliance, or alter the original award. Contracting may begin immediately, but no sensitive document enters Traceli until the NDA, classification, processing terms, approved transfer route, and technical security gate pass.
 
 ## The 90-second pilot journey
 
@@ -54,7 +66,22 @@ The default `Member` and `Admin` roles remain untouched. Pilot users must be ass
 
 ## Execution sequence
 
-The immediate sequence is Sprint 0.5 → resume Sprint 1. The critical path to the first live pilot remains Sprint 1 → Sprint 2 → Sprint 3 → Sprint 5 → Sprint 6. The operations track runs in parallel: O0 begins during Sprint 1; O1 must pass before sensitive pilot data; O2 arrives with durable document and AI workflows; O3 arrives before a consequential live pilot. Sprint 4 (MCP) is a parallel distribution track that may start after the tenant and secure-document boundaries pass, but it must not delay a design partner's submissions and clarification journey. Sprint 7 begins only when a signed pilot identifies the first real source system.
+The immediate commercial sequence is twelve qualified follow-up calls → named retrospective tender and sponsor → written paid-pilot proposal → signed scope and data gate. The minimum delivery path is Sprint 1 → Sprint 2 → Pilot Slice A → Pilot Slice B. It deliberately pulls only the retrospective ingestion, evidence-mapping, review, and export behavior needed from later workflow sprints before building source-grounded tender drafting or a complete live-tender workflow.
+
+The operations track runs in parallel: O0 continues during Sprint 1; O1 must pass before sensitive pilot data; O2 arrives with durable document and extraction workflows; O3 arrives before a consequential live pilot. Sprint 3 expands into tender drafting only when the paid pilot or next live procurement validates it. Sprint 4 (MCP) and Sprint 7 (ERP connectors) remain deferred distribution tracks and must not delay the first paid assurance outcome.
+
+### Paid-pilot conversion track — immediate
+
+Outcome: at least one of the twelve DIHAD follow-ups signs a paid retrospective pilot, and the implementation backlog becomes accountable to that contract's acceptance criteria.
+
+- Classify every follow-up as buyer/implementer, potential channel, or supplier-only before pitching.
+- Qualify one completed procurement, governing rule sets, evidence locations, consequence, accountable sponsor, secure data route, budget owner, and buying process.
+- Demonstrate only the rule → evidence → human judgment → approval → decision-record journey relevant to that account.
+- Ask directly for the six-week paid pilot; do not substitute an unpaid innovation workshop for willingness-to-pay validation.
+- Send a short proposal/SOW within 24 hours of a qualified call and maintain a mutual action plan through sponsor, security/legal, procurement, and signature.
+- Keep the founding commercial hypothesis, qualification score, discovery questions, objection posture, and contract contents in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
+
+Commercial gate: all twelve accounts are classified; at least four buyer-side accounts name a completed tender and consequence; at least two proposals reach a sponsor or economic buyer; and at least one paid pilot is signed or has a documented contracting path with named approvers and dates.
 
 ### Operations track — autonomous assurance without autonomous control
 
@@ -91,7 +118,7 @@ This is a public-story refinement before the next product iteration. It does not
 **Landing hierarchy**
 
 - Replace the centered hero with a WorkOS-style split: left-aligned promise and actions; a restrained product/video surface on the right.
-- Keep the headline `Every award, audit ready.` and shorten the supporting copy to one procurement outcome.
+- Use the category `Award assurance for donor-funded procurement` and the headline `Prove the award before you sign it.`
 - Remove `See the proof`. Use one dominant action—`Watch the 90-second tender walkthrough`—and one lower-emphasis path to `Open demo workspace`.
 - Remove duplicate or competing above-the-fold explanations. The product visual should demonstrate the claim rather than restate it.
 
@@ -107,9 +134,9 @@ Brand gate: maintain [AFFILIATION_REGISTER.md](./AFFILIATION_REGISTER.md) with t
 **Three service outcomes**
 
 - Show three icon-led modules, not a feature catalogue:
-  1. `Draft from your rules` — turn approved policy, donor conditions, and past tenders into a cited tender and matrix draft.
-  2. `Run the evaluation` — keep submissions, Q&A, reviewer judgments, and exceptions in one controlled process.
-  3. `Defend the award` — preserve approvals, integrity concerns, and source-linked proof in an audit-ready decision record.
+  1. `Map the award controls` — connect donor, institutional and local rules to the criteria, evidence and approvals that govern the award.
+  2. `Close the evidence gaps` — keep supplier proof, reviewer judgment, clarifications and exceptions visible before sign-off.
+  3. `Issue the assurance pack` — preserve the source-linked rules, evidence, human decisions, exceptions and approvals behind the award.
 - Use the existing icon library and one visual grammar. Each module gets one sentence and one destination at most.
 
 **Tender-to-proof video**
@@ -130,14 +157,29 @@ Recommended 90-second page order:
 
 1. Left-aligned promise plus product walkthrough.
 2. Verified team-experience strip.
-3. Three icon-led outcomes.
-4. Tender-to-proof video with chapters and transcript.
-5. Documentation/security entry point.
-6. `Bring one completed tender` call to action.
+3. Governed public consequence evidence with primary-source links.
+4. Three icon-led assurance outcomes.
+5. Tender-to-proof video with chapters and transcript.
+6. Documentation/security entry point.
+7. `Bring one completed tender` call to action.
 
 Exit gate: five procurement or audit professionals can explain Traceli as `the proof behind the award` after one scroll; at least three choose the walkthrough or pilot action without prompting; every affiliation and availability claim has an owner and evidence.
 
-Implementation status: the left-led landing composition, single primary walkthrough action, three outcome modules, deterministic 90-second tender journey, public documentation route, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses a monochrome, equal-block treatment and explicit non-endorsement language. Relationship verification and mark permission remain separate release gates under [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). The remaining gate is interview conversion evidence and logo clearance—not another UI feature.
+Implementation status: the left-led landing composition, category and must-have promise, single primary walkthrough action, four governed consequence examples, three assurance outcome modules, deterministic 90-second tender journey, public control-model documentation, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses a monochrome, equal-block treatment and explicit non-endorsement language. Relationship verification, mark permission and long-form consequence-claim review remain separate release gates under [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). The remaining gate is interview conversion evidence, case-study authority and logo clearance—not another UI feature.
+
+### Sprint 0.75 — must-have evidence and case-study authority (recommended)
+
+Outcome: Traceli can explain the cost of weak award proof with a balanced, primary-source evidence library, and the twelve DIHAD follow-up calls reveal which consequence is urgent enough to fund.
+
+- Build a 25-record official-source backlog across UN oversight, multilateral development banks, EU/OLAF and national development-aid auditors.
+- Approve twelve short-form cases across auditability, ineligible spend, funding continuity and integrity sanctions.
+- Produce four reviewed one-page case studies and one reusable four-slide sales proof module.
+- Keep the official finding, institutional consequence, Traceli inference and product boundary visibly separate.
+- Never say Traceli would have prevented a case, never turn a recommendation into an implemented suspension, and never imply the source institution is a customer.
+- Test one consequence hypothesis on every qualified follow-up call and record whether it creates a named tender, sponsor, budget route or proposal step.
+- Run the detailed ten-day plan and claim register in [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md).
+
+Exit gate: twelve entries pass source review; four one-page cases pass factual and legal/comms review; and at least six relevant calls produce evidence about the consequence, owner and budget route that move—or fail to move—the opportunity.
 
 ### Sprint 1 — tenant-safe data spine (in progress)
 
@@ -170,9 +212,34 @@ Outcome: a pilot team can share controlled procurement documents without weakeni
 
 Exit gate: threat-model review passes for unauthorized download, guessed URLs, malicious files, log leakage, and deletion/hold conflicts.
 
+### Pilot Slice A — retrospective award reconstruction
+
+Outcome: the signed pilot's completed tender can be reconstructed in Traceli without first building a new-tender drafting workflow.
+
+- Import the customer-approved policy/donor pack, final tender and matrix versions, submissions, evaluation artifacts, clarifications, approvals, and award record.
+- Preserve source hashes, versions, actors, dates, and customer-system identifiers.
+- Allow assisted and manual mapping from governing obligations to criteria, supplier evidence, reviewer judgments, exceptions, and approvals.
+- Keep `supported`, `not found`, `ambiguous`, `customer confirmed`, and `not available` visibly distinct.
+- Record the customer's current reconstruction workflow and baseline time before presenting Traceli's result.
+- Require named customer confirmation for every consequential interpretation; Traceli may organize and challenge the record but may not rewrite the historical decision.
+
+Exit gate: one completed procurement has a navigable rules-to-award chain, every sampled material claim opens an accepted source or explicit gap, and no uncontrolled file path exists.
+
+### Pilot Slice B — independent review and minimum export
+
+Outcome: the customer can judge the paid pilot against an assurance result rather than a product demonstration.
+
+- Provide a reviewer view that starts with “why did this supplier win?” and opens the supporting rule, evidence, judgment, clarification, exception, and approval.
+- Run a structured review with a customer-selected person who did not assemble the record.
+- Capture review time, unsupported claims, missing controls, and questions that still require institutional judgment.
+- Produce a minimum human-readable decision pack plus a machine-readable manifest when the export boundary passes security and integrity checks.
+- Deliver a results brief comparing the baseline with the reconstructed record and recommend either stop, repeat on another completed tender, or accompany one live tender.
+
+Exit gate: the independent reviewer can explain the recommendation from the record, the customer accepts or rejects each reported gap, and a named buyer makes an explicit expansion decision.
+
 ### Sprint 3 — source-grounded tender drafting
 
-Outcome: Traceli infers a first tender structure from approved institutional knowledge without inventing policy.
+Outcome: after retrospective value is proven, Traceli helps a live-pilot team infer a first tender structure from approved institutional knowledge without inventing policy.
 
 - Connect an approved knowledge pack: policy, donor conditions, templates, and selected precedents.
 - Extract obligations with page/section citations and version metadata.
@@ -254,9 +321,9 @@ Exit gate: one pilot procurement moves from source system to Traceli and back wi
 - Runtime health and security findings are operational records, separate from the procurement decision-event chain.
 - No model may lower a deterministic severity, suppress a P0/P1, or bypass a failing CI or isolation gate.
 
-## First pilot definition
+## First paid pilot definition
 
-Choose one organization, one procurement category, and one completed or low-risk live tender. Limit scope to:
+Choose one buyer-side humanitarian or development organization, one procurement category, and one completed tender. Limit scope to:
 
 - one approved policy pack;
 - one tender and matrix;
@@ -265,14 +332,18 @@ Choose one organization, one procurement category, and one completed or low-risk
 - one clarification;
 - one decision record and audit export.
 
+The contract starts with a data gate. NDA, classification, processing/subprocessor terms, region, approved transfer route, retention, deletion, and exit/export must be agreed before sensitive files move. The customer's original award remains authoritative throughout.
+
 Success measures:
 
+- one accountable sponsor, one procurement champion, and one independent reviewer participate through readout;
 - time to locate evidence for a sampled requirement;
 - percentage of findings with an accepted citation;
 - time to produce the audit pack;
 - number of missing approvals or declarations caught before award;
 - reviewer agreement after examining Traceli’s source link;
-- prospect can explain the product back as “the proof behind the award.”
+- independent reviewer can explain the recommendation from the reconstructed record;
+- customer makes an explicit decision to stop, repeat, or accompany one live tender.
 
 ## What we deliberately defer
 
