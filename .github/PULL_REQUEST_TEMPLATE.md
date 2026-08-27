@@ -6,6 +6,9 @@ Describe the user outcome and the product boundary affected.
 
 - [ ] Type checking passes.
 - [ ] Production build passes.
+- [ ] Environment validation passes without exposing credentials.
+- [ ] Database migrations, tenant isolation, and audit immutability checks pass when data boundaries change.
+- [ ] The production smoke check passes when the public journey or deployment boundary changes.
 - [ ] No secrets, private procurement records, or sensitive evidence are included.
 - [ ] New capability claims match the implementation plan's honest boundary.
 
