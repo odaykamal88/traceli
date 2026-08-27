@@ -117,6 +117,8 @@ Route selection is mechanical: exclude models that fail the data, region, tool, 
 
 For sensitive buyer or supplier data, start with contractually approved closed-source routes that enforce the required retention, training, and regional policy. An open or self-hosted model becomes eligible only when its hosting boundary, security patching, isolation, evaluation result, and total operating cost are demonstrably acceptable. Public-source fetching and repository-only analysis are the safest early tasks for lower-cost or open models.
 
+The invocation ledger, unit-economics measures, engineering-agent accounting, budget triggers, and open-weight adoption gate are governed by [MODEL_ECONOMICS.md](./MODEL_ECONOMICS.md).
+
 ## Supervisory agent
 
 The “super agent” is a **read-only operations analyst**, not the source of truth and not the incident commander.
