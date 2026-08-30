@@ -1,6 +1,6 @@
 # Traceli ROI and value-case framework
 
-Updated: 27 August 2026
+Updated: 30 August 2026
 
 This is the canonical internal framework for discussing Traceli's economic value in discovery, proposals, pilot measurement, marketing, and expansion decisions. It is a **Structural Case**, not a customer-specific ROI claim: account baselines and measured Traceli outcomes do not exist yet.
 
@@ -18,7 +18,7 @@ The value case has three layers, in this order:
 2. **Measured cycle value:** time and rework added by evidence requests, review queries, approvals, closeout, or no-objection steps where applicable.
 3. **Customer-modelled risk value:** the probability and severity of findings, remediation, questioned expenditure, delayed funding, or other consequences—using the customer's own history and an explicitly agreed attribution assumption.
 
-The first two layers can be tested in the six-week pilot. The third should remain a scenario until customer evidence or longitudinal Traceli data supports it.
+Operating value can be tested directly in the six-week pilot. Cycle value can be measured only when the pilot or a comparable live step reaches the same approval, review, no-objection, audit or closeout event; otherwise it remains a customer baseline and a pending expansion measure. The third layer should remain a scenario until customer evidence or longitudinal Traceli data supports it.
 
 ## Evidence posture
 

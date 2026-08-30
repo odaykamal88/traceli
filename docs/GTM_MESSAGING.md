@@ -1,8 +1,8 @@
 # Traceli go-to-market messaging
 
-Updated: 27 August 2026
+Updated: 30 August 2026
 
-This document turns the Traceli category and must-have thesis into reusable marketing and sales language. Product truth and claim boundaries remain governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md); public consequence examples remain governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md); economic claims and pilot measurement remain governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md).
+This document turns the Traceli category and must-have thesis into reusable marketing and sales language. Product truth and claim boundaries remain governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md); public consequence examples remain governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md); economic claims and pilot measurement remain governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md); scheduling copy and qualification controls remain governed by [CALCOM_OUTREACH.md](./CALCOM_OUTREACH.md).
 
 ## Message hierarchy
 
@@ -29,6 +29,106 @@ This document turns the Traceli category and must-have thesis into reusable mark
 **Pilot call to action**
 
 > Bring one completed tender.
+
+## Positioning amendment: cinematic clarity in service of conversion
+
+The [shared X post](https://x.com/alextalksai/status/2093583622691283018?s=20) promotes a tutorial for producing premium, cinematic websites with GPT-5.6 Sol. Treat it as presentation inspiration only. It does not validate a new ICP, forcing function or product claim.
+
+The transferable principle is **recognition before explanation**: in the first screen and the first minute of a call, the buyer should recognize the control moment, the evidence problem and the accountable role. Motion, polish and product imagery are useful only when they make that story clearer and lead to a concrete next action.
+
+Positioning test:
+
+> Can a procurement, programme or assurance leader see within ten seconds which award they need to prove, why the proof matters now and what Traceli asks them to do next?
+
+If the answer is no, additional cinematic treatment will amplify ambiguity rather than conversion.
+
+## Landing-page positioning amendment
+
+This is a copy and narrative amendment, not a request for new product capability.
+
+### First viewport
+
+**Audience line**
+
+> For procurement and assurance teams accountable for donor-funded awards.
+
+**Headline**
+
+> Prove the award before you sign it.
+
+**Subhead**
+
+> Traceli gives the accountable team one source-linked record of the governing rule, supplier evidence, human judgment and required approval—before a donor review, no-objection, complaint or audit forces the reconstruction.
+
+**Primary CTA**
+
+> Test one completed tender
+
+**Secondary CTA**
+
+> See the 44-second proof path
+
+**Qualification microcopy**
+
+> A bounded six-week paid pilot. Your existing process remains authoritative, and no sensitive files move before the data route is agreed.
+
+### Recommended page sequence
+
+1. **Recognize the control moment:** hero copy plus a single visual path from governing rule to approval.
+2. **See the proof problem:** the 44-second film should show one award, one missing material link and the accountable human's disposition.
+3. **How Traceli supports you:** map the controls, surface evidence gaps for human disposition, and issue the Award Assurance Pack.
+4. **Why this becomes urgent:** matched public case studies covering auditability, financial eligibility, funding continuity and integrity exposure, explicitly labelled as public institutional records rather than customers.
+5. **FAQ:** answer ERP overlap, audit independence, certification boundaries, sensitive-data handling, pilot scope and budget-route questions.
+6. **Commercial action:** repeat `Test one completed tender`, the six-week scope and the conditions required to begin.
+
+### Section-copy amendments
+
+Rename `The pre-award control gate` section to:
+
+> How Traceli supports your award process
+
+Use the section introduction:
+
+> Keep the systems that run procurement. Add one assurance path that shows what governed the decision, which evidence was accepted, where human judgment was applied and whether the required approval is present.
+
+Rename the public-evidence section to:
+
+> When award proof breaks down
+
+Keep the current disclaimer that these are public institutional records—not Traceli customers, endorsements or claims that Traceli would have prevented the outcomes.
+
+### FAQ copy
+
+**Does Traceli replace our ERP or tender portal?**
+
+No. Those systems remain authoritative for the procedures and transactions they record. Traceli connects the rule, evidence, judgment, exception and approval needed to defend the award across those sources.
+
+**Does Traceli certify donor or legal compliance?**
+
+No. Traceli surfaces the configured controls and supporting evidence for human review. The customer's authorized people remain responsible for the decision and any compliance determination.
+
+**Does Traceli replace internal audit?**
+
+No. It helps the operating team maintain a testable award record before audit and gives independent reviewers a source-linked pack to inspect.
+
+**What happens to sensitive procurement data?**
+
+No sensitive file enters the pilot until the NDA, data classification, approved transfer route, processing terms and technical security gate are agreed.
+
+**What does the first pilot cover?**
+
+One organization, one completed tender and one six-week retrospective. Traceli reconstructs the rules-to-award evidence chain, exposes unresolved proof and tests the resulting pack with an independent reviewer.
+
+**Where does the budget come from?**
+
+There is no assumed software budget line. The customer must identify and approve the permitted route, which may sit with programme assurance, audit remediation, internal controls, procurement improvement, fiduciary strengthening or technical assistance.
+
+### Presentation guardrails
+
+- Use deliberate pacing, restrained motion and one coherent award story; do not make the interface itself the protagonist.
+- Put the buyer, control moment and consequence in copy that remains understandable without video or animation.
+- Keep each visual tied to a commercial question: what governed the award, what supports it, what is unresolved, who decides, and what must happen next.
+- Measure the amendment by qualified pilot movement, not by whether the site appears more cinematic.
 
 ## Spoken versions
 
@@ -109,6 +209,8 @@ Use one territory at a time so the category remains memorable.
 
 ## Follow-up email for DIHAD contacts
 
+For the approved 30-minute scheduling route, use the controlled event, intake, confirmation and channel copy in [CALCOM_OUTREACH.md](./CALCOM_OUTREACH.md). Keep `Test one completed tender` as the action; do not replace it with `Book a demo`.
+
 **Subject:** Can you prove one completed award without rebuilding it?
 
 Hi [Name],
@@ -148,6 +250,7 @@ For the twelve calls, measure message quality by buying movement:
 
 - named completed tender;
 - named consequence and trigger date;
+- named material proof gap;
 - named accountable sponsor;
 - named existing budget route;
 - named baseline owner and at least one quantifiable operating measure;

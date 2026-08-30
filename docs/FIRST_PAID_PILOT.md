@@ -1,6 +1,6 @@
 # Traceli first paid pilot playbook
 
-Updated: 27 August 2026
+Updated: 30 August 2026
 
 This document converts the DIHAD conversations into a working ideal-customer profile, a contractable first offer, and a sales motion for the twelve follow-up calls beginning the week of 31 August 2026. It is an internal commercial hypothesis until the calls confirm account-specific facts.
 
@@ -23,6 +23,19 @@ The software remains the durable product, but the first contract is a time-boxed
 **Missing:** organization type, contact role, buying authority, current systems, specific recent procurement, triggering consequence, budget source, security path, and contracting process for each follow-up.
 
 The calls must turn the first-party signal into account-level evidence. Until then, do not treat all twelve as direct customers.
+
+### Positioning input from the cinematic-website example
+
+The [shared X post](https://x.com/alextalksai/status/2093583622691283018?s=20) points to a tutorial whose public promise is a premium, cinematic website. That is evidence of a presentation technique, not evidence of Traceli's buyer, urgency or willingness to pay. Its useful implication is to make one high-stakes award story easy to recognize and remember before explaining the product.
+
+Use the technique as a positioning layer:
+
+- open on the control moment and consequence, not on Traceli's interface;
+- show one award moving from scattered proof to a defensible record;
+- keep the accountable human and the required decision visible throughout;
+- end on a commercial action: test one completed tender.
+
+Do not change the product category, promise an outcome because the page looks premium, or substitute cinematic polish for a named trigger, sponsor and budget route.
 
 ## Must-have positioning for the calls
 
@@ -75,6 +88,26 @@ Prioritize accounts with one of these events already in motion:
 - programme closeout requiring dispersed procurement evidence;
 - an overstretched procurement, grants, or audit team relying on manual reconstruction.
 
+### ICP activation filter
+
+Firmographic fit is not enough. Move an account into an active sales cycle only when the conversation identifies all three:
+
+1. **A named control moment:** a prior review or no-objection, award approval, complaint response, corrective action, closeout or other review with a real date or active consequence.
+2. **A named accountable owner:** the person who must sign, defend, remediate or fund the response—not only a person who finds the concept interesting.
+3. **A named proof gap:** the material rule, evidence, judgment, exception or approval that currently requires reconstruction across systems, files, email or memory.
+
+Prioritize the ICP in this order:
+
+| Priority | Buying situation | Sales posture |
+| --- | --- | --- |
+| 1 | An external donor, funder, regulator or complainant creates a live gate before award, payment, closeout or response | Pursue the paid pilot and agree the contracting path |
+| 2 | An executive, committee, audit-remediation plan or transformation programme creates a dated internal gate | Pursue if the accountable owner and budget route are named |
+| 3 | General concern about governance, reputation or future audit exposure without a date or owner | Nurture; do not treat recognition as qualified demand |
+
+The page and product film can create recognition. Only the three-part activation filter establishes whether there is a current buying case.
+
+The three conditions are a hard gate, not points that can be offset elsewhere. An account cannot enter an active pilot sale without a named control moment, accountable owner and material proof gap, even when its total qualification score would otherwise exceed the threshold. Use the score to rank activated accounts and identify the next condition to close; never use it to bypass activation.
+
 ### Disqualifiers
 
 Do not pursue a direct pilot now when the contact:
@@ -97,7 +130,7 @@ Score each dimension from 0 to 2 immediately after the call.
 | Restricted-funding exposure | None | Occasional | Recurring/material |
 | Rule complexity | One stable process | Some variation | Donor + internal + local rules |
 | Evidence fragmentation | One controlled system | Some manual work | Multiple systems, files and email |
-| Consequence or trigger | Abstract interest | General audit pressure | Named finding, deadline, complaint or tender |
+| Consequence or trigger | Abstract interest | General audit pressure | Named control gate and date or active consequence |
 | Accountable sponsor | No owner | Operational contact only | Champion plus economic-buyer route |
 | Pilot readiness | No suitable case | Case exists, access uncertain | Completed tender and secure access path |
 | Contract path | No budget or mechanism | Possible but unclear | Named budget owner and buying process |
@@ -123,7 +156,7 @@ Never inflate a score to keep an account active. One contractable account is mor
 1. **Baseline and control map:** the applicable rules, required decision evidence, systems involved, and current reconstruction workflow.
 2. **Source-linked award record:** requirements, criteria, supplier evidence, clarifications, judgments, exceptions, approvals, and chronology linked to their sources or explicitly marked missing.
 3. **Independent-review session:** a reviewer who was not responsible for assembling the record attempts to answer why the supplier won.
-4. **Pilot results brief:** measured reconstruction time, evidence gaps, control failures found, workflow implications, and a recommendation for a live or portfolio deployment.
+4. **Pilot results brief:** measured reconstruction time, evidence gaps and customer-dispositioned control observations, workflow implications, and a recommendation for a live or portfolio deployment.
 5. **Customer export:** a human-readable decision pack and a machine-readable manifest when the minimum export boundary is ready.
 
 ### Success measures
@@ -186,6 +219,52 @@ The objective of every call is a decision about a specific pilot path, not anoth
 4. **Test the pilot — 7 minutes:** scope, data route, reviewer, success measure, budget owner, and contracting path.
 5. **Close — 5 minutes:** agree the named tender, sponsor meeting, security/legal owner, proposal date, and decision date.
 
+### Positioning-only next-call script
+
+Use this script to test the buying situation before giving a broad walkthrough.
+
+**Opening — 45 seconds**
+
+> At DIHAD, the issue that seemed to resonate was not running another tender workflow. It was being able to prove why a donor-funded award was defensible when the governing rules, supplier evidence, reviewer judgments and approvals sit in different places. I would like to use one real completed award today to see whether that is an active control problem for you or simply an interesting idea.
+
+**Locate the control moment**
+
+> What is the next award, donor review, no-objection, complaint response, corrective-action deadline or closeout where somebody will need the full decision record?
+
+If there is no upcoming gate, ask:
+
+> Which completed tender from the last twelve months would be hardest to defend if the full reasoning were requested next week?
+
+**Make the current state visible**
+
+> If that request arrived, who would assemble the answer, where would they look, and which part of the reasoning would still depend on email, spreadsheets, meeting notes or memory?
+
+> What would be delayed, questioned or escalated if the answer were incomplete—and who owns that consequence?
+
+**Show one proof path — no more than five minutes**
+
+> Let me show the one part that maps to what you just described: the governing rule, the accepted supplier evidence, the human disposition and the approval in one source-linked path.
+
+Do not give a generic feature tour. Reuse the prospect's words for the missing proof and stop once the relevant path is understood.
+
+**Bridge to the pilot**
+
+> The six-week pilot would not replace your ERP, portal or decision process. We would take one completed tender, reconstruct this proof path, measure the work required today and test whether an independent reviewer can defend the award from the resulting pack. Is that outcome important enough for the accountable owner to fund now?
+
+**Close on a mutual action**
+
+> If the answer is yes, can we leave today with the tender, executive sponsor, data owner, permitted budget route and a date to review the written scope? If one of those is missing, which one must we resolve first and by when?
+
+### Changes for the current discovery conversations
+
+- **Diagnose before demonstrating:** do not play the film or open the workspace until the prospect names a tender and a control moment.
+- **Replace general pain with a clock:** capture the review, approval, complaint, remediation or closeout event and its date.
+- **Quantify proof latency:** ask how many people, elapsed days, review loops and external-support costs are involved in assembling and defending the record.
+- **Separate system of record from decision proof:** ask what the ERP or portal records authoritatively and what material reasoning remains outside it.
+- **Test ownership twice:** identify both the operational champion and the person accountable for the financial, programme or institutional consequence.
+- **Use one matched public case:** choose the consequence family closest to the prospect's trigger, state the controlled fact, then return immediately to their own tender.
+- **End with evidence of movement:** a named tender, sponsor, data route, budget route and dated next action; positive feedback is not a sales outcome.
+
 ### Required discovery questions
 
 1. “Which completed procurement from the last twelve months would be hardest to defend if a donor or auditor asked for the full reasoning next week?”
@@ -197,6 +276,12 @@ The objective of every call is a decision about a specific pilot path, not anoth
 7. “Where do you currently budget for procurement compliance support, audit preparation, programme assurance, internal controls, procurement improvement, fiduciary strengthening, or technical assistance—and who decides whether that route may fund this pilot?”
 8. “Could one completed tender be made available under an NDA and an agreed data-classification route?”
 9. “How many material awards follow a comparable process each year, and what measured result would justify a live-tender or portfolio deployment?”
+
+### Tender story prompts
+
+When the contact describes a real tender, use two or three prompts from [DISCOVERY_CALL_STORY_CAPTURE.md](./DISCOVERY_CALL_STORY_CAPTURE.md) to understand what became difficult to prove, where the evidence lived, when the gap surfaced, who carried the reconstruction work and which control would have helped.
+
+Ask separately whether the account may be retained as private product research or reviewed later as an anonymized pattern. Do not interpret a useful story as permission to publish it. Do not request confidential bid material, supplier names or active evaluation information.
 
 ### Closing ask
 
@@ -235,7 +320,7 @@ Within 24 hours of a qualified call, send a short proposal/SOW containing:
 By the end of the follow-up cycle, success is:
 
 - all twelve accounts classified and scored;
-- at least four buyer-side accounts with a named completed tender and consequence;
+- at least four buyer-side accounts with a named completed tender, consequence and material proof gap;
 - at least two accounts with a named baseline owner and one quantifiable operating measure;
 - at least two sponsor or economic-buyer meetings;
 - at least two written paid-pilot proposals;
@@ -247,7 +332,7 @@ If the calls produce interest but no named tender, consequence, sponsor, or budg
 
 Use one row per DIHAD follow-up. Keep the score evidence-backed and replace `TBD` only with facts stated by the account.
 
-| # | Account | Type | Contact / role | Score | Named trigger | Completed tender | Value baseline | Sponsor / budget | Data route | Next action / date |
+| # | Account | Type | Contact / role | Score | Named control gate / date | Completed tender | Value baseline | Sponsor / budget | Data route | Next action / date |
 | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- |
 | 1 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |
 | 2 | TBD | TBD | TBD | — | TBD | TBD | TBD | TBD | TBD | TBD |

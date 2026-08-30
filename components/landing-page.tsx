@@ -22,6 +22,8 @@ import {
 
 import { cn } from '@/lib/utils'
 
+const bookingHref = 'https://cal.com/oqemal/30min'
+
 const outcomes: Array<{
   title: string
   detail: string
@@ -40,8 +42,8 @@ const outcomes: Array<{
   },
   {
     eyebrow: '02 · Resolve',
-    title: 'Close the evidence gaps',
-    detail: 'Keep supplier proof, reviewer judgment, clarifications and exceptions visible before the decision is signed.',
+    title: 'Surface the evidence gaps',
+    detail: 'Keep supplier proof, reviewer judgment, clarifications and exceptions visible for human disposition before the decision is signed.',
     icon: ScanSearch,
     detailIcon: Waypoints,
     tone: 'blue',
@@ -62,7 +64,7 @@ const publicCases = [
     title: 'Incomplete files weakened auditability',
     detail: 'UN OIOS found that bid evaluations at UNMISS were not timely and their documentation was inadequate.',
     source: 'UN OIOS · Report 2024/064',
-    href: 'https://oios.un.org/file/10525/download?token=XrBorFi3',
+    href: 'https://oios.un.org/sites/default/files/confidential-files/Reports/2024_064_pd.pdf',
   },
   {
     metric: '€7.5m',
@@ -84,6 +86,33 @@ const publicCases = [
     detail: 'The World Bank debarred a supplier that falsely claimed past experience in bids for two financed projects.',
     source: 'World Bank Group · 2025',
     href: 'https://www.worldbank.org/en/news/press-release/2025/06/18/world-bank-group-debars-pars-tableau-company-jsc',
+  },
+] as const
+
+const faqItems = [
+  {
+    question: 'Does Traceli replace our ERP or tender portal?',
+    answer: 'No. Those systems remain authoritative for the procedures and transactions they record. Traceli connects the rule, evidence, judgment, exception and approval needed to defend the award across those sources.',
+  },
+  {
+    question: 'Does Traceli certify donor or legal compliance?',
+    answer: "No. Traceli surfaces configured controls and supporting evidence for human review. Your authorized people remain responsible for the decision and any compliance determination.",
+  },
+  {
+    question: 'Does Traceli replace internal audit?',
+    answer: 'No. It helps the operating team maintain a testable award record before audit and gives independent reviewers a source-linked pack to inspect.',
+  },
+  {
+    question: 'What happens to sensitive procurement data?',
+    answer: 'No sensitive file enters the pilot until the NDA, data classification, approved transfer route, processing terms and technical security gate are agreed.',
+  },
+  {
+    question: 'What does the first pilot cover?',
+    answer: 'One organization, one completed tender and one six-week retrospective. We reconstruct the rules-to-award evidence chain, expose unresolved proof and test the resulting pack with an independent reviewer.',
+  },
+  {
+    question: 'Where does the budget come from?',
+    answer: 'There is no assumed software budget line. The customer identifies and approves the permitted route, which may sit with programme assurance, audit remediation, internal controls, procurement improvement, fiduciary strengthening or technical assistance.',
   },
 ] as const
 
@@ -228,26 +257,26 @@ export default function LandingPage() {
             <div className="max-w-[650px]">
               <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#78d8c4]/35 bg-[#0a2b46]/70 px-3 py-1.5 font-mono text-[9px] font-semibold uppercase leading-4 tracking-[0.12em] text-[#8be1cf] sm:text-[10px] sm:tracking-[0.16em]">
                 <span className="size-1.5 shrink-0 rounded-full bg-[#78d8c4]" aria-hidden="true" />
-                Award assurance for donor-funded procurement
+                For procurement and assurance teams accountable for donor-funded awards
               </div>
               <h1 className="mt-7 font-display text-[clamp(3rem,6.8vw,7.2rem)] leading-[0.88] tracking-[-0.035em] text-[#fbf5ea]">
                 Prove the award
                 <span className="block">before you sign it.</span>
               </h1>
               <p className="mt-7 max-w-[570px] text-lg leading-8 text-white/66 sm:text-xl">
-                Traceli shows whether every material award decision is connected to the governing rule, supplier evidence, human judgment and required approval—before donor review, complaint or audit.
+                Traceli gives the accountable team one source-linked record of the governing rule, supplier evidence, human judgment and required approval—before a donor review, no-objection, complaint or audit forces the reconstruction.
               </p>
               <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <button type="button" onClick={startFilm} className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#fbf5ea] px-6 py-3.5 text-sm font-semibold text-[#071d39] shadow-[0_14px_34px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:bg-white">
-                  <span className="flex size-8 items-center justify-center rounded-full bg-[#071d39] text-white"><Play className="ml-0.5 size-3.5 fill-current" aria-hidden="true" /></span>
-                  Watch the award-proof story
-                </button>
-                <Link href="/demo" className="group inline-flex min-h-12 items-center gap-3 px-2 text-sm font-semibold text-white/78 transition hover:text-white">
-                  Open demo workspace
+                <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#fbf5ea] px-6 py-3.5 text-sm font-semibold text-[#071d39] shadow-[0_14px_34px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:bg-white">
+                  Test one completed tender
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                </Link>
+                </a>
+                <button type="button" onClick={startFilm} className="group inline-flex min-h-12 items-center gap-3 px-2 text-sm font-semibold text-white/78 transition hover:text-white">
+                  <Play className="size-3.5 fill-current" aria-hidden="true" />
+                  See the 44-second proof path
+                </button>
               </div>
-              <p className="mt-6 flex items-center gap-2 text-xs text-white/42"><Clock3 className="size-3.5" aria-hidden="true" />A complete rule-to-award-proof story in 44 seconds.</p>
+              <p className="mt-6 flex max-w-[600px] items-start gap-2 text-xs leading-5 text-white/42"><Clock3 className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />A bounded six-week paid pilot. Your existing process remains authoritative, and no sensitive files move before the data route is agreed.</p>
             </div>
 
             <div id="walkthrough" ref={filmRef} className="scroll-mt-28">
@@ -318,8 +347,8 @@ export default function LandingPage() {
           <div className="mx-auto max-w-[1320px]">
             <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
               <div className="max-w-xl">
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Why award assurance</p>
-                <h2 id="case-evidence-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">The consequences do not stay inside procurement.</h2>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Public award-assurance cases</p>
+                <h2 id="case-evidence-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">When award proof breaks down.</h2>
                 <p className="mt-5 text-base leading-7 text-[#617078]">Public institutional records show the pattern: weak decision evidence can become an audit finding, ineligible spend, a condition on future funding or an integrity sanction.</p>
               </div>
               <div className="grid gap-px overflow-hidden rounded-[24px] border border-[#d8d5cc] bg-[#d8d5cc] sm:grid-cols-2">
@@ -342,9 +371,9 @@ export default function LandingPage() {
         <section aria-labelledby="outcomes-heading" className="bg-[#eef2ed] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
           <div className="mx-auto max-w-[1320px]">
             <div className="max-w-3xl">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">The pre-award control gate</p>
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">How Traceli supports your award process</p>
               <h2 id="outcomes-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">Make proof a condition of award readiness.</h2>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-[#617078]">Your portal can run the tender and your ERP can post the commitment. Traceli shows whether the source-linked award record is supported, unresolved or explicitly excepted before sign-off.</p>
+              <p className="mt-5 max-w-2xl text-base leading-7 text-[#617078]">Keep the systems that run procurement. Add one assurance path that shows what governed the decision, which evidence was accepted, where human judgment was applied and whether the required approval is present.</p>
             </div>
             <div className="mt-12 grid gap-4 lg:grid-cols-3">
               {outcomes.map(({ title, detail, eyebrow, icon, detailIcon, tone }) => (
@@ -357,6 +386,27 @@ export default function LandingPage() {
                   <p className="mt-3 text-sm leading-6 text-[#617078]">{detail}</p>
                   <span className="mt-8 inline-flex items-center gap-2 text-xs font-semibold text-[#2f8876]">See the assurance workflow<ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></span>
                 </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="faq-heading" className="border-t border-[#d8d5cc] bg-[#f7f3eb] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
+          <div className="mx-auto grid max-w-[1320px] gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div className="max-w-lg">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">FAQ</p>
+              <h2 id="faq-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">What accountable teams ask first.</h2>
+              <p className="mt-5 text-base leading-7 text-[#617078]">The first pilot is deliberately bounded. These answers clarify where Traceli fits, what remains human-owned and what must be agreed before work begins.</p>
+            </div>
+            <div className="divide-y divide-[#d8d5cc] border-y border-[#d8d5cc]">
+              {faqItems.map(({ question, answer }) => (
+                <details key={question} className="group py-1">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left text-lg font-semibold tracking-[-0.02em] marker:content-none">
+                    {question}
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[#bfc8c5] text-xl font-normal text-[#2f8876] transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                  </summary>
+                  <p className="max-w-3xl pb-6 pr-14 text-sm leading-7 text-[#617078]">{answer}</p>
+                </details>
               ))}
             </div>
           </div>
@@ -382,7 +432,7 @@ export default function LandingPage() {
             <h2 className="mx-auto mt-4 max-w-3xl font-display text-5xl leading-[0.94] tracking-[-0.025em] sm:text-6xl">Bring one completed tender.</h2>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#52696a]">In a six-week retrospective, reconstruct the rules-to-award evidence chain, expose missing proof and test whether an independent reviewer can defend the decision.</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href="mailto:hello@trace-li.com?subject=Award%20Assurance%20Pilot" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#071d39] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0d3057]">Discuss a paid pilot<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></a>
+              <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#071d39] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0d3057]">Test one completed tender<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></a>
               <Link href="/demo" className="inline-flex min-h-14 items-center px-5 py-3.5 text-sm font-semibold text-[#1f6f61] transition hover:text-[#124c43]">Open the demo workspace</Link>
             </div>
             <p className="mx-auto mt-5 max-w-2xl text-xs leading-5 text-[#52696a]">No sensitive document enters Traceli until the NDA, data classification, approved transfer route and security gate are agreed.</p>

@@ -1,6 +1,6 @@
 # Award Assurance Pilot — proposal and SOW template
 
-Updated: 27 August 2026
+Updated: 30 August 2026
 
 Internal commercial working draft. Complete the bracketed fields, remove internal notes, and obtain appropriate legal review before sending. This is a scoped pilot schedule, not a substitute for the customer's NDA, master terms, purchase order, or required procurement process.
 
@@ -48,7 +48,7 @@ The six-week delivery period begins after the kickoff conditions and secure-data
 | Baseline and control map | Week 1 | Document rule sets, evidence locations, current reconstruction workflow, and success baselines | Walk through the selected procurement and confirm authoritative sources |
 | Retrospective reconstruction | Weeks 2–4 | Build the source-linked rules-to-award record and mark unsupported, ambiguous, or unavailable evidence explicitly | Resolve source identity questions and confirm consequential interpretations |
 | Independent review | Week 5 | Facilitate the structured award review and record remaining evidence or control gaps | Provide a reviewer who did not assemble the reconstructed record |
-| Results and expansion decision | Week 6 | Deliver the results brief, customer export, and recommendation | Accept or challenge findings and decide stop, repeat, or live-tender expansion |
+| Results and expansion decision | Week 6 | Deliver the results brief, customer export, and recommendation | Accept, reject or leave unresolved the reported observations and decide stop, repeat, or live-tender expansion |
 
 ## Deliverables
 

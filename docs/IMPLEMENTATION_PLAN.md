@@ -1,6 +1,6 @@
 # Traceli pilot implementation plan
 
-Updated: 28 August 2026
+Updated: 30 August 2026
 
 Architecture maturity, external-dependency decisions, environment boundaries, and customer-onboarding gates are detailed in [ARCHITECTURE_ROADMAP.md](./ARCHITECTURE_ROADMAP.md). The current solution, technology stack, trust boundaries, security posture, and provider-evidence requirements are documented in [SOLUTION_ARCHITECTURE.md](./SOLUTION_ARCHITECTURE.md). Scheduled monitoring, model routing, bounded agents, CI gates, and supervisory reporting are detailed in [AUTONOMOUS_OPERATIONS.md](./AUTONOMOUS_OPERATIONS.md). Public messaging, visual identity, iconography, affiliation treatment, and demonstration release gates are governed by [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). Reusable campaign and call language lives in [GTM_MESSAGING.md](./GTM_MESSAGING.md). Public consequence claims and the case-study authority sprint are governed by [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md). Economic-value logic, pilot measurement, and ROI claim boundaries are governed by [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md). The ICP, first commercial offer, twelve-call qualification method, and contract path are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
 
@@ -26,7 +26,7 @@ The current offer is a **paid six-week Award Assurance Pilot**:
 
 The pilot is retrospective, bounded, and human-owned. It does not replace the customer's system of record, certify compliance, or alter the original award. Contracting may begin immediately, but no sensitive document enters Traceli until the NDA, classification, processing terms, approved transfer route, and technical security gate pass.
 
-## The 90-second pilot journey
+## The deeper 90-second workspace journey
 
 1. Open an award and see the plain-language conclusion.
 2. Open one requirement and the cited tender clause.
@@ -82,7 +82,54 @@ Outcome: at least one of the twelve DIHAD follow-ups signs a paid retrospective 
 - Keep the founding commercial hypothesis, qualification score, discovery questions, objection posture, and contract contents in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md).
 - Keep operating value, cycle value, and customer-modelled risk visibly separate; do not use public-case amounts as expected loss or promise a generic risk-reduction percentage.
 
-Commercial gate: all twelve accounts are classified; at least four buyer-side accounts name a completed tender and consequence; at least two name a baseline owner and one quantifiable operating measure; at least two proposals reach a sponsor or economic buyer; and at least one paid pilot is signed or has a documented contracting path with named approvers and dates.
+Commercial gate: all twelve accounts are classified; at least four buyer-side accounts name a completed tender, consequence and material proof gap; at least two name a baseline owner and one quantifiable operating measure; at least two proposals reach a sponsor or economic buyer; and at least one paid pilot is signed or has a documented contracting path with named approvers and dates. The control moment, accountable owner and material proof gap remain hard activation conditions regardless of score.
+
+### Commercial-readiness sprint — twelve-follow-up conversion (active; positioning only)
+
+Outcome: use the current ICP, positioning, discovery, public-evidence and value-case assets to convert the twelve DIHAD follow-ups into at least one paid six-week Award Assurance Pilot. This sprint does not add product capability, widen the pilot scope, change the data boundary or pull forward a deferred connector, MCP or live-tender feature.
+
+The commercial source of truth remains split deliberately:
+
+- [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md) owns ICP activation, qualification, next-call language, the account tracker and the contract path.
+- [GTM_MESSAGING.md](./GTM_MESSAGING.md) owns landing-page and outreach language.
+- [CALCOM_OUTREACH.md](./CALCOM_OUTREACH.md) owns the approved scheduling route, intake, reminder and channel copy; the direct 30-minute event is the canonical booking destination.
+- [DISCOVERY_CALL_STORY_CAPTURE.md](./DISCOVERY_CALL_STORY_CAPTURE.md) owns tender-story prompts, publication permission and the separate story record.
+- [PUBLIC_CASE_STUDY_REGISTER.md](./PUBLIC_CASE_STUDY_REGISTER.md) owns approved public-case wording, procedural status and the case-study authority sprint.
+- [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md) owns customer baselines, pilot measurement and economic-claim boundaries.
+- [PUBLICATION_PR_STRATEGY.md](./PUBLICATION_PR_STRATEGY.md) owns publication sequencing, distribution and the route from public evidence to a completed-tender conversation.
+
+#### Done — available for the follow-up calls
+
+| Work item | Completed state and acceptance evidence |
+| --- | --- |
+| ICP activation filter | The active-sales threshold is defined as a named control moment, a named accountable owner and a named proof gap. Firmographic fit or positive interest alone no longer qualifies an account. |
+| Positioning-only next-call script | The call opening, control-moment diagnosis, current-state questions, five-minute proof path, pilot bridge and mutual-action close are defined in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md). |
+| Cal.com scheduling route | The approved `https://cal.com/oqemal/30min` route supports a 30-minute Google Meet booking. The landing-page pilot actions and controlled outreach copy use this direct event rather than the generic profile chooser. Cal.com-side event naming and intake configuration remain a separate account setting. |
+| Landing-page narrative | The first viewport identifies the accountable procurement and assurance audience, the control moment and the completed-tender action. `How Traceli supports your award process`, governed public-case positioning and the buyer FAQ explain the service without adding a product claim. |
+| Discovery capture method | Commercial facts stay in the twelve-account tracker; tender stories, corroboration and publication permission use the separate capture in [DISCOVERY_CALL_STORY_CAPTURE.md](./DISCOVERY_CALL_STORY_CAPTURE.md). Silence is not permission. |
+| Initial public-case evidence | Four controlled short-form institutional records cover auditability, financial eligibility, funding continuity and integrity exposure. Their source-linked short wording is approved for the landing surface. Expanded, long-form or derivative claims remain behind the register's factual and legal/comms gates. They remain public evidence, not customer stories or prevention claims. |
+| Conversion and value measures | The account score, conversion gate, customer-owned baseline measures and proposal target are defined. Public-case amounts are not used as expected loss or generic ROI. |
+
+#### Pending — execute through the twelve-call cycle
+
+| Work item | Owner | Execution requirement | Done when |
+| --- | --- | --- | --- |
+| Apply the activation filter and next-call script | Founder / commercial lead | Diagnose one completed tender and control moment before demonstrating; show only the matching rule-to-evidence-to-approval path; close on the tender, sponsor, data owner, budget route and dated next action. | All twelve accounts are classified and scored from stated evidence, with no score inflated to preserve an opportunity. |
+| Validate the landing-page positioning in conversation | Founder / commercial lead | Record whether the first-viewport language, `How Traceli supports you`, matched public case, FAQ answer and completed-tender CTA help the intended role name a real buying situation. Treat page views and positive reactions as supporting signals only. | Call notes identify the language that did or did not produce a named tender, consequence, sponsor or proposal step; any copy revision remains positioning-only. |
+| Capture discovery evidence | Founder / commercial lead | Record the named gate and date, proof gap, accountable owner, systems involved, reconstruction effort, budget route and next action in the account tracker immediately after each call. Use two or three tender-story prompts only when a real story emerges, and store permission separately. | Every completed call has an evidence-backed tracker row; useful stories have a permission status and are never mistaken for an approved case study. |
+| Run the case-study authority sprint | Founder / evidence owner; factual and legal/comms reviewers required | Expand the 25-record official-source backlog, approve twelve register entries, produce four reviewed one-page cases and test one matched consequence hypothesis in each relevant call. | Twelve entries meet the source standard, four long-form cases pass review, and at least six relevant conversations record the resonant consequence, objection, owner and next action. |
+| Convert qualified calls to proposals | Founder / commercial lead | Send the short pilot proposal/SOW within 24 hours of a qualified call and maintain the contracting path through sponsor, security/legal, procurement and signature. | At least two sponsor or economic-buyer meetings and two written paid-pilot proposals are reached. |
+| Measure the twelve-call outcome | Founder / commercial lead | Maintain one denominator of twelve and report buying movement, not impressions: classification, completed tender, consequence, baseline owner, sponsor, budget route, proposal and decision date. | At least four buyer-side accounts name a completed tender and consequence; at least two name a baseline owner and quantifiable operating measure; and at least one paid pilot is signed or has a documented contracting path with named approvers and dates. |
+
+#### Blocked by required input — do not invent or publish around the gap
+
+| Blocked item | Required input | Action after the input exists |
+| --- | --- | --- |
+| Account-specific deal facts | Statements from the twelve contacts about organization type, role, named tender, trigger/date, material proof gap, sponsor, baseline, data route, budget and purchasing process. | Replace `TBD` values in the account tracker, apply the qualification score and advance only accounts that pass the activation filter or have one clearly closable condition. |
+| Customer ROI inputs | Customer-confirmed people, hours, review loops, external spend, award volume, labour rates and any documented delay linkage. | Calculate measured operating and break-even views under [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md); keep customer-modelled risk as a separate labelled scenario. |
+| Story and case publication approval | Explicit contact permission for discovery stories plus factual and legal/comms approval for public institutional case wording. | Publish only the approved attribution level and controlled claim. Until then, keep discovery material private and long-form cases in review. |
+
+Sprint review rule: do not answer weak conversion by adding product scope. First inspect which activation condition, accountable stakeholder, evidence baseline, case narrative, budget route or contracting step was absent. A useful result is one signed paid pilot; a secondary useful result is a documented account-by-account reason the current segment or offer did not convert.
 
 ### Operations track — autonomous assurance without autonomous control
 
@@ -112,7 +159,7 @@ Exit gate: public story, protected route, audit interaction, strict types, and p
 
 ### Sprint 0.5 — conversation-to-pilot conversion surface (implemented; interview validation pending)
 
-Outcome: a procurement officer understands the promise in ten seconds, sees the complete tender-to-proof journey in ninety seconds, and has one obvious next action.
+Outcome: a procurement or assurance owner understands the promise in ten seconds, can see the proof path in a 44-second film, and has one obvious pilot action. A deeper guided workspace journey remains available after discovery establishes relevance.
 
 This is a public-story refinement before the next product iteration. It does not widen the production data boundary or delay the tenant-safe data spine.
 
@@ -120,7 +167,7 @@ This is a public-story refinement before the next product iteration. It does not
 
 - Replace the centered hero with a WorkOS-style split: left-aligned promise and actions; a restrained product/video surface on the right.
 - Use the category `Award assurance for donor-funded procurement` and the headline `Prove the award before you sign it.`
-- Remove `See the proof`. Use one dominant action—`Watch the 90-second tender walkthrough`—and one lower-emphasis path to `Open demo workspace`.
+- Remove `See the proof`. Use `Test one completed tender` as the dominant action, `See the 44-second proof path` as the secondary action, and keep `Open demo workspace` as a lower-emphasis path.
 - Remove duplicate or competing above-the-fold explanations. The product visual should demonstrate the claim rather than restate it.
 
 **Credibility strip**
@@ -136,13 +183,13 @@ Brand gate: maintain [AFFILIATION_REGISTER.md](./AFFILIATION_REGISTER.md) with t
 
 - Show three icon-led modules, not a feature catalogue:
   1. `Map the award controls` — connect donor, institutional and local rules to the criteria, evidence and approvals that govern the award.
-  2. `Close the evidence gaps` — keep supplier proof, reviewer judgment, clarifications and exceptions visible before sign-off.
+  2. `Surface the evidence gaps` — keep supplier proof, reviewer judgment, clarifications and exceptions visible for human disposition before sign-off.
   3. `Issue the assurance pack` — preserve the source-linked rules, evidence, human decisions, exceptions and approvals behind the award.
 - Use the existing icon library and one visual grammar. Each module gets one sentence and one destination at most.
 
 **Tender-to-proof video**
 
-- Embed a 60–90 second, captioned, click-to-play product walkthrough inspired by Vanta's demo-led proof. Do not autoplay sound.
+- Embed the 44-second muted proof film in the first viewport. Keep sound off by default and preserve reduced-motion behavior. Use the interactive workspace for the deeper guided journey.
 - Use a public, completed tender from an authoritative portal, or a buyer-approved irreversibly sanitized tender. Cache the demonstration pack so DIHAD playback does not depend on portal availability.
 - Until secure ingestion and the shown workflow are live, label the asset `Illustrative product walkthrough`; never present a staged import as a live customer integration.
 - Script the sequence as: fetch or upload tender pack → infer cited requirements and matrix → confirm the human-controlled draft → track submissions and Q&A → surface an evidence or integrity concern for human review → record approvals → ask `Why did this supplier win?` → open the audit-ready record.
@@ -154,19 +201,19 @@ Brand gate: maintain [AFFILIATION_REGISTER.md](./AFFILIATION_REGISTER.md) with t
 - Publish workflow and security documentation as soon as it is accurate. Label unshipped interfaces `Planned` or `Private alpha`; do not imply that MCP, ERP connectors, or live tender fetching are already available.
 - Design the MCP documentation structure now—authorization, scopes, tool catalogue, citations, human confirmation, client setup, and audit semantics—but publish usable setup instructions only when the Sprint 4 read-only alpha passes its isolation and exfiltration tests.
 
-Recommended 90-second page order:
+Recommended page order:
 
-1. Left-aligned promise plus product walkthrough.
+1. Left-aligned promise, `Test one completed tender` action and 44-second proof film.
 2. Verified team-experience strip.
 3. Governed public consequence evidence with primary-source links.
 4. Three icon-led assurance outcomes.
-5. Tender-to-proof video with chapters and transcript.
+5. Buyer FAQ covering ERP overlap, audit independence, certification, data handling, pilot scope and budget route.
 6. Documentation/security entry point.
-7. `Bring one completed tender` call to action.
+7. `Test one completed tender` call to action.
 
 Exit gate: five procurement or audit professionals can explain Traceli as `the proof behind the award` after one scroll; at least three choose the walkthrough or pilot action without prompting; every affiliation and availability claim has an owner and evidence.
 
-Implementation status: the left-led landing composition, category and must-have promise, single primary walkthrough action, four governed consequence examples, three assurance outcome modules, deterministic 90-second tender journey, public control-model documentation, availability labels, responsive layouts, and retrospective-pilot call to action are complete. The walkthrough uses the public WFP Somalia notice `WFPSOM/LOG/045/11/2024`; all supplier and award content is visibly labelled fictional. The organization strip uses a monochrome, equal-block treatment and explicit non-endorsement language. Relationship verification, mark permission and long-form consequence-claim review remain separate release gates under [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). The remaining gate is interview conversion evidence, case-study authority and logo clearance—not another UI feature.
+Implementation status: the left-led landing composition, category and must-have promise, primary completed-tender action, secondary 44-second proof film, three assurance outcome modules, buyer FAQ, public control-model documentation, availability labels, responsive layouts, and retrospective-pilot call to action are complete in the current checkout. Four source-linked consequence examples use controlled short wording on the landing surface; expanded, long-form or derivative claims remain behind factual and legal/comms review. The film and demo content are visibly labelled fictional or illustrative. The organization strip uses a monochrome, equal-block treatment and explicit non-endorsement language. Relationship verification, mark permission and long-form consequence-claim review remain separate release gates under [BRAND_SYSTEM.md](./BRAND_SYSTEM.md). The remaining gate is interview conversion evidence, case-study authority and logo clearance—not another UI feature.
 
 ### Sprint 0.6 — public trust surface and controlled documentation (queued)
 
@@ -362,8 +409,8 @@ Choose one buyer-side humanitarian or development organization, one procurement 
 - one tender and matrix;
 - three to five submissions;
 - two to four reviewers;
-- one clarification;
-- one decision record and audit export.
+- the material clarification, exception, conflict, approval and award history available for the selected case;
+- one decision record and customer export.
 
 The contract starts with a data gate. NDA, classification, processing/subprocessor terms, region, approved transfer route, retention, deletion, and exit/export must be agreed before sensitive files move. The customer's original award remains authoritative throughout.
 
@@ -371,10 +418,9 @@ Success measures:
 
 - one accountable sponsor, one procurement champion, and one independent reviewer participate through readout;
 - time to locate evidence for a sampled requirement;
-- percentage of findings with an accepted citation;
-- time to produce the audit pack;
-- number of missing approvals or declarations caught before award;
-- reviewer agreement after examining Traceli’s source link;
+- proportion of sampled material claims supported by an accepted source or explicit unresolved status;
+- time to produce the Award Assurance Pack and remaining manual work;
+- missing approvals, declarations, source versions or clarifications surfaced in the historical record and dispositioned by the customer;
 - independent reviewer can explain the recommendation from the reconstructed record;
 - customer makes an explicit decision to stop, repeat, or accompany one live tender.
 - results brief separates measured operating value, measured or pending cycle value, external-cost evidence, and any customer-owned risk scenario.

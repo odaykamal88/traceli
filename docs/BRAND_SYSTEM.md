@@ -1,6 +1,6 @@
 # Traceli brand and product-expression system
 
-Updated: 27 August 2026
+Updated: 30 August 2026
 
 This is the canonical reference for Traceli's public story, visual language, product iconography, affiliation treatment, and demonstration assets. New screens and marketing surfaces should extend this system rather than inventing a parallel one.
 
@@ -16,7 +16,7 @@ Primary statement:
 
 Supporting line:
 
-> Traceli shows whether every material award decision is connected to the governing rule, supplier evidence, human judgment and required approval—before donor review, complaint or audit.
+> Traceli gives the accountable team one source-linked record of the governing rule, supplier evidence, human judgment and required approval—before a donor review, no-objection, complaint or audit forces the reconstruction.
 
 Traceli should be understood in ten seconds as the pre-award control gate that protects funding eligibility and keeps awards moving. It sits beside the tender portal and ERP; it does not compete to become either system of record. Its named output is the **Traceli Award Assurance Pack**: the source-linked record of the rules, evidence, judgments, exceptions, approvals and chronology behind an award.
 
@@ -28,7 +28,7 @@ Internal operating principle:
 
 Do not publish the shortened phrase `No proof, no award` as an absolute compliance promise. In public language, `ready` means that the buyer's configured control profile is complete or has named, approved exceptions. It does not mean certified compliant, legally approved, fraud-free, donor-approved or guaranteed to pass an audit.
 
-Use plain procurement outcomes before technical mechanisms. Prefer `Map the award controls`, `Close the evidence gaps`, and `Issue the assurance pack` over a feature catalogue. Do not describe Traceli as autonomous decision-making, an AI scoring engine, another tender portal, an auditor or a compliance certification.
+Use plain procurement outcomes before technical mechanisms. Prefer `Map the award controls`, `Surface the evidence gaps`, and `Issue the assurance pack` over a feature catalogue. `Surface` means make the evidence status visible for human disposition; the retrospective pilot does not remediate source documents or make a compliance determination. Do not describe Traceli as autonomous decision-making, an AI scoring engine, another tender portal, an auditor or a compliance certification.
 
 ## Must-have narrative
 
@@ -66,12 +66,13 @@ Traceli's public value story follows an evidence ladder:
 
 Present measured facts, customer inputs, scenario assumptions, and public consequence examples as visually distinct evidence types. Never place a headline recovery amount beside the pilot price in a way that implies causation or guaranteed avoidance. Do not publish a generic ROI percentage, payback period, `typical finding cost`, `one finding pays`, or `cheap insurance` claim without an approved methodology and evidence under [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md).
 
-## The 10/90 interaction rule
+## The 10/44/90 interaction rule
 
-- The first viewport earns attention in ten seconds: one promise, one supporting sentence, one dominant walkthrough action, and one secondary workspace path.
-- The next ninety seconds show one deterministic tender-to-proof story. Avoid carousels, competing dashboards, or explanations that duplicate the product visual.
+- The first viewport earns attention in ten seconds: one promise, one supporting sentence, one dominant pilot action, and one secondary proof-film action.
+- The 44-second film shows one deterministic tender-to-proof story. The deeper workspace remains available for a guided ninety-second journey after the buyer names a relevant tender or proof gap.
+- Avoid carousels, competing dashboards, or explanations that duplicate the product visual.
 - Start the walkthrough from a clean tender workspace. Show information appearing only when the corresponding action occurs.
-- End with a low-friction pilot request: `Bring one completed tender.` The retrospective pilot proves whether the organization can reconstruct an accepted Award Assurance Pack before Traceli accompanies a live award.
+- End with a low-friction pilot request: `Test one completed tender.` The retrospective pilot tests whether the organization can reconstruct an accepted Award Assurance Pack before Traceli accompanies a live award.
 - Label fictional, staged, sanitized, and not-yet-live behavior explicitly.
 
 ## Visual hierarchy

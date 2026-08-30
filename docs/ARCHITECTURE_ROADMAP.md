@@ -29,7 +29,7 @@ This preserves the simple “proof behind the award” experience while the oper
 
 | Area | What exists now | Assessment | Required next boundary |
 | --- | --- | --- | --- |
-| Product promise | Clear public story and a strong 90-second award-proof journey | Strong core, conversion hierarchy needs tightening | Move the promise left, replace competing calls to action with a guided walkthrough, and validate that buyers repeat the promise back in their own language |
+| Product promise | Clear public story, a 44-second proof film and a deeper guided workspace journey | Strong core, conversion hierarchy needs field validation | Keep the promise left, make the completed-tender pilot the dominant action, and validate that buyers repeat the promise back in their own language |
 | Frontend | Next.js 16, React 19, Tailwind; polished public page and interactive workspace | Right platform, demo architecture | Refine the public composition without changing the promise; break the large client workbench into domain slices as each one gains real data |
 | Public proof and docs | Fictional interactive demo; no structured public docs or recorded tender walkthrough | Safe but incomplete for self-serve evaluation | Add a truthful team-experience strip, three outcome modules, an illustrative public/sanitized tender walkthrough, and availability-labelled docs |
 | Identity | WorkOS AuthKit integration; staging organization, roles, and permissions configured | Good foundation | Provision production separately; require an organization and a Traceli role for all real-data routes |
@@ -262,7 +262,7 @@ Do not accept identifiable buyer or supplier files until all of the following ar
 
 ### Wave A.5 — sharpen the conversation-to-pilot surface (implemented; validation pending)
 
-- Recompose the hero as a left-aligned promise with one dominant 90-second walkthrough and one lower-emphasis demo-workspace path.
+- Recompose the hero as a left-aligned promise with one dominant completed-tender pilot action, a secondary 44-second proof film and one lower-emphasis demo-workspace path.
 - Replace `See the proof` and the competing above-the-fold explanation with a product/video surface that shows the journey.
 - Add three icon-led outcomes: draft from approved rules, run the evaluation, and defend the award.
 - Add a team-experience strip only after affiliation and logo-use review; avoid customer, partnership, or endorsement implications.
@@ -271,7 +271,7 @@ Do not accept identifiable buyer or supplier files until all of the following ar
 
 **Gate:** procurement interviewees understand the category and select a walkthrough or retrospective-pilot action without explanation; every public claim, affiliation, and product-state label is defensible.
 
-**Progress:** the new landing hierarchy, interactive 90-second public-tender walkthrough, icon-led outcome modules, availability-labelled documentation and retrospective-pilot call to action are implemented. Official organization marks remain deliberately withheld until affiliation and mark-use clearance; the current text treatment makes no customer or endorsement claim.
+**Progress:** the new landing hierarchy, 44-second proof film, deeper interactive workspace journey, icon-led outcome modules, availability-labelled documentation and retrospective-pilot call to action are implemented in the current checkout. Official organization marks remain subject to affiliation and mark-use clearance; the current treatment makes no customer or endorsement claim.
 
 ### Wave B — build the tenant-safe data spine
 
@@ -280,7 +280,7 @@ Do not accept identifiable buyer or supplier files until all of the following ar
 - Add a server-only DAL, policy checks, typed commands, transactional event/outbox writing and seeded two-tenant tests.
 - Replace browser state one vertical slice at a time: open award, open requirement/source, record finding, approve, inspect event.
 
-**Gate:** the 90-second journey persists, and every cross-tenant attempt is denied and tested.
+**Gate:** the deeper guided workspace journey persists, and every cross-tenant attempt is denied and tested.
 
 **Progress:** the non-production database, migration path, control-graph schema, restricted application role, row-level policies, server-only read model, first human-determination command, transactional event/outbox write, and two-tenant denial test are complete. The next vertical slice is server-owned approvals and decision locking with idempotency and version checks.
 
