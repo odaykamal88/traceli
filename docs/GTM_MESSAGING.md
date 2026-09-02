@@ -225,6 +225,38 @@ Best,
 
 [Name]
 
+## Partnership outreach campaign
+
+This lane is separate from the twelve-account direct-buyer tracker in [FIRST_PAID_PILOT.md](./FIRST_PAID_PILOT.md). A partnership target is not qualified demand until it produces a named owner, customer use case, commercial route, and dated next action.
+
+Contact status below records only what the founder has explicitly confirmed. `Contacted` means a message was sent; it does not imply a reply, meeting, active opportunity, or named contact. Contact dates and channels were not supplied.
+
+| Target | Motion | Priority | Contact status | Contact date | Partnership hypothesis / next gate |
+| --- | --- | --- | --- | --- | --- |
+| Workday | ERP / agent ecosystem | High | Contacted | Not supplied | Strong fit for source-linked audit trails covering agent recommendations and actions. Next gate: named Agent Partner Network or procurement-product owner. |
+| JAGGAER | Procurement platform | High | Contacted | Not supplied | Strong embedded supplier-risk and compliance-evidence fit. Next gate: technology-partner owner and one joint customer workflow. |
+| Ivalua | Procurement platform | High | Contacted | Not supplied | Open technology ecosystem already accommodates outside risk and compliance data. Next gate: ecosystem owner and marketplace/integration requirements. |
+| Kobalt.io | Boutique compliance consultancy | High | Contacted | Not supplied | Potential referral and delivery partner with incentives to attach Traceli to client work. Next gate: confirm client demand, services boundary, and referral economics. |
+| Sprinto | Compliance platform | High | Contacted | Not supplied | Potential channel into evidence-heavy compliance buyers. Next gate: determine whether Traceli complements or overlaps with its product roadmap. |
+| Delve | Compliance platform | Medium | Contacted | Not supplied | Potential co-sell or integration hypothesis around continuous evidence. Next gate: establish a distinct customer problem and buyer route. |
+| Thoropass | Compliance platform / services | Medium | Contacted | Not supplied | Possible referral or delivery partnership because software and compliance services are already combined. Next gate: identify the partnership owner and non-overlapping offer. |
+| Acumatica | ERP / ISV ecosystem | High | Target identified | — | Partner-friendly classic ERP with an ISV- and VAR-led distribution model. Next gate: validate the marketplace route with one relevant VAR or technology-partner owner. |
+| Coupa | Procurement platform | High | Target identified | — | Benchmark for embedded third-party compliance and supplier-risk products. Next gate: test whether Traceli fills a distinct award-evidence gap in Coupa workflows. |
+| Microsoft Dynamics 365 / Microsoft Agent Framework | ERP / agent ecosystem | High | Target identified | — | Marketplace and partner-channel route; Agent Framework is the relevant successor path to AutoGen. Next gate: choose one precise Dynamics procurement workflow and partner motion. |
+| Rhymetec | Boutique compliance consultancy | High | Target identified | — | Potentially strong referral and implementation partner for clients with audit-readiness pressure. Next gate: verify current capacity and appetite for a recurring software attachment. |
+| Bright Defense | Boutique compliance consultancy | High | Target identified | — | Potential overwhelmed-services partner that could use Traceli to productize evidence work. Next gate: confirm pipeline, delivery bottleneck, and ideal client overlap. |
+| Drata | Compliance platform | Medium | Target identified | — | Large adjacent ecosystem and possible integration route, with meaningful product overlap. Next gate: identify a narrow non-competing evidence use case. |
+| Secureframe | Compliance platform | Medium | Target identified | — | Potential marketplace or referral route for continuous evidence buyers. Next gate: validate category adjacency and partner-program access. |
+| NetSuite | ERP / SuiteApp ecosystem | Medium | Target identified | — | Mid-market distribution through SuiteApp and solution-provider channels. Next gate: find a NetSuite partner with procurement or compliance clients before approaching the vendor. |
+| BD Emerson | Boutique compliance consultancy | Medium | Target identified | — | Possible referral and delivery partner. Next gate: verify active pipeline, client profile, and willingness to share recurring revenue. |
+| Tagore | Boutique compliance consultancy | Medium | Target identified | — | Possible specialist channel if its active client work matches Traceli's evidence layer. Next gate: validate service scope and current delivery capacity. |
+| SAP Ariba | Enterprise procurement platform | Later-stage | Target identified | — | High upside and compatible external risk-provider/API model, but a long partnership cycle. Next gate: pursue only after smaller-platform proof or a joint customer request. |
+| Oracle Fusion Cloud Procurement | Enterprise ERP / procurement | Later-stage | Target identified | — | Supports external supplier-data enrichment but has substantial native risk and compliance coverage. Next gate: prove a differentiated evidence gap through a customer or implementer. |
+| Vanta | Compliance platform | Later-stage | Target identified | — | Valuable ecosystem but material AI-governance overlap. Next gate: approach only with a narrow complementary workflow and proof of customer pull. |
+| GEP | Procurement platform | Later-stage | Target identified | — | Native risk-assessment and compliance agents create meaningful overlap. Next gate: proceed only if Traceli supplies evidence GEP cannot generate internally. |
+
+For commercial discussions, begin with a three-customer design-partner pilot, a marketplace or embedded integration, and non-exclusive referral or reseller economics. Do not offer an ERP-wide OEM bundle before repeated customer pull and joint wins establish the integration and support case.
+
 ## Claim guardrails
 
 Use:
