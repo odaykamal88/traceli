@@ -64,7 +64,7 @@ const publicCases = [
     title: 'Incomplete files weakened auditability',
     detail: 'UN OIOS found that bid evaluations at UNMISS were not timely and their documentation was inadequate.',
     source: 'UN OIOS · Report 2024/064',
-    href: 'https://oios.un.org/sites/default/files/confidential-files/Reports/2024_064_pd.pdf',
+    href: 'https://oios.un.org/system/files/confidential-files/Reports/2024_064_pd.pdf',
   },
   {
     metric: '€7.5m',
@@ -241,6 +241,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-5 px-5 py-4 sm:px-8 lg:px-12">
           <Link href="/" aria-label="Traceli home"><TraceliMark /></Link>
           <nav aria-label="Public navigation" className="flex items-center gap-2 sm:gap-5">
+            <Link href="/insights/the-award-was-signed-the-proof-was-not-ready" className="rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white">Research</Link>
             <Link href="/docs" className="hidden rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Documentation</Link>
             <Link href="/demo" className="group inline-flex min-h-11 items-center gap-3 rounded-xl border border-white/18 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08]">
               Open demo
@@ -260,15 +261,15 @@ export default function LandingPage() {
                 For procurement and assurance teams accountable for donor-funded awards
               </div>
               <h1 className="mt-7 font-display text-[clamp(3rem,6.8vw,7.2rem)] leading-[0.88] tracking-[-0.035em] text-[#fbf5ea]">
-                Prove the award
-                <span className="block">before you sign it.</span>
+                Be ready to
+                <span className="block">explain the award.</span>
               </h1>
               <p className="mt-7 max-w-[570px] text-lg leading-8 text-white/66 sm:text-xl">
-                Traceli gives the accountable team one source-linked record of the governing rule, supplier evidence, human judgment and required approval—before a donor review, no-objection, complaint or audit forces the reconstruction.
+                We help procurement and grant teams reconstruct the evidence behind an award, identify missing records, and prepare a source-linked file for review. Start with one completed procurement file, the question it needs to answer, and the date the answer is due. We can then agree the scope, evidence deliverable and review responsibilities.
               </p>
               <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#fbf5ea] px-6 py-3.5 text-sm font-semibold text-[#071d39] shadow-[0_14px_34px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:bg-white">
-                  Test one completed tender
+                  Discuss one procurement file
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                 </a>
                 <button type="button" onClick={startFilm} className="group inline-flex min-h-12 items-center gap-3 px-2 text-sm font-semibold text-white/78 transition hover:text-white">
@@ -350,6 +351,7 @@ export default function LandingPage() {
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Public award-assurance cases</p>
                 <h2 id="case-evidence-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">When award proof breaks down.</h2>
                 <p className="mt-5 text-base leading-7 text-[#617078]">Public institutional records show the pattern: weak decision evidence can become an audit finding, ineligible spend, a condition on future funding or an integrity sanction.</p>
+                <Link href="/insights/the-award-was-signed-the-proof-was-not-ready" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#1f6f61] hover:underline">Read the evidence and methodology<ArrowRight className="size-4" aria-hidden="true" /></Link>
               </div>
               <div className="grid gap-px overflow-hidden rounded-[24px] border border-[#d8d5cc] bg-[#d8d5cc] sm:grid-cols-2">
                 {publicCases.map(({ metric, title, detail, source, href }) => (
