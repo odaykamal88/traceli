@@ -4,6 +4,8 @@ Updated: 30 August 2026
 
 This is the canonical reference for Traceli's public story, visual language, product iconography, affiliation treatment, and demonstration assets. New screens and marketing surfaces should extend this system rather than inventing a parallel one.
 
+For LinkedIn company images, carousels and captions, apply the [LinkedIn visual and voice guide](editorial/LINKEDIN_VISUAL_AND_VOICE_GUIDE.md), adopted on 9 September 2026 at Odey's request. This channel uses bold sans-serif hooks, prominent editorial imagery and selective yellow text highlights while retaining Traceli's identity and evidence standards.
+
 ## Category and promise
 
 Category:

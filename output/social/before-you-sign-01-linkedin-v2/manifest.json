@@ -1,0 +1,38 @@
+{
+  "version": "linkedin-editorial-v2",
+  "pdf": "output/pdf/before-you-sign-01-linkedin-v2.pdf",
+  "sha256": "17824d96c6e02792b1b4d3415165c404e5bb039a003c64931d6c5ac0b50e6d80",
+  "pages": 9,
+  "size": [
+    1080,
+    1350
+  ],
+  "source_links": [
+    [
+      "UN OIOS / Report 2024/064",
+      "https://oios.un.org/system/files/confidential-files/Reports/2024_064_pd.pdf"
+    ],
+    [
+      "UN OIOS / Implementation status, July 2026",
+      "https://oios.un.org/sites/default/files/2026-07/Rec_implementation_rate_IAD_20260731.pdf"
+    ],
+    [
+      "OLAF / Report 2025 / Irregular tender procedure",
+      "https://ec.europa.eu/olaf-report/2025/investigative-activities/protection-of-eu-funds_en.html#an-irregular-tender-procedure"
+    ],
+    [
+      "OLAF / Report 2023 / IPARD funding",
+      "https://ec.europa.eu/olaf-report/2023/investigative-activities/preventing-undue-expenditure_en.html#serious-misuse-of-eu-pre-accession-agricultural-funds"
+    ],
+    [
+      "World Bank / Debarment notice / 18 June 2025",
+      "https://www.worldbank.org/en/news/press-release/2025/06/18/world-bank-group-debars-pars-tableau-company-jsc"
+    ]
+  ],
+  "article": "https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-not-ready",
+  "claim_basis": "Approved first-piece source sheet; presentation and wording adapted 9 September 2026.",
+  "image": "source/editorial-paper-still-life.png",
+  "image_provenance": "OpenAI built-in image generation; illustrative, not case evidence.",
+  "reference": "https://www.instagram.com/maybeworthbuilding/",
+  "reference_observation": "Public cover grid only; individual posts required login."
+}
