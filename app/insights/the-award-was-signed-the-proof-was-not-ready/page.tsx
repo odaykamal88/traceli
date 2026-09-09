@@ -9,7 +9,7 @@ import content from './article-content.json'
 export const metadata: Metadata = {
   title: 'The award was signed. The proof was not ready.',
   description: 'Four official records show how procurement evidence gaps become audit, financial, funding and integrity problems.',
-  alternates: { canonical: '/insights/the-award-was-signed-the-proof-was-not-ready' },
+  alternates: { canonical: 'https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-not-ready' },
   robots: { index: true, follow: true },
   openGraph: { type: 'article', title: 'The award was signed. The proof was not ready.', description: 'Four official records and seven questions for one completed procurement award.', url: 'https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-not-ready', authors: ['Traceli Research Desk'], images: [{ url: '/research/before-you-sign-01/cover.png', width: 1600, height: 900, alt: 'The award was signed. The proof was not ready. Traceli Research Desk.' }] },
 }

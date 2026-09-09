@@ -1,6 +1,6 @@
 # Traceli editorial approvals register
 
-Updated: 8 September 2026
+Updated: 9 September 2026
 
 Odey is the current factual and publication approver. A blank or pending field is not approval.
 
@@ -16,12 +16,12 @@ The accepted Week 3 service packet supplies the service paragraph, LinkedIn comp
 
 | Asset | Factual review | Odey publication approval | Readiness / execution |
 | --- | --- | --- | --- |
-| `The award was signed. The proof was not ready.` | APPROVED — 8 September | APPROVED FOR PUBLICATION | Article/source parity reconciled; build and deployment verification underway |
+| `The award was signed. The proof was not ready.` | APPROVED — 8 September | APPROVED FOR PUBLICATION | PUBLISHED — 9 September. [Live article](https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-not-ready); 35 approved paragraphs/questions and production smoke verified |
 | Canonical article source sheet, C-001–C-010 | APPROVED — 8 September | Approved as supporting record | Primary records rechecked; retain internally with public source links in article |
-| LinkedIn company Page document | APPROVED — 8 September | APPROVED FOR PUBLICATION | Separate release export in preparation; review originals retained |
-| LinkedIn company Page post | APPROVED — 8 September | APPROVED FOR PUBLICATION | Use accepted Week 3 copy. Trace-li Page administration verified: 146191018 |
-| X derivative | APPROVED — 8 September | APPROVED FOR PUBLICATION | Existing six-post source thread; account and delivery checks underway |
-| Evidence card, website excerpt and sales slide | APPROVED — 8 September | Approved for reuse in intended company materials | Source and CTA reconciliation underway; no separate sales recipient authorized |
+| LinkedIn company Page document | APPROVED — 8 September | APPROVED FOR PUBLICATION | Release PDF verified and published as the article download. Native LinkedIn attachment not completed: browser file chooser timed out |
+| LinkedIn company Page post | APPROVED — 8 September | APPROVED FOR PUBLICATION | PUBLISHED — 9 September. [Company post](https://www.linkedin.com/feed/update/urn:li:share:7503328533331566592); accepted Week 3 copy and destination verified |
+| X derivative | APPROVED — 8 September | APPROVED FOR PUBLICATION | READY, NOT PUBLISHED — six-post thread and cards saved; X is signed out and publishing handle is unknown |
+| Evidence card, website excerpt and sales slide | APPROVED — 8 September | Approved for reuse in intended company materials | Source and CTA reconciled; release assets retained for reuse. No separate sales recipient authorized |
 | Optional founder LinkedIn post | Existing wording reviewed | NOT IN CURRENT COMPANY RELEASE | No personal-profile post planned |
 | `Before You Sign` Page newsletter edition | Not yet a completed asset | NOT IN CURRENT RELEASE | New edition / eligibility not established |
 | Email brief | Existing wording reviewed | Content approved; sending scope absent | Recipient list, sender and unsubscribe controls not supplied; no email send planned |
