@@ -344,6 +344,21 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <section aria-labelledby="featured-research-heading" className="border-b border-[#d8d5cc] bg-[#e4ede7] px-5 py-14 text-[#071d39] sm:px-8 lg:px-12 lg:py-20">
+          <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+            <div className="max-w-lg">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Featured research · Before You Sign</p>
+              <h2 id="featured-research-heading" className="mt-5 font-display text-5xl leading-[0.98] tracking-[-0.025em] sm:text-6xl">The award was signed. The proof was not ready.</h2>
+              <p className="mt-6 text-base leading-7 text-[#45565d]">Four official records and seven questions for one completed award. Explore the visual briefing and the evidence behind it.</p>
+              <Link href="/insights/the-award-was-signed-the-proof-was-not-ready#visual-briefing" className="mt-7 inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#071d39] px-5 text-sm font-semibold text-white hover:bg-[#0d3057]">Explore the seven-slide briefing<ArrowRight className="size-4" aria-hidden="true" /></Link>
+            </div>
+            <Link href="/insights/the-award-was-signed-the-proof-was-not-ready#visual-briefing" aria-label="View the illustrated award-evidence briefing" className="group grid grid-cols-2 items-center gap-3 sm:gap-5">
+              <Image src="/research/before-you-sign-01/carousel/01-cover.png" alt="" width={1080} height={1350} unoptimized className="h-auto w-full rounded-xl border border-[#071d39]/15 shadow-[0_15px_40px_rgba(7,29,57,0.12)] transition-transform motion-safe:group-hover:-translate-y-1" />
+              <Image src="/research/before-you-sign-01/carousel/03-auditability-financial-eligibility.png" alt="" width={1080} height={1350} unoptimized className="mt-8 h-auto w-full rounded-xl border border-[#071d39]/15 shadow-[0_15px_40px_rgba(7,29,57,0.12)] transition-transform motion-safe:group-hover:-translate-y-1 sm:mt-12" />
+            </Link>
+          </div>
+        </section>
+
         <section aria-labelledby="case-evidence-heading" className="border-b border-[#d8d5cc] bg-[#f7f3eb] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
           <div className="mx-auto max-w-[1320px]">
             <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
