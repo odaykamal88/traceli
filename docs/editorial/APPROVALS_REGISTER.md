@@ -62,3 +62,8 @@ No platform publishing or scheduling action was made. No credential value was re
 The owner authorization above is recorded. Publication execution must retain the reviewed claim boundaries, use working primary-source and destination links, verify the company account, and record actual live URLs after publication. Approval is not evidence of a successful send or deployment.
 
 Default publisher: Traceli. Research byline: `Traceli Research Desk`. No invented reviewer, employee, customer endorsement or prevention claim may be added. See `RELEASE_2026-09-08.md` for artifact hashes and final verification.
+
+
+## Future LinkedIn creative direction, 9 September 2026
+
+Odey requested: "moving forward can you change the branding and display for linkedin to be closer to how this account actually publishes" and linked https://www.instagram.com/maybeworthbuilding/, asking for professional hooks, text and highlights. Apply `LINKEDIN_VISUAL_AND_VOICE_GUIDE.md` for future company LinkedIn creative. This authorizes the channel design update and reusable assets; it does not grant blanket approval for new factual claims or other channels. See `LINKEDIN_REDESIGN_2026-09-09.md` for the exact prepared nine-page example, its checks and the already-published original carousel URL.
