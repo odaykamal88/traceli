@@ -2,7 +2,7 @@
 
 Updated: 8 September 2026
 
-**Asset status:** `APPROVED FOR PUBLICATION — company release, 8 September 2026. Execution tracked separately.`
+**Asset status:** `APPROVED FOR PUBLICATION — company release, 8 September 2026. Website and LinkedIn published 9 September; X awaits account sign-in.`
 
 **Canonical asset:** [FIRST_PIECE_DRAFT.md](./FIRST_PIECE_DRAFT.md)
 
@@ -240,3 +240,11 @@ https://cal.com/oqemal/30min?utm_source=email&utm_medium=email&utm_campaign=foun
 - [ ] Alt text is present and the document export passes reading-order and contrast checks.
 
 No checklist item is currently recorded as complete.
+
+## Publication receipts, 9 September 2026
+
+Website: https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-not-ready
+
+Company LinkedIn: https://www.linkedin.com/feed/update/urn:li:share:7503328533331566592
+
+The company post uses the approved text below with the live article URL. The PDF is downloadable from the article; the native LinkedIn file chooser failed, so no attached LinkedIn document is claimed. X copy and cards remain prepared and unpublished pending destination identification and sign-in. See RELEASE_2026-09-08.md for exact hashes, checks and source-access notes.

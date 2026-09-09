@@ -4,7 +4,7 @@ Updated: 8 September 2026
 
 **Asset status:** `APPROVED FOR PUBLICATION — release exports verified 8 September 2026`
 
-**Source copy:** Controlled by the separate editorial distribution pack and source sheet in the working workspace; those review files are not part of this asset commit.
+**Source copy:** Controlled by the separate editorial distribution pack and source sheet in the working workspace; those files are included in the approved release commit.
 
 **Generator:** [`scripts/generate-first-piece-social-assets.py`](../../scripts/generate-first-piece-social-assets.py)
 
@@ -68,3 +68,7 @@ The Python environment needs ReportLab and pypdf; Node needs Playwright and a Ch
 ## Approved release generation
 
 Run `TRACELI_SOCIAL_RELEASE=1 python3 scripts/generate-first-piece-social-assets.py`. It preserves the review copies and writes a separate release set. Current output: seven 1080×1350 LinkedIn pages, a tagged seven-page PDF, and six 1600×900 X cards. Final hashes and live URLs are recorded in RELEASE_2026-09-08.md.
+
+## Publication delivery, 9 September 2026
+
+The approved PDF is served at `/research/before-you-sign-01/briefing.pdf` and linked from the live article. Its downloaded bytes match the approved PDF SHA256. LinkedIn published the approved company text and article link; the browser file chooser timed out, so the PDF was not attached natively. X cards remain ready and unpublished. Review-copy paths above are historical; the committed release PNGs use `output/social/before-you-sign-01-release/`.
