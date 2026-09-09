@@ -28,4 +28,4 @@ The page displays the approved hook, article link and seven-page document. This 
 
 The redesigned nine-page version is a prepared reference for future posts, not a second publication of the same article. Existing published posts were not edited or removed.
 
-The website's original approved carousel and four inline case images are live. Production verification found all seven carousel slide paths, all four case-image paths, all 35 approved text passages and the correct www canonical on the article route. The website visual release was merged through PR 14. X remains pending identification and sign-in of the authorized company account.
+The website's original approved carousel and four inline case images are live. Production verification found all seven carousel slide paths, all four case-image paths, all 35 approved text passages and the correct www canonical on the article route. The website visual release was merged through PR 14. X publication was not verified in this redesign task. A fresh operating-room read showed task 11 already marked done; that owner state was preserved. No new X URL is claimed here.
