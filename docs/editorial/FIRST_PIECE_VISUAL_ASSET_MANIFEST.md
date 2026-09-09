@@ -71,4 +71,9 @@ Run `TRACELI_SOCIAL_RELEASE=1 python3 scripts/generate-first-piece-social-assets
 
 ## Publication delivery, 9 September 2026
 
-The approved PDF is served at `/research/before-you-sign-01/briefing.pdf` and linked from the live article. Its downloaded bytes match the approved PDF SHA256. LinkedIn published the approved company text and article link; the browser file chooser timed out, so the PDF was not attached natively. X cards remain ready and unpublished. Review-copy paths above are historical; the committed release PNGs use `output/social/before-you-sign-01-release/`.
+The approved PDF is served at `/research/before-you-sign-01/briefing.pdf` and linked from the live article. Its downloaded bytes match the approved PDF SHA256. The original seven-page native LinkedIn document was subsequently verified live at https://www.linkedin.com/feed/update/urn:li:ugcPost:7503493067388366849/. This supersedes the earlier file-chooser blocker. Review-copy paths above are historical; the original release PNGs use `output/social/before-you-sign-01-release/`. X publication was not re-verified during the redesign.
+
+
+## LinkedIn direction adopted 9 September 2026
+
+Follow `LINKEDIN_VISUAL_AND_VOICE_GUIDE.md` for future LinkedIn hooks, typography, imagery and highlights. The prepared nine-page example is `output/pdf/before-you-sign-01-linkedin-v2.pdf` (SHA256 `17824d96c6e02792b1b4d3415165c404e5bb039a003c64931d6c5ac0b50e6d80`). Its nine PNGs, caption, transcript, manifest, original illustrative image and generation prompt are in `output/social/before-you-sign-01-linkedin-v2/`. The editable generator is `scripts/build-linkedin-editorial-v2.py`. This is a future creative reference, not a second publication of the article. See `LINKEDIN_REDESIGN_2026-09-09.md` for verification.

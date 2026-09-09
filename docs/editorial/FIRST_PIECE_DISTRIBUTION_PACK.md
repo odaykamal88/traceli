@@ -19,7 +19,7 @@ Updated: 8 September 2026
 | Asset | Audience and job | Register | Intended action | Current state |
 | --- | --- | --- | --- | --- |
 | LinkedIn company Page post | Procurement, assurance, donor relations and executive leaders | Professional analysis | Read the canonical article | Approved content; delivery tracked in release record |
-| LinkedIn company Page document | Cross-functional buying committee | Evidence-led briefing | Test one completed award against seven questions | Outline only |
+| LinkedIn company Page document | Cross-functional buying committee | Evidence-led briefing | Test one completed award against seven questions | Original seven-page carousel published; see the 9 September LinkedIn redesign guide for future creative |
 | Optional founder LinkedIn post | Odey's professional network | Calm first-person operator view | Read the company research | Internal draft only. Separate founder approval required |
 | X thread | Procurement policy, oversight and aid-accountability readers | Concise sourced observations | Inspect the four official records | Approved content; delivery tracked in release record |
 | Email brief | Warm institutional contacts and subscribers | Concise editorial briefing | Read the article or discuss one completed tender | Approved content; delivery tracked in release record |
@@ -247,4 +247,4 @@ Website: https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-no
 
 Company LinkedIn: https://www.linkedin.com/feed/update/urn:li:share:7503328533331566592
 
-The company post uses the approved text below with the live article URL. The PDF is downloadable from the article; the native LinkedIn file chooser failed, so no attached LinkedIn document is claimed. X copy and cards remain prepared and unpublished pending destination identification and sign-in. See RELEASE_2026-09-08.md for exact hashes, checks and source-access notes.
+The company text post and original seven-page document are published. The native document permalink was verified on 9 September: https://www.linkedin.com/feed/update/urn:li:ugcPost:7503493067388366849/. This supersedes the earlier file-chooser blocker. For future images, carousels and captions, apply LINKEDIN_VISUAL_AND_VOICE_GUIDE.md. Its nine-page example is prepared and has not been republished. X was not re-verified during the redesign; the owner's current task state was preserved. See RELEASE_2026-09-08.md and LINKEDIN_REDESIGN_2026-09-09.md for exact artifact and publication evidence.
