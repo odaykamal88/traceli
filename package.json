@@ -16,7 +16,9 @@
     "video:poster": "remotion still remotion/index.ts TraceliTenderToProof public/traceli-tender-to-proof-poster.png --frame=1010",
     "db:migrate": "node --env-file-if-exists=.env.local scripts/db/migrate.mjs",
     "db:seed": "node --env-file-if-exists=.env.local scripts/db/seed.mjs",
-    "test:tenant": "node --env-file-if-exists=.env.local scripts/db/test-tenant-isolation.mjs"
+    "test:tenant": "node --env-file-if-exists=.env.local scripts/db/test-tenant-isolation.mjs",
+    "demo:agent": "node --conditions=react-server --import ./scripts/agent/register.mjs scripts/agent/demo.mjs",
+    "test:agent": "node --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/agent/test-evidence.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

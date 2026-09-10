@@ -27,19 +27,19 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: traceli_ci
+          POSTGRES_DB: traceli_agent_demo
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d traceli_ci"
+          --health-cmd "pg_isready -U postgres -d traceli_agent_demo"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/traceli_ci
-      DATABASE_URL_UNPOOLED: postgres://postgres:postgres@127.0.0.1:5432/traceli_ci
+      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/traceli_agent_demo
+      DATABASE_URL_UNPOOLED: postgres://postgres:postgres@127.0.0.1:5432/traceli_agent_demo
       TRACELI_SEED_ORGANIZATION_ID: org_traceli_relief
     steps:
       - name: Check out repository
@@ -67,6 +67,10 @@ jobs:
         run: pnpm db:seed
       - name: Test tenant and audit boundaries
         run: pnpm test:tenant
+      - name: Test read-only evidence tools against fictional records
+        run: pnpm test:agent
+        env:
+          TRACELI_AGENT_FIXTURE: '1'
 
   supply-chain:
     name: Dependency and secret checks
