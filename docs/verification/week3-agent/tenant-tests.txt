@@ -1,0 +1,1 @@
+Tenant isolation, cross-tenant write denial, and append-only audit checks passed.

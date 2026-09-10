@@ -4,6 +4,7 @@ import { withAuth } from '@workos-inc/authkit-nextjs'
 import { redirect } from 'next/navigation'
 
 import type { WorkspaceViewer } from '@/lib/workspace-viewer'
+import { workspaceRoleLabels } from '@/lib/workspace-policy'
 
 const requiredWorkOSEnvironmentVariables = [
   'WORKOS_CLIENT_ID',
@@ -12,23 +13,7 @@ const requiredWorkOSEnvironmentVariables = [
   'NEXT_PUBLIC_WORKOS_REDIRECT_URI',
 ] as const
 
-const roleLabels: Record<string, string> = {
-  'procurement-officer': 'Procurement Officer',
-  'panel-member': 'Panel Member',
-  'procurement-director': 'Procurement Director',
-  auditor: 'Auditor',
-  'workspace-admin': 'Workspace Admin',
-  admin: 'Admin',
-  member: 'Member',
-}
-
-const allowedWorkspaceRoles = new Set([
-  'procurement-officer',
-  'panel-member',
-  'procurement-director',
-  'auditor',
-  'workspace-admin',
-])
+const allowedWorkspaceRoles = new Set(Object.keys(workspaceRoleLabels))
 
 export function isWorkOSConfigured() {
   return requiredWorkOSEnvironmentVariables.every((name) => Boolean(process.env[name]))
@@ -52,7 +37,7 @@ export async function getWorkspaceViewer(): Promise<WorkspaceViewer> {
     name: fullName || user.email,
     email: user.email,
     organizationId,
-    role: roleLabels[role] ?? role,
+    role: workspaceRoleLabels[role],
     mode: 'workos',
   }
 }

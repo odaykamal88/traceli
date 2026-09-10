@@ -44,3 +44,5 @@ npx workos verify-login --json
 Real secrets belong only in `.env.local` or the deployment environment. `.env.local` is ignored by Git.
 
 The default production smoke check targets `https://www.trace-li.com`. Set `TRACELI_BASE_URL` to check another deployment without changing the script.
+
+The [read-only evidence contract](./docs/AGENT_READ_CONTRACT.md) has a local fictional-data demonstration and PostgreSQL boundary tests (`pnpm test:agent`). It is not a deployed MCP endpoint or a verified integration with a buyer's agent. Follow the isolated-fixture setup in that document; these tests never load `.env.local`.

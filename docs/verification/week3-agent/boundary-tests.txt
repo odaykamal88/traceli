@@ -1,0 +1,27 @@
+(node:3836) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/odaykamal/Documents/ChatGPT/traceli-week3-agent-demo/lib/agent/evidence-tools.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/odaykamal/Documents/ChatGPT/traceli-week3-agent-demo/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ authorized persisted read includes exact source reference and pending human decision (26.9525ms)
+✔ guessed other-tenant and missing IDs are indistinguishable; second tenant can read its own record (20.331542ms)
+✔ missing identity, invalid tenant and disallowed roles fail closed (6.514625ms)
+✔ agent cannot supply tenant, viewer, URL, path, SQL, extra citation fields or mutation tools (1.337458ms)
+✔ citation validation rejects invented anchors, hashes and cross-tenant references (71.081459ms)
+✔ malicious evidence text remains data and cannot authorize approval or exfiltration (39.587291ms)
+✔ unknown source ACL and unlocked source fail closed, without returning a partial record (11.809458ms)
+✔ same-tenant source from a different procurement cannot be cited (8.921042ms)
+✔ oversized output is rejected and repeated reads cause no writes (27.222292ms)
+✔ shared tenant transaction enforces SQL read-only, even if a caller attempts a write (9.952958ms)
+✔ read-only query duration is bounded and a timed-out read does not poison the next transaction (5038.616833ms)
+✔ local CLI uses trusted fixture identity and serializes the real contract response (520.240708ms)
+✔ fixture launcher rejects nonlocal or nonfixture databases before connecting (0.340666ms)
+✔ database failure returns a bounded generic error; a subsequent healthy retry succeeds (392.644459ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6766.90825
+$ node --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/agent/test-evidence.mjs
