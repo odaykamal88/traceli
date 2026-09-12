@@ -1,0 +1,294 @@
+{
+  "title": "The app was delivered. The fallout lasted years.",
+  "lede": "ArriveCAN shows how a procurement decision can become a problem that outlives the project.",
+  "opening": [
+    [
+      {
+        "type": "text",
+        "text": "An app can be delivered. A contract can be signed. An invoice can be paid."
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "The questions can still keep coming."
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "What did it really cost? Why was that supplier chosen? Who checked what was delivered? And why is it taking so long to get an answer?"
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "Canada's ArriveCAN became a public example of that exposure. The story moved from a border application to audits, parliamentary scrutiny and supplier sanctions. The cost of the work was only one part of the fallout."
+      }
+    ]
+  ],
+  "sections": [
+    {
+      "id": "the-cost",
+      "title": "C$59.5 million. Even the price needed explaining.",
+      "paragraphs": [
+        [
+          {
+            "type": "text",
+            "text": "In February 2024, Canada's Auditor General estimated ArriveCAN's cost at C$59.5 million. Poor financial records made the precise total impossible to establish. The audit also found scant support for the initial non-competitive supplier selection and invoices approved with little detail about the work performed. "
+          },
+          {
+            "type": "link",
+            "text": "Auditor General's findings",
+            "href": "https://www.canada.ca/en/auditor-general/media-room/2024-reports-of-the-auditor-general-of-canada-to-the-parliament-of-canada-glaring-disregard-for-basic-management-and-contracting-practices-surrounds-the-governments-arrivecan-application.html"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The procurement concerns went beyond filing. Canada's Procurement Ombud found that requirements for a C$25 million contract favoured the incumbent, GC Strategies. It was the only bidder. "
+          },
+          {
+            "type": "link",
+            "text": "January 2024 procurement review",
+            "href": "https://opo-boa.gc.ca/praapp-prorev/2024/epa-ppr-01-2024-eng.html?wbdisable=true"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Those are difficult findings to explain privately. In this case, the feedback was public."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The Auditor General's conclusion was stark: the missing support for spending and decisions had compromised accountability. "
+          },
+          {
+            "type": "link",
+            "text": "Auditor General, 12 February 2024",
+            "href": "https://www.canada.ca/en/auditor-general/media-room/2024-reports-of-the-auditor-general-of-canada-to-the-parliament-of-canada-glaring-disregard-for-basic-management-and-contracting-practices-surrounds-the-governments-arrivecan-application.html"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ]
+      ]
+    },
+    {
+      "id": "the-response-burden",
+      "title": "The work of answering became another burden.",
+      "paragraphs": [
+        [
+          {
+            "type": "text",
+            "text": "The Information Commissioner's later investigation reported an average wait of "
+          },
+          {
+            "type": "strong",
+            "text": "224 calendar days"
+          },
+          {
+            "type": "text",
+            "text": " for ArriveCAN-related information requests in 2024-25. It also described experts prioritizing parliamentary responses, delaying some record retrievals. Complex requests and a server outage contributed to the wider response problem. "
+          },
+          {
+            "type": "link",
+            "text": "2026 investigation, timeliness findings",
+            "href": "https://www.oic-ci.gc.ca/en/decisions/final-reports/canada-border-services-agency-re-2026-oic-46"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "That number measures the wait for information, not a procurement delivery delay. But it makes the aftermath tangible: once a project attracts scrutiny, the people with the knowledge can become the people repeatedly called on to explain it."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "CBSA accepted the investigation's recommendations."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "For an accountable leader, this is the pain to recognize. Questions spread beyond the original team. A decision has to survive an audience that has no reason to take its rationale on trust. Time that could support current work is needed to answer for old work."
+          }
+        ]
+      ]
+    },
+    {
+      "id": "future-federal-work",
+      "title": "A supplier lost access to future federal work.",
+      "paragraphs": [
+        [
+          {
+            "type": "text",
+            "text": "In June 2025, Canada declared GC Strategies ineligible for new federal contracts and real-property agreements for seven years following a supplier-conduct assessment. The official register lists the exclusion through June 2032. "
+          },
+          {
+            "type": "link",
+            "text": "Government decision",
+            "href": "https://www.canada.ca/en/public-services-procurement/news/2025/06/gc-strategies-inc-determined-to-be-ineligible-under-the-ineligibility-and-suspension-policy.html"
+          },
+          {
+            "type": "text",
+            "text": ", "
+          },
+          {
+            "type": "link",
+            "text": "current supplier register",
+            "href": "https://www.canada.ca/en/public-services-procurement/services/standards-oversight/supplier-integrity-compliance/ineligible-suspended-suppliers.html"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "That was a separate integrity decision, not a penalty for missing paperwork. Alongside the ArriveCAN findings, it shows how serious the commercial consequences of procurement scrutiny can become."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "The reputational damage is visible in the public record of criticism and scrutiny. Government briefing material itself describes GC Strategies as facing intense public scrutiny, particularly over ArriveCAN. "
+          },
+          {
+            "type": "link",
+            "text": "Government briefing",
+            "href": "https://search.open.canada.ca/qpnotes/record/pwgsc-tpsgc%2CPSPC-2025-QP-00022"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ]
+      ]
+    },
+    {
+      "id": "before-the-questions",
+      "title": "The calmer version starts before the questions.",
+      "paragraphs": [
+        [
+          {
+            "type": "text",
+            "text": "Imagine the next review request arriving and knowing the answers are already there."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Why the supplier was selected. What supported the price. What was actually delivered. Which exceptions were raised, and who resolved them."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Earlier checks could have exposed the evidence gaps in this case and reduced the scramble to explain decisions later. That is the mitigation worth pursuing: less uncertainty at commitment, fewer missing answers under scrutiny, and a stronger basis for defending the decision."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "This is the peace of mind Traceli is built around: a procurement decision you can explain, with the evidence ready when it matters."
+          }
+        ],
+        [
+          {
+            "type": "strong",
+            "text": "Be ready before it becomes public."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Follow Traceli's "
+          },
+          {
+            "type": "em",
+            "text": "Before You Sign"
+          },
+          {
+            "type": "text",
+            "text": " for real cases where procurement problems became expensive, disruptive and public. "
+          },
+          {
+            "type": "link",
+            "text": "Explore Traceli",
+            "href": "https://www.trace-li.com"
+          },
+          {
+            "type": "text",
+            "text": "."
+          }
+        ],
+        [
+          {
+            "type": "em",
+            "text": "Public case analysis. Traceli was not involved in ArriveCAN. The potential mitigation above is our analysis of earlier evidence checks."
+          }
+        ]
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "file": "slide-1.png",
+      "title": "The fallout lasted years",
+      "alt": "TRACELI ARRIVECAN / CANADA AI-generated editorial illustration: a hearing-room microphone, unbranded phone and closed folder. Conceptual public scrutiny, not an actual ArriveCAN hearing. AI-GENERATED EDITORIAL ILLUSTRATION THE APP WAS DELIVERED. THE FALLOUT LASTED YEARS. A C$59.5M estimate. Years of public scrutiny. BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 01 / 08"
+    },
+    {
+      "file": "slide-2.png",
+      "title": "The uncertain cost",
+      "alt": "TRACELI THE COST / 2024 AUDIT C$59.5M ESTIMATED COST OF ARRIVECAN THE EXACT COST COULD NOT BE VERIFIED. The Auditor General could not establish the precise total from the financial records. The estimate published in the Auditor General's February 2024 audit. Auditor General of Canada / February 2024  > BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 02 / 08"
+    },
+    {
+      "file": "slide-3.png",
+      "title": "Public criticism",
+      "alt": "TRACELI THE FEEDBACK WAS PUBLIC ACCOUNTABILITY WAS ON THE LINE. CANADA'S AUDITOR GENERAL: \"The lack of information to support ArriveCAN spending and decisions has compromised accountability.\" 12 February 2024. The explanation was now owed to the public. Auditor General of Canada / February 2024  > BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 03 / 08"
+    },
+    {
+      "file": "slide-4.png",
+      "title": "The wait for answers",
+      "alt": "TRACELI THE WAIT FOR ANSWERS / 2024-25 224 DAYS FOR ANSWERS. Average response time for ArriveCAN-related access-to-information requests in 2024-25. Factors included request complexity, competing disclosure work and a server outage. Information Commissioner / 2026 OIC 46  > BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 04 / 08"
+    },
+    {
+      "file": "slide-5.png",
+      "title": "Future federal work",
+      "alt": "TRACELI THE COMMERCIAL CONSEQUENCE 7 YEARS SHUT OUT OF FEDERAL WORK. GC Strategies was declared ineligible for new Canadian federal contracts and real-property agreements. A separate supplier-conduct determination. June 2025 to June 2032. PSPC / Supplier determination / June 2025  > PSPC / Current ineligible supplier register  > BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 05 / 08"
+    },
+    {
+      "file": "slide-6.png",
+      "title": "The response burden",
+      "alt": "TRACELI WHAT SCRUTINY DOES TO A TEAM THE QUESTIONS BECAME MORE WORK. The Information Commissioner found that parliamentary responses took priority and delayed some record retrievals. Experts pulled into responses. Decisions examined in public. Confidence harder to defend. The management and reputation exposure. Information Commissioner / 2026 OIC 46  > BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 06 / 08"
+    },
+    {
+      "file": "slide-7.png",
+      "title": "Peace of mind",
+      "alt": "TRACELI THE PEACE OF MIND THE CALMER VERSION STARTS EARLIER. Imagine the questions arriving and knowing the answers are ready. Why this supplier. What supported the price. What was delivered. Clarity before commitment. Confidence under scrutiny. BEFORE YOU SIGN  /  02 SWIPE TO CONTINUE  > 07 / 08"
+    },
+    {
+      "file": "slide-8.png",
+      "title": "Be ready before it is public",
+      "alt": "TRACELI TRACELI / BEFORE YOU SIGN BE READY BEFORE IT'S PUBLIC. Earlier evidence checks could have exposed gaps and reduced the scramble to explain decisions later. Traceli is built around that peace of mind: a decision you can explain, with the evidence ready. FOLLOW TRACELI Real cases. Costly lessons. Better-prepared decisions. trace-li.com  > BEFORE YOU SIGN  /  02 BEFORE YOU SIGN 08 / 08"
+    }
+  ]
+}

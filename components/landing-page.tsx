@@ -241,7 +241,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-5 px-5 py-4 sm:px-8 lg:px-12">
           <Link href="/" aria-label="Traceli home"><TraceliMark /></Link>
           <nav aria-label="Public navigation" className="flex items-center gap-2 sm:gap-5">
-            <Link href="/insights/the-award-was-signed-the-proof-was-not-ready" className="rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white">Research</Link>
+            <Link href="/insights" className="rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white">Research</Link>
             <Link href="/docs" className="hidden rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Documentation</Link>
             <Link href="/demo" className="group inline-flex min-h-11 items-center gap-3 rounded-xl border border-white/18 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08]">
               Open demo

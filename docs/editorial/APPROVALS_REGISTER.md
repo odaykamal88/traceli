@@ -67,3 +67,7 @@ Default publisher: Traceli. Research byline: `Traceli Research Desk`. No invente
 ## Future LinkedIn creative direction, 9 September 2026
 
 Odey requested: "moving forward can you change the branding and display for linkedin to be closer to how this account actually publishes" and linked https://www.instagram.com/maybeworthbuilding/, asking for professional hooks, text and highlights. Apply `LINKEDIN_VISUAL_AND_VOICE_GUIDE.md` for future company LinkedIn creative. This authorizes the channel design update and reusable assets; it does not grant blanket approval for new factual claims or other channels. See `LINKEDIN_REDESIGN_2026-09-09.md` for the exact prepared nine-page example, its checks and the already-published original carousel URL.
+
+## ArriveCAN publication authorization, 12 September 2026
+
+Odey reviewed the completed replacement packet and instructed: "great push and post it". This is explicit approval to publish the ArriveCAN article on the Traceli website and the approved eight-page carousel with its company LinkedIn post. The article link may be added to the caption. The owner instruction authorizes this release now and supersedes its earlier prepared-only status and provisional date. No independent external review is represented as completed. No paid promotion, direct outreach or personal-profile posting is included. Actual release results are recorded in RELEASE_2026-09-12.md.
