@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { ArrowLeft, ArrowRight, Download, ExternalLink } from 'lucide-react'
 
-const slides = [
+const defaultSlides = [
   { file: '01-cover.png', title: 'The award record', alt: 'The award was signed. The proof was not ready. A trace connects governing rule, source evidence, named human judgment, exception and approval.' },
   { file: '02-control-moment.png', title: 'The control moment', alt: 'A donor or auditor asks why the supplier won. The trace connects the governing rule, source evidence, named human judgment, exception and approval. The human decision point remains visible.' },
   { file: '03-auditability-financial-eligibility.png', title: 'Auditability and financial eligibility', alt: 'UN OIOS found inadequate bid-evaluation documentation at UNMISS; recommendations were accepted and later implemented. OLAF reported a €7.5 million financial impact and considered corresponding payments ineligible. These are different procedural outcomes.' },
@@ -14,9 +14,21 @@ const slides = [
   { file: '07-where-traceli-fits.png', title: 'Where Traceli fits', alt: 'Be ready to explain the award. Traceli helps reconstruct procurement evidence and prepare a source-linked file for human review. Discuss one procurement file. Traceli does not certify compliance, replace audit, guarantee an outcome or make the award decision.' },
 ] as const
 
-const imageRoot = '/research/before-you-sign-01/carousel'
+type BriefingProps = {
+  slides?: readonly { file: string; title: string; alt: string }[]
+  imageRoot?: string
+  pdfHref?: string
+  heading?: ReactNode
+  introduction?: string
+}
 
-export function ResearchBriefingCarousel() {
+export function ResearchBriefingCarousel({
+  slides = defaultSlides,
+  imageRoot = '/research/before-you-sign-01/carousel',
+  pdfHref = '/research/before-you-sign-01/briefing.pdf',
+  heading = <>The award record,<br />in seven frames.</>,
+  introduction = 'Four official records. Seven questions for one completed award. Explore the briefing, then read the full analysis below.',
+}: BriefingProps = {}) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
 
@@ -34,13 +46,13 @@ export function ResearchBriefingCarousel() {
       <div className="mx-auto grid max-w-[1100px] items-center gap-10 lg:grid-cols-[0.85fr_1fr] lg:gap-20">
         <div className="max-w-md">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Before You Sign · Visual briefing</p>
-          <h2 id="visual-briefing-heading" className="mt-5 font-display text-5xl leading-[0.98] tracking-[-0.025em] sm:text-6xl">The award record,<br />in seven frames.</h2>
-          <p className="mt-6 text-lg leading-8 text-[#45565d]">Four official records. Seven questions for one completed award. Explore the briefing, then read the full analysis below.</p>
-          <a href="/research/before-you-sign-01/briefing.pdf" className="mt-7 inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#071d39] px-5 text-sm font-semibold text-white hover:bg-[#0d3057]" target="_blank" rel="noreferrer"><Download className="size-4" aria-hidden="true" />Download the complete briefing</a>
-          <p className="mt-4 text-xs leading-6 text-[#617078]">Seven pages · PDF · Sources included</p>
+          <h2 id="visual-briefing-heading" className="mt-5 font-display text-5xl leading-[0.98] tracking-[-0.025em] sm:text-6xl">{heading}</h2>
+          <p className="mt-6 text-lg leading-8 text-[#45565d]">{introduction}</p>
+          <a href={pdfHref} className="mt-7 inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#071d39] px-5 text-sm font-semibold text-white hover:bg-[#0d3057]" target="_blank" rel="noreferrer"><Download className="size-4" aria-hidden="true" />Download the complete briefing</a>
+          <p className="mt-4 text-xs leading-6 text-[#617078]">{slides.length} pages · PDF · Sources included</p>
         </div>
 
-        <div role="region" aria-roledescription="carousel" aria-label="Seven-page award evidence briefing" className="mx-auto w-full max-w-[440px] min-w-0">
+        <div role="region" aria-roledescription="carousel" aria-label={`${slides.length}-page research briefing`} className="mx-auto w-full max-w-[440px] min-w-0">
           <div
             ref={trackRef}
             tabIndex={0}

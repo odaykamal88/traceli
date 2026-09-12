@@ -5,7 +5,7 @@ import { ArrowRight, Waypoints } from 'lucide-react'
 const bookingHref = 'https://cal.com/oqemal/30min'
 
 const navigation = [
-  { href: '/insights/the-award-was-signed-the-proof-was-not-ready', label: 'Research' },
+  { href: '/insights', label: 'Research' },
   { href: '/docs', label: 'Documentation' },
 ] as const
 
