@@ -64,8 +64,16 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
+  outputFileTracingIncludes: { '/hq': ['./docs/hq/**/*.json', './docs/hq/**/*.md'] },
   async headers() {
     return [
+      {
+        source: '/hq/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
       {
         source: '/:path*',
         headers: securityHeaders,

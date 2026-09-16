@@ -1,0 +1,101 @@
+[
+  {
+    "id": "EVT-001",
+    "at": "2026-09-14",
+    "actor": "Supervisor",
+    "type": "charters_written",
+    "subject": "Eight mandates",
+    "summary": "Constitution and eight v1.0 charters written before dispatch.",
+    "evidence_ref": "CHARTERS.md"
+  },
+  {
+    "id": "EVT-002",
+    "at": "2026-09-14",
+    "actor": "Supervisor",
+    "type": "queues_registered",
+    "subject": "Workstreams A\u2013G",
+    "summary": "Seven active queues registered; running jobs are tracked separately.",
+    "evidence_ref": "data/jobs.json"
+  },
+  {
+    "id": "EVT-003",
+    "at": "2026-09-14T16:01:37.524940+00:00",
+    "actor": "Supervisor",
+    "type": "repository_reconciled",
+    "subject": "Current Trace-li foundations",
+    "summary": "Branch updated to current main 0130366; existing authentication, tenant boundaries and evidence contracts preserved.",
+    "evidence_ref": "REPOSITORY_RECONCILIATION.md"
+  },
+  {
+    "id": "EVT-004",
+    "at": "2026-09-14T16:01:37.524940+00:00",
+    "actor": "Investigator",
+    "type": "output_submitted",
+    "subject": "Four account evidence packets",
+    "summary": "UNFPA, OCHA, Chemonics and DAI primary-source packets submitted with 18 claim IDs and management-response qualifications.",
+    "evidence_ref": "research/ACCOUNT_EVIDENCE.md"
+  },
+  {
+    "id": "EVT-005",
+    "at": "2026-09-14T16:01:37.524940+00:00",
+    "actor": "Editor",
+    "type": "output_submitted",
+    "subject": "Explainer and content playbook",
+    "summary": "Two sequential internal drafts completed; publication and sends remain unapproved.",
+    "evidence_ref": "artifacts/HOW_TRACE_LI_WORKS.md"
+  },
+  {
+    "id": "EVT-006",
+    "at": "2026-09-14T16:01:37.524940+00:00",
+    "actor": "Supervisor",
+    "type": "review_dispatched",
+    "subject": "Independent Auditor review",
+    "summary": "Temporary Auditor assigned source claims, product messaging and HQ operating boundaries.",
+    "evidence_ref": "SPAWN_PACKETS.md"
+  },
+  {
+    "id": "EVT-007",
+    "at": "2026-09-14T20:55:51.388233+00:00",
+    "actor": "Supervisor",
+    "type": "internal_evidence_accepted",
+    "subject": "Four source packets cleared for internal drafting",
+    "summary": "Independent Auditor checked 18 claims. UNFPA rule qualifier corrected; OCHA retained as historical-snapshot-only review. External use remains gated.",
+    "evidence_ref": "reviews/accounts-review.md"
+  },
+  {
+    "id": "EVT-008",
+    "at": "2026-09-14T21:04:29.035064+00:00",
+    "actor": "Supervisor",
+    "type": "package_accepted",
+    "subject": "HQ package and internal drafts reviewed",
+    "summary": "Constitution, charters, Trace specs, HQ shell, explainer, playbook and four account pieces accepted for internal use after independent review. Type/build/browser/schema checks pass. No recurring worker remains running.",
+    "evidence_ref": "VERIFICATION.md"
+  },
+  {
+    "id": "EVT-009",
+    "at": "2026-09-14T21:04:29.035064+00:00",
+    "actor": "Supervisor",
+    "type": "blocker_recorded",
+    "subject": "Operating Room evidence still required",
+    "summary": "Queue F preserves unknown sends, replies and commercial next steps until the original records and handling scope are supplied.",
+    "evidence_ref": "artifacts/OPERATING_ROOM_IMPORT.md"
+  },
+  {
+    "id": "EVT-010",
+    "at": "2026-09-15T06:55:51.354653Z",
+    "actor": "Supervisor",
+    "type": "runtime_connected",
+    "subject": "Existing desks connected to HQ",
+    "summary": "Verified six ACTIVE schedules and saved Operating Room evidence; attached the visible charters and A\u2013G handoff using the existing schedule IDs. Task #44 tracks the connection. No new timer, send or production deployment.",
+    "evidence_ref": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "EVT-011",
+    "at": "2026-09-15T20:29:18.706754+00:00",
+    "actor": "Supervisor",
+    "type": "foundation_verified_locally",
+    "subject": "Durable jobs and reviewed memory tested on Postgres",
+    "summary": "Task #45 implements scoped storage and fenced job attempts; local database and existing evidence-agent tests pass. QM assessed as an optional worker runtime. Production migration, authenticated HQ integration and cloud execution remain outstanding.",
+    "evidence_ref": "POSTGRES_FOUNDATION.md"
+  }
+]

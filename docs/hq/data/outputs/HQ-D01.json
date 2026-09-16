@@ -1,0 +1,489 @@
+{
+  "job_id": "HQ-D01",
+  "mandate_id": "evidence-lab",
+  "artifact_id": "HQ-D01-OUTPUT",
+  "version": 1,
+  "classification": "internal",
+  "produced_at": "2026-09-14T21:04:29.035064+00:00",
+  "sources": [
+    {
+      "id": "U-01",
+      "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+      "location": "Printed p. 17 / PDF p. 18, paragraph 58(h)",
+      "observed_at": null,
+      "claim": "A $27,120 award excluded an $11,400 bidder on technical grounds, while signed minutes recorded both bidders as qualifying for financial evaluation.",
+      "kind": "primary_source",
+      "limitations": [
+        "audit finding",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "U-02",
+      "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+      "location": "Printed p. 17 / PDF p. 18, paragraph 58 introduction",
+      "observed_at": null,
+      "claim": "This instance sat within 17 tested transactions worth $217,175.",
+      "kind": "primary_source",
+      "limitations": [
+        "sample scope",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "U-03",
+      "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+      "location": "Printed p. 16 / PDF p. 17, paragraph 57(g)",
+      "observed_at": null,
+      "claim": "Under a two-envelope system, technical evaluation should be completed and signed before financial evaluation.",
+      "kind": "primary_source",
+      "limitations": [
+        "rule as cited by auditor",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "U-04",
+      "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+      "location": "Printed pp. 17–18 / PDF pp. 18–19, recommendation 8 and action plan",
+      "observed_at": null,
+      "claim": "Management agreed to recommendation 8; its plan included training and document review, targeting January 2025.",
+      "kind": "primary_source",
+      "limitations": [
+        "management response",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "O-01",
+      "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+      "location": "O1, printed p. 10 / PDF p. 13, paragraph 45(c)",
+      "observed_at": null,
+      "claim": "Among 16 completed-2023 projects worth $23 million, 5/7 high-risk and 9/9 high-value medium-risk projects had at least one pending monitoring activity.",
+      "kind": "primary_source",
+      "limitations": [
+        "audit finding",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+        "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+      ]
+    },
+    {
+      "id": "O-02",
+      "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+      "location": "Same paragraph",
+      "observed_at": null,
+      "claim": "Monitoring was scheduled according to the Fund's operational modalities.",
+      "kind": "primary_source",
+      "limitations": [
+        "obligation",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+        "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+      ]
+    },
+    {
+      "id": "O-03",
+      "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+      "location": "Same paragraph",
+      "observed_at": null,
+      "claim": "OCHA cited logistical and staffing constraints.",
+      "kind": "primary_source",
+      "limitations": [
+        "management explanation",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+        "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+      ]
+    },
+    {
+      "id": "O-04",
+      "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+      "location": "O1, executive summary, PDF p. 2",
+      "observed_at": null,
+      "claim": "OCHA accepted the report's recommendations.",
+      "kind": "primary_source",
+      "limitations": [
+        "management response",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+        "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+      ]
+    },
+    {
+      "id": "O-05",
+      "source_ref": "https://oios.un.org/sites/oios.un.org/files/Reports/rec_implementation_rate_iad_202602.pdf",
+      "location": "O2 below, printed/PDF p. 7, row 2024/052",
+      "observed_at": null,
+      "claim": "A later OIOS table records five of six important recommendations implemented.",
+      "kind": "primary_source",
+      "limitations": [
+        "later aggregate status",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+        "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+      ]
+    },
+    {
+      "id": "C-01",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+      "location": "Printed pp. 9–10 / PDF pp. 14–15, Finding 1",
+      "observed_at": null,
+      "claim": "The auditor questioned $53,983.41 of direct costs for insufficient support permitting reconciliation.",
+      "kind": "primary_source",
+      "limitations": [
+        "audit finding",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "C-02",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+      "location": "Printed p. 9 / PDF p. 14, expense table",
+      "observed_at": null,
+      "claim": "A $10,969.49 contractual/procurement item lacked an identifiable conversion rate for reconciliation.",
+      "kind": "primary_source",
+      "limitations": [
+        "concrete mechanism",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "C-03",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+      "location": "Printed p. 11 / PDF p. 16, Chemonics' response",
+      "observed_at": null,
+      "claim": "Chemonics said it supplied support, disputed the described system transition, and explained that D365 and ABACUS operated concurrently.",
+      "kind": "primary_source",
+      "limitations": [
+        "disputed explanation",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "C-04",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+      "location": "Printed pp. 11–12 / PDF pp. 16–17",
+      "observed_at": null,
+      "claim": "The auditor maintained the reconciliation finding after that response.",
+      "kind": "primary_source",
+      "limitations": [
+        "auditor's response",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "C-05",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+      "location": "Printed p. 12 / PDF p. 17; OIG memorandum recommendation 1, PDF p. 4",
+      "observed_at": null,
+      "claim": "The conclusion reported no overbilling or underbilling; questioned costs are not established loss or recovery.",
+      "kind": "primary_source",
+      "limitations": [
+        "material qualification",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "D-01",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2018-06/5-497-15-002-p.pdf",
+      "location": "D1, printed p. 8 / PDF p. 11, training-results section",
+      "observed_at": null,
+      "claim": "DAI staff were counted as training participants; monitoring staff had not verified entered data against source records.",
+      "kind": "primary_source",
+      "limitations": [
+        "audit finding",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "D-02",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2018-06/5-497-15-002-p.pdf",
+      "location": "Same section; printed p. 9 / PDF p. 12",
+      "observed_at": null,
+      "claim": "The audit cites USAID data-quality standards, including validity.",
+      "kind": "primary_source",
+      "limitations": [
+        "obligation",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "D-03",
+      "source_ref": "https://oig.usaid.gov/sites/default/files/2018-06/5-497-15-002-p.pdf",
+      "location": "D1, printed p. 11 / PDF p. 14, recommendation 4; management details pp. 17–18 / PDF pp. 20–21",
+      "observed_at": null,
+      "claim": "USAID's evaluation records a revised annual result reducing the count by 3,894 after a separate sample review.",
+      "kind": "primary_source",
+      "limitations": [
+        "corrective response",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    },
+    {
+      "id": "D-04",
+      "source_ref": "https://oig.usaid.gov/node/623",
+      "location": "D2, recommendations 4–5",
+      "observed_at": null,
+      "claim": "Recommendations 4 and 5 show closure on 1 September 2015.",
+      "kind": "primary_source",
+      "limitations": [
+        "closure",
+        "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+      ]
+    }
+  ],
+  "assumptions": [
+    "Acceptance is limited to the internal scope recorded in the review."
+  ],
+  "known_gaps": [
+    "Original Operating Room/customer evidence unavailable.",
+    "No consequential external action authorized."
+  ],
+  "review_status": "accepted",
+  "next_owner": "Supervisor",
+  "payload": {
+    "conclusion": "Four distinct historical evidence-chain mechanisms are supported for internal drafting, within source/review limits.",
+    "obligations": [
+      "UNFPA two-envelope sequencing as cited",
+      "OCHA monitoring modalities",
+      "Chemonics documentation/reconciliation criterion as cited",
+      "DAI beneficiary-definition/data-validity criterion"
+    ],
+    "chronology": [
+      "Full audited periods, publication dates, management response and closure are preserved in research/ACCOUNT_EVIDENCE.md."
+    ],
+    "approvals": [
+      "No permission to publish, send or represent account demand."
+    ],
+    "claim_source_map": [
+      {
+        "id": "U-01",
+        "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+        "location": "Printed p. 17 / PDF p. 18, paragraph 58(h)",
+        "observed_at": null,
+        "claim": "A $27,120 award excluded an $11,400 bidder on technical grounds, while signed minutes recorded both bidders as qualifying for financial evaluation.",
+        "kind": "primary_source",
+        "limitations": [
+          "audit finding",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "U-02",
+        "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+        "location": "Printed p. 17 / PDF p. 18, paragraph 58 introduction",
+        "observed_at": null,
+        "claim": "This instance sat within 17 tested transactions worth $217,175.",
+        "kind": "primary_source",
+        "limitations": [
+          "sample scope",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "U-03",
+        "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+        "location": "Printed p. 16 / PDF p. 17, paragraph 57(g)",
+        "observed_at": null,
+        "claim": "Under a two-envelope system, technical evaluation should be completed and signed before financial evaluation.",
+        "kind": "primary_source",
+        "limitations": [
+          "rule as cited by auditor",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "U-04",
+        "source_ref": "https://www.unfpa.org/sites/default/files/audit-reports/2024-09-30_Audit_of_the_UNFPA_CO_in_Morocco_FINAL.pdf",
+        "location": "Printed pp. 17–18 / PDF pp. 18–19, recommendation 8 and action plan",
+        "observed_at": null,
+        "claim": "Management agreed to recommendation 8; its plan included training and document review, targeting January 2025.",
+        "kind": "primary_source",
+        "limitations": [
+          "management response",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "O-01",
+        "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+        "location": "O1, printed p. 10 / PDF p. 13, paragraph 45(c)",
+        "observed_at": null,
+        "claim": "Among 16 completed-2023 projects worth $23 million, 5/7 high-risk and 9/9 high-value medium-risk projects had at least one pending monitoring activity.",
+        "kind": "primary_source",
+        "limitations": [
+          "audit finding",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+          "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+        ]
+      },
+      {
+        "id": "O-02",
+        "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+        "location": "Same paragraph",
+        "observed_at": null,
+        "claim": "Monitoring was scheduled according to the Fund's operational modalities.",
+        "kind": "primary_source",
+        "limitations": [
+          "obligation",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+          "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+        ]
+      },
+      {
+        "id": "O-03",
+        "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+        "location": "Same paragraph",
+        "observed_at": null,
+        "claim": "OCHA cited logistical and staffing constraints.",
+        "kind": "primary_source",
+        "limitations": [
+          "management explanation",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+          "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+        ]
+      },
+      {
+        "id": "O-04",
+        "source_ref": "https://oios.un.org/system/files/confidential-files/Reports/2024_052_pd.pdf",
+        "location": "O1, executive summary, PDF p. 2",
+        "observed_at": null,
+        "claim": "OCHA accepted the report's recommendations.",
+        "kind": "primary_source",
+        "limitations": [
+          "management response",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+          "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+        ]
+      },
+      {
+        "id": "O-05",
+        "source_ref": "https://oios.un.org/sites/oios.un.org/files/Reports/rec_implementation_rate_iad_202602.pdf",
+        "location": "O2 below, printed/PDF p. 7, row 2024/052",
+        "observed_at": null,
+        "claim": "A later OIOS table records five of six important recommendations implemented.",
+        "kind": "primary_source",
+        "limitations": [
+          "later aggregate status",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply.",
+          "Independent OCHA live retrieval unavailable; reviewed historical snapshot only."
+        ]
+      },
+      {
+        "id": "C-01",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+        "location": "Printed pp. 9–10 / PDF pp. 14–15, Finding 1",
+        "observed_at": null,
+        "claim": "The auditor questioned $53,983.41 of direct costs for insufficient support permitting reconciliation.",
+        "kind": "primary_source",
+        "limitations": [
+          "audit finding",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "C-02",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+        "location": "Printed p. 9 / PDF p. 14, expense table",
+        "observed_at": null,
+        "claim": "A $10,969.49 contractual/procurement item lacked an identifiable conversion rate for reconciliation.",
+        "kind": "primary_source",
+        "limitations": [
+          "concrete mechanism",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "C-03",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+        "location": "Printed p. 11 / PDF p. 16, Chemonics' response",
+        "observed_at": null,
+        "claim": "Chemonics said it supplied support, disputed the described system transition, and explained that D365 and ABACUS operated concurrently.",
+        "kind": "primary_source",
+        "limitations": [
+          "disputed explanation",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "C-04",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+        "location": "Printed pp. 11–12 / PDF pp. 16–17",
+        "observed_at": null,
+        "claim": "The auditor maintained the reconciliation finding after that response.",
+        "kind": "primary_source",
+        "limitations": [
+          "auditor's response",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "C-05",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2025-03/3-000-25-003-U.pdf",
+        "location": "Printed p. 12 / PDF p. 17; OIG memorandum recommendation 1, PDF p. 4",
+        "observed_at": null,
+        "claim": "The conclusion reported no overbilling or underbilling; questioned costs are not established loss or recovery.",
+        "kind": "primary_source",
+        "limitations": [
+          "material qualification",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "D-01",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2018-06/5-497-15-002-p.pdf",
+        "location": "D1, printed p. 8 / PDF p. 11, training-results section",
+        "observed_at": null,
+        "claim": "DAI staff were counted as training participants; monitoring staff had not verified entered data against source records.",
+        "kind": "primary_source",
+        "limitations": [
+          "audit finding",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "D-02",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2018-06/5-497-15-002-p.pdf",
+        "location": "Same section; printed p. 9 / PDF p. 12",
+        "observed_at": null,
+        "claim": "The audit cites USAID data-quality standards, including validity.",
+        "kind": "primary_source",
+        "limitations": [
+          "obligation",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "D-03",
+        "source_ref": "https://oig.usaid.gov/sites/default/files/2018-06/5-497-15-002-p.pdf",
+        "location": "D1, printed p. 11 / PDF p. 14, recommendation 4; management details pp. 17–18 / PDF pp. 20–21",
+        "observed_at": null,
+        "claim": "USAID's evaluation records a revised annual result reducing the count by 3,894 after a separate sample review.",
+        "kind": "primary_source",
+        "limitations": [
+          "corrective response",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      },
+      {
+        "id": "D-04",
+        "source_ref": "https://oig.usaid.gov/node/623",
+        "location": "D2, recommendations 4–5",
+        "observed_at": null,
+        "claim": "Recommendations 4 and 5 show closure on 1 September 2015.",
+        "kind": "primary_source",
+        "limitations": [
+          "closure",
+          "Historical source; all scope, response and closure qualifications in the reviewed packet apply."
+        ]
+      }
+    ],
+    "missing_evidence": [
+      "Original operational files",
+      "Several later case-specific outcomes",
+      "OCHA independently retrievable live source status"
+    ],
+    "unresolved_exceptions": [
+      "Source limitation and management rebuttal remain adjacent to their claims."
+    ],
+    "limitations": [
+      "Historical cases; no organization-wide current-state or buying-demand inference."
+    ]
+  }
+}

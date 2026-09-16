@@ -1,0 +1,42 @@
+[
+  {
+    "id": "LOOP-01",
+    "name": "Existing shortlist watch",
+    "owner": "Scout",
+    "trigger": "Weekly or new official source",
+    "state": "Existing Funding Watch \u00b7 bounded internal scope",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-02",
+    "name": "Case \u2192 review \u2192 content",
+    "owner": "Investigator / Auditor / Editor",
+    "trigger": "Manual accepted-source handoff",
+    "state": "Existing Editorial Desk \u00b7 eligible queued work",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-03",
+    "name": "Discovery \u2192 product evidence",
+    "owner": "Listener / Product Steward",
+    "trigger": "Authorized actual conversation",
+    "state": "Existing Customer Learning Review \u00b7 actual inputs required",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-04",
+    "name": "Memory promotion",
+    "owner": "Librarian / Supervisor",
+    "trigger": "Reviewed proposal and exact approval",
+    "state": "Prepared \u00b7 manual review",
+    "evidence": "data/memory-proposals.json"
+  },
+  {
+    "id": "LOOP-05",
+    "name": "CI and production smoke",
+    "owner": "Existing repository operations",
+    "trigger": "Repository workflow definitions",
+    "state": "Saved result dates shown in runtime snapshot; each result has its own scope",
+    "evidence": "RUNTIME_HANDOFF.md"
+  }
+]

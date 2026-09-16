@@ -1,0 +1,66 @@
+{
+  "job_id": "HQ-G01",
+  "mandate_id": "build",
+  "artifact_id": "HQ-G01-OUTPUT",
+  "version": 1,
+  "classification": "internal",
+  "produced_at": "2026-09-14T21:04:29.035064+00:00",
+  "sources": [
+    {
+      "id": "HQ-G01-artifact",
+      "source_ref": "HQ_DASHBOARD_SPEC.md",
+      "location": null,
+      "observed_at": "2026-09-14T16:01:37.524940+00:00",
+      "claim": "The artifact exists and is submitted for review.",
+      "kind": "artifact",
+      "limitations": [
+        "Submission is not acceptance or authority for external use."
+      ]
+    },
+    {
+      "id": "HQ-G01-review",
+      "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "location": "Disposition and coverage",
+      "observed_at": "2026-09-14T21:04:29.035064+00:00",
+      "claim": "Independent review permits internal acceptance within its stated scope.",
+      "kind": "artifact",
+      "limitations": [
+        "No consequential external action authorized."
+      ]
+    }
+  ],
+  "assumptions": [
+    "Acceptance is limited to the internal scope recorded in the review."
+  ],
+  "known_gaps": [
+    "Original Operating Room/customer evidence unavailable.",
+    "No consequential external action authorized."
+  ],
+  "review_status": "accepted",
+  "next_owner": "Supervisor",
+  "payload": {
+    "base_revision": "0130366",
+    "branch": "codex/trace-li-hq",
+    "files": [
+      "app/hq/page.tsx",
+      "app/hq/hq.module.css",
+      "docs/hq/"
+    ],
+    "behavior": "Development-only read-only HQ with fictional Trace; no execution endpoint.",
+    "checks": [
+      "pnpm typecheck passed",
+      "pnpm build passed",
+      "Desktop/mobile browser checks passed",
+      "Production HQ/document requests return 404",
+      "JSON Schema validation passed"
+    ],
+    "limitations": [
+      "No HQ authentication, job runner, live sharing or customer-data import."
+    ],
+    "preview_or_pr": "http://127.0.0.1:3014/hq",
+    "rollback": "Remove this branch’s new app/hq and docs/hq files; no database or production state changed.",
+    "outstanding_approvals": [
+      "Any production enablement or consequential external action."
+    ]
+  }
+}

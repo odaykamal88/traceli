@@ -1,0 +1,2078 @@
+[
+  {
+    "id": "HQ-A01",
+    "version": 1,
+    "workstream": "A",
+    "objective": "Define the atomic Trace and a sanitized sharing test",
+    "owner": "product",
+    "persona": "Product Steward",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-A01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/product.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Read redacted evidence and approved roadmap",
+      "Inspect product locally",
+      "Write specs and priority proposals"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/product",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/product/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/specs/TRACE_AND_SHARING.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Experiment/spec: evidence IDs, user task, hypothesis, smallest test, measure, disconfirmation, scope, acceptance, dependencies, approval level"
+    },
+    "acceptance_criteria": [
+      "Explicit conclusion, rule, approvals, evidence, gaps, exceptions and provenance",
+      "Recipient access/expiry/redaction/log requirements distinguish prototype from implementation",
+      "Preserve discovery and define observable sharing test"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-A01-artifact",
+        "source_ref": "specs/TRACE_AND_SHARING.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-A01-review",
+        "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/specs/TRACE_AND_SHARING.md",
+        "docs/hq/schemas/trace.schema.json",
+        "docs/hq/data/sample-trace.json"
+      ],
+      "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-A02",
+    "version": 1,
+    "workstream": "A",
+    "objective": "Build a fictional recipient Trace for discovery",
+    "owner": "build",
+    "persona": "Builder",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-A02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/build.md",
+      "Oday current HQ brief",
+      "HQ-A01"
+    ],
+    "allowed_tools": [
+      "Local code read/edit",
+      "Local tests and browser preview",
+      "Branches and local patches",
+      "Draft PR or protected preview only with approved target and no sensitive data"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/build",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/build/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/sanitized-trace",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Change packet: branch/base revision, files, behavior, tests, limitations, preview/PR reference, rollback, outstanding approvals"
+    },
+    "acceptance_criteria": [
+      "Fictional label remains on view/export",
+      "Each conclusion opens its exact supporting evidence or displays unknown",
+      "CTA and missing-evidence interaction can be tested locally"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 60,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "ready",
+    "dependencies": [
+      "HQ-A01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "A fictional read-only walkthrough exists within HQ. Finish the experiment-ready artifact and export check before marking this job accepted.",
+      "artifact_refs": [
+        "app/hq/page.tsx",
+        "docs/hq/data/sample-trace.json"
+      ],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-A01": "accepted"
+    }
+  },
+  {
+    "id": "HQ-A03",
+    "version": 1,
+    "workstream": "A",
+    "objective": "Run the sharing question during an authorized existing discovery conversation",
+    "owner": "customer-evidence",
+    "persona": "Listener",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-A03-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/customer-evidence.md",
+      "Oday current HQ brief",
+      "HQ-A02",
+      "HQ-F01"
+    ],
+    "allowed_tools": [
+      "Read only specifically authorized records",
+      "Extract evidence locally within data policy",
+      "Write restricted draft records and redacted proposals"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/customer-evidence",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/customer-evidence/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/sharing-observation",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Discovery record: recent task, steps, hours, workaround, consequence, owner, deadline, buying route, willingness to pay, verbatim support, unknowns, next step/date"
+    },
+    "acceptance_criteria": [
+      "Record recipient role, reason, redaction objection and next action",
+      "Separate stated intent from observed forwarding",
+      "Conversation access and contact explicitly authorized"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Red",
+      "state": "pending",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "blocked",
+    "dependencies": [
+      "HQ-A02",
+      "HQ-F01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": null,
+      "artifact_refs": [],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": "Original Operating Room/customer evidence and explicit data/action scope are unavailable.",
+    "dependency_requirements": {
+      "HQ-A02": "accepted",
+      "HQ-F01": "accepted"
+    }
+  },
+  {
+    "id": "HQ-B01",
+    "version": 1,
+    "workstream": "B",
+    "objective": "Draft the canonical How Trace-li works explainer",
+    "owner": "distribution",
+    "persona": "Editor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-B01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/distribution.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Read verified case packets",
+      "Draft local Markdown/HTML and approved design assets",
+      "Read explicitly supplied content-performance records"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/distribution",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/distribution/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/HOW_TRACE_LI_WORKS.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Content packet: audience, hook, broken chain, reconstruction, consequence, useful takeaway, CTA, claim IDs, limitations, review state"
+    },
+    "acceptance_criteria": [
+      "Use exact core message and ERP boundary",
+      "Distinguish current prototype from intended capability",
+      "No invented customer or compliance outcomes"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-B01-artifact",
+        "source_ref": "artifacts/HOW_TRACE_LI_WORKS.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-B01-review",
+        "source_ref": "docs/hq/reviews/explainer-review.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/artifacts/HOW_TRACE_LI_WORKS.md"
+      ],
+      "review_ref": "docs/hq/reviews/explainer-review.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-B02",
+    "version": 1,
+    "workstream": "B",
+    "objective": "Review the canonical explainer against product truth",
+    "owner": "risk",
+    "persona": "Auditor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-B02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/risk.md",
+      "Oday current HQ brief",
+      "HQ-B01"
+    ],
+    "allowed_tools": [
+      "Read assigned evidence and code",
+      "Independent public-source verification",
+      "Local non-destructive checks",
+      "Write review findings"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/risk",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/risk/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/reviews/explainer-review.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Review: artifact/version, criteria, evidence inspected, severity, pass/revise/reject, blocking findings, retest conditions"
+    },
+    "acceptance_criteria": [
+      "All capability claims have scope and evidence",
+      "Reject unsupported claims",
+      "Return pass/revise/reject with actionable findings"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [
+      "HQ-B01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-B02-review",
+        "source_ref": "docs/hq/reviews/explainer-review.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/reviews/explainer-review.md"
+      ],
+      "review_ref": "docs/hq/reviews/explainer-review.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-B01": "submitted"
+    }
+  },
+  {
+    "id": "HQ-C01",
+    "version": 1,
+    "workstream": "C",
+    "objective": "Prepare a public-case editorial playbook and first sequence",
+    "owner": "distribution",
+    "persona": "Editor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-C01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/distribution.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Read verified case packets",
+      "Draft local Markdown/HTML and approved design assets",
+      "Read explicitly supplied content-performance records"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/distribution",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/distribution/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/CONTENT_PLAYBOOK.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Content packet: audience, hook, broken chain, reconstruction, consequence, useful takeaway, CTA, claim IDs, limitations, review state"
+    },
+    "acceptance_criteria": [
+      "Evidence-chain story leads; no AI-first marketing",
+      "Define public case \u2192 Trace \u2192 buyer recognition \u2192 private Trace \u2192 sharing",
+      "Use claim IDs and explicit publication gate"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-C01-artifact",
+        "source_ref": "artifacts/CONTENT_PLAYBOOK.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-C01-review",
+        "source_ref": "docs/hq/reviews/explainer-review.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/artifacts/CONTENT_PLAYBOOK.md"
+      ],
+      "review_ref": "docs/hq/reviews/explainer-review.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-C02",
+    "version": 1,
+    "workstream": "C",
+    "objective": "Prepare the first publishable case packet after review",
+    "owner": "distribution",
+    "persona": "Editor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-C02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/distribution.md",
+      "Oday current HQ brief",
+      "HQ-D02",
+      "HQ-C01"
+    ],
+    "allowed_tools": [
+      "Read verified case packets",
+      "Draft local Markdown/HTML and approved design assets",
+      "Read explicitly supplied content-performance records"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/distribution",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/distribution/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/first-content-packet",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Content packet: audience, hook, broken chain, reconstruction, consequence, useful takeaway, CTA, claim IDs, limitations, review state"
+    },
+    "acceptance_criteria": [
+      "All material claims link to reviewed case facts",
+      "Include audience, CTA and exact publication draft",
+      "Keep state unsent and unpublished"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "ready",
+    "dependencies": [
+      "HQ-D02",
+      "HQ-C01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": null,
+      "artifact_refs": [],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-D02": "accepted",
+      "HQ-C01": "accepted"
+    }
+  },
+  {
+    "id": "HQ-D01",
+    "version": 1,
+    "workstream": "D",
+    "objective": "Research four distinct public evidence-chain cases for UNFPA, OCHA, Chemonics and DAI",
+    "owner": "evidence-lab",
+    "persona": "Investigator",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-D01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/evidence-lab.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Public web/PDF read",
+      "Local extraction of authorized documents",
+      "Write assigned case drafts",
+      "Read approved company memory"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/evidence-lab",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/evidence-lab/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/research/ACCOUNT_EVIDENCE.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Trace packet: conclusion, obligation, chronology, approvals, evidence links, missing evidence, exceptions, provenance and limitations"
+    },
+    "acceptance_criteria": [
+      "One inspected primary-source candidate per account or explicit blocker",
+      "Distinct failure mechanisms are evidence-led, not imposed",
+      "Exact sources, locations, dates, qualifications and management response when available",
+      "No unsupported allegations; all pieces internal drafts"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 60,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-D01-artifact",
+        "source_ref": "research/ACCOUNT_EVIDENCE.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-D01-review",
+        "source_ref": "docs/hq/reviews/accounts-review.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal historical-source drafting; OCHA live public access/status remains unverified.",
+      "artifact_refs": [
+        "docs/hq/research/ACCOUNT_EVIDENCE.md"
+      ],
+      "review_ref": "docs/hq/reviews/accounts-review.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-D02",
+    "version": 1,
+    "workstream": "D",
+    "objective": "Independently review four account evidence packets",
+    "owner": "risk",
+    "persona": "Auditor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-D02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/risk.md",
+      "Oday current HQ brief",
+      "HQ-D01"
+    ],
+    "allowed_tools": [
+      "Read assigned evidence and code",
+      "Independent public-source verification",
+      "Local non-destructive checks",
+      "Write review findings"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/risk",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/risk/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/reviews/accounts-review.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Review: artifact/version, criteria, evidence inspected, severity, pass/revise/reject, blocking findings, retest conditions"
+    },
+    "acceptance_criteria": [
+      "Reopen every material source and check claim/location",
+      "Check entity/program/time-window attribution",
+      "Pass each account separately or block with precise fixes"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [
+      "HQ-D01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "D02-review",
+        "source_ref": "docs/hq/reviews/accounts-review.md",
+        "location": null,
+        "observed_at": "2026-09-14T20:55:51.388233+00:00",
+        "claim": "Independent source-location review covers all 18 material claims.",
+        "kind": "artifact",
+        "limitations": [
+          "OCHA checked against saved historical snapshots, not independent live retrieval.",
+          "No external action authorized."
+        ]
+      },
+      {
+        "id": "HQ-D02-review",
+        "source_ref": "docs/hq/reviews/accounts-review.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal historical-source drafting; OCHA live public access/status remains unverified.",
+      "artifact_refs": [
+        "docs/hq/reviews/accounts-review.md"
+      ],
+      "review_ref": "docs/hq/reviews/accounts-review.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-D01": "submitted"
+    }
+  },
+  {
+    "id": "HQ-D03",
+    "version": 1,
+    "workstream": "D",
+    "objective": "Write four respectful account-specific content pieces from accepted evidence",
+    "owner": "distribution",
+    "persona": "Editor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-D03-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/distribution.md",
+      "Oday current HQ brief",
+      "HQ-D02"
+    ],
+    "allowed_tools": [
+      "Read verified case packets",
+      "Draft local Markdown/HTML and approved design assets",
+      "Read explicitly supplied content-performance records"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/distribution",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/distribution/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/ACCOUNT_PIECES.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Content packet: audience, hook, broken chain, reconstruction, consequence, useful takeaway, CTA, claim IDs, limitations, review state"
+    },
+    "acceptance_criteria": [
+      "Separate UNFPA, OCHA, Chemonics and DAI pieces",
+      "Different evidence-chain lesson per piece when supported",
+      "Claim map, caveats, useful takeaway and private Trace CTA",
+      "Oday publication approval still required"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [
+      "HQ-D02"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-D03-review",
+        "source_ref": "docs/hq/reviews/account-copy-review.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal historical-source drafting; OCHA live public access/status remains unverified.",
+      "artifact_refs": [
+        "docs/hq/artifacts/ACCOUNT_PIECES.md"
+      ],
+      "review_ref": "docs/hq/reviews/account-copy-review.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-D02": "accepted"
+    }
+  },
+  {
+    "id": "HQ-E01",
+    "version": 1,
+    "workstream": "E",
+    "objective": "Adjust development sequencing around the Trace and discovery",
+    "owner": "product",
+    "persona": "Product Steward",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-E01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/product.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Read redacted evidence and approved roadmap",
+      "Inspect product locally",
+      "Write specs and priority proposals"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/product",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/product/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/specs/DEVELOPMENT_SEQUENCE.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Experiment/spec: evidence IDs, user task, hypothesis, smallest test, measure, disconfirmation, scope, acceptance, dependencies, approval level"
+    },
+    "acceptance_criteria": [
+      "Trace model \u2192 beautiful artifact \u2192 recipient view \u2192 secure sharing \u2192 evidence workflow \u2192 new Trace \u2192 export \u2192 integrations",
+      "Reconcile existing implementation plan explicitly",
+      "Protect existing dated discovery commitments"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-E01-artifact",
+        "source_ref": "specs/DEVELOPMENT_SEQUENCE.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-E01-review",
+        "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/specs/DEVELOPMENT_SEQUENCE.md"
+      ],
+      "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-E02",
+    "version": 1,
+    "workstream": "E",
+    "objective": "Implement accepted thin slice after sharing feedback",
+    "owner": "build",
+    "persona": "Builder",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-E02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/build.md",
+      "Oday current HQ brief",
+      "HQ-A03",
+      "HQ-E01"
+    ],
+    "allowed_tools": [
+      "Local code read/edit",
+      "Local tests and browser preview",
+      "Branches and local patches",
+      "Draft PR or protected preview only with approved target and no sensitive data"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/build",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/build/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/product-change-packet",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Change packet: branch/base revision, files, behavior, tests, limitations, preview/PR reference, rollback, outstanding approvals"
+    },
+    "acceptance_criteria": [
+      "Use existing repository and approved evidence-based scope",
+      "Tests cover access boundaries before real sharing",
+      "Production deployment remains Red"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 60,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "blocked",
+    "dependencies": [
+      "HQ-A03",
+      "HQ-E01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": null,
+      "artifact_refs": [],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": "Dependencies are not accepted.",
+    "dependency_requirements": {
+      "HQ-A03": "accepted",
+      "HQ-E01": "accepted"
+    }
+  },
+  {
+    "id": "HQ-F01",
+    "version": 1,
+    "workstream": "F",
+    "objective": "Reconcile the existing customer-development Operating Room",
+    "owner": "customer-evidence",
+    "persona": "Listener",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-F01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/customer-evidence.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Read only specifically authorized records",
+      "Extract evidence locally within data policy",
+      "Write restricted draft records and redacted proposals"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/customer-evidence",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/customer-evidence/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/OPERATING_ROOM_IMPORT.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Discovery record: recent task, steps, hours, workaround, consequence, owner, deadline, buying route, willingness to pay, verbatim support, unknowns, next step/date"
+    },
+    "acceptance_criteria": [
+      "Import existing IDs with source timestamps and no duplicate events",
+      "Separate actual sends/replies/conversations from unknowns",
+      "Every active commercial next step has owner, date and observable done",
+      "Do not import customer records without scope authorization"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Red",
+      "state": "pending",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "blocked",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": null,
+      "artifact_refs": [],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": "Original Operating Room found and connected on 15 September. Actual send/reply history is still required for Week 4 baseline task #29 after Oday history task #28; counts and receipt metadata do not supply that evidence.",
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-F02",
+    "version": 1,
+    "workstream": "F",
+    "objective": "Prepare the next evidenced commercial action for each active opportunity",
+    "owner": "customer-evidence",
+    "persona": "Listener",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-F02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/customer-evidence.md",
+      "Oday current HQ brief",
+      "HQ-F01"
+    ],
+    "allowed_tools": [
+      "Read only specifically authorized records",
+      "Extract evidence locally within data policy",
+      "Write restricted draft records and redacted proposals"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/customer-evidence",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/customer-evidence/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/commercial-next-steps",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Discovery record: recent task, steps, hours, workaround, consequence, owner, deadline, buying route, willingness to pay, verbatim support, unknowns, next step/date"
+    },
+    "acceptance_criteria": [
+      "Use only actual records",
+      "Unknown or silence is not validation",
+      "Exact action/recipient/date and supporting evidence for Oday approval"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Red",
+      "state": "pending",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "blocked",
+    "dependencies": [
+      "HQ-F01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": null,
+      "artifact_refs": [],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": "Original Operating Room/customer evidence and explicit data/action scope are unavailable.",
+    "dependency_requirements": {
+      "HQ-F01": "accepted"
+    }
+  },
+  {
+    "id": "HQ-G01",
+    "version": 1,
+    "workstream": "G",
+    "objective": "Create HQ control-plane shell in existing application",
+    "owner": "build",
+    "persona": "Builder",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-G01-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/build.md",
+      "Oday current HQ brief",
+      "HQ-G02"
+    ],
+    "allowed_tools": [
+      "Local code read/edit",
+      "Local tests and browser preview",
+      "Branches and local patches",
+      "Draft PR or protected preview only with approved target and no sensitive data"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/build",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/build/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "app/hq",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Change packet: branch/base revision, files, behavior, tests, limitations, preview/PR reference, rollback, outstanding approvals"
+    },
+    "acceptance_criteria": [
+      "Eight charter drilldowns and seven separate queues",
+      "Jobs, approvals, decisions, memory proposals, feed and Supervisor brief",
+      "No live execution or approval mutation; development-only access",
+      "Typecheck, build and desktop/mobile checks"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 60,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [
+      "HQ-G02"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-G01-artifact",
+        "source_ref": "HQ_DASHBOARD_SPEC.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-G01-review",
+        "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "app/hq/page.tsx",
+        "app/hq/hq.module.css",
+        "docs/hq/VERIFICATION.md"
+      ],
+      "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-G02": "submitted"
+    }
+  },
+  {
+    "id": "HQ-G02",
+    "version": 1,
+    "workstream": "G",
+    "objective": "Write constitution, charters and canonical operating contracts",
+    "owner": "institutional-memory",
+    "persona": "Librarian",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-G02-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/institutional-memory.md",
+      "Oday current HQ brief"
+    ],
+    "allowed_tools": [
+      "Read approved scoped memory",
+      "Write proposals and curated draft diffs",
+      "Apply an exact Supervisor-approved canonical change in the permitted scope"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/institutional-memory",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/institutional-memory/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Promotion packet: proposed diff, evidence, conflict check, scope, classification, retention, reviewer, decision reference"
+    },
+    "acceptance_criteria": [
+      "Eight explicit charters before dispatch",
+      "Decision ledger separates user decisions from proposals",
+      "Memory promotion requires Librarian/Supervisor review"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-G02-artifact",
+        "source_ref": "CHARTERS.md",
+        "location": null,
+        "observed_at": "2026-09-14T16:01:37.524940+00:00",
+        "claim": "The artifact exists and is submitted for review.",
+        "kind": "artifact",
+        "limitations": [
+          "Submission is not acceptance or authority for external use."
+        ]
+      },
+      {
+        "id": "HQ-G02-review",
+        "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/AGENT_CONSTITUTION.md",
+        "docs/hq/CHARTERS.md",
+        "docs/hq/JOB_CONTRACT.md",
+        "docs/hq/DECISION_LEDGER.md"
+      ],
+      "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {}
+  },
+  {
+    "id": "HQ-G03",
+    "version": 1,
+    "workstream": "G",
+    "objective": "Review HQ package, authority boundaries and implementation",
+    "owner": "risk",
+    "persona": "Auditor",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-G03-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/risk.md",
+      "Oday current HQ brief",
+      "HQ-G01"
+    ],
+    "allowed_tools": [
+      "Read assigned evidence and code",
+      "Independent public-source verification",
+      "Local non-destructive checks",
+      "Write review findings"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/risk",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/risk/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/reviews/HQ_REVIEW.md",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Review: artifact/version, criteria, evidence inspected, severity, pass/revise/reject, blocking findings, retest conditions"
+    },
+    "acceptance_criteria": [
+      "No unauthorized runner, sends or production changes",
+      "No exposed private records or fake running metrics",
+      "Schemas, records and job lifecycle agree",
+      "Find material gaps and required next steps"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 45,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "accepted",
+    "dependencies": [
+      "HQ-G01"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [
+      {
+        "id": "HQ-G03-review",
+        "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+        "location": "Disposition and coverage",
+        "observed_at": "2026-09-14T21:04:29.035064+00:00",
+        "claim": "Independent review permits internal acceptance within its stated scope.",
+        "kind": "artifact",
+        "limitations": [
+          "No consequential external action authorized."
+        ]
+      }
+    ],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": "Accepted for internal review use. This does not authorize publication, production or customer-data processing.",
+      "artifact_refs": [
+        "docs/hq/reviews/HQ_REVIEW.md"
+      ],
+      "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "accepted_by": "Supervisor",
+      "accepted_at": "2026-09-14T21:04:29.035064+00:00"
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": null,
+    "dependency_requirements": {
+      "HQ-G01": "submitted"
+    }
+  },
+  {
+    "id": "HQ-G04",
+    "version": 1,
+    "workstream": "G",
+    "objective": "Add durable authenticated HQ state only when manual use warrants it",
+    "owner": "build",
+    "persona": "Builder",
+    "charter_version": "1.0",
+    "trigger": {
+      "type": "manual",
+      "reference": "Oday HQ brief 2026-09-14",
+      "dedupe_key": "HQ-G04-v1"
+    },
+    "inputs_context": [
+      "AGENT_CONSTITUTION.md",
+      "charters/build.md",
+      "Oday current HQ brief",
+      "HQ-G03"
+    ],
+    "allowed_tools": [
+      "Local code read/edit",
+      "Local tests and browser preview",
+      "Branches and local patches",
+      "Draft PR or protected preview only with approved target and no sensitive data"
+    ],
+    "allowed_memory": {
+      "read": [
+        "memory/company/approved",
+        "memory/mandates/build",
+        "assigned case scope only"
+      ],
+      "write": [
+        "assigned output path",
+        "memory/mandates/build/drafts",
+        "memory/proposals"
+      ]
+    },
+    "expected_output": {
+      "path": "docs/hq/artifacts/durable-hq-spec",
+      "schema_ref": "schemas/output.schema.json",
+      "description": "Change packet: branch/base revision, files, behavior, tests, limitations, preview/PR reference, rollback, outstanding approvals"
+    },
+    "acceptance_criteria": [
+      "Reuse selected app identity and storage",
+      "Server-enforced actor/role, approval hashes and append-only events",
+      "Cost, lease, dedupe, retry and stop controls tested before timers"
+    ],
+    "deadline_sla": {
+      "due_at": null,
+      "starts_on": "dispatch after dependencies and authority are satisfied",
+      "active_minutes": 60,
+      "review_within_hours": 24
+    },
+    "approval": {
+      "level": "Green",
+      "state": "not_required",
+      "actor": null,
+      "record_ref": null,
+      "artifact_hash": null,
+      "expires_at": null
+    },
+    "status": "blocked",
+    "dependencies": [
+      "HQ-G03"
+    ],
+    "reviewer": "Supervisor + independent Auditor for material claims/security",
+    "evidence": [],
+    "cost": {
+      "currency": "USD",
+      "new_spend_limit": 0,
+      "actual": null,
+      "tokens": null,
+      "measurement": "Session allocation; runtime has not exposed job-level usage."
+    },
+    "limits": {
+      "max_tool_calls": 30,
+      "max_revisions": 2
+    },
+    "result": {
+      "summary": null,
+      "artifact_refs": [],
+      "review_ref": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    "handoff": {
+      "to": [
+        "risk",
+        "Supervisor"
+      ],
+      "when": "artifact ready for review; never external execution",
+      "payload": [
+        "artifact/version",
+        "source or test evidence",
+        "limitations",
+        "next action"
+      ]
+    },
+    "blocker": "Storage portion implemented and locally tested in Operating Room task #45. Authenticated HQ membership, server capability binding and worker/approval integration remain required before full G04 acceptance.",
+    "dependency_requirements": {
+      "HQ-G03": "accepted"
+    }
+  }
+]

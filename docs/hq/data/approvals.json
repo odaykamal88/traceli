@@ -1,0 +1,35 @@
+[
+  {
+    "id": "APR-001",
+    "level": "Red",
+    "status": "not_ready",
+    "action": "Import private buyer history for customer learning",
+    "owner": "Oday",
+    "job": "HQ-F01",
+    "reason": "Operating Room status is connected. The exact send/reply history, permitted handling and original evidence are still needed for buyer metrics.",
+    "artifact_ref": null,
+    "executable": false
+  },
+  {
+    "id": "APR-002",
+    "level": "Red",
+    "status": "not_ready",
+    "action": "Publish or send account content",
+    "owner": "Oday",
+    "job": "HQ-D03",
+    "reason": "Requires reviewed exact text, audience/channel, timing and version.",
+    "artifact_ref": null,
+    "executable": false
+  },
+  {
+    "id": "APR-003",
+    "level": "Red",
+    "status": "not_ready",
+    "action": "Deploy HQ or product changes to production",
+    "owner": "Oday",
+    "job": "HQ-G04",
+    "reason": "Requires authenticated state, verified checks and a concrete release/rollback packet.",
+    "artifact_ref": null,
+    "executable": false
+  }
+]

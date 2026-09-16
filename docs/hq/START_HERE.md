@@ -1,0 +1,49 @@
+# Trace-li HQ operating package
+
+Updated 15 September 2026. Eight mandate charters and all seven A–G workstreams are written and visible. Eleven bootstrap jobs have accepted internal outputs. The six existing desktop schedules now read the HQ handoff and current charters; the original Operating Room remains the authority for its tasks, reviews and receipts.
+
+[Open local HQ](http://127.0.0.1:3014/hq) · [Current Supervisor handover](SUPERVISOR_BRIEF.md) · [Runtime and A–G mapping](RUNTIME_HANDOFF.md)
+
+## Current delivery state
+
+**16 September access increment:** the Vercel connection blocker is resolved through the authenticated CLI. An owner-only WorkOS gate and dedicated staging identity are prepared for the private preview. [Cloud access setup](CLOUD_ACCESS_SETUP.md) and [access verification](reviews/access-verification.md) record the exact boundary. Actual owner sign-in and a cloud worker remain separate acceptance gates.
+
+- **Operating package:** constitution, charters, queues, schemas, decisions, memory policy and first reviewed artifacts are prepared.
+- **Existing desks:** connected without new timers or widened permissions. A schedule being enabled is different from a recorded run or an accepted result; HQ displays saved evidence and its age.
+- **Postgres:** scoped jobs, runs, decisions and reviewed memory promotion are implemented and tested locally. [Foundation](POSTGRES_FOUNDATION.md) and [verification](reviews/postgres-verification.md) describe exact scope and remaining gates.
+- **Cloud execution:** not deployed. The HQ page remains a local reader, and desktop schedules require the computer and Codex available. Authenticated HQ membership, worker capabilities, production migration and a single-job cutover remain outstanding.
+- **Customer progress:** room metadata is connected, but sends, replies, completed interviews and commercial dates must come from actual records. Drafts and silence establish none of these outcomes.
+
+## Operating rules and contracts
+
+[Constitution](AGENT_CONSTITUTION.md) · [Eight charters](CHARTERS.md) · [Dashboard specification](HQ_DASHBOARD_SPEC.md) · [Job contract](JOB_CONTRACT.md) · [Decision Ledger](DECISION_LEDGER.md) · [Backlog](IMPLEMENTATION_BACKLOG.md) · [Dispatch packets](SPAWN_PACKETS.md)
+
+Current charters are v1.1. Bootstrap v1.0 bytes are retained under `history/bootstrap-2026-09-14`; these historical documents are not current execution instructions. Canonical memory changes require exact-content review and Librarian promotion.
+
+## All seven conversation threads
+
+| Workstream | Owner and current output | Next evidence |
+|---|---|---|
+| [A · Sharing](queues/A.md) | Product → Builder → Listener; atomic Trace, fixture and recipient test specified | Observe an actual buyer's recipient task |
+| [B · Explainer](queues/B.md) | Editor → Auditor; reviewed ERP-boundary explainer | Select an exact use/asset packet |
+| [C · Organic content](queues/C.md) | Editor; reviewed evidence-led playbook | Test one useful case asset with real readers |
+| [D · Account pieces](queues/D.md) | Investigator → Auditor → Editor; four reviewed internal drafts | Exact external review, including fresh OCHA source check |
+| [E · Development sequence](queues/E.md) | Product → Builder; Trace/sharing before broad integrations | Secure recipient implementation and discovery evidence |
+| [F · Operating Room](queues/F.md) | Listener; existing Week 4 tasks preserved | Actual send/reply/conversation records and dated next step |
+| [G · HQ](queues/G.md) | Builder + Librarian + Auditor; local HQ, connected desks, tested storage | Identity binding and reviewed single-worker cloud cutover |
+
+The queue files retain initial job-registration details; [jobs](data/jobs.json) and [runs](data/runs.json) record bootstrap progress. Current room task #44 tracks the connection and #45 tracks storage; they are not duplicate bootstrap completions. Active workstreams do not imply seven simultaneous workers.
+
+## First artifacts
+
+[How Trace-li works](artifacts/HOW_TRACE_LI_WORKS.md) · [Content playbook](artifacts/CONTENT_PLAYBOOK.md) · [Four account pieces](artifacts/ACCOUNT_PIECES.md) · [Source packet](research/ACCOUNT_EVIDENCE.md) · [Atomic Trace and sharing](specs/TRACE_AND_SHARING.md) · [Development sequence](specs/DEVELOPMENT_SEQUENCE.md)
+
+Reviewed artifact bodies retain their submitted bytes. Separate reviews establish internal acceptance; no named account is represented as a customer or partner. Publication and consequential sends remain subject to Oday's exact approval.
+
+## Implementation handoff
+
+Source is in the existing `traceli` repository on `codex/trace-li-hq`, based on `0130366`. Changes cover `app/hq`, `docs/hq`, new HQ database models/migration/broker, runtime and database tests, and one test script entry in `package.json`. No application dependency was added. Unrelated local changes remain intact.
+
+The supplied patch can be reviewed and applied to a clean checkout of that base, or reconciled with newer work. Use the existing lockfile; run type checking and the production build. The fixture test requires its dedicated local database. Production HQ remains unavailable until internal identity and storage access are integrated and reviewed. Do not apply the production migration as part of merely opening the preview.
+
+[QM runtime assessment](QM_ASSESSMENT.md) · [Latest reference extract](REFERENCE_EXTRACT.md) · [Repository reconciliation](REPOSITORY_RECONCILIATION.md)

@@ -1,4 +1,5 @@
 import { sql } from 'drizzle-orm'
+import * as hqSchema from '@/db/hq-schema'
 import {
   foreignKey,
   index,
@@ -242,6 +243,7 @@ export const outboxEvents = pgTable(
 )
 
 export const schema = {
+  ...hqSchema,
   organizations,
   procurements,
   sourceDocuments,

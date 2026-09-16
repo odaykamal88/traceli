@@ -1,0 +1,869 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mandate_id": {
+      "enum": [
+        "buyer-intelligence",
+        "evidence-lab",
+        "distribution",
+        "customer-evidence",
+        "product",
+        "build",
+        "risk",
+        "institutional-memory"
+      ]
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "classification": {
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ]
+    },
+    "produced_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "location": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "observed_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "requirement",
+              "primary_source",
+              "test",
+              "artifact",
+              "conversation",
+              "send",
+              "reply"
+            ]
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id",
+          "source_ref",
+          "location",
+          "observed_at",
+          "claim",
+          "kind",
+          "limitations"
+        ]
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "known_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "review_status": {
+      "enum": [
+        "draft",
+        "review",
+        "accepted",
+        "rejected"
+      ]
+    },
+    "next_owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "job_id",
+    "mandate_id",
+    "artifact_id",
+    "version",
+    "classification",
+    "produced_at",
+    "sources",
+    "assumptions",
+    "known_gaps",
+    "review_status",
+    "next_owner",
+    "payload"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "buyer-intelligence"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "account": {
+                "type": "string",
+                "minLength": 1
+              },
+              "event_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "source_url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_location": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observed_problem": {
+                "type": "string",
+                "minLength": 1
+              },
+              "affected_role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "consequence": {
+                "type": "string",
+                "minLength": 1
+              },
+              "confidence": {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "next_research_action": {
+                "type": "string",
+                "minLength": 1
+              },
+              "delta": {
+                "enum": [
+                  "new",
+                  "changed",
+                  "unchanged"
+                ]
+              },
+              "duplicate_key": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "account",
+              "event_date",
+              "source_url",
+              "source_location",
+              "observed_problem",
+              "affected_role",
+              "consequence",
+              "confidence",
+              "next_research_action",
+              "delta",
+              "duplicate_key"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "evidence-lab"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "conclusion": {
+                "type": "string",
+                "minLength": 1
+              },
+              "obligations": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "chronology": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "approvals": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "claim_source_map": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "location": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "observed_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "claim": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "kind": {
+                      "enum": [
+                        "requirement",
+                        "primary_source",
+                        "test",
+                        "artifact",
+                        "conversation",
+                        "send",
+                        "reply"
+                      ]
+                    },
+                    "limitations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "source_ref",
+                    "location",
+                    "observed_at",
+                    "claim",
+                    "kind",
+                    "limitations"
+                  ]
+                }
+              },
+              "missing_evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "unresolved_exceptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "limitations": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "conclusion",
+              "obligations",
+              "chronology",
+              "approvals",
+              "claim_source_map",
+              "missing_evidence",
+              "unresolved_exceptions",
+              "limitations"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "distribution"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "audience": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hook": {
+                "type": "string",
+                "minLength": 1
+              },
+              "broken_chain": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reconstruction": {
+                "type": "string",
+                "minLength": 1
+              },
+              "consequence": {
+                "type": "string",
+                "minLength": 1
+              },
+              "takeaway": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cta": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claim_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "limitations": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "external_action": {
+                "const": "not_authorized"
+              }
+            },
+            "required": [
+              "audience",
+              "hook",
+              "broken_chain",
+              "reconstruction",
+              "consequence",
+              "takeaway",
+              "cta",
+              "claim_ids",
+              "limitations",
+              "body",
+              "external_action"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "customer-evidence"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "recent_task": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "steps": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hours": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "workaround": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "consequence": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "owner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "deadline": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "buying_route": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "willingness_to_pay": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "verbatim_support": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "next_step": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "next_step_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "recent_task",
+              "steps",
+              "hours",
+              "workaround",
+              "consequence",
+              "owner",
+              "deadline",
+              "buying_route",
+              "willingness_to_pay",
+              "verbatim_support",
+              "next_step",
+              "next_step_date"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "product"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "user_task": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hypothesis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "smallest_test": {
+                "type": "string",
+                "minLength": 1
+              },
+              "measure": {
+                "type": "string",
+                "minLength": 1
+              },
+              "disconfirmation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "acceptance": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "evidence_ids",
+              "user_task",
+              "hypothesis",
+              "smallest_test",
+              "measure",
+              "disconfirmation",
+              "scope",
+              "acceptance",
+              "dependencies"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "build"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "base_revision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "branch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "files": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "behavior": {
+                "type": "string",
+                "minLength": 1
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "limitations": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "preview_or_pr": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "rollback": {
+                "type": "string",
+                "minLength": 1
+              },
+              "outstanding_approvals": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "base_revision",
+              "branch",
+              "files",
+              "behavior",
+              "checks",
+              "limitations",
+              "preview_or_pr",
+              "rollback",
+              "outstanding_approvals"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "risk"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "artifact_version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "criteria": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "evidence_inspected": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "decision": {
+                "enum": [
+                  "pass",
+                  "revise",
+                  "reject",
+                  "blocked"
+                ]
+              },
+              "severity": {
+                "enum": [
+                  "none",
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ]
+              },
+              "blocking_findings": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "retest_conditions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "coverage_limits": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "artifact_version",
+              "criteria",
+              "evidence_inspected",
+              "decision",
+              "severity",
+              "blocking_findings",
+              "retest_conditions",
+              "coverage_limits"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mandate_id": {
+            "const": "institutional-memory"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "diff_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "conflicts": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "classification": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retention": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reviewer": {
+                "type": "string",
+                "minLength": 1
+              },
+              "decision_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "supersedes": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "diff_ref",
+              "evidence_ids",
+              "conflicts",
+              "scope",
+              "classification",
+              "retention",
+              "reviewer",
+              "decision_ref",
+              "supersedes"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

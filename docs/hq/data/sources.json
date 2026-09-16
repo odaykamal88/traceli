@@ -1,0 +1,36 @@
+[
+  {
+    "id": "source:oday-current-hq-brief",
+    "kind": "user_requirement",
+    "title": "Oday’s current Trace-li HQ request",
+    "locator": "Current thread; full brief provided in chat on 14 September 2026",
+    "authority": "Oday",
+    "status": "provided directly; authoritative requirements",
+    "limitations": [
+      "Full prior conversation unavailable; current brief controls."
+    ]
+  },
+  {
+    "id": "source:referenced-conversation",
+    "kind": "conversation_preview",
+    "title": "Trace li Content Strategy",
+    "locator": "chatgpt-conversation://6aa810ea-0d40-83ea-887b-e616b9467c42",
+    "authority": "context only",
+    "status": "bounded untrusted preview",
+    "limitations": [
+      "No read_thread capability available here.",
+      "Preview infrastructure claims not adopted as verified facts."
+    ]
+  },
+  {
+    "id": "source:local-repository-inspection",
+    "kind": "repository",
+    "title": "Existing Trace-li repository at 0130366",
+    "locator": "REPOSITORY_RECONCILIATION.md",
+    "authority": "observed code and local documents",
+    "status": "inspected after fast-forward to current remote main",
+    "limitations": [
+      "Code/configuration presence does not prove live credentials, deployed state or executed recurring jobs."
+    ]
+  }
+]

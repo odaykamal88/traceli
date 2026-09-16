@@ -1,0 +1,35 @@
+[
+  {
+    "job_id": "HQ-B02",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/reviews/explainer-review.md"
+    ],
+    "review_ref": "docs/hq/reviews/explainer-review.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  },
+  {
+    "job_id": "HQ-D02",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/reviews/accounts-review.md"
+    ],
+    "review_ref": "docs/hq/reviews/accounts-review.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  },
+  {
+    "job_id": "HQ-G03",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/reviews/HQ_REVIEW.md"
+    ],
+    "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  }
+]

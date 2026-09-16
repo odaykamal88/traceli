@@ -1,0 +1,97 @@
+[
+  {
+    "id": "A",
+    "title": "Product sharing / usage = sharing",
+    "owner": "product",
+    "status": "active",
+    "objective": "Test an atomic Trace inside existing discovery.",
+    "handoff": "A01 → A02 → A03. Product scopes; Builder prototypes; Listener records observed feedback; Auditor checks evidence and permissions.",
+    "rules": "Do not build live sharing until the sanitized test has evidence. Secure access is a release gate, not an assumed prototype capability.",
+    "job_ids": [
+      "HQ-A01",
+      "HQ-A02",
+      "HQ-A03"
+    ]
+  },
+  {
+    "id": "B",
+    "title": "How Trace-li works",
+    "owner": "distribution",
+    "status": "active",
+    "objective": "Make the ERP boundary and source-linked value easy to understand.",
+    "handoff": "Editor drafts; Auditor checks product truth; Supervisor accepts canonical internal copy; Oday approves publication.",
+    "rules": "Use the exact core line while labeling intended versus available functionality.",
+    "job_ids": [
+      "HQ-B01",
+      "HQ-B02"
+    ]
+  },
+  {
+    "id": "C",
+    "title": "Organic content loop",
+    "owner": "distribution",
+    "status": "active",
+    "objective": "Expose broken evidence chains through verified public cases.",
+    "handoff": "Investigator → Auditor → Editor → Auditor → Supervisor → Oday external action. Listener receives actual replies.",
+    "rules": "Metrics require observed events; no fabricated reach, replies or conversion.",
+    "job_ids": [
+      "HQ-C01",
+      "HQ-C02"
+    ]
+  },
+  {
+    "id": "D",
+    "title": "Four account-specific pieces",
+    "owner": "evidence-lab",
+    "status": "active",
+    "objective": "UNFPA, OCHA, Chemonics and DAI, each grounded in inspected primary evidence.",
+    "handoff": "D01 research → D02 independent review → D03 four drafts → copy review → Oday publication.",
+    "rules": "Distinct mechanisms only where supported. No source means blocked account, not an invented example.",
+    "job_ids": [
+      "HQ-D01",
+      "HQ-D02",
+      "HQ-D03"
+    ]
+  },
+  {
+    "id": "E",
+    "title": "Development sequence",
+    "owner": "product",
+    "status": "active",
+    "objective": "Trace model, shareable artifact and recipient workflow before broad integrations.",
+    "handoff": "Product reconciles existing plan; Listener supplies discovery evidence; Builder implements accepted narrow scope; Auditor checks.",
+    "rules": "Preserve current customer discovery and existing code; no rewrite of the product.",
+    "job_ids": [
+      "HQ-E01",
+      "HQ-E02"
+    ]
+  },
+  {
+    "id": "F",
+    "title": "Customer-development Operating Room",
+    "owner": "customer-evidence",
+    "status": "active",
+    "objective": "Keep actual commercial progress, evidence and next steps visible.",
+    "handoff": "Oday supplies/authorizes scoped records → Listener reconciles IDs → Supervisor reviews → Product receives redacted evidence.",
+    "rules": "Original records unavailable. Counts are unknown. Do not overwrite or fabricate the earlier Operating Room.",
+    "job_ids": [
+      "HQ-F01",
+      "HQ-F02"
+    ]
+  },
+  {
+    "id": "G",
+    "title": "Trace-li HQ operating system",
+    "owner": "build",
+    "status": "active",
+    "objective": "A visible portfolio of mandates, bounded jobs, review and durable memory contracts.",
+    "handoff": "Librarian writes contracts → Builder adds shell → Auditor challenges → Supervisor accepts local package.",
+    "rules": "Manual execution first. No always-on process, new framework, spend or consequential capability is enabled.",
+    "job_ids": [
+      "HQ-G01",
+      "HQ-G02",
+      "HQ-G03",
+      "HQ-G04"
+    ]
+  }
+]
