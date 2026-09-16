@@ -2,6 +2,8 @@
 
 Updated 16 September 2026. This increment concerns the private dashboard. A hosted dashboard is separate from an unattended worker and its durable job state.
 
+Preview address: [Trace-li HQ preview](https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq). The exact callback is registered in WorkOS; existing callbacks are preserved. The private feature branch `codex/trace-li-hq` is saved on GitHub. Branch-scoped Preview settings are configured for WorkOS mode. Deployment readiness and Oday's real sign-in must be checked before claiming the preview is usable.
+
 ## Confirmed account and project
 
 The signed-in Vercel dashboard and Vercel CLI both identify `traceli-new`, project `prj_wzlYEGTiKm6GRNISciGi7E4NeNb2`, in team `team_ut14teXSaz7Gby0BTOczrhHT`. Its live production domain is `www.trace-li.com`, serving commit `0130366`. The saved local project link is correct. The connector returns 404 for this same project, so use the authenticated CLI for this rollout; do not recreate or relink the website based on that connector result.
@@ -46,6 +48,6 @@ Preserve the existing WorkOS redirect URIs when adding the exact preview callbac
 4. Select one actual workload, then provision its cloud runtime with Oday's confirmed spending limit. Existing desktop schedules continue to need the laptop until their selected job is cut over and its duplicate timer is paused.
 5. Prepare the exact production deployment/migration packet and rollback. Oday retains production authority.
 
-The discussed additional $20/month remains a proposed pilot envelope, not an enacted subscription or a verified bill. No Pro upgrade, paid worker or model API budget is enabled by this preview. AWS memory banks, eight databases and a new agent framework are unnecessary for this increment; keep scoped memory on the existing Postgres foundation.
+The discussed additional $20/month remains a proposed pilot envelope, not an enacted subscription or a verified bill. No Pro upgrade, paid worker or model API budget is enabled by this preview. AWS memory banks, eight databases and a new agent framework are unnecessary for this increment; keep scoped memory on the existing Postgres foundation. Revoke owner access by removing the preview membership/role; disable the preview by setting its branch-specific `TRACELI_HQ_ACCESS=disabled` and redeploying. None of these preview settings are production settings.
 
 [Access verification](reviews/access-verification.md) · [Postgres foundation](POSTGRES_FOUNDATION.md) · [Backlog](IMPLEMENTATION_BACKLOG.md)

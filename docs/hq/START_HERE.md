@@ -11,7 +11,7 @@ Updated 15 September 2026. Eight mandate charters and all seven A–G workstream
 - **Operating package:** constitution, charters, queues, schemas, decisions, memory policy and first reviewed artifacts are prepared.
 - **Existing desks:** connected without new timers or widened permissions. A schedule being enabled is different from a recorded run or an accepted result; HQ displays saved evidence and its age.
 - **Postgres:** scoped jobs, runs, decisions and reviewed memory promotion are implemented and tested locally. [Foundation](POSTGRES_FOUNDATION.md) and [verification](reviews/postgres-verification.md) describe exact scope and remaining gates.
-- **Cloud execution:** not deployed. The HQ page remains a local reader, and desktop schedules require the computer and Codex available. Authenticated HQ membership, worker capabilities, production migration and a single-job cutover remain outstanding.
+- **Cloud execution:** no worker is deployed. A private read-only HQ preview is being configured with dedicated owner membership. Desktop schedules still require the computer and Codex available. Actual hosted sign-in, native storage reads, worker capabilities, production migration and a single-job cutover remain outstanding.
 - **Customer progress:** room metadata is connected, but sends, replies, completed interviews and commercial dates must come from actual records. Drafts and silence establish none of these outcomes.
 
 ## Operating rules and contracts
@@ -44,6 +44,6 @@ Reviewed artifact bodies retain their submitted bytes. Separate reviews establis
 
 Source is in the existing `traceli` repository on `codex/trace-li-hq`, based on `0130366`. Changes cover `app/hq`, `docs/hq`, new HQ database models/migration/broker, runtime and database tests, and one test script entry in `package.json`. No application dependency was added. Unrelated local changes remain intact.
 
-The supplied patch can be reviewed and applied to a clean checkout of that base, or reconciled with newer work. Use the existing lockfile; run type checking and the production build. The fixture test requires its dedicated local database. Production HQ remains unavailable until internal identity and storage access are integrated and reviewed. Do not apply the production migration as part of merely opening the preview.
+The supplied patch can be reviewed and applied to a clean checkout of that base, or reconciled with newer work. The feature branch is now saved in the existing private GitHub repository for preview deployment. Use the existing lockfile; run type checking and the production build. The fixture test requires its dedicated local database. Production HQ remains unavailable until internal identity and storage access are integrated and reviewed. Do not apply the production migration as part of merely opening the preview.
 
 [QM runtime assessment](QM_ASSESSMENT.md) · [Latest reference extract](REFERENCE_EXTRACT.md) · [Repository reconciliation](REPOSITORY_RECONCILIATION.md)
