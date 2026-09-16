@@ -54,3 +54,7 @@ Do not build now: Slack bot, synthetic employees, eight always-on agents, vector
 4. Implement version/hash/target/expiry-bound single-use approvals. Current read-only shell must not gain an “Approve” button before its server behavior exists.
 5. Add adapter for the existing read-only evidence contract only after an actual client identity is bound. It remains no-mutation; source hashes currently establish stored-reference metadata only.
 6. Verify tenant-denial, actor-spoofing, duplicate-dispatch, stale-lease, budget-stop, changed/expired approval and pause/resume checks. Prepare exact staging and production release packets; Oday decides consequential deployment.
+
+## 16 September cloud pilot increment
+
+Private owner login is verified. The fixed readiness-brief worker, restricted database capability functions, immutable artifacts, cost reservations and read-only HQ panel are prepared and locally tested. See the [exact pilot activation packet](CLOUD_WORKER_PILOT.md). Next: disabled Railway trial deployment → approved pre-production migration and service credentials → funded single run → independent review → one deliberate schedule cutover. Existing A–G queue/customer priorities are unchanged.

@@ -9,6 +9,8 @@ import { isStale, readRuntime } from './runtime'
 import { RuntimePanel } from './runtime-panel'
 import { RuntimeRefresh } from './runtime-refresh'
 import { requireHQViewer } from '@/lib/hq/access'
+import { readCloudHQ } from '@/lib/hq/cloud-reader'
+import { CloudPanel } from './cloud-panel'
 
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { title: 'Trace-li HQ · Company operations', robots: { index: false, follow: false } }
@@ -44,7 +46,7 @@ export default async function HQ({searchParams}: {searchParams: Promise<Record<s
   const query=await searchParams
   const get=(key:string)=>typeof query[key]==='string'? query[key] as string:''
   const view=views.some(v=>v[0]===get('view'))?get('view'):'overview'
-  const [mandates,jobs,queues,decisions,events,approvals,proposals,loops,docs,runtime]=await Promise.all([read<Mandate[]>('mandates'),read<Job[]>('jobs'),read<Queue[]>('queues'),read<Decision[]>('decisions'),read<Event[]>('events'),read<Approval[]>('approvals'),read<Proposal[]>('memory-proposals'),read<Loop[]>('loops'),documents(),readRuntime()])
+  const [mandates,jobs,queues,decisions,events,approvals,proposals,loops,docs,runtime,cloud]=await Promise.all([read<Mandate[]>('mandates'),read<Job[]>('jobs'),read<Queue[]>('queues'),read<Decision[]>('decisions'),read<Event[]>('events'),read<Approval[]>('approvals'),read<Proposal[]>('memory-proposals'),read<Loop[]>('loops'),documents(),readRuntime(),readCloudHQ()])
   const doc=get('doc'); if(doc&&!docs.includes(doc)) notFound()
   const documentText=doc?await readFile(path.join(root,doc),'utf8'):null
   const running=jobs.filter(j=>j.status==='running').length
@@ -68,6 +70,7 @@ export default async function HQ({searchParams}: {searchParams: Promise<Record<s
         return docs.includes(target)?<DocLink key={index} file={target}>{match[1]}</DocLink>:part
       })}</pre></article>:<>
       {view==='overview'&&<>
+        <CloudPanel state={cloud}/>
         <section className={styles.metrics} aria-label="Portfolio metrics">{[['Mandates',String(mandates.length),'Charters written'],['Active queues',String(queues.length),'A–G workstreams'],['HQ jobs running',String(running),'Package dispatch records'],['HQ jobs accepted',String(accepted),'Reviewed package deliverables']].map(([title,value,note])=><div key={title}><span>{title}</span><strong>{value}</strong><small>{note}</small></div>)}</section>
         <div className={styles.columns}><section className={styles.brief}><p className={styles.eyebrow}>SUPERVISOR BRIEF</p><h2>Protect discovery.<br/>Make the evidence useful.</h2><p>The immediate priorities are a sanitized Trace, accurate product messaging and four source-led account packets. HQ keeps the work and its limits visible.</p><ul><li>Eight mandates have explicit charters and scoped memory.</li><li>Current repository foundations are preserved: WorkOS, tenant boundaries and the read-only evidence contract.</li><li>Existing desks now have the HQ charters and A–G handoff. Week 4 discovery keeps its existing owners and evidence requirements.</li></ul><DocLink file="IMPLEMENTATION_BACKLOG.md">Read the prioritized backlog →</DocLink></section>
           <section className={styles.panel}><div className={styles.sectionTitle}><h2>Decisions & exceptions</h2><Link href="/hq?view=approvals">View queue</Link></div><p>No consequential action packet is ready to execute.</p>{approvals.map(a=><div key={a.id} className={styles.exception}><Badge>{a.level} · Packet incomplete</Badge><h3>{a.action}</h3><p>{a.reason}</p></div>)}</section></div>

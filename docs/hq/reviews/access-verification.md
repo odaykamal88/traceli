@@ -13,3 +13,17 @@ Production HTTP checks with fictional WorkOS settings: signed-out HQ and a forge
 The installed SDK callback was inspected to confirm it uses PKCE-bound state and honors `returnPathname` from that state before its default `/workspace` fallback. No custom token parser, cookie scheme or credential storage was added. The [WorkOS Next.js integration](https://workos.com/docs/authkit/nextjs) and [roles documentation](https://workos.com/docs/authkit/roles-and-permissions) informed the integration; installed SDK types and source were checked directly.
 
 Remaining: hosted real-user sign-in, non-owner end-to-end denial, authenticated Postgres integration and independent review before production. This increment does not test an unattended worker, model spending, approval mutations or production database migration.
+
+## Hosted preview evidence
+
+Deployment `dpl_F9ALkiYp4B8ZGGsNxhwz1VZH2EGF`, commit `a624f3d04f12b81b50e94c7a7f8a956f9f1927a5`, is READY in the existing `traceli-new` project, target Preview. The branch alias is `https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app`. The production deployment remains `dpl_Hm6BBXPBgu8vHXwm5NWUD6pEsYob` from `0130366`.
+
+Authenticated Vercel transport checks, with no application session, confirmed both `/hq` and direct library access return 307 to `/hq/sign-in`, without company record content. The browser followed the real hosted flow to the correct WorkOS staging AuthKit sign-in page, with the exact registered preview callback and designated organization. Oday was asked to complete the application login; no credential, verification code or successful owner login was fabricated.
+
+WorkOS readback confirmed an active membership for the configured owner and role `org-hq-owner`; the user email was still unverified before the handoff. Local mock tests establish non-owner denial at the policy/adapter level; a real non-owner end-to-end test is still pending.
+
+[Draft pull request #21](https://github.com/odaykamal88/traceli/pull/21) holds the complete operating package, Postgres foundation and access change for review. Both GitHub-reported Vercel preview checks succeeded for the deployed commit. No production merge is authorized by those checks.
+
+## Owner login verified
+
+On 16 September 2026, the same hosted HQ browser session reached `/hq` after Oday completed login. The application rendered “Private owner access”, eight mandates, seven workstreams and the curated Company Feed. This confirms the real owner sign-in, callback, session binding and fresh membership check for the deployed preview. The live page correctly reported runtime status unavailable and zero package jobs running. This is owner-read acceptance only; a real non-owner session test, native Postgres reader and cloud worker still remain.

@@ -171,6 +171,6 @@ export function createHQStore(trustedPrincipal: HQPrincipal, pool: Pool = getDat
         return result.rows[0]
       })
     },
-    async listJobs() { return transaction(async c=>(await c.query('SELECT * FROM hq_jobs ORDER BY created_at,id')).rows) },
+    async listJobs() { return transaction(async c=>(await c.query('SELECT organization_id,id,mandate_id,objective,status,attempts,max_attempts,approval_level,source_system,worker_id,result,reviewer_id,review_evidence,created_at,updated_at FROM hq_jobs ORDER BY created_at,id')).rows) },
   }
 }

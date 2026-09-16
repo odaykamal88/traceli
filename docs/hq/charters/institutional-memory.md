@@ -86,3 +86,7 @@ Use `memory/mandates/institutional-memory/` for reviewed handoff notes and scope
 ## Acceptance and performance history
 
 Every output carries job ID, sources, known gaps, assumptions, version, review status and next owner. Auditor reviews material claims/security; Supervisor accepts the job. Record accepted/rejected output IDs, elapsed time, measured cost, actual outcome and failure reason after each run. Initial performance history is empty; KPI baselines are unknown.
+
+## Prepared cloud pilot · 16 September 2026
+
+The [cloud-pilot-1 factsheet](../CLOUD_WORKER_PILOT.md) defines one source-linked readiness draft, with narrower tools, time and memory than this general charter. Its implementation is locally tested. It grants no canonical promotion capability. Paid execution remains disabled until Oday approves its exact funding reference and the cloud acceptance checks pass; this supplement does not override the zero-new-spend rule by itself.

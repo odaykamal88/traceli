@@ -2,7 +2,9 @@
 
 Updated 16 September 2026. This increment concerns the private dashboard. A hosted dashboard is separate from an unattended worker and its durable job state.
 
-Preview address: [Trace-li HQ preview](https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq). The exact callback is registered in WorkOS; existing callbacks are preserved. The private feature branch `codex/trace-li-hq` is saved on GitHub. Branch-scoped Preview settings are configured for WorkOS mode. Deployment readiness and Oday's real sign-in must be checked before claiming the preview is usable.
+Preview address: [Trace-li HQ preview](https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq). The exact callback is registered in WorkOS; existing callbacks are preserved. The private feature branch `codex/trace-li-hq` is saved on GitHub. Branch-scoped Preview settings are configured for WorkOS mode. Deployment readiness and Oday's real sign-in have now been verified.
+
+Deployment is now READY and its signed-out access/redirect checks pass. The browser reaches the correct hosted login. Oday's actual hosted login is now verified; HQ renders Private owner access. [Draft PR #21](https://github.com/odaykamal88/traceli/pull/21) and [hosted verification](reviews/access-verification.md#hosted-preview-evidence) contain the release evidence. The live production website has not been promoted to this branch.
 
 ## Confirmed account and project
 
@@ -42,9 +44,9 @@ Preserve the existing WorkOS redirect URIs when adding the exact preview callbac
 
 ## Remaining cloud work
 
-1. Verify Oday's real hosted sign-in and a non-owner denial. Fictional-policy tests do not substitute for this.
-2. Bind a read-only server principal to the HQ Postgres reader. Prepare a staging migration/seed packet; do not silently turn the current curated files into live job records.
-3. Implement one bounded worker adapter with a fixed tool allowlist, scoped memory, maximum runtime, dedupe/lease fencing, two-attempt cap, measured usage, cumulative cost limits, output review and pause. Test denial and crash recovery before scheduling it.
+1. Owner hosted sign-in is verified. Complete the real non-owner denial check; fictional-policy tests do not substitute for that separate check.
+2. Apply the prepared cloud migration/setup packet to the approved pre-production target and configure the dedicated read-only HQ credential. Code and local denial tests are complete; no remote HQ migration has run.
+3. The bounded adapter, immutable drafts, identity-bound database functions and conservative budget reservations are implemented and locally verified. Complete the first cloud deployment and funded run described in the [pilot factsheet](CLOUD_WORKER_PILOT.md) before scheduling it.
 4. Select one actual workload, then provision its cloud runtime with Oday's confirmed spending limit. Existing desktop schedules continue to need the laptop until their selected job is cut over and its duplicate timer is paused.
 5. Prepare the exact production deployment/migration packet and rollback. Oday retains production authority.
 

@@ -1,0 +1,7 @@
+**
+!workers/
+!workers/hq/
+!workers/hq/package.json
+!workers/hq/package-lock.json
+!workers/hq/worker.mjs
+!workers/hq/Dockerfile

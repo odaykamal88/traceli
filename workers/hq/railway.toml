@@ -1,0 +1,9 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "workers/hq/Dockerfile"
+watchPatterns = ["/workers/hq/**"]
+
+[deploy]
+restartPolicyType = "NEVER"
+numReplicas = 1
+# Deliberately no cron schedule until a bounded cloud run is verified.

@@ -1,17 +1,17 @@
 # Trace-li HQ operating package
 
-Updated 15 September 2026. Eight mandate charters and all seven A–G workstreams are written and visible. Eleven bootstrap jobs have accepted internal outputs. The six existing desktop schedules now read the HQ handoff and current charters; the original Operating Room remains the authority for its tasks, reviews and receipts.
+Updated 16 September 2026. Eight mandate charters and all seven A–G workstreams are written and visible. Eleven bootstrap jobs have accepted internal outputs. The six existing desktop schedules now read the HQ handoff and current charters; the original Operating Room remains the authority for its tasks, reviews and receipts.
 
 [Open local HQ](http://127.0.0.1:3014/hq) · [Current Supervisor handover](SUPERVISOR_BRIEF.md) · [Runtime and A–G mapping](RUNTIME_HANDOFF.md)
 
 ## Current delivery state
 
-**16 September access increment:** the Vercel connection blocker is resolved through the authenticated CLI. An owner-only WorkOS gate and dedicated staging identity are prepared for the private preview. [Cloud access setup](CLOUD_ACCESS_SETUP.md) and [access verification](reviews/access-verification.md) record the exact boundary. Actual owner sign-in and a cloud worker remain separate acceptance gates.
+**16 September access increment:** the Vercel connection blocker is resolved through the authenticated CLI. An owner-only WorkOS gate and dedicated staging identity are prepared for the private preview. [Cloud access setup](CLOUD_ACCESS_SETUP.md) and [access verification](reviews/access-verification.md) record the exact boundary. Oday’s real hosted sign-in is verified. The bounded worker implementation is now prepared and tested; cloud execution remains a separate acceptance gate.
 
 - **Operating package:** constitution, charters, queues, schemas, decisions, memory policy and first reviewed artifacts are prepared.
 - **Existing desks:** connected without new timers or widened permissions. A schedule being enabled is different from a recorded run or an accepted result; HQ displays saved evidence and its age.
 - **Postgres:** scoped jobs, runs, decisions and reviewed memory promotion are implemented and tested locally. [Foundation](POSTGRES_FOUNDATION.md) and [verification](reviews/postgres-verification.md) describe exact scope and remaining gates.
-- **Cloud execution:** no worker is deployed. A private read-only HQ preview is being configured with dedicated owner membership. Desktop schedules still require the computer and Codex available. Actual hosted sign-in, native storage reads, worker capabilities, production migration and a single-job cutover remain outstanding.
+- **Cloud execution:** the private owner-only preview is deployed and real owner sign-in verified. A bounded draft worker, narrow Postgres capabilities and a read-only cloud panel are implemented and tested locally. [Pilot factsheet](CLOUD_WORKER_PILOT.md) and [verification](reviews/cloud-worker-verification.md) distinguish preparation from live operation. Cloud credentials, one funded run and schedule cutover remain outstanding; existing desks still depend on the desktop.
 - **Customer progress:** room metadata is connected, but sends, replies, completed interviews and commercial dates must come from actual records. Drafts and silence establish none of these outcomes.
 
 ## Operating rules and contracts
