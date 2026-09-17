@@ -30,7 +30,7 @@ Current charters are v1.1. Bootstrap v1.0 bytes are retained under `history/boot
 | [D · Account pieces](queues/D.md) | Investigator → Auditor → Editor; four reviewed internal drafts | Exact external review, including fresh OCHA source check |
 | [E · Development sequence](queues/E.md) | Product → Builder; Trace/sharing before broad integrations | Secure recipient implementation and discovery evidence |
 | [F · Operating Room](queues/F.md) | Listener; existing Week 4 tasks preserved | Actual send/reply/conversation records and dated next step |
-| [G · HQ](queues/G.md) | Builder + Librarian + Auditor; local HQ, connected desks, tested storage | Identity binding and reviewed single-worker cloud cutover |
+| [G · HQ](queues/G.md) | Builder + Librarian + Auditor; private hosted HQ, scoped Postgres, one accepted cloud draft and bounded daily check | First scheduled check, then migrate a selected desktop desk with equivalent inputs and receipts |
 
 The queue files retain initial job-registration details; [jobs](data/jobs.json) and [runs](data/runs.json) record bootstrap progress. Current room task #44 tracks the connection and #45 tracks storage; they are not duplicate bootstrap completions. Active workstreams do not imply seven simultaneous workers.
 

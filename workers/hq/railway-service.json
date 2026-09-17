@@ -1,0 +1,14 @@
+{
+  "projectId": "20cf2c7b-5765-4aac-a22c-938c199f7ed6",
+  "environmentId": "2526b375-8e58-4484-9388-41116b7051dd",
+  "serviceId": "6b012384-412e-4717-905d-4cc0933db4b9",
+  "input": {
+    "dockerfilePath": "Dockerfile",
+    "restartPolicyType": "NEVER",
+    "restartPolicyMaxRetries": 0,
+    "numReplicas": 1,
+    "cronSchedule": "0 6 * * *"
+  },
+  "variableNames": ["HQ_WORKER_ENABLED", "HQ_WORKER_DATABASE_URL", "OPENAI_API_KEY", "RAILWAY_DOCKERFILE_PATH"],
+  "dockerfilePathVariable": "Dockerfile"
+}

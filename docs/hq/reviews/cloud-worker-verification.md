@@ -28,3 +28,9 @@ The real hosted owner login is verified in [access verification](access-verifica
 ## First funded cloud execution
 
 17 September: one actual Railway run completed, saving an immutable draft and usage to Neon and stopping at review. Owner-authenticated hosted HQ displayed it. Pause/revocation was applied and proved; Oday then authorized the exact one-time review exception and bounded daily recurrence. Source audit passed. No separate specialist output-audit acceptance is claimed. Migration 0005 and the updated seven-group database test verify that independent acceptance appears in the cloud snapshot while the original attempt history is retained. [Exact live evidence](../cloud/LIVE_RUN_20260917.md).
+
+## Deployment and handover check
+
+The final scheduled deployment `2d50f299-7fa7-4f24-bddc-73077f867518` reports SUCCESS, Dockerfile build and the approved recurrence in its actual manifest. Service readback agrees: one replica, restart NEVER, next check 18 September at 06:00 UTC. An unchanged approved snapshot was separately claimed through the restricted runner and returned idle without a provider call. The first scheduled occurrence is still pending at this check.
+
+The staging helper copies only four reviewed runtime files, a root Dockerfile and an ignore file. Its generated manifest matches the deployed worker hash. The earlier failed scheduled deployment stopped during build; the replacement used explicit service settings and a fresh isolated upload. See the [activation receipt](../cloud/ACTIVATION_RECEIPT_20260917.json). The owner-visible draft was verified before acceptance; a subsequent browser refresh was unavailable, so accepted status is established by database readback and the tested reader function, not a claimed second browser check.

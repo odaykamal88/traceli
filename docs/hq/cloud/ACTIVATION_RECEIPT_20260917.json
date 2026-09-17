@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-09-17T16:50:41.552Z",
+  "worker_enabled": true,
+  "provider_key_present": true,
+  "duplicate_secret_removed": true,
+  "unchanged_snapshot_claim": "idle; no model call made",
+  "schedule": {
+    "cronSchedule": "0 6 * * *",
+    "nextCronRunAt": "2026-09-18T06:00:00.000Z",
+    "numReplicas": 1,
+    "restartPolicyType": "NEVER"
+  },
+  "deployment": {
+    "id": "2d50f299-7fa7-4f24-bddc-73077f867518",
+    "status": "SUCCESS",
+    "builder": "DOCKERFILE",
+    "dockerfile": "Dockerfile",
+    "cron": "0 6 * * *",
+    "restart": "NEVER"
+  },
+  "review": {
+    "job": "cloud-brief-20260917",
+    "status": "accepted",
+    "authority": "Oday exact one-time exception + Supervisor evidence review"
+  },
+  "recovered_failure": {
+    "deployment_id": "a06cab4e-f8d0-4150-b1b0-3c4bf4257c62",
+    "stage": "build",
+    "model_calls": 0,
+    "repair": "Fresh isolated upload with a root Dockerfile and explicit service settings"
+  },
+  "final_database_check": {
+    "checked_at": "2026-09-17T22:43:44.038Z",
+    "job_status": "accepted",
+    "total_runs": 1,
+    "artifact_hash": "3b89575576bbc11e36e073d23a520ce2fec02f9f2efffd8bdb41c8da45c0fefb",
+    "estimated_microusd": 2191,
+    "reserved_microusd": 50000
+  }
+}

@@ -1,5 +1,7 @@
 # Verification and implementation handoff
 
+This page preserves the **14 September bootstrap verification**. It describes that earlier local-only stage. For current hosted authentication, Postgres and the approved cloud pilot, use [access verification](reviews/access-verification.md), [Postgres verification](reviews/postgres-verification.md) and [cloud worker verification](reviews/cloud-worker-verification.md). Later evidence supersedes the historical practical limits below.
+
 The tested story is Oday opening the local HQ route → server reading curated HQ files → reviewing charters, jobs and sources → inspecting a fictional Trace. No customer database, external side effect or runner is on this path.
 
 ## Completed checks
