@@ -9,8 +9,8 @@ function time(at: string) {
 export function RuntimePanel({runtime}: {runtime: Runtime | null}) {
   const room = runtime?.room
   const fresh = runtime?.connection === 'connected' && !isStale(room?.fetched_at)
-  return <section className={styles.panel} aria-label="Scheduled operations">
-    <div className={styles.sectionTitle}><h2>Scheduled operations</h2><a href={operatingRoomUrl} target="_blank" rel="noopener noreferrer">Open Operating Room ↗</a></div>
+  return <section className={styles.panel} aria-label="Desktop operations">
+    <div className={styles.sectionTitle}><h2>Desktop operations</h2><a href={operatingRoomUrl} target="_blank" rel="noopener noreferrer">Open Operating Room ↗</a></div>
     <p>The existing desks carry the mandates. A schedule being enabled and a result being saved are separate facts.</p>
     {runtime ? <>
       <p className={fresh ? styles.small : styles.alert}>{fresh ? 'Operating Room connected' : 'Operating Room evidence needs refresh'} · {room ? 'last read '+time(room.fetched_at) : 'no saved evidence yet'}. Schedule settings checked {time(runtime.checked_at)}.</p>
@@ -29,7 +29,7 @@ export function RuntimePanel({runtime}: {runtime: Runtime | null}) {
       })}
       {!!room?.pending_reviews && <p>Review packets awaiting disposition: {room.pending_review_task_ids.map(id=>'#'+id).join(', ')}. Open the Operating Room to inspect the exact work.</p>}
       {!!runtime.pending_local_receipts && <p className={styles.alert}>{runtime.pending_local_receipts} local receipt(s) awaiting confirmed delivery.</p>}
-    </> : <p className={styles.alert}>Runtime status is unavailable. This does not mean the existing schedules are disabled.</p>}
+    </> : <p className={styles.alert}>Desktop status is unavailable here. This does not mean the existing desktop schedules are disabled.</p>}
     <p className={styles.small}>The page rereads its saved status every 30 seconds. Desks refresh that status during runs; this page does not dispatch workers. Local schedules need the computer on and the desktop app running. Pause or run a desk from Scheduled in the app.</p>
     <Link href="/hq?doc=RUNTIME_HANDOFF.md">Read activation scope and workstream handoffs →</Link>
   </section>

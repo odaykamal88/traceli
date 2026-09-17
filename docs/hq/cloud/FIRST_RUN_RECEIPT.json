@@ -1,0 +1,96 @@
+{
+  "recorded_at": "2026-09-17T11:07:16.631Z",
+  "source_snapshot_sha256": "071f2c3cb8a353e3c0c6f044ea519709f612247d2863334e99ccdf3a1b466da4",
+  "railway_deployment": "b6e8e2cc-c9f2-46c8-820b-b290023bb38c",
+  "job": {
+    "id": "cloud-brief-20260917",
+    "status": "review",
+    "attempts": 1,
+    "reviewer_id": null,
+    "review_evidence": null
+  },
+  "run": {
+    "id": "97ae49c9-3c92-488d-a4b8-106ad52c6d94",
+    "job_id": "cloud-brief-20260917",
+    "status": "review",
+    "started_at": "2026-09-17T11:06:55.038Z",
+    "finished_at": "2026-09-17T11:07:07.783Z",
+    "input_tokens": "2925",
+    "output_tokens": "1216"
+  },
+  "artifact": {
+    "run_id": "97ae49c9-3c92-488d-a4b8-106ad52c6d94",
+    "job_id": "cloud-brief-20260917",
+    "body": {
+      "summary": "Draft for Supervisor review: the snapshot documents approved and locally tested readiness work, but does not establish a completed cloud run, accepted output, recurring cutover, or a fully laptop-independent HQ. The record is a dated setup snapshot; subsequent live state is unverified. [docs/hq/cloud/LIVE_SETUP_RECORD.md@sha256:bf54babc08b09a465e70d008d099cb0de42afb09a9cbf2714ae13b4bf29add2d]",
+      "questions": [
+        "Has the outstanding API key handoff occurred, and what authenticated evidence shows its scope and storage?",
+        "Has one bounded cloud run completed with the required immutable source-linked draft, token usage, cost reservation, Postgres save, review stop, and authenticated-owner readback?",
+        "Has an independent source review occurred, and was any output accepted by the Supervisor?",
+        "What evidence establishes the current Railway hosting/payment state, given that the paid $10 hosting cap was unverified and the trial was recorded?",
+        "Has the funding record been rechecked before any further paid dispatch, given its 1 October 2026 expiry?",
+        "What evidence, if any, supports recurrence or cutover of the six desktop schedules?",
+        "Are the apparent differences between the OpenAI billing readback and the initial $5 top-up request reconciled in the current live billing record?",
+        "Has any canonical memory promotion, external send, publication, production change, or customer-data processing occurred? If so, where are the required approval and execution records?"
+      ],
+      "observations": [
+        {
+          "statement": "The constitution and Institutional Memory charter define bounded Green work through existing desktop schedules; new mandate timers remain disabled and no consequential permission is granted. [Implemented/configured in the snapshot; current live state not established.]",
+          "source_refs": [
+            "docs/hq/AGENT_CONSTITUTION.md@sha256:473c08398eb73ce8bcc5d40d5f8dc99e7c16b84555f371ca416f59d8917ac770",
+            "docs/hq/charters/institutional-memory.md@sha256:19698c2da73a0d551abaaf564f8390fc22758ea1465f7bd3573d928b7a12a3b0"
+          ]
+        },
+        {
+          "statement": "Oday approval for the bounded $20/month pilot is recorded, with a $10 hosting, $8 API, and $2 contingency envelope; this does not authorize unrelated spend, sends, sensitive publication, production changes, customer-data import, or automatic canonical promotion. [Approval recorded; execution and payment state require separate evidence.]",
+          "source_refs": [
+            "docs/hq/cloud/FUNDING_APPROVAL.md@sha256:517b8d812d0749a20126e6651b859b33578c5099c843b4d6c292dd4a5f89e68c"
+          ]
+        },
+        {
+          "statement": "The OpenAI project is recorded with an $8 hard spend limit, $8 available credit, and automatic recharge OFF; no worker API call had occurred at the checkpoint. [Hosted billing configuration/readback recorded; model execution unverified.]",
+          "source_refs": [
+            "docs/hq/cloud/FUNDING_APPROVAL.md@sha256:517b8d812d0749a20126e6651b859b33578c5099c843b4d6c292dd4a5f89e68c",
+            "docs/hq/cloud/LIVE_SETUP_RECORD.md@sha256:bf54babc08b09a465e70d008d099cb0de42afb09a9cbf2714ae13b4bf29add2d"
+          ]
+        },
+        {
+          "statement": "Railway deployment `649268b7-e3e0-4f51-8299-abc01e94d922` is recorded for `hq-readiness-brief`; the process logged `disabled`, with one replica, no cron, restart NEVER, zero retries, and no public domain. [Hosted deployment/configuration recorded; successful worker operation unverified.]",
+          "source_refs": [
+            "docs/hq/cloud/LIVE_SETUP_RECORD.md@sha256:bf54babc08b09a465e70d008d099cb0de42afb09a9cbf2714ae13b4bf29add2d"
+          ]
+        },
+        {
+          "statement": "The API key handoff remained outstanding, and the successful first cloud run requirements were an immutable source-linked draft, token usage, cost reservation, Postgres persistence, review stop, and authenticated-owner visibility. [Missing execution evidence.]",
+          "source_refs": [
+            "docs/hq/cloud/LIVE_SETUP_RECORD.md@sha256:bf54babc08b09a465e70d008d099cb0de42afb09a9cbf2714ae13b4bf29add2d"
+          ]
+        },
+        {
+          "statement": "Neon pre-production migrations 0003 and 0004 are checksum-recorded, with separated runner and reader access and a redacted cloud snapshot; runner identity and spending policy were paused. [Locally/hosted setup recorded; operational validation unverified.]",
+          "source_refs": [
+            "docs/hq/cloud/LIVE_SETUP_RECORD.md@sha256:bf54babc08b09a465e70d008d099cb0de42afb09a9cbf2714ae13b4bf29add2d"
+          ]
+        },
+        {
+          "statement": "The snapshot states that all A\u2013G workstreams have charters/queues and reviewed initial internal outputs, but ongoing customer/distribution work is incomplete and six desktop schedules have not been cut over. [Initial internal work recorded; completion and replacement unverified.]",
+          "source_refs": [
+            "docs/hq/cloud/LIVE_SETUP_RECORD.md@sha256:bf54babc08b09a465e70d008d099cb0de42afb09a9cbf2714ae13b4bf29add2d"
+          ]
+        }
+      ]
+    },
+    "content_hash": "3b89575576bbc11e36e073d23a520ce2fec02f9f2efffd8bdb41c8da45c0fefb",
+    "created_at": "2026-09-17T11:07:07.775Z"
+  },
+  "cost": {
+    "run_id": "97ae49c9-3c92-488d-a4b8-106ad52c6d94",
+    "reserved_microusd": "50000",
+    "estimated_microusd": "2191",
+    "input_tokens": "2925",
+    "output_tokens": "1216",
+    "settled_at": "2026-09-17T11:07:07.782Z"
+  },
+  "owner_hosted_readback": "2026-09-17T11:07Z: private owner access, database connected, saved draft in review, $0.05 held, pilot paused",
+  "state_after_run": "Paused; no recurring schedule; review incomplete"
+}

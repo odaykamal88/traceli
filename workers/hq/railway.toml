@@ -6,4 +6,6 @@ watchPatterns = ["/workers/hq/**"]
 [deploy]
 restartPolicyType = "NEVER"
 numReplicas = 1
-# Deliberately no cron schedule until a bounded cloud run is verified.
+# Oday approved the bounded daily check after the first verified cloud run.
+# No new approved input means no model call.
+cronSchedule = "0 6 * * *"

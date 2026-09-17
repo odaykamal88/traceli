@@ -97,5 +97,23 @@
     "subject": "Durable jobs and reviewed memory tested on Postgres",
     "summary": "Task #45 implements scoped storage and fenced job attempts; local database and existing evidence-agent tests pass. QM assessed as an optional worker runtime. Production migration, authenticated HQ integration and cloud execution remain outstanding.",
     "evidence_ref": "POSTGRES_FOUNDATION.md"
+  },
+  {
+    "id": "EVT-CLOUD-20260917",
+    "at": "2026-09-17T11:07:07Z",
+    "actor": "Supervisor",
+    "type": "cloud_draft_submitted",
+    "subject": "First cloud worker completed; review pending",
+    "summary": "One bounded Railway run saved a source-linked draft in Neon and appeared in authenticated HQ. Estimated model cost $0.002191; $0.05 held. Worker paused after the output Auditor reached the Codex usage limit. No desktop schedule cutover.",
+    "evidence_ref": "cloud/LIVE_RUN_20260917.md"
+  },
+  {
+    "id": "EVT-CLOUD-ACTIVE-20260917",
+    "at": "2026-09-17",
+    "actor": "Supervisor",
+    "type": "bounded_cloud_check_enabled",
+    "subject": "First cloud draft accepted; daily check enabled",
+    "summary": "Oday approved a one-time specialist-review exception for the exact first draft and bounded daily recurrence. Railway confirms 06:00 UTC daily; only new approved snapshots can trigger a model call. Existing desktop desks remain unchanged.",
+    "evidence_ref": "cloud/LIVE_RUN_20260917.md"
   }
 ]

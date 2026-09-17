@@ -342,5 +342,61 @@
     "supersedes": null,
     "superseded_by": null,
     "execution_authorized": true
+  },
+  {
+    "id": "DEC-CLOUD-BUDGET-20260917",
+    "decided_at": "2026-09-17",
+    "recorded_at": "2026-09-17",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "Bounded HQ preview worker pilot only",
+    "decision": "Approve up to $20/month additional pilot spend: $10 Railway, $8 OpenAI API, $2 contingency.",
+    "rationale": "Prove one supervised cloud job before broader desktop migration.",
+    "alternatives": [
+      "Continue desktop-only execution"
+    ],
+    "evidence_refs": [
+      "cloud/FUNDING_APPROVAL.md",
+      "cloud/LIVE_RUN_20260917.md"
+    ],
+    "consequences": [
+      "One bounded cloud run completed; independent output review and recurring activation remain open.",
+      "No external sends, publication, production release or customer import is authorized."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Pricing revalidation by 1 October 2026, exhausted budget or material scope change",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
+  },
+  {
+    "id": "DEC-CLOUD-EXCEPTION-20260917",
+    "decided_at": "2026-09-17",
+    "recorded_at": "2026-09-17",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "Exact first internal cloud draft and bounded daily check",
+    "decision": "Approve the one-time additional specialist-review exception and daily cloud check for new approved snapshots.",
+    "rationale": "Specialist output Auditor reached the Codex usage limit; Supervisor independently checked source fidelity.",
+    "alternatives": [
+      "Keep paused until specialist capacity returns"
+    ],
+    "evidence_refs": [
+      "reviews/cloud-output-20260917.md",
+      "cloud/LIVE_RUN_20260917.md",
+      "sha256:3b89575576bbc11e36e073d23a520ce2fec02f9f2efffd8bdb41c8da45c0fefb"
+    ],
+    "consequences": [
+      "First draft accepted internally; no canonical promotion.",
+      "Daily check enabled; unchanged snapshot produces no model call.",
+      "Future drafts retain ordinary review; six desktop desks are not replaced."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Next output, changed scope, budget exhaustion or pricing revalidation on 1 October",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
   }
 ]

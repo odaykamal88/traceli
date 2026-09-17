@@ -1,6 +1,6 @@
 # First cloud worker: HQ readiness brief
 
-Updated 17 September 2026 · Charter supplement `cloud-pilot-1` · **Funding approved; execution paused pending credential handoff and one live acceptance run.**
+Updated 17 September 2026 · Charter supplement `cloud-pilot-1` · **First cloud run completed and accepted under Oday’s one-time review exception; bounded daily cloud check enabled.**
 
 This is a bounded extension of [Institutional Memory](charters/institutional-memory.md), supervised by Supervisor and reviewed by Auditor. Oday approved this bounded funding packet on 17 September under [approval `oday-hq-pilot-2026-09-17`](cloud/FUNDING_APPROVAL.md). This supplement permits only the specified pilot spend; the general charter's other restrictions remain in force.
 
@@ -16,7 +16,7 @@ This is a bounded extension of [Institutional Memory](charters/institutional-mem
 | Memory | Approved source snapshot plus this mandate's durable run/draft history; no automatic writes to canonical Company Memory |
 | Output | JSON brief: summary, observations with exact approved source references, open questions. Immutable database bytes and database-computed SHA-256 |
 | Review | Every successful run stops at `review`; Supervisor accepts with independent evidence. Auditor checks material claims and source mapping. No self-acceptance or promotion capability |
-| Trigger | First a single operator-started cloud test. Prepared recurrence is disabled. Maximum one daily job, no regeneration of an unchanged snapshot already in review/accepted |
+| Trigger | Daily at 06:00 UTC after the verified first run and Oday’s explicit recurrence approval. Maximum one daily job; no model call for an unchanged snapshot already in review/accepted |
 | Time | Two attempts at most; each lease at most 120 seconds, cumulative elapsed ceiling 240 seconds from first attempt. Model call at most 60 seconds and shorter near lease expiry |
 | Approved model allowance | $0.05 reserved before each possible billable call; at most $0.10 for a daily job; approved $8 per UTC month for this one worker |
 | Approved infrastructure allowance | Railway trial first; if needed, Hobby within $10/month hosting and the additional $20 envelope. $2 contingency. Trial credit currently applies; a paid hosting cap is not yet configured |
@@ -26,11 +26,9 @@ This is a bounded extension of [Institutional Memory](charters/institutional-mem
 
 ## Current evidence
 
-The owner-only HQ preview is deployed and Oday's real sign-in is verified. HQ migrations 0003–0004 are applied to the existing Neon pre-production database, with separate restricted runner and reader logins. Both actual logins passed table-access denial checks. The reader is enabled; runner binding and policy remain paused. No customer rows were imported or exported.
+The first real cloud run completed on 17 September: one Railway attempt, 2,925 input and 1,216 output tokens, immutable draft saved in Neon, status `review`. The owner-authenticated hosted HQ displayed that draft and the $0.05 held reservation. Estimated model cost is $0.002191; final billing is unreconciled. [Live run receipt](cloud/LIVE_RUN_20260917.md) preserves the exact evidence.
 
-Railway successfully built and executed the fixed container with execution disabled. The actual service configuration now reads one replica, no schedule and restart policy `NEVER` with zero retries. Its database secret is installed. The OpenAI project has a verified $8 hard spend limit; the organization shows $8 API credit and automatic recharge OFF. The dedicated Responses-only key is prepared for Oday's direct transfer to Railway. A real model response has not yet been recorded. [Live setup record](cloud/LIVE_SETUP_RECORD.md) and [verification](reviews/cloud-worker-verification.md) distinguish these checks from acceptance.
-
-The branch-specific Vercel reader secret is installed; a refreshed deployment and owner-visible live snapshot remain to verify. No production promotion is implied.
+Actual restricted runner and reader login denial checks passed. The OpenAI project has an $8 hard spend limit and automatic recharge OFF. Railway has one replica, a daily 06:00 UTC check and restart `NEVER` with zero retries; it remains on its trial. Source-packet Auditor review passed. The separate output review hit the account's Codex usage limit, so Supervisor paused execution. Oday then approved a one-time exception for the exact draft and a bounded daily check. Supervisor accepted that draft, re-enabled the worker and verified the schedule. Future outputs retain their ordinary review requirement.
 
 All A–G workstreams remain active queues with their existing owners and reviewed initial artifacts. This pilot does not execute all seven queues, replace the six desktop desk schedules, access their customer records, or establish any send/reply/customer outcome.
 

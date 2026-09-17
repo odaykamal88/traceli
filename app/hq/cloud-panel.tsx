@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { CloudState } from '@/lib/hq/cloud-reader'
 import styles from './hq.module.css'
 
-const dollars = (value: number) => '$' + (value / 1_000_000).toFixed(2)
+const dollars = (value: number) => '$' + (value / 1_000_000).toFixed(value > 0 && value < 10_000 ? 4 : 2)
 const time = (value: string) => new Date(value).toLocaleString('en-GB', { timeZone: 'Africa/Cairo', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) + ' Cairo'
 
 export function CloudPanel({ state }: { state: CloudState }) {
@@ -24,7 +24,7 @@ export function CloudPanel({ state }: { state: CloudState }) {
           <p>{run.cost_uncertain ? 'Provider cost is unconfirmed; the full reservation remains counted.' : run.estimated_microusd !== null ? `Estimated token cost: ${dollars(run.estimated_microusd)}. Final billing is not yet reconciled.` : 'No model cost recorded.'}</p>
           {run.draft ? <><h3>{run.draft.summary}</h3><ul>{run.draft.observations.map((item, i) => <li key={i}><p>{item.statement}</p><small>Sources: {item.source_refs.join(', ')}</small></li>)}</ul>
             {!!run.draft.questions.length && <><h4>Open questions</h4><ul>{run.draft.questions.map((question, i) => <li key={i}>{question}</li>)}</ul></>}
-            <p className={styles.small}>Saved draft · SHA-256 {run.content_hash}. Source references require review; this is not canonical company memory.</p></> : <p>No draft has been saved for this attempt.</p>}
+            <p className={styles.small}>Saved draft · SHA-256 {run.content_hash}. This brief describes its dated source snapshot. Acceptance does not promote it to canonical company memory.</p></> : <p>No draft has been saved for this attempt.</p>}
         </div>
       </details>) : <p>No cloud run has been recorded.</p>}
     </> : <p>{state.connection === 'not-configured' ? 'The worker package is prepared. Cloud database setup, credentials and the pilot budget still need to be completed.' : 'The cloud status could not be verified. No success or failure is inferred from missing status.'}</p>}

@@ -1,6 +1,6 @@
 # Cloud worker verification
 
-Updated 17 September 2026. Local implementation and disabled cloud execution verified; paid model quality remains unverified.
+Updated 17 September 2026. Local boundary checks and one actual paid cloud response verified. The exact first draft was accepted by Supervisor under Oday’s one-time specialist-review exception; no general quality baseline is claimed.
 
 ## Tested boundaries
 
@@ -17,10 +17,14 @@ The chartered Auditor reviewed the migration, fixed runner, reader and fixtures.
 
 ## Remaining live acceptance
 
-Completed live checks: Railway Docker build and disabled process execution; checksum-recorded managed-database migrations; actual reader and runner direct-table denial; disabled runner claim denial; separate secrets installed in their intended services; actual Railway restart `NEVER`, zero retries, one replica and no cron. OpenAI project hard limit is $8; available organization credit is $8 and automatic recharge is OFF.
+Completed live checks: Railway Docker build and disabled process execution; checksum-recorded managed-database migrations; actual reader and runner direct-table denial; disabled runner claim denial; separate secrets installed in their intended services; actual Railway restart `NEVER`, zero retries, one replica; daily recurrence was subsequently explicitly authorized and read back at 06:00 UTC. OpenAI project hard limit is $8; available organization credit is $8 and automatic recharge is OFF.
 
-Remaining: API key handoff, one real model response, immutable persisted draft and token accounting, owner-visible live status on a refreshed Vercel deployment, independent output review, and any scheduler cutover. The existing six desktop schedules remain unchanged. Railway remains on a bounded trial; paid hosting limit is not yet configured. See [dated live record](../cloud/LIVE_SETUP_RECORD.md).
+Now verified: API key handoff, one real model response, immutable persisted draft and token accounting, and owner-visible live status. Oday waived the additional specialist review for this one exact draft and authorized a bounded daily check. Broader desk cutover remains outstanding. The existing six desktop schedules remain unchanged. Railway remains on a bounded trial; paid hosting limit is not yet configured. See [dated live record](../cloud/LIVE_SETUP_RECORD.md).
 
 The real hosted owner login is verified in [access verification](access-verification.md). A separate real non-owner login denial check remains outstanding. No production promotion is implied.
 
 [Pilot factsheet and activation packet](../CLOUD_WORKER_PILOT.md)
+
+## First funded cloud execution
+
+17 September: one actual Railway run completed, saving an immutable draft and usage to Neon and stopping at review. Owner-authenticated hosted HQ displayed it. Pause/revocation was applied and proved; Oday then authorized the exact one-time review exception and bounded daily recurrence. Source audit passed. No separate specialist output-audit acceptance is claimed. Migration 0005 and the updated seven-group database test verify that independent acceptance appears in the cloud snapshot while the original attempt history is retained. [Exact live evidence](../cloud/LIVE_RUN_20260917.md).

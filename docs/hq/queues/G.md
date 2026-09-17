@@ -12,11 +12,13 @@ Librarian writes contracts → Builder adds shell → Auditor challenges → Sup
 
 ## Constraints
 
-Current execution uses the six existing bounded desktop desks; see [runtime handoff](../RUNTIME_HANDOFF.md). No new cloud worker, framework, spend or consequential capability is enabled.
+Current execution uses the six existing bounded desktop desks; see [runtime handoff](../RUNTIME_HANDOFF.md). A separate bounded cloud pilot is now authorized under the [pilot factsheet](../CLOUD_WORKER_PILOT.md); it does not replace the six desktop desks or add consequential action permissions.
 
 ## Current increments
 
-16 September: owner-only access gate and staging identity are prepared under G04. [Cloud handoff](../CLOUD_ACCESS_SETUP.md) and [verification](../reviews/access-verification.md). Hosted owner login, Postgres read binding and the worker adapter remain separate gates; G04 is not complete.
+17 September: owner-only hosted login, restricted cloud storage, one real Railway worker result and bounded daily check are verified under G04. Broader desk migration is still open. [First cloud run](../cloud/LIVE_RUN_20260917.md).
+
+Historical 16 September checkpoint: owner-only access gate and staging identity were prepared under G04. [Cloud handoff](../CLOUD_ACCESS_SETUP.md) and [verification](../reviews/access-verification.md). Hosted owner login, Postgres read binding and the worker adapter remain separate gates; G04 is not complete.
 
 Original bootstrap G01–G03 have accepted internal outputs in the job register. Original room task #44 records the tested schedule connection. Task #45 implements and tests the storage portion of G04; internal identity binding, approval capabilities and a worker adapter remain outstanding. Read the [Postgres foundation](../POSTGRES_FOUNDATION.md) and [verification](../reviews/postgres-verification.md). Initial registration fields below are historical, not current dispatch status.
 
