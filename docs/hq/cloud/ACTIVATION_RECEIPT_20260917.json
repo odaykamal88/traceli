@@ -36,5 +36,15 @@
     "artifact_hash": "3b89575576bbc11e36e073d23a520ce2fec02f9f2efffd8bdb41c8da45c0fefb",
     "estimated_microusd": 2191,
     "reserved_microusd": 50000
+  },
+  "final_owner_browser_check": {
+    "recorded_at": "2026-09-17T22:45:20.138274+00:00",
+    "private_owner_access": true,
+    "database_connected": true,
+    "pilot_permitted": true,
+    "job_status": "accepted",
+    "displayed_estimate_usd": "0.0022",
+    "displayed_reservation_usd": "0.05",
+    "artifact_hash": "3b89575576bbc11e36e073d23a520ce2fec02f9f2efffd8bdb41c8da45c0fefb"
   }
 }
