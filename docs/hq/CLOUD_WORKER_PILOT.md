@@ -1,8 +1,8 @@
 # First cloud worker: HQ readiness brief
 
-Prepared 16 September 2026 · Charter supplement `cloud-pilot-1` · **Execution disabled pending setup and funding authority.**
+Updated 17 September 2026 · Charter supplement `cloud-pilot-1` · **Funding approved; execution paused pending credential handoff and one live acceptance run.**
 
-This is a bounded extension of [Institutional Memory](charters/institutional-memory.md), supervised by Supervisor and reviewed by Auditor. The charter's existing zero-new-spend rule remains in force until Oday approves the exact pilot funding packet. This document records a proposal, not that approval.
+This is a bounded extension of [Institutional Memory](charters/institutional-memory.md), supervised by Supervisor and reviewed by Auditor. Oday approved this bounded funding packet on 17 September under [approval `oday-hq-pilot-2026-09-17`](cloud/FUNDING_APPROVAL.md). This supplement permits only the specified pilot spend; the general charter's other restrictions remain in force.
 
 ## Visible factsheet
 
@@ -18,17 +18,19 @@ This is a bounded extension of [Institutional Memory](charters/institutional-mem
 | Review | Every successful run stops at `review`; Supervisor accepts with independent evidence. Auditor checks material claims and source mapping. No self-acceptance or promotion capability |
 | Trigger | First a single operator-started cloud test. Prepared recurrence is disabled. Maximum one daily job, no regeneration of an unchanged snapshot already in review/accepted |
 | Time | Two attempts at most; each lease at most 120 seconds, cumulative elapsed ceiling 240 seconds from first attempt. Model call at most 60 seconds and shorter near lease expiry |
-| Proposed model allowance | $0.05 reserved before each possible billable call; at most $0.10 for a daily job; proposed $8 per UTC month for this one worker |
-| Proposed infrastructure allowance | Railway trial first; if needed, Hobby with $10 compute hard limit, within the discussed additional $20 envelope. $2 contingency. Paid subscription and top-up require Oday's approval |
+| Approved model allowance | $0.05 reserved before each possible billable call; at most $0.10 for a daily job; approved $8 per UTC month for this one worker |
+| Approved infrastructure allowance | Railway trial first; if needed, Hobby within $10/month hosting and the additional $20 envelope. $2 contingency. Trial credit currently applies; a paid hosting cap is not yet configured |
 | Stop | Missing/expired funding or pricing authority, revoked login, pause, insufficient lease, budget exhausted, invalid/refused output, missing sources, provider error, two failed attempts |
 | Handoff | Saved draft → Auditor/Supervisor review → separate exact canonical-promotion packet if useful. External and customer actions remain Red |
 | KPIs | Accepted useful briefs / reviewed briefs; unsupported claims; unresolved exceptions; estimated versus reconciled cost; unauthorized actions (target zero). No production baseline yet |
 
 ## Current evidence
 
-The owner-only HQ preview is deployed and Oday's real sign-in is verified. Railway browser sign-in is verified on a trial; OpenAI Platform sign-in is verified with $0.00 available credit at the check. The existing Neon pre-production database is reachable; its HQ migrations have **not** been applied remotely.
+The owner-only HQ preview is deployed and Oday's real sign-in is verified. HQ migrations 0003–0004 are applied to the existing Neon pre-production database, with separate restricted runner and reader logins. Both actual logins passed table-access denial checks. The reader is enabled; runner binding and policy remain paused. No customer rows were imported or exported.
 
-The worker, cloud capability migration, isolated runtime package and private HQ status panel are implemented on the feature branch. Local tests use fictional tenants and mocked provider responses. They prove the tested behavior, not model quality, a paid API call or a successful Railway deployment. See [verification](reviews/cloud-worker-verification.md).
+Railway successfully built and executed the fixed container with execution disabled. The actual service configuration now reads one replica, no schedule and restart policy `NEVER` with zero retries. Its database secret is installed. The OpenAI project has a verified $8 hard spend limit; the organization shows $8 API credit and automatic recharge OFF. The dedicated Responses-only key is prepared for Oday's direct transfer to Railway. A real model response has not yet been recorded. [Live setup record](cloud/LIVE_SETUP_RECORD.md) and [verification](reviews/cloud-worker-verification.md) distinguish these checks from acceptance.
+
+The branch-specific Vercel reader secret is installed; a refreshed deployment and owner-visible live snapshot remain to verify. No production promotion is implied.
 
 All A–G workstreams remain active queues with their existing owners and reviewed initial artifacts. This pilot does not execute all seven queues, replace the six desktop desk schedules, access their customer records, or establish any send/reply/customer outcome.
 
@@ -49,9 +51,9 @@ The price estimate uses the verified 16 September model rates, conservatively al
 ## Exact activation sequence
 
 1. Review this factsheet, source snapshot, migration and test record. Confirm Oday's cloud setup and funding reference, scope, expiry and $20 maximum additional monthly envelope before any paid service/API activation.
-2. In the existing Neon **pre-production** database, verify migration checksums and take the provider's normal recovery checkpoint/branch. Apply migrations 0003–0004 after the reviewed setup authorization; do not migrate production or import customer data. Confirm the function owner's inherited staff grants under forced RLS.
+2. In the existing Neon **pre-production** database, verify migration checksums and retain the schema inventory and checked original migration sources. The completed additive migration used one transaction including checksum records; this inventory is not a full database backup or provider restore point. Apply migrations 0003–0004 only once after the reviewed setup authorization; do not migrate production or import customer data. Confirm the function owner's inherited staff grants under forced RLS.
 3. Create separate new runner and reader LOGINs with only their matching cloud capability role, `INHERIT FALSE`, no administration option, and verified-TLS URLs. Register both under the existing dedicated preview organization. Default runner and policy disabled; reader enabled. A prepared provisioning module is in `scripts/db/provision-hq-cloud.mjs`.
-4. Railway service: repository `odaykamal88/traceli`, branch `codex/trace-li-hq`, configuration `workers/hq/railway.toml`, Dockerfile `workers/hq/Dockerfile`, one replica, no automatic restarts, **no public domain or cron**. Deploy with `HQ_WORKER_ENABLED=false` first; the process must exit with `disabled` and no DB/API call.
+4. Railway service: repository `odaykamal88/traceli`, branch `codex/trace-li-hq`, reviewed runtime bundle from that branch, configuration `workers/hq/railway.toml`, Dockerfile `workers/hq/Dockerfile`, one replica, no automatic restarts, **no public domain or cron**. Read back the actual service settings; the initial CLI upload did not apply the restart policy from TOML, so it was corrected through the official service API. Deploy with `HQ_WORKER_ENABLED=false` first; the process must exit with `disabled` and no DB/API call.
 5. Put `HQ_WORKER_DATABASE_URL` and a dedicated project/service-account `OPENAI_API_KEY` only in Railway's secret variables. Put `HQ_READER_DATABASE_URL` only in Vercel Preview for this branch. Never install the Neon owner or WorkOS secret in the worker. Oday creates/authorizes new provider credentials through the official interface; do not paste keys into chat or commit them.
 6. Read back the hosting cap and provider project controls. Store the exact funding reference, model allowance, reviewed inputs and pricing expiry in the database policy. Enable that worker and start **one** bounded run. Verify the saved draft, hash, token counts, reservation and review state in owner-authenticated hosted HQ after disconnecting local execution.
 7. Only after a useful accepted result, configure a small cloud recurrence. First replace one specifically selected desktop job after its inputs/connectors/receipts are equivalent and verified; then pause its desktop duplicate. This pilot alone does not make the entire company independent of the laptop.

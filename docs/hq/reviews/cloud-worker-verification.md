@@ -1,6 +1,6 @@
 # Cloud worker verification
 
-16 September 2026. Local implementation verification; no claim of cloud execution or paid model quality.
+Updated 17 September 2026. Local implementation and disabled cloud execution verified; paid model quality remains unverified.
 
 ## Tested boundaries
 
@@ -17,7 +17,9 @@ The chartered Auditor reviewed the migration, fixed runner, reader and fixtures.
 
 ## Remaining live acceptance
 
-Railway container build/execution, actual managed-database grants, least-privilege credential readback, provider credit/key availability, one real model response, owner-visible persisted draft after local disconnection, and scheduler cutover are not yet verified. Docker packaging could not be built locally because the Docker daemon is not running; runtime request tests and the app build are separate evidence.
+Completed live checks: Railway Docker build and disabled process execution; checksum-recorded managed-database migrations; actual reader and runner direct-table denial; disabled runner claim denial; separate secrets installed in their intended services; actual Railway restart `NEVER`, zero retries, one replica and no cron. OpenAI project hard limit is $8; available organization credit is $8 and automatic recharge is OFF.
+
+Remaining: API key handoff, one real model response, immutable persisted draft and token accounting, owner-visible live status on a refreshed Vercel deployment, independent output review, and any scheduler cutover. The existing six desktop schedules remain unchanged. Railway remains on a bounded trial; paid hosting limit is not yet configured. See [dated live record](../cloud/LIVE_SETUP_RECORD.md).
 
 The real hosted owner login is verified in [access verification](access-verification.md). A separate real non-owner login denial check remains outstanding. No production promotion is implied.
 

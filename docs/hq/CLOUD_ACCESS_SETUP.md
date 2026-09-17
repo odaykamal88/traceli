@@ -1,6 +1,6 @@
 # HQ private preview and cloud handoff
 
-Updated 16 September 2026. This increment concerns the private dashboard. A hosted dashboard is separate from an unattended worker and its durable job state.
+Updated 17 September 2026. This increment concerns the private dashboard. A hosted dashboard is separate from an unattended worker and its durable job state.
 
 Preview address: [Trace-li HQ preview](https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq). The exact callback is registered in WorkOS; existing callbacks are preserved. The private feature branch `codex/trace-li-hq` is saved on GitHub. Branch-scoped Preview settings are configured for WorkOS mode. Deployment readiness and Oday's real sign-in have now been verified.
 
@@ -39,17 +39,18 @@ Vercel variables belong only to Preview and branch `codex/trace-li-hq`:
 | `TRACELI_HQ_ACCESS` | `disabled` while establishing the preview URL; `workos` only with complete bindings |
 | `TRACELI_HQ_OWNER_USER_ID` | Exact owner application user above |
 | `TRACELI_HQ_ORGANIZATION_ID` | Exact dedicated preview organization above |
+| `HQ_READER_DATABASE_URL` | Separate restricted verified-TLS login; installed on this branch Preview only |
 
 Preserve the existing WorkOS redirect URIs when adding the exact preview callback. Do not add a wildcard. The sign-in route fixes both organization and return destination (`/hq`), ignoring URL-provided return/role values. The existing callback uses the SDK's protected state to return to HQ.
 
 ## Remaining cloud work
 
 1. Owner hosted sign-in is verified. Complete the real non-owner denial check; fictional-policy tests do not substitute for that separate check.
-2. Apply the prepared cloud migration/setup packet to the approved pre-production target and configure the dedicated read-only HQ credential. Code and local denial tests are complete; no remote HQ migration has run.
-3. The bounded adapter, immutable drafts, identity-bound database functions and conservative budget reservations are implemented and locally verified. Complete the first cloud deployment and funded run described in the [pilot factsheet](CLOUD_WORKER_PILOT.md) before scheduling it.
+2. HQ migrations and separate runner/reader credentials are installed in pre-production. Actual restricted-login denial checks pass. Refresh the preview deployment and verify its live read-only status panel.
+3. The bounded adapter, immutable drafts, identity-bound database functions and conservative budget reservations are implemented and locally verified. The disabled cloud deployment is verified. Complete the first funded run described in the [pilot factsheet](CLOUD_WORKER_PILOT.md) before scheduling it.
 4. Select one actual workload, then provision its cloud runtime with Oday's confirmed spending limit. Existing desktop schedules continue to need the laptop until their selected job is cut over and its duplicate timer is paused.
 5. Prepare the exact production deployment/migration packet and rollback. Oday retains production authority.
 
-The discussed additional $20/month remains a proposed pilot envelope, not an enacted subscription or a verified bill. No Pro upgrade, paid worker or model API budget is enabled by this preview. AWS memory banks, eight databases and a new agent framework are unnecessary for this increment; keep scoped memory on the existing Postgres foundation. Revoke owner access by removing the preview membership/role; disable the preview by setting its branch-specific `TRACELI_HQ_ACCESS=disabled` and redeploying. None of these preview settings are production settings.
+Oday approved the additional $20/month pilot, and the API account is funded with an $8 project hard limit and automatic recharge off. The Railway trial is active; no paid Railway subscription or $10 hosting cap is established yet. The worker remains paused pending its key and first live acceptance. No Pro upgrade is required by this setup. AWS memory banks, eight databases and a new agent framework are unnecessary for this increment; keep scoped memory on the existing Postgres foundation. Revoke owner access by removing the preview membership/role; disable the preview by setting its branch-specific `TRACELI_HQ_ACCESS=disabled` and redeploying. None of these preview settings are production settings.
 
 [Access verification](reviews/access-verification.md) · [Postgres foundation](POSTGRES_FOUNDATION.md) · [Backlog](IMPLEMENTATION_BACKLOG.md)
