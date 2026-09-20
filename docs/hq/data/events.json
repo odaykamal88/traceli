@@ -178,5 +178,14 @@
     "subject": "Operating Room reorganized around decisions and outcomes",
     "summary": "The landing page now puts milestones, owner inputs, blockers and recent changes first. Today’s read found 45 original tasks, 5 pending reviews and unchanged Week 4 buyer counters. The latest saved desktop result remains 15 September; social analytics are unavailable.",
     "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+  },
+  {
+    "id": "EVT-FEED-20260920",
+    "at": "2026-09-20T14:08:42.721Z",
+    "actor": "Builder + Librarian",
+    "type": "cloud_feed_verified",
+    "subject": "Operating metadata now reaches HQ automatically",
+    "summary": "Hosted source delivery verified. Railway produced one bounded Luna draft for review at about $0.0012 and skipped a repeat without a model call. The next daily run is due 21 September at 09:00 Cairo; six specialist desks remain to migrate.",
+    "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
   }
 ]

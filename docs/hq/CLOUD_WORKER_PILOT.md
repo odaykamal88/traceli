@@ -63,3 +63,7 @@ Set the policy's enabled flag false to deny claim, reservation and submission; d
 Rollback the HQ preview to the last verified branch deployment if necessary. Retain the additive database tables with access disabled; destructive down-migration is unnecessary. Production website and original Operating Room remain separate.
 
 [OpenAI model and pricing](https://developers.openai.com/api/docs/models/gpt-5.6-luna) · [Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs) · [Railway plans](https://docs.railway.com/pricing/plans) · [Railway cost controls](https://docs.railway.com/pricing/cost-control)
+
+## 20 September input extension
+
+The signed Operating Room metadata feed now supplies the bounded brief under the existing pilot budget. [Loop charter](operations/EFFICIENT_CLOUD_LOOP.md) defines the exact field contract, source-age gate and review hold. [Deployment evidence](cloud/OPERATING_FEED_20260920.md) records cloud execution, costs and remaining migration scope. New draft `cloud-brief-20260920` remains awaiting review; the first-draft exception does not apply.

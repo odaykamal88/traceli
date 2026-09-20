@@ -4,23 +4,23 @@
     "name": "Existing shortlist watch",
     "owner": "Scout",
     "trigger": "Weekly or new official source",
-    "state": "Existing Funding Watch \u00b7 bounded internal scope",
+    "state": "Existing Funding Watch · bounded internal scope",
     "evidence": "RUNTIME_HANDOFF.md"
   },
   {
     "id": "LOOP-02",
-    "name": "Case \u2192 review \u2192 content",
+    "name": "Case → review → content",
     "owner": "Investigator / Auditor / Editor",
     "trigger": "Manual accepted-source handoff",
-    "state": "Existing Editorial Desk \u00b7 eligible queued work",
+    "state": "Existing Editorial Desk · eligible queued work",
     "evidence": "RUNTIME_HANDOFF.md"
   },
   {
     "id": "LOOP-03",
-    "name": "Discovery \u2192 product evidence",
+    "name": "Discovery → product evidence",
     "owner": "Listener / Product Steward",
     "trigger": "Authorized actual conversation",
-    "state": "Existing Customer Learning Review \u00b7 actual inputs required",
+    "state": "Existing Customer Learning Review · actual inputs required",
     "evidence": "RUNTIME_HANDOFF.md"
   },
   {
@@ -28,7 +28,7 @@
     "name": "Memory promotion",
     "owner": "Librarian / Supervisor",
     "trigger": "Reviewed proposal and exact approval",
-    "state": "Prepared \u00b7 manual review",
+    "state": "Prepared · manual review",
     "evidence": "data/memory-proposals.json"
   },
   {
@@ -41,10 +41,10 @@
   },
   {
     "id": "LOOP-CLOUD-01",
-    "name": "Cloud readiness brief",
+    "name": "Operating metadata → bounded cloud brief",
     "owner": "Librarian / Supervisor",
-    "trigger": "Daily 06:00 UTC; model call only for a new Supervisor-approved snapshot",
-    "state": "Cloud schedule verified 17 September; first draft accepted under exact Oday exception",
+    "trigger": "Daily 06:00 UTC; signed source metadata; fresh changed evidence and no pending draft required",
+    "state": "Cloud execution and no-spend review hold verified 20 September; next scheduled occurrence pending",
     "evidence": "cloud/LIVE_RUN_20260917.md"
   }
 ]

@@ -63,7 +63,7 @@ export function NeedsOday({ control, room, compact = false }: { control: Control
   const pending = room.reviews.filter(r => r.status === 'pending')
   return <section id="needs-you" className={s.anchor}>
     <SectionTitle number="02" title="What I need from you" href={compact ? '/hq?view=needs-you' : undefined} action="All requests & reviews"/>
-    <div className={s.askGrid}>{control.asks.filter(ask => ask.task_ids.some(id => room.tasks.find(t => t.id === id)?.status !== 'done')).map(ask => <article className={`${s.card} ${s.askCard}`} key={ask.id}>
+    <div className={s.askGrid}>{control.asks.filter(ask => ask.id === 'editorial-review' ? pending.some(review => ask.task_ids.includes(review.task_id)) : ask.task_ids.some(id => room.tasks.find(t => t.id === id)?.status !== 'done')).map(ask => <article className={`${s.card} ${s.askCard}`} key={ask.id}>
       <div className={s.cardTop}><Status tone="warning">{ask.priority}</Status><span className={s.fine}>{ask.task_ids.map(id => '#' + id).join(' · ')}</span></div>
       <h3>{ask.title}</h3><p>{ask.why}</p>
       <details className={s.disclosure}><summary>What to provide</summary><p>{ask.request}</p><p className={s.fine}>{ask.next_owner}</p></details>

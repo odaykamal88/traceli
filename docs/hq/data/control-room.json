@@ -41,8 +41,8 @@
         "status": "pending"
       }
     ],
-    "next": "Prepare one desk migration with its approved inputs, review rules and output receipts. The six existing desks still depend on desktop. Resolve hosting continuity beyond Railway’s trial.",
-    "evidence_ref": "cloud/DAILY_CHECKS_20260920.md"
+    "next": "The source metadata feed and economical cloud brief are live. Review the new draft, observe the next scheduled run, then migrate one specialist desk with equivalent inputs and receipts. Resolve hosting continuity beyond the Railway trial.",
+    "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
   },
   "blockers": [
     {
@@ -75,14 +75,14 @@
     {
       "id": "desk-migration",
       "title": "Six desks still depend on desktop",
-      "impact": "The cloud pilot is proven, but it does not yet carry the desks’ operating work.",
+      "impact": "The metadata feed and bounded brief now run in the cloud. The six specialist desk workflows still need their own equivalent inputs and review controls.",
       "owner": "Builder + Supervisor",
-      "next": "Prepare one equivalent desk migration and resolve hosting continuity beyond the trial. The first daily check is now verified.",
+      "next": "Use the first cloud loop as the foundation, then migrate one specialist workflow and resolve hosting continuity beyond the trial.",
       "task_ids": [
         44,
         45
       ],
-      "evidence_ref": "cloud/SCHEDULED_CHECK_20260918.md"
+      "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
     }
   ],
   "asks": [
@@ -181,11 +181,11 @@
       "id": "G",
       "name": "HQ & cloud operations",
       "owner": "Builder + Librarian",
-      "state": "Pilot accepted",
+      "state": "First economical loop live",
       "tone": "good",
-      "now": "Private HQ and scoped Postgres are live. One cloud draft is accepted; the first scheduled check returned idle.",
-      "next": "Move one desk with its inputs, evidence and review controls; arrange hosting continuity.",
-      "evidence_ref": "cloud/SCHEDULED_CHECK_20260918.md"
+      "now": "Hosted source metadata reaches HQ; Railway produced a Luna draft and skipped the repeat while review is pending.",
+      "next": "Review the draft, verify the next daily occurrence, then move one specialist desk; arrange hosting continuity.",
+      "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
     }
   ],
   "channels": [

@@ -8,7 +8,7 @@ Keep HQ task status, milestone counters, review queue and desk receipts aligned 
 
 ## Trigger, authority and memory
 
-On each successful source API read/change, a consistent D1 metadata read is signed and pushed to the fixed private HQ destination. The shared signing key is secret-store only. Five-minute authentication window; exact source and schema; 200 KB packet limit; immutable tenant binding and restricted ingest login. The original successful source write is preserved if delivery fails. The UI reports pending delivery; its next read/change retries. There is no independent scheduler or durable retry outbox in Sites. No temporary private-access bearer is stored.
+On each successful source API read/change, a consistent D1 metadata read is signed and pushed to the fixed private HQ destination. The shared signing key is secret-store only. A distinct server-only Vercel automation credential passes preview platform protection; HQ owner authentication and the HMAC check remain enforced. Five-minute authentication window; exact source and schema; 200 KB packet limit; immutable tenant binding and restricted ingest login. The original successful source write is preserved if delivery fails. The UI reports pending delivery; its next read/change retries. There is no independent scheduler or durable retry outbox in Sites. No temporary private-access bearer is stored.
 
 Railway checks this Postgres mirror daily at 06:00 UTC (09:00 Cairo). Every check saves a receipt without a model call. `captured_at` is the source read; `received_at` is transport; `checked_at` is the worker check. A mirror check never refreshes source age. HQ renders the latest mirror after owner authentication; unavailability falls back to a clearly dated saved snapshot.
 
