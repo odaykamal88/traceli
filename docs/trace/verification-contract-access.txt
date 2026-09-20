@@ -1,0 +1,37 @@
+(node:43296) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/odaykamal/.codex/worktrees/6672/TRACELI/lib/trace/access-policy.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/odaykamal/.codex/worktrees/6672/TRACELI/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:43296) ExperimentalWarning: Module mocking is an experimental feature and might change at any time
+✔ local identity is explicit, development-only and cannot target remote DB or connection overrides (0.791125ms)
+✔ no session or unverified identity is denied (1.222458ms)
+✔ session role cannot override removed membership or downgraded current role (0.31175ms)
+✔ wrong tenant, wrong actor and inactive membership fail closed (0.199333ms)
+✔ ambiguous memberships and unknown roles cannot add privileges (0.146542ms)
+✔ impersonation, auth lookup outage and changed current subject deny (0.226875ms)
+✔ each operation checks fresh membership (0.173875ms)
+✔ disabled or incomplete auth never resolves a session (0.121875ms)
+✔ local identity rejects a non-loopback request host (17.66125ms)
+✔ mutation parser rejects missing/cross origin and oversized streams (4.211375ms)
+✔ HTTP errors never expose arbitrary backend diagnostics (0.698792ms)
+(node:43297) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/odaykamal/.codex/worktrees/6672/TRACELI/lib/trace/contract.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/odaykamal/.codex/worktrees/6672/TRACELI/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ all eight offline scenarios preserve model/policy separation and honest unknown states (44.046875ms)
+✔ strict schemas reject extras, invalid calendar facts, invented unknown dates and nonfinite probabilities (6.048541ms)
+✔ meaningful byte, source manifest, snapshot, frozen input and policy hashes verify independently (1.806917ms)
+✔ foreign tenant and same-tenant foreign-procurement child references fail even with a new outer hash (6.106333ms)
+✔ corrupted bytes, invented source content, false policy results and oversize payloads fail closed (6.406833ms)
+✔ evidence-only revision preserves lane/case and exact source/profile/policy while changing snapshot (5.72075ms)
+✔ explicit source correction appends a new source version and binds new policy/input hashes (2.389292ms)
+✔ human decisions require exact hashes, rationale, source-linked citations and actual override authority (3.347833ms)
+✔ full export reconstructs exact disclosed record; allowlisted redaction leaks no creator/reviewer/rationale (10.93625ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233.321083

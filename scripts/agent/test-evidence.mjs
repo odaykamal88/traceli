@@ -103,29 +103,32 @@ test('malicious evidence text remains data and cannot authorize approval or exfi
   assert.deepEqual(await snapshot(), before)
 })
 
-test('unknown source ACL and unlocked source fail closed, without returning a partial record', async () => {
+test('unknown source ACL fails closed and locked source cannot be unlocked', async () => {
   try {
     await admin.query("UPDATE source_documents SET access_boundary='Restricted legal' WHERE id='source-rfp-2026-041-alpha'")
     assert.deepEqual(await read(), { ok: false, error: 'evidence_unavailable' })
   } finally {
     await admin.query("UPDATE source_documents SET access_boundary='Panel and procurement team' WHERE id='source-rfp-2026-041-alpha'")
   }
-  try {
-    await admin.query("UPDATE source_versions SET locked_at=NULL WHERE id='source-version-rfp-2026-041-alpha'")
-    assert.deepEqual(await read(), { ok: false, error: 'evidence_unavailable' })
-  } finally {
-    await admin.query("UPDATE source_versions SET locked_at='2026-04-02T08:00:00Z' WHERE id='source-version-rfp-2026-041-alpha'")
-  }
+  const before = await read()
+  await assert.rejects(
+    admin.query("UPDATE source_versions SET locked_at=NULL WHERE id='source-version-rfp-2026-041-alpha'"),
+    /Locked source versions are immutable/,
+  )
+  assert.deepEqual(await read(), before)
 })
 
 test('same-tenant source from a different procurement cannot be cited', async () => {
   await admin.query(`INSERT INTO procurements (id,organization_id,reference,title,region,status,blocker_summary)
     VALUES ('fixture-other-procurement','org_traceli_relief','OTHER','Other','Test','draft','Test')`)
   try {
-    await admin.query("UPDATE source_documents SET procurement_id='fixture-other-procurement' WHERE id='source-rfp-2026-041-alpha'")
-    assert.deepEqual(await read(), { ok: false, error: 'evidence_unavailable' })
+    const before = await read()
+    await assert.rejects(
+      admin.query("UPDATE source_documents SET procurement_id='fixture-other-procurement' WHERE id='source-rfp-2026-041-alpha'"),
+      /foreign key constraint/,
+    )
+    assert.deepEqual(await read(), before)
   } finally {
-    await admin.query('UPDATE source_documents SET procurement_id=$1 WHERE id=$2', [procurementId, 'source-rfp-2026-041-alpha'])
     await admin.query("DELETE FROM procurements WHERE id='fixture-other-procurement'")
   }
 })

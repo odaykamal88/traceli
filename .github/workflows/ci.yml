@@ -71,6 +71,12 @@ jobs:
         run: pnpm test:agent
         env:
           TRACELI_AGENT_FIXTURE: '1'
+      - name: Test synthetic Trace contracts and access boundary
+        run: pnpm test:trace
+      - name: Test Trace persistence, review and export boundaries
+        run: pnpm test:trace:postgres
+      - name: Test safe Trace migration preflight
+        run: pnpm test:trace:migration
 
   supply-chain:
     name: Dependency and secret checks

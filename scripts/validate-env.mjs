@@ -58,6 +58,21 @@ if (isConfigured('TRACELI_SEED_ORGANIZATION_ID') && !databaseConfigured) {
 }
 
 const hqAccess = process.env.TRACELI_HQ_ACCESS
+const traceMode = process.env.TRACELI_TRACE_MODE
+if (traceMode && !['disabled', 'local', 'workos'].includes(traceMode)) {
+  throw new Error('TRACELI_TRACE_MODE must be disabled, local or workos.')
+}
+if (traceMode === 'local') {
+  const url = new URL(process.env.DATABASE_URL || 'https://invalid')
+  if (process.env.NODE_ENV !== 'development' || process.env.VERCEL ||
+      !['postgres:', 'postgresql:'].includes(url.protocol) ||
+      !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) || url.search || url.hash) {
+    throw new Error('Local Trace requires development mode and an isolated loopback PostgreSQL URL without query overrides.')
+  }
+}
+if (traceMode === 'workos' && (!workOSConfigured || !databaseConfigured)) {
+  throw new Error('Trace WorkOS access requires complete WorkOS and database configuration.')
+}
 if (hqAccess && !['disabled', 'local', 'workos'].includes(hqAccess)) {
   throw new Error('TRACELI_HQ_ACCESS must be disabled, local or workos.')
 }

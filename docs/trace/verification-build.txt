@@ -1,0 +1,46 @@
+▲ Next.js 16.3.3 (webpack)
+✓ Running next.config.mjs took 8ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 9.3s
+  Running TypeScript ...
+  Finished TypeScript in 4.8s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/17) ...
+  Generating static pages using 7 workers (4/17) 
+  Generating static pages using 7 workers (8/17) 
+  Generating static pages using 7 workers (12/17) 
+✓ Generating static pages using 7 workers (17/17) in 586ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/health
+├ ƒ /api/hq/jev-smoke
+├ ƒ /api/hq/source
+├ ƒ /api/trace
+├ ƒ /api/trace/export
+├ ƒ /auth/callback
+├ ○ /demo
+├ ○ /docs
+├ ƒ /hq
+├ ƒ /hq/sign-in
+├ ○ /insights
+├ ○ /insights/the-app-was-delivered-the-fallout-lasted-years
+├ ○ /insights/the-award-was-signed-the-proof-was-not-ready
+├ ○ /opengraph-image
+├ ƒ /sign-in
+├ ƒ /sign-up
+├ ƒ /workspace
+├ ○ /workspace/access-required
+├ ○ /workspace/setup-required
+└ ƒ /workspace/trace
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

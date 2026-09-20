@@ -1,0 +1,10 @@
+Applied 0001_tenant_safe_control_graph.sql
+Applied 0002_restricted_application_role.sql
+Applied 0003_hq_operating_memory.sql
+Applied 0004_hq_cloud_pilot.sql
+Applied 0005_hq_cloud_review_status.sql
+Applied 0006_hq_operating_feed.sql
+Applied 0007_hq_customer_readout.sql
+Applied 0008_hq_readout_timeout_contract.sql
+Applied 0009_hq_readout_check_receipts.sql
+Applied 0010_trace_workflow.sql

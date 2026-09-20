@@ -1,0 +1,22 @@
+✔ authorized persisted read includes exact source reference and pending human decision (15.963291ms)
+✔ guessed other-tenant and missing IDs are indistinguishable; second tenant can read its own record (8.82275ms)
+✔ missing identity, invalid tenant and disallowed roles fail closed (2.63175ms)
+✔ agent cannot supply tenant, viewer, URL, path, SQL, extra citation fields or mutation tools (0.835875ms)
+✔ citation validation rejects invented anchors, hashes and cross-tenant references (20.243917ms)
+✔ malicious evidence text remains data and cannot authorize approval or exfiltration (6.865875ms)
+✔ unknown source ACL fails closed and locked source cannot be unlocked (9.056666ms)
+✔ same-tenant source from a different procurement cannot be cited (6.264875ms)
+✔ oversized output is rejected and repeated reads cause no writes (8.946375ms)
+✔ shared tenant transaction enforces SQL read-only, even if a caller attempts a write (2.490292ms)
+✔ read-only query duration is bounded and a timed-out read does not poison the next transaction (5013.041292ms)
+✔ local CLI uses trusted fixture identity and serializes the real contract response (462.404875ms)
+✔ fixture launcher rejects nonlocal or nonfixture databases before connecting (0.194209ms)
+✔ database failure returns a bounded generic error; a subsequent healthy retry succeeds (379.422708ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6469.496458

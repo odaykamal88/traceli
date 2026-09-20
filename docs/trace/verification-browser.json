@@ -1,0 +1,71 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-09-20T19:54:27.573Z",
+  "base": "http://127.0.0.1:3044",
+  "checks": [
+    {
+      "name": "Keyboard skip link reaches main; fixture controls render without error overlay",
+      "status": "passed"
+    },
+    {
+      "name": "Missing evidence remains unknown with useful next action and source disclosure",
+      "status": "passed"
+    },
+    {
+      "name": "Evidence revision preserves original U rule context and immutable history",
+      "status": "passed"
+    },
+    {
+      "name": "Human decision persists with rationale and exact version",
+      "status": "passed"
+    },
+    {
+      "name": "Redacted and full downloads verify hashes; revocation denies future downloads",
+      "status": "passed"
+    },
+    {
+      "name": "Concurrent review returns visible conflict and preserves unsaved rationale",
+      "status": "passed"
+    },
+    {
+      "name": "Mandatory failure stays visible with high mock confidence; override preserves it",
+      "status": "passed"
+    },
+    {
+      "name": "Scenario conflict: separate evidence and processing state",
+      "status": "passed"
+    },
+    {
+      "name": "Scenario excluded: separate evidence and processing state",
+      "status": "passed"
+    },
+    {
+      "name": "Scenario unknown_date: separate evidence and processing state",
+      "status": "passed"
+    },
+    {
+      "name": "Scenario timeout: separate evidence and processing state",
+      "status": "passed"
+    },
+    {
+      "name": "Scenario invalid_model: separate evidence and processing state",
+      "status": "passed"
+    },
+    {
+      "name": "Desktop and 320/375px layouts keep open provenance readable, keyboard disclosures work",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown direct source and cross-origin mutation disclose no record",
+      "status": "passed"
+    },
+    {
+      "name": "Lost create response retries the same command without a duplicate unit",
+      "status": "passed"
+    }
+  ],
+  "browserErrors": [],
+  "limitations": [
+    "Synthetic local identities and fixtures only; no human comprehension study or production/WorkOS browser session."
+  ]
+}
