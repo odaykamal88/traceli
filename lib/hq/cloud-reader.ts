@@ -1,8 +1,10 @@
 import 'server-only'
 import pg from 'pg'
 import { z } from 'zod'
+import { operatingSnapshotSchema } from '@/lib/hq/operating-contract'
 
 const snapshotSchema = z.object({
+  operating: operatingSnapshotSchema,
   checked_at: z.string(),
   workers: z.array(z.object({ actor: z.string(), mandate: z.string(), enabled: z.boolean(), monthly_limit_microusd: z.number(), reserved_microusd: z.number(), pricing_valid_until: z.string() })),
   runs: z.array(z.object({
@@ -29,8 +31,9 @@ export async function readCloudHQ(): Promise<CloudState> {
     await client.query('BEGIN READ ONLY')
     await client.query('SET LOCAL ROLE traceli_hq_cloud_reader')
     const result = await client.query('SELECT public.hq_cloud_snapshot() AS snapshot')
+    const operating = await client.query('SELECT public.hq_operating_snapshot() AS snapshot')
     await client.query('COMMIT')
-    return { connection: 'connected', snapshot: snapshotSchema.parse(result.rows[0].snapshot) }
+    return { connection: 'connected', snapshot: snapshotSchema.parse({ ...result.rows[0].snapshot, operating: operating.rows[0].snapshot }) }
   } catch {
     if (client) await client.query('ROLLBACK').catch(() => {})
     // Never log connection strings, provider bodies, source text or credentials.

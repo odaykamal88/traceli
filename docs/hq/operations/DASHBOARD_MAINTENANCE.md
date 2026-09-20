@@ -4,10 +4,11 @@ The landing page is a decision view, not an activity counter. It should answer: 
 
 ## Sources and freshness
 
-- `data/operating-room.json`: minimized snapshot from the existing private Operating Room. Preserve original task/review IDs and the actual read timestamp. The UI labels it a snapshot and flags it for refresh after 24 hours. Page refresh does not reread the remote board.
+- Signed cloud feed: source API reads/changes push minimized metadata into Postgres. HQ reads that mirror after owner authentication. Source capture and cloud check times are distinct; stale sources pause paid drafts. See `EFFICIENT_CLOUD_LOOP.md`.
+- `data/operating-room.json`: fallback minimized snapshot from the existing private Operating Room. Preserve original task/review IDs and the actual read timestamp. The UI labels it a snapshot and flags it for refresh after 24 hours. Page refresh does not reread the remote board.
 - `data/control-room.json`: Supervisor-reviewed milestone definitions, blockers, requests, workstream handoffs, channel evidence and lessons. Each item has an evidence link or original task IDs; `reviewed_at` dates the brief. Update this alongside new accepted evidence.
 - `data/events.json`: dated event history. Add outcomes, exceptions and decisions with evidence; do not rewrite earlier checkpoints to imply they were known sooner.
-- Cloud status: the existing authenticated read-only Postgres reader supplies current saved runs, review states and budget reservations. No additional credentials, tables or write authority were added for the overview.
+- Cloud status: the existing authenticated read-only Postgres reader supplies current saved runs, review states and budget reservations. The source bridge uses a separate restricted ingest identity; the dashboard reader cannot write or approve records.
 - LinkedIn/X: dated release and feedback records only. No live analytics connector is installed. Missing reach or response metrics stay unavailable. An original board task marked done cannot establish publication without the URL/receipt.
 
 ## Supervisor update procedure

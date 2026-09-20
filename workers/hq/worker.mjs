@@ -88,6 +88,12 @@ export async function runOnce({ db, apiKey, fetchImpl = fetch, monotonicNow = ()
   return { status: 'review', job_id: claim.job_id, artifact_hash: result.artifactHash }
 }
 
+export async function runCycle(options) {
+  const check = (await options.db.query('SELECT public.hq_operating_tick() AS result')).rows[0].result
+  if (check.model_eligible !== true) return { ...check, model_called: false }
+  return await runOnce(options)
+}
+
 async function main() {
   if (process.env.HQ_WORKER_ENABLED !== 'true') { console.log(JSON.stringify({ status: 'disabled' })); return }
   if (!process.env.HQ_WORKER_DATABASE_URL || !process.env.OPENAI_API_KEY) throw new Error('Worker configuration incomplete')
@@ -98,7 +104,7 @@ async function main() {
   try {
     await db.connect()
     await db.query('SET ROLE traceli_hq_cloud_runner')
-    console.log(JSON.stringify(await runOnce({ db, apiKey: process.env.OPENAI_API_KEY })))
+    console.log(JSON.stringify(await runCycle({ db, apiKey: process.env.OPENAI_API_KEY })))
   } finally { clearTimeout(hardStop); await db.end() }
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

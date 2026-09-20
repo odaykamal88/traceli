@@ -63,7 +63,7 @@ export function NeedsOday({ control, room, compact = false }: { control: Control
   const pending = room.reviews.filter(r => r.status === 'pending')
   return <section id="needs-you" className={s.anchor}>
     <SectionTitle number="02" title="What I need from you" href={compact ? '/hq?view=needs-you' : undefined} action="All requests & reviews"/>
-    <div className={s.askGrid}>{control.asks.map(ask => <article className={`${s.card} ${s.askCard}`} key={ask.id}>
+    <div className={s.askGrid}>{control.asks.filter(ask => ask.task_ids.some(id => room.tasks.find(t => t.id === id)?.status !== 'done')).map(ask => <article className={`${s.card} ${s.askCard}`} key={ask.id}>
       <div className={s.cardTop}><Status tone="warning">{ask.priority}</Status><span className={s.fine}>{ask.task_ids.map(id => '#' + id).join(' · ')}</span></div>
       <h3>{ask.title}</h3><p>{ask.why}</p>
       <details className={s.disclosure}><summary>What to provide</summary><p>{ask.request}</p><p className={s.fine}>{ask.next_owner}</p></details>
@@ -130,10 +130,21 @@ export function ControlHome({ control, room, events, cloud }: { control: Control
     </section>
     <nav className={s.quickNav} aria-label="Operating room questions"><a href="#milestones"><span>01</span>How close are we?</a><a href="#needs-you"><span>02</span>What needs me?</a><a href="#blockers"><span>03</span>What is blocked?</a><a href="#activity"><span>04</span>What changed?</a></nav>
     <div className={s.sourceStrip}><span><i className={fresh === 'recent' ? s.dot : s.dotWarning}/>{fresh === 'recent' ? 'Board read' : 'Board snapshot needs refresh'} · {recordedTime(room.checked_at)}</span>{lastBoardChange && <span>Last task change: {recordedTime(lastBoardChange)}</span>}<span>Cloud: {cloud.connection === 'connected' ? latestRun ? 'latest draft ' + latestRun.status : 'no run recorded' : 'live status unavailable'}</span><Link href="/hq?view=systems">Sources & system status ↗</Link></div>
-    <section id="milestones" className={s.anchor}><SectionTitle number="01" title="Progress toward the next milestone" href="/hq?view=milestones" action="Milestones & criteria"/><Milestones control={control} room={room}/></section>
+    <SourceConnection cloud={cloud} compact/><section id="milestones" className={s.anchor}><SectionTitle number="01" title="Progress toward the next milestone" href="/hq?view=milestones" action="Milestones & criteria"/><Milestones control={control} room={room}/></section>
     <NeedsOday control={control} room={room} compact/>
     <div className={s.activityWrap}><Activity events={events} compact/></div>
     <Blockers control={control}/><WorkstreamSummary control={control}/><Feedback control={control} room={room}/><Lessons control={control} compact/>
-    <p className={s.fine}>Business records are a dated, reviewed snapshot of the original Operating Room. Cloud run status is read from Postgres at page load. Refreshing this page does not import new outreach or social metrics. <Evidence file="operations/DASHBOARD_MAINTENANCE.md" label="How this room stays current"/></p>
+    <p className={s.fine}>Board counts and review status use the signed source mirror when connected, with a dated fallback if unavailable. Source reads and changes push updates; refreshing HQ reads the saved mirror. Narrative priorities, lessons and social feedback still need reviewed evidence updates. <Evidence file="operations/DASHBOARD_MAINTENANCE.md" label="How this room stays current"/></p>
   </div>
+}
+
+export function SourceConnection({ cloud, compact = false }: { cloud: CloudState; compact?: boolean }) {
+  const source = cloud.snapshot?.operating.source, check = cloud.snapshot?.operating.checks[0]
+  const fresh = source && Date.now() - Date.parse(source.captured_at) < 86400000
+  return <section className={s.card} aria-label="Cloud source connection">
+    <div className={s.cardTop}><h3>Cloud operations feed</h3><Status tone={fresh ? 'good' : 'warning'}>{source ? fresh ? 'Source received' : 'Source needs refresh' : 'Using saved fallback'}</Status></div>
+    <p>Source read: {source ? recordedTime(source.captured_at) : 'No signed source received'}. Worker check: {check ? recordedTime(check.checked_at) + ' · ' + check.status.replaceAll('_', ' ') : 'No feed check recorded'}.</p>
+    <p className={s.fine}>Metadata checks use zero model tokens. Luna drafts only changed, fresh evidence; pending review stops further generation. Source updates arrive when the original room is read or changed.</p>
+    {!compact && <><p>Source older than 24 hours pauses generation. Delivery failure preserves the source record and retries on its next read/change. This is not continuous polling of the private source.</p><Evidence file="operations/EFFICIENT_CLOUD_LOOP.md" label="Loop charter, limits & recovery"/></>}
+  </section>
 }
