@@ -1,0 +1,802 @@
+{
+  "source_id": "appgprj_6a94833e5918819180fb17a031f5711e",
+  "captured_at": "2026-09-20T17:16:21.656Z",
+  "content_hash": "2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+  "records": {
+    "tasks": [
+      {
+        "id": 1,
+        "due": "Mon",
+        "lane": "Pitching",
+        "week": "2026-08-31",
+        "owner": "Oday",
+        "title": "Ring UNFPA and WFP procurement",
+        "status": "done",
+        "updated_at": "2026-08-31T19:30:28.557Z"
+      },
+      {
+        "id": 2,
+        "due": "Tue",
+        "lane": "Pipeline",
+        "week": "2026-08-31",
+        "owner": "Oday",
+        "title": "Follow up the six DIHAD contacts",
+        "status": "done",
+        "updated_at": "2026-09-01T13:03:53.165Z"
+      },
+      {
+        "id": 3,
+        "due": "Fri",
+        "lane": "Demand",
+        "week": "2026-08-31",
+        "owner": "Oday",
+        "title": "Capture one named tender and trigger",
+        "status": "todo",
+        "updated_at": "2026-08-30T19:33:00.017Z"
+      },
+      {
+        "id": 4,
+        "due": "Thu",
+        "lane": "Approval",
+        "week": "2026-08-31",
+        "owner": "Oday",
+        "title": "Approve the first evidence-led article",
+        "status": "done",
+        "updated_at": "2026-09-09T05:43:38.327Z"
+      },
+      {
+        "id": 5,
+        "due": "Tue",
+        "lane": "Research",
+        "week": "2026-08-31",
+        "owner": "Codex",
+        "title": "Verify the four first-piece sources",
+        "status": "done",
+        "updated_at": "2026-09-01T13:22:30.732Z"
+      },
+      {
+        "id": 6,
+        "due": "Wed",
+        "lane": "Editorial",
+        "week": "2026-08-31",
+        "owner": "Codex",
+        "title": "Draft the publication and source sheet",
+        "status": "done",
+        "updated_at": "2026-09-02T20:43:37.431Z"
+      },
+      {
+        "id": 7,
+        "due": "Fri",
+        "lane": "Security",
+        "week": "2026-08-31",
+        "owner": "Codex",
+        "title": "Run security posture review",
+        "status": "done",
+        "updated_at": "2026-09-07T21:30:28.377Z"
+      },
+      {
+        "id": 8,
+        "due": "Fri",
+        "lane": "Learning",
+        "week": "2026-08-31",
+        "owner": "Codex",
+        "title": "Synthesize customer learning",
+        "status": "todo",
+        "updated_at": "2026-08-30T19:33:00.017Z"
+      },
+      {
+        "id": 9,
+        "due": "2026-09-08",
+        "lane": "Publish",
+        "week": "2026-09-07",
+        "owner": "Oday",
+        "title": "Finalize the article",
+        "status": "done",
+        "updated_at": "2026-09-09T06:05:40.438Z"
+      },
+      {
+        "id": 10,
+        "due": "2026-09-09",
+        "lane": "Publish",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Finish the publication packet",
+        "status": "done",
+        "updated_at": "2026-09-09T05:43:44.573Z"
+      },
+      {
+        "id": 11,
+        "due": "2026-09-10",
+        "lane": "Publish",
+        "week": "2026-09-07",
+        "owner": "Oday",
+        "title": "Publish and verify the approved assets",
+        "status": "done",
+        "updated_at": "2026-09-09T06:05:45.358Z"
+      },
+      {
+        "id": 12,
+        "due": "2026-09-07",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Rebuild the operating room",
+        "status": "done",
+        "updated_at": "2026-09-07T21:30:28.377Z"
+      },
+      {
+        "id": 13,
+        "due": "2026-09-09",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Clear the dependency security gate",
+        "status": "done",
+        "updated_at": "2026-09-09T17:01:13.463Z"
+      },
+      {
+        "id": 14,
+        "due": "2026-09-09",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Connect automatic run reporting",
+        "status": "done",
+        "updated_at": "2026-09-08T06:57:29.147Z"
+      },
+      {
+        "id": 15,
+        "due": "2026-09-10",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Prove delivery inside an existing agent",
+        "status": "blocked",
+        "updated_at": "2026-09-10T07:23:14.577Z"
+      },
+      {
+        "id": 16,
+        "due": "2026-09-11",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Exercise the evidence and tool boundaries",
+        "status": "done",
+        "updated_at": "2026-09-10T11:41:42.822Z"
+      },
+      {
+        "id": 17,
+        "due": "2026-09-07",
+        "lane": "Buyers",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Review all Gojiberry imports",
+        "status": "done",
+        "updated_at": "2026-09-07T21:30:28.377Z"
+      },
+      {
+        "id": 18,
+        "due": "2026-09-08",
+        "lane": "Buyers",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Verify five current buyer triggers",
+        "status": "done",
+        "updated_at": "2026-09-08T11:30:33.876Z"
+      },
+      {
+        "id": 19,
+        "due": "2026-09-09",
+        "lane": "Buyers",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Prepare three prospect evidence briefs",
+        "status": "review",
+        "updated_at": "2026-09-08T11:31:53.009Z"
+      },
+      {
+        "id": 20,
+        "due": "2026-09-09",
+        "lane": "Buyers",
+        "week": "2026-09-07",
+        "owner": "Oday",
+        "title": "Send the first five reviewed briefs",
+        "status": "doing",
+        "updated_at": "2026-09-09T16:43:46.129Z"
+      },
+      {
+        "id": 21,
+        "due": "2026-09-10",
+        "lane": "Buyers",
+        "week": "2026-09-07",
+        "owner": "Oday",
+        "title": "Record the useful discussions",
+        "status": "done",
+        "updated_at": "2026-09-09T06:06:17.439Z"
+      },
+      {
+        "id": 22,
+        "due": "2026-09-11",
+        "lane": "Buyers",
+        "week": "2026-09-07",
+        "owner": "Oday",
+        "title": "Turn one live pain into a service scope",
+        "status": "todo",
+        "updated_at": "2026-09-07T21:30:28.377Z"
+      },
+      {
+        "id": 23,
+        "due": "2026-09-11",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Close the week against real evidence",
+        "status": "review",
+        "updated_at": "2026-09-11T08:55:33.520Z"
+      },
+      {
+        "id": 24,
+        "due": "2026-09-09",
+        "lane": "Publish",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Publication packet: apply the service positioning",
+        "status": "done",
+        "updated_at": "2026-09-08T11:22:49.344Z"
+      },
+      {
+        "id": 25,
+        "due": "2026-09-10",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Product presentation: show one readable evidence example",
+        "status": "done",
+        "updated_at": "2026-09-09T17:00:16.111Z"
+      },
+      {
+        "id": 26,
+        "due": "2026-09-11",
+        "lane": "Publish",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Friday review: connect content to buyer responses",
+        "status": "review",
+        "updated_at": "2026-09-14T06:19:30.032Z"
+      },
+      {
+        "id": 27,
+        "due": "2026-09-12",
+        "lane": "Platform",
+        "week": "2026-09-07",
+        "owner": "Codex",
+        "title": "Repair PostCSS updates and resolve scanning follow-up",
+        "status": "done",
+        "updated_at": "2026-09-12T19:46:55.981Z"
+      },
+      {
+        "id": 28,
+        "due": "2026-09-14",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Oday",
+        "title": "Confirm who received our outreach",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 29,
+        "due": "2026-09-14",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Reconstruct the outreach funnel",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 30,
+        "due": "2026-09-14",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Select ten people who do the work",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 31,
+        "due": "2026-09-15",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Prepare the messages and conversation guide",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 32,
+        "due": "2026-09-16",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Oday",
+        "title": "Send the ten personal approaches",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 33,
+        "due": "2026-09-17",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Diagnose replies and prepare eligible follow-ups",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 34,
+        "due": "2026-09-18",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Oday",
+        "title": "Follow up only where the window has elapsed",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 35,
+        "due": "2026-09-18",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Oday",
+        "title": "Hold and capture five problem conversations",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 36,
+        "due": "2026-09-18",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Scope one paid assignment if a real need emerges",
+        "status": "blocked",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 37,
+        "due": "2026-09-18",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Oday",
+        "title": "Secure a dated commercial next step",
+        "status": "blocked",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 38,
+        "due": "2026-09-18",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Recommend what to work on next",
+        "status": "doing",
+        "updated_at": "2026-09-20T17:07:30.096Z"
+      },
+      {
+        "id": 39,
+        "due": "2026-09-18",
+        "lane": "Buyers",
+        "week": "2026-09-14",
+        "owner": "Oday",
+        "title": "Choose the Week 5 priority",
+        "status": "todo",
+        "updated_at": "2026-09-12T08:48:03.094Z"
+      },
+      {
+        "id": 40,
+        "due": "After audience selection",
+        "lane": "Publish",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Tool backlog: fal.ai for LinkedIn and social outbound hooks",
+        "status": "blocked",
+        "updated_at": "2026-09-12T08:58:05.732Z"
+      },
+      {
+        "id": 41,
+        "due": "On trigger",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Tool backlog: Axiom for an evidenced logging gap",
+        "status": "blocked",
+        "updated_at": "2026-09-12T08:58:13.678Z"
+      },
+      {
+        "id": 42,
+        "due": "On trigger",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Tool backlog: Railway for a defined cloud worker",
+        "status": "blocked",
+        "updated_at": "2026-09-12T08:58:21.483Z"
+      },
+      {
+        "id": 43,
+        "due": "On trigger",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "Tool backlog: Convex only for a justified backend requirement",
+        "status": "blocked",
+        "updated_at": "2026-09-12T08:58:28.434Z"
+      },
+      {
+        "id": 44,
+        "due": "2026-09-15",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ G: connect mandate charters and schedule evidence",
+        "status": "review",
+        "updated_at": "2026-09-15T11:57:57.540Z"
+      },
+      {
+        "id": 45,
+        "due": "2026-09-15",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ G: extend Postgres memory and job foundation",
+        "status": "review",
+        "updated_at": "2026-09-15T20:33:58.472Z"
+      },
+      {
+        "id": 46,
+        "due": "2026-09-22",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M01: reconcile and register the three-lane moat program",
+        "status": "review",
+        "updated_at": "2026-09-20T15:06:17.748Z"
+      },
+      {
+        "id": 47,
+        "due": "2026-09-23",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M02: Decision corpus contract and field map",
+        "status": "todo",
+        "updated_at": "2026-09-20T15:00:41.058Z"
+      },
+      {
+        "id": 48,
+        "due": "2026-09-25",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M03: U: UN Secretariat / UNFPA source inventory",
+        "status": "todo",
+        "updated_at": "2026-09-20T15:00:49.098Z"
+      },
+      {
+        "id": 49,
+        "due": "2026-09-25",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M04: M: World Bank / ADB source inventory",
+        "status": "todo",
+        "updated_at": "2026-09-20T15:00:56.320Z"
+      },
+      {
+        "id": 50,
+        "due": "2026-09-25",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M05: G: Saudi central / UAE federal source inventory",
+        "status": "todo",
+        "updated_at": "2026-09-20T15:01:03.727Z"
+      },
+      {
+        "id": 51,
+        "due": "2026-09-23",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M06: Deduplicated case catalogue",
+        "status": "blocked",
+        "updated_at": "2026-09-20T15:01:15.527Z"
+      },
+      {
+        "id": 52,
+        "due": "2026-10-04",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M07: Versioned constraint matrix implementation specification",
+        "status": "blocked",
+        "updated_at": "2026-09-20T15:01:27.153Z"
+      },
+      {
+        "id": 53,
+        "due": "2026-09-25",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M08: Frozen benchmark protocol",
+        "status": "blocked",
+        "updated_at": "2026-09-20T15:01:39.064Z"
+      },
+      {
+        "id": 54,
+        "due": "2026-10-04",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M09: Jev API integration: readiness, connection and Trace workflow",
+        "status": "blocked",
+        "updated_at": "2026-09-20T16:45:04.287Z"
+      },
+      {
+        "id": 55,
+        "due": "2026-10-04",
+        "lane": "Publish",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M10: Four-week editorial plan linked to existing content job",
+        "status": "blocked",
+        "updated_at": "2026-09-20T15:01:58.662Z"
+      },
+      {
+        "id": 56,
+        "due": "2026-09-25",
+        "lane": "Platform",
+        "week": "2026-09-14",
+        "owner": "Codex",
+        "title": "HQ-M12: Moat scorecard definition and baseline",
+        "status": "todo",
+        "updated_at": "2026-09-20T15:02:08.843Z"
+      }
+    ],
+    "latest": [
+      {
+        "at": "2026-09-20T16:47:58.000Z",
+        "id": "github-35523715502-2026-09-20T16:47:58Z",
+        "job_id": "change-assurance",
+        "outcome": "Passed"
+      },
+      {
+        "at": "2026-09-12T14:42:20.000Z",
+        "id": "customer-learning-2026-09-12-1c658c24-599b-428a-99e8-c72229f2b40c",
+        "job_id": "customer-learning",
+        "outcome": "Missing inputs"
+      },
+      {
+        "at": "2026-09-14T01:47:41.000Z",
+        "id": "github-34797018785-2026-09-14T01:47:41Z",
+        "job_id": "dependency-updates",
+        "outcome": "Passed"
+      },
+      {
+        "at": "2026-09-15T06:36:56.000Z",
+        "id": "editorial-desk-20260915-no-ready-publish",
+        "job_id": "editorial-desk",
+        "outcome": "Findings open"
+      },
+      {
+        "at": "2026-09-20T16:45:06.726Z",
+        "id": "jev-connectivity-20260920-f72c1f4c",
+        "job_id": "execution-desk",
+        "outcome": "Completed"
+      },
+      {
+        "at": "2026-09-14T06:19:28.000Z",
+        "id": "funding-watch-2026-09-14-3a736e5f-d761-40d4-9649-7fce31e88063",
+        "job_id": "funding-watch",
+        "outcome": "Findings open"
+      },
+      {
+        "at": "2026-09-11T15:31:28.000Z",
+        "id": "learning-readiness-2026-09-11",
+        "job_id": "learning-readiness",
+        "outcome": "Gate unmet"
+      },
+      {
+        "at": "2026-09-20T09:37:52.000Z",
+        "id": "github-35502829381-2026-09-20T09:37:52Z",
+        "job_id": "production-smoke",
+        "outcome": "Passed"
+      },
+      {
+        "at": "2026-09-11T08:55:03.854Z",
+        "id": "security-posture-friday-2026-09-11-f9a3ed67-cc8e-4ff7-933d-653cc244562b",
+        "job_id": "security-posture",
+        "outcome": "Findings open"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "calls",
+        "label": "Fit calls",
+        "target": 2,
+        "current": 0,
+        "sort_order": 3
+      },
+      {
+        "id": "replies",
+        "label": "Substantive replies",
+        "target": 3,
+        "current": 0,
+        "sort_order": 2
+      },
+      {
+        "id": "tenders",
+        "label": "Qualified tenders",
+        "target": 1,
+        "current": 0,
+        "sort_order": 4
+      },
+      {
+        "id": "touches",
+        "label": "Direct buyer touches",
+        "target": 15,
+        "current": 7,
+        "sort_order": 1
+      },
+      {
+        "id": "w3-briefs",
+        "label": "Briefs actually sent",
+        "target": 5,
+        "current": 0,
+        "sort_order": 1
+      },
+      {
+        "id": "w3-calls",
+        "label": "Qualification calls",
+        "target": 2,
+        "current": 0,
+        "sort_order": 3
+      },
+      {
+        "id": "w3-replies",
+        "label": "Substantive replies",
+        "target": 3,
+        "current": 0,
+        "sort_order": 2
+      },
+      {
+        "id": "w3-scopes",
+        "label": "Paid-scope opportunities",
+        "target": 1,
+        "current": 0,
+        "sort_order": 4
+      },
+      {
+        "id": "w4-conversations",
+        "label": "Substantive conversations",
+        "target": 5,
+        "current": 0,
+        "sort_order": 3
+      },
+      {
+        "id": "w4-next-steps",
+        "label": "Dated commercial next steps",
+        "target": 1,
+        "current": 0,
+        "sort_order": 4
+      },
+      {
+        "id": "w4-people",
+        "label": "Relevant people selected",
+        "target": 10,
+        "current": 0,
+        "sort_order": 1
+      },
+      {
+        "id": "w4-sent",
+        "label": "Personal approaches sent",
+        "target": 10,
+        "current": 0,
+        "sort_order": 2
+      }
+    ],
+    "reviews": [
+      {
+        "id": "026278d8-21e0-45aa-b958-af9bd73aac7c",
+        "title": "Friday review: connect content to buyer responses",
+        "status": "pending",
+        "task_id": 26,
+        "created_at": "2026-09-14T06:19:30.032Z",
+        "reviewed_at": null
+      },
+      {
+        "id": "358d8bfe-9765-4bcf-8f4e-ea8799b49ccc",
+        "title": "Repair PostCSS updates and resolve scanning follow-up",
+        "status": "accepted",
+        "task_id": 27,
+        "created_at": "2026-09-12T14:44:38.963Z",
+        "reviewed_at": "2026-09-12T19:46:55.981Z"
+      },
+      {
+        "id": "6b3e95a5-9107-4b7c-a59a-535c31fbfce7",
+        "title": "HQ-M01: reconcile and register the three-lane moat program",
+        "status": "pending",
+        "task_id": 46,
+        "created_at": "2026-09-20T15:06:17.748Z",
+        "reviewed_at": null
+      },
+      {
+        "id": "85f3118a-5b2d-4ce4-8c6e-c201ea07b920-16",
+        "title": "Exercise the evidence and tool boundaries",
+        "status": "accepted",
+        "task_id": 16,
+        "created_at": "2026-09-10T07:26:15.285Z",
+        "reviewed_at": "2026-09-10T11:41:42.822Z"
+      },
+      {
+        "id": "f9a3ed67-cc8e-4ff7-933d-653cc244562b",
+        "title": "Close the week against real evidence",
+        "status": "pending",
+        "task_id": 23,
+        "created_at": "2026-09-11T08:55:33.520Z",
+        "reviewed_at": null
+      },
+      {
+        "id": "hq-connect-finalize-73090c45-5682-468a-880c-95e729b9baed",
+        "title": "HQ G: connect mandate charters and schedule evidence",
+        "status": "pending",
+        "task_id": 44,
+        "created_at": "2026-09-15T11:57:57.540Z",
+        "reviewed_at": null
+      },
+      {
+        "id": "hq-postgres-finalize-153e8a26-1361-4eda-9632-01de9d521ea5",
+        "title": "HQ G: extend Postgres memory and job foundation",
+        "status": "pending",
+        "task_id": 45,
+        "created_at": "2026-09-15T20:33:58.472Z",
+        "reviewed_at": null
+      },
+      {
+        "id": "manual-7893d5890dea43e4aeb93a0bf55d8666",
+        "title": "Publication packet: apply the service positioning",
+        "status": "accepted",
+        "task_id": 24,
+        "created_at": "2026-09-08T06:56:39.600Z",
+        "reviewed_at": "2026-09-08T11:22:49.344Z"
+      },
+      {
+        "id": "resume-2605ef590f8244a08fa9c7adcadde3e5",
+        "title": "Prepare three prospect evidence briefs",
+        "status": "pending",
+        "task_id": 19,
+        "created_at": "2026-09-08T11:31:53.009Z",
+        "reviewed_at": null
+      },
+      {
+        "id": "resume-39a7d8c79f3848569ded37f0ee417be9",
+        "title": "Clear the dependency security gate",
+        "status": "accepted",
+        "task_id": 13,
+        "created_at": "2026-09-09T16:37:38.972Z",
+        "reviewed_at": "2026-09-09T17:01:13.463Z"
+      },
+      {
+        "id": "resume-70e7d56f3e5248c3848c442dd904bf9e",
+        "title": "Product presentation: show one readable evidence example",
+        "status": "accepted",
+        "task_id": 25,
+        "created_at": "2026-09-09T10:56:16.134Z",
+        "reviewed_at": "2026-09-09T17:00:16.111Z"
+      }
+    ],
+    "receipt_count": 124
+  }
+}

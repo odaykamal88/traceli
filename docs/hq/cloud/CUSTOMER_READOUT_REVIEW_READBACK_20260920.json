@@ -1,0 +1,40 @@
+{
+  "observed_at": "2026-09-20T17:21:12.345Z",
+  "supervisor_readback": {
+    "id": "customer-readout-w4-20260914",
+    "status": "accepted",
+    "limits": {
+      "model_calls": 0,
+      "active_seconds": 10
+    },
+    "result": {
+      "job_id": "customer-readout-w4-20260914",
+      "run_id": "873e4799-4d11-44b2-b79e-d055c1e79178",
+      "summary": "Week 4 decision memo: establish the send evidence and test access before changing the offer. Draft for task 38; customer demand remains untested.",
+      "artifactRef": "postgres:hq_cloud_artifacts/873e4799-4d11-44b2-b79e-d055c1e79178",
+      "artifactHash": "0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d",
+      "hosting_cost": "unavailable",
+      "input_tokens": 0,
+      "reviewStatus": "accepted_internal",
+      "output_tokens": 0,
+      "model_cost_usd": 0
+    },
+    "reviewer_id": "supervisor-customer-readout-20260920",
+    "review_evidence": "Independent Auditor PASS; report SHA256 c7e7235b8f69039139f9fe02d553eee1426efdb00061c1ffcc3d1d650d5809a3. Supervisor source/body/usage and Railway manual replay verified. Internal artifact accepted only; Oday task38 disposition, sends and canonical promotion remain separate."
+  },
+  "prior_model_charges_unchanged": {
+    "calls": 2,
+    "estimated_microusd": "3425",
+    "reserved_microusd": "100000"
+  },
+  "manual_replay": {
+    "observed_at": "2026-09-20T17:20:14.393968738Z",
+    "status": "already_submitted",
+    "same_artifact": true,
+    "model_called": false
+  },
+  "hosting_cost_for_run": "unavailable",
+  "railway_reported_project_usage_usd": 0.0000016074654320987656,
+  "railway_usage_period": "2026-09-16T11:29:20.314Z through 2026-09-20T23:59:59.999Z; API report, not per-run allocation or settled invoice",
+  "scheduled_run": "not observed; existing next occurrence 2026-09-21T06:00:00Z"
+}

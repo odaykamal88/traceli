@@ -9,7 +9,7 @@ export function CloudPanel({ state }: { state: CloudState }) {
   const snapshot = state.snapshot
   return <section className={styles.panel} aria-label="Cloud worker">
     <div className={styles.sectionTitle}><h2>Cloud worker</h2><span className={styles.badge}>{state.connection === 'connected' ? 'Database connected' : state.connection === 'not-configured' ? 'Setup pending' : 'Status unavailable'}</span></div>
-    <p>Institutional Memory drafts an HQ readiness brief from an approved snapshot. Every draft waits for Supervisor review.</p>
+    <p>Cloud outputs use approved snapshots. Readiness briefs use bounded inference; the customer evidence memo uses deterministic rules. Every draft retains its review gate.</p>
     {snapshot ? <>
       <p className={styles.small}>Checked {time(snapshot.checked_at)}. A connected database does not establish that a worker or schedule is running.</p>
       {snapshot.workers.length ? snapshot.workers.map(worker => <div className={styles.event} key={worker.actor}>
@@ -21,7 +21,7 @@ export function CloudPanel({ state }: { state: CloudState }) {
       {snapshot.runs.length ? snapshot.runs.map(run => <details className={styles.job} key={run.id}>
         <summary><span>{run.job_id}<small>{time(run.started_at)} · Attempt {run.attempt}</small></span><span className={styles.badge}>{run.status === 'review' ? 'Draft awaiting review' : run.status}</span></summary>
         <div className={styles.detail}>
-          <p>{run.cost_uncertain ? 'Provider cost is unconfirmed; the full reservation remains counted.' : run.estimated_microusd !== null ? `Estimated token cost: ${dollars(run.estimated_microusd)}. Final billing is not yet reconciled.` : 'No model cost recorded.'}</p>
+          <p>{run.job_id === 'customer-readout-w4-20260914' ? 'Deterministic execution: 0 model calls, 0 input/output tokens, $0 model cost. Hosting cost is unavailable.' : run.cost_uncertain ? 'Provider cost is unconfirmed; the full reservation remains counted.' : run.estimated_microusd !== null ? `Estimated token cost: ${dollars(run.estimated_microusd)}. Final billing is not yet reconciled.` : 'No model cost recorded.'}</p>
           {run.draft ? <><h3>{run.draft.summary}</h3><ul>{run.draft.observations.map((item, i) => <li key={i}><p>{item.statement}</p><small>Sources: {item.source_refs.join(', ')}</small></li>)}</ul>
             {!!run.draft.questions.length && <><h4>Open questions</h4><ul>{run.draft.questions.map((question, i) => <li key={i}>{question}</li>)}</ul></>}
             <p className={styles.small}>Saved draft · SHA-256 {run.content_hash}. This brief describes its dated source snapshot. Acceptance does not promote it to canonical company memory.</p></> : <p>No draft has been saved for this attempt.</p>}

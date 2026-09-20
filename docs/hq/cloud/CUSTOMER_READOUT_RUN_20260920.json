@@ -1,0 +1,183 @@
+{
+  "trigger": "manual Railway restart",
+  "observed_at": "2026-09-20T17:17:31.367Z",
+  "deployment_id": "4dbe5253-28b7-4d82-8252-dcd76efce371",
+  "id": "customer-readout-w4-20260914",
+  "status": "review",
+  "contract": {
+    "limits": {
+      "model_calls": 0,
+      "active_seconds": 8
+    },
+    "reviewer": "Independent Auditor and Supervisor; Oday disposition in Operating Room task 38",
+    "inputs_context": {
+      "tasks": [
+        {
+          "id": 28,
+          "owner": "Oday",
+          "status": "todo"
+        },
+        {
+          "id": 29,
+          "owner": "Codex",
+          "status": "todo"
+        },
+        {
+          "id": 30,
+          "owner": "Codex",
+          "status": "todo"
+        },
+        {
+          "id": 31,
+          "owner": "Codex",
+          "status": "todo"
+        },
+        {
+          "id": 32,
+          "owner": "Oday",
+          "status": "todo"
+        },
+        {
+          "id": 33,
+          "owner": "Codex",
+          "status": "todo"
+        },
+        {
+          "id": 34,
+          "owner": "Oday",
+          "status": "todo"
+        },
+        {
+          "id": 35,
+          "owner": "Oday",
+          "status": "todo"
+        },
+        {
+          "id": 36,
+          "owner": "Codex",
+          "status": "blocked"
+        },
+        {
+          "id": 37,
+          "owner": "Oday",
+          "status": "blocked"
+        },
+        {
+          "id": 38,
+          "owner": "Codex",
+          "status": "doing"
+        },
+        {
+          "id": 39,
+          "owner": "Oday",
+          "status": "todo"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "w4-conversations",
+          "label": "Substantive conversations",
+          "target": 5,
+          "current": 0,
+          "sort_order": 3
+        },
+        {
+          "id": "w4-next-steps",
+          "label": "Dated commercial next steps",
+          "target": 1,
+          "current": 0,
+          "sort_order": 4
+        },
+        {
+          "id": "w4-people",
+          "label": "Relevant people selected",
+          "target": 10,
+          "current": 0,
+          "sort_order": 1
+        },
+        {
+          "id": "w4-sent",
+          "label": "Personal approaches sent",
+          "target": 10,
+          "current": 0,
+          "sort_order": 2
+        }
+      ],
+      "claim_id": "5931a68c-2ff9-46be-b3ec-40b207ddf6f5",
+      "captured_at": "2026-09-20T17:16:21.656+00:00",
+      "source_hash": "2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a"
+    },
+    "source_task_id": 38,
+    "charter_version": "customer-readout-1"
+  },
+  "result": {
+    "job_id": "customer-readout-w4-20260914",
+    "run_id": "873e4799-4d11-44b2-b79e-d055c1e79178",
+    "summary": "Week 4 decision memo: establish the send evidence and test access before changing the offer. Draft for task 38; customer demand remains untested.",
+    "artifactRef": "postgres:hq_cloud_artifacts/873e4799-4d11-44b2-b79e-d055c1e79178",
+    "artifactHash": "0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d",
+    "hosting_cost": "unavailable",
+    "input_tokens": 0,
+    "reviewStatus": "pending",
+    "output_tokens": 0,
+    "model_cost_usd": 0
+  },
+  "started_at": "2026-09-20T17:17:07.388Z",
+  "finished_at": "2026-09-20T17:17:07.421Z",
+  "input_tokens": "0",
+  "output_tokens": "0",
+  "cost_usd": "0.000000",
+  "body": {
+    "summary": "Week 4 decision memo: establish the send evidence and test access before changing the offer. Draft for task 38; customer demand remains untested.",
+    "questions": [
+      "Oday: provide the task 28 send history or explicitly confirm that no Week 4 approach was sent.",
+      "Independent Auditor and Supervisor: verify this exact artifact against its pinned counters and weekly plan before acceptance.",
+      "Oday: disposition task 38 and choose the next access experiment in task 39. Acceptance does not authorize sending."
+    ],
+    "observations": [
+      {
+        "statement": "The saved Week 4 counters record 0/10 relevant people selected, 0/10 approaches sent, 0/5 substantive conversations and 0/1 dated commercial next steps. These are recorded counters, not independently verified event totals.",
+        "source_refs": [
+          "ops-sha256:2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+          "plan:week4-20260914:task38"
+        ]
+      },
+      {
+        "statement": "The actual sent, delivered, bounced, replied and met denominators are unavailable in this metadata-only input. Do not calculate a response rate or conclude that silence means rejection. The earlier seven-touch counter belongs to a different period and is not a Week 4 denominator.",
+        "source_refs": [
+          "ops-sha256:2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+          "plan:week4-20260914:task38"
+        ]
+      },
+      {
+        "statement": "Recent task, steps, hours, workaround, consequence, owner, deadline, purchasing route and exact buyer language are unavailable. Direct buyer, referrer and partner comparisons therefore cannot be made. Confidence is high in the saved zero counters, low in actual funnel completeness; no costly-pain or willingness-to-pay conclusion is supported.",
+        "source_refs": [
+          "ops-sha256:2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+          "plan:week4-20260914:task38"
+        ]
+      },
+      {
+        "statement": "Recommended experiment: Oday supplies the existing send-history handoff in task 28; Codex reconciles task 29, selects the first relevant warm route in task 30 and prepares one exact recent-task question through task 31. Oday alone sends after review and records the event in task 32. Change only the access route/ask first; success is one substantive recent-task example or named relevant introduction.",
+        "source_refs": [
+          "ops-sha256:2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+          "plan:week4-20260914:task38"
+        ]
+      },
+      {
+        "statement": "Owner action: Oday reviews this memo and records the Week 5 choice in task 39. Codex prepares from available permitted inputs. Preserve follow-up windows of 3–5 recipient business days from each actual send; no date is inferred from draft creation. Tasks 36/37 need a current task, owner, deadline and plausible purchasing route before a commercial scope.",
+        "source_refs": [
+          "ops-sha256:2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+          "plan:week4-20260914:task38"
+        ]
+      },
+      {
+        "statement": "Defer speculative features, integrations, expanded lead research and new major content until buyer evidence justifies them. Proposed lesson only: make send timestamp, delivery evidence and exact ask the minimum next handoff. No canonical memory promotion; the two-week/six-human-disposition/three-job-class learning gate is not established.",
+        "source_refs": [
+          "ops-sha256:2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+          "plan:week4-20260914:task38"
+        ]
+      }
+    ]
+  },
+  "content_hash": "0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d"
+}

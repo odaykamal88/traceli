@@ -9,6 +9,7 @@ const snapshotSchema = z.object({
   workers: z.array(z.object({ actor: z.string(), mandate: z.string(), enabled: z.boolean(), monthly_limit_microusd: z.number(), reserved_microusd: z.number(), pricing_valid_until: z.string() })),
   runs: z.array(z.object({
     id: z.string(), job_id: z.string(), attempt: z.number(), status: z.string(), started_at: z.string(), finished_at: z.string().nullable(),
+    input_tokens: z.coerce.number().nullable().optional(), output_tokens: z.coerce.number().nullable().optional(),
     estimated_microusd: z.number().nullable(), reserved_microusd: z.number().nullable(), cost_uncertain: z.boolean(), content_hash: z.string().nullable(),
     draft: z.object({ summary: z.string(), observations: z.array(z.object({ statement: z.string(), source_refs: z.array(z.string()) })), questions: z.array(z.string()) }).nullable(),
   })),
