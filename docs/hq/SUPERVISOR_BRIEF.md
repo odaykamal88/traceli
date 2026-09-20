@@ -1,3 +1,13 @@
+# Current checkpoint — 20 September 2026
+
+Task 38’s [customer evidence memo](artifacts/CUSTOMER_READOUT_20260920.md) was executed manually on the existing Railway worker, persisted to Postgres, independently reviewed and accepted internally. It used zero model calls/tokens and $0 model cost. Replay returned the same artifact. Oday’s original task disposition remains separate.
+
+The next useful input is task28’s actual send history. The memo recommends one relevant warm access route and recent-task question through existing tasks29–32; it does not infer demand or rejection from saved zero counters. Task39 remains Oday’s priority choice. The proposed send-record lesson is not canonical memory.
+
+The earlier readiness brief remains pending review. Actual Codex desktop desks, including Execution Desk, are paused even though the original board’s labels still say Active. No schedule was resumed. Railway retains its existing daily06:00UTC schedule; this new implementation has only manual-run evidence so far. Full specialist-desk parity and the self-improvement gate remain unmet.
+
+---
+
 # Supervisor handover
 
 Updated 17 September 2026.

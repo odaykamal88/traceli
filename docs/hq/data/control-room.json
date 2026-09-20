@@ -41,8 +41,8 @@
         "status": "pending"
       }
     ],
-    "next": "The source metadata feed and economical cloud brief are live. Review the new draft, observe the next scheduled run, then migrate one specialist desk with equivalent inputs and receipts. Resolve hosting continuity beyond the Railway trial.",
-    "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
+    "next": "One bounded customer-evidence memo is now delivered and reviewed in the cloud; this is not full desk migration. Preserve the older readiness review, verify the next scheduled occurrence and resolve equivalent inputs/receipts plus hosting continuity.",
+    "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
   },
   "blockers": [
     {
@@ -100,6 +100,21 @@
       "next_owner": "Listener reconciles the record; Supervisor recommends the next action.",
       "href": "https://traceli-operating-room.odeyqemal.chatgpt.site",
       "link_label": "Open original tasks"
+    },
+    {
+      "id": "customer-readout-review",
+      "priority": "Then",
+      "title": "Review the customer evidence memo",
+      "why": "Task 38 has an independently reviewed cloud memo; task 39 is your Week 5 priority decision.",
+      "request": "Accept or return the exact task 38 memo, then choose the next access experiment in task 39. Provide actual send history first; zero recorded counters do not prove no activity.",
+      "owner": "Oday",
+      "task_ids": [
+        38,
+        39
+      ],
+      "next_owner": "Listener reconciles the supplied evidence; Oday owns sending.",
+      "href": "https://traceli-operating-room.odeyqemal.chatgpt.site",
+      "link_label": "Review original task 38"
     },
     {
       "id": "editorial-review",
@@ -173,9 +188,9 @@
       "owner": "Oday + Listener",
       "state": "Needs your input",
       "tone": "warning",
-      "now": "Week 4 outcome counters remain at zero recorded; outreach history is unreconciled.",
-      "next": "Reconcile actual sends, capture substantive conversations and agree a dated next step.",
-      "evidence_ref": "operations/WEEK_4_ACTION_PLAN.md"
+      "now": "Task 38 decision memo produced on Railway and passed independent review. Week 4 counters remain zero recorded; actual denominators are unavailable.",
+      "next": "Oday reviews task 38, supplies task 28 send history and chooses the next access test in task 39.",
+      "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
     },
     {
       "id": "G",
@@ -183,9 +198,9 @@
       "owner": "Builder + Librarian",
       "state": "First economical loop live",
       "tone": "good",
-      "now": "Hosted source metadata reaches HQ; Railway produced a Luna draft and skipped the repeat while review is pending.",
-      "next": "Review the draft, verify the next daily occurrence, then move one specialist desk; arrange hosting continuity.",
-      "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
+      "now": "One customer evidence memo ran in the cloud, persisted and passed independent review at zero model cost; replay returned the same artifact.",
+      "next": "Keep the earlier readiness draft at review. Observe the existing daily schedule; full desk parity and hosting continuity remain open.",
+      "evidence_ref": "cloud/CUSTOMER_READOUT_REVIEW_READBACK_20260920.json"
     }
   ],
   "channels": [
@@ -236,6 +251,16 @@
     }
   ],
   "lessons": [
+    {
+      "id": "L-05",
+      "title": "Require the send record before interpreting silence",
+      "state": "Proposed",
+      "observed_at": "2026-09-20",
+      "observation": "The cloud memo could verify saved zero counters but could not reconstruct actual outreach denominators or buyer language.",
+      "change": "Proposal only: require send timestamp, delivery evidence and exact ask in the next owner handoff. No canonical memory change.",
+      "next_check": "Oday reviews the proposal; then test whether the task 28 handoff supports a defensible task 29 denominator. Self-improvement gate remains unmet.",
+      "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
+    },
     {
       "id": "L-01",
       "title": "Verify deployment behavior, not just settings",

@@ -41,3 +41,18 @@ The separate source export now retains the complete metadata mirror. I independe
 Supervisor reported applying 0008, then explicitly setting the tenant and Supervisor actor to correct the existing job contract, and reading back `model_calls: 0`, `active_seconds: 10` with the same artifact hash. This addresses the forced-RLS update concern. The initial receipt remains historical; deployment/readback evidence belongs in the separate correction receipt.
 
 The recorded run reports zero input/output model tokens and zero model cost, consistent with the deterministic code path and absence of model reservations in local verification. Hosting cost remains unavailable. The exported trigger says manual Railway restart; this audit does not relabel it scheduled. Supervisor review, authoritative task/receipt readback and Oday disposition must remain separately evidenced.
+
+## HQ presentation addendum
+
+20 September 2026. **PASS; no actionable finding.** Independently reviewed the presentation changes below against the exact memo and `CUSTOMER_READOUT_REVIEW_READBACK_20260920.json`. The saved readback reports internal Supervisor acceptance at `2026-09-20T17:21:12.345Z`, corrected ten-second contract, unchanged artifact hash and manual replay. This is file evidence reviewed by the Auditor, not independent access to the live service.
+
+| File | SHA-256 |
+| --- | --- |
+| `docs/hq/data/control-room.json` | `ed2444244ff1f83501d51615c60b050c374cbd7e62db9213087ce4c631888474` |
+| `docs/hq/data/events.json` | `efac5a73d242fb6f56a7c64dfca603258f091c7465340d990668300925d9c98a` |
+| `docs/hq/SUPERVISOR_BRIEF.md` | `5c4a28b6576745e40014edece108e628be09185010fe5f28a900da102c297ef9` |
+| `app/hq/control-room.tsx` | `fc0e50d3c39f7ea9c4ea3a3465f75f451f78b234d83bb3c640d560910b425106` |
+
+The task 38/39 request preserves Oday's unrecorded disposition and priority choice. Workstreams F/G distinguish the completed bounded memo from full specialist-desk migration and identify the missing send evidence. The checkpoint and new event distinguish internal acceptance from human acceptance and manual execution from scheduled execution; the older readiness draft and desktop pauses remain explicit. L-05 is marked Proposed, repeats that canonical memory has not changed, and retains the unmet learning gate. Its conditional UI label now says “Proposed change,” accurately matching that state. Existing historical events retain their prior meaning; the Unicode serialization changes do not alter their text.
+
+The addendum changes this report's file hash after its original acceptance reference was recorded. The original acceptance hash is a historical reference to the earlier review, not the hash of this expanded report. This addendum changes neither the artifact decision nor its exact body hash. Supervisor-reported four passing tests and TypeScript verification were not rerun for this text/presentation addendum.
