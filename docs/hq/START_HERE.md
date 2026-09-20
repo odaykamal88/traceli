@@ -1,5 +1,9 @@
 # Trace-li HQ operating package
 
+## 20 September: Jev connectivity verified
+
+[Live result and remaining scope](moat/M09_CONNECTIVITY_RUN_2026-09-20.md): the owner-authorized synthetic TypeSafe test succeeded in the private preview (jev-1.13.0, 334 ms, 338 reported tokens). The full #54/M09 workflow remains incomplete behind reviewed input/policy definitions; no further calls or production rollout were enabled.
+
 ## 20 September: three-lane moat program
 
 [Live queue mapping and baseline](moat/DISPATCH_2026-09-20.md) · [Program](MOAT_PROGRAM_2026-09-20.md) · [Actions](MOAT_ACTIONS_2026-09-20.md) · [Jev API integration](JEV_INTEGRATION_2026-09-20.md).

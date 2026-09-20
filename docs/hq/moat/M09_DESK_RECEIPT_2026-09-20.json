@@ -1,0 +1,26 @@
+{
+  "receipt": {
+    "id": "jev-connectivity-20260920-f72c1f4c",
+    "job_id": "execution-desk",
+    "occurred_at": "2026-09-20T16:45:06.726Z",
+    "outcome": "Completed",
+    "summary": "Connectivity milestone completed and independently reviewed: direct TypeSafe HTTP200 at 2026-09-20T15:50:55.365Z, jev-1.13.0, 334 ms, 317 input + 21 output tokens. Cost unavailable. One synthetic provider attempt; persisted result read back via owner-authenticated private preview. Code 378b9915947b713df62f40fdb4ba62448402a557; PR21; 27 tests/typecheck, 14 focused tests after form-policy repair. Narrow contract/review/run receipt: docs/hq/moat/M09_CONNECTIVITY_{CONTRACT,REVIEW,RUN_2026-09-20}.md and M09_LIVE_RECEIPT_2026-09-20.json. Full #54 incomplete: full reviewed M02 input and M07 policy/disposition/export prerequisites remain; M08 required before benchmark scoring. Policy/human decision not evaluated. Single-call allowance consumed; no production or schedule activation. Finalization-only recovery of expired implementation lease; no further model call.",
+    "source": "Jev connectivity milestone only; implementation run f72c1f4c-63bb-42a0-94a7-017490ae7401; finalization a6ee2adb-c830-4b7e-92d5-f51903fd7789",
+    "source_url": "https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/api/hq/jev-smoke"
+  },
+  "metadata": {
+    "scope": "Connectivity milestone; full task blocked",
+    "finalization_run_id": "a6ee2adb-c830-4b7e-92d5-f51903fd7789",
+    "provider_calls": 1,
+    "input_tokens": 317,
+    "output_tokens": 21,
+    "provider_cost_usd": null,
+    "codex_tokens": null,
+    "code_commit": "378b9915947b713df62f40fdb4ba62448402a557",
+    "hashes": {
+      "run": "88b9aa7c39bc1448e1351a66a75694ece26217feb34a003a7040df604e03e892",
+      "live_receipt": "5fc6c0c22ebadb25a2f0b407c9a3574cc88c90860e404efb94da404ab3f04f7f"
+    },
+    "new_calls_in_finalization": 0
+  }
+}

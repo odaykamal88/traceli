@@ -37,3 +37,15 @@ Store the transport/provider/model identifier returned or requested, unavailable
 - Reviewer override and acceptance are persisted with provenance, and the exported Trace can reconstruct what was supplied, returned and decided.
 
 Return a selected-route decision, implementation/check results, actual call receipt where authorized, and the remaining activation/deployment dependency. This task has not installed a package, created credentials, activated billing or made a model call.
+
+## Implementation follow-through — 20 September 2026
+
+After Oday confirmed saving `TYPESAFE_API_KEY`, HQ verified hidden secret entries for Preview, Production and Development without retrieving their values. Direct TypeSafe HTTP is the selected transport. The preceding planning-only statement records the original handoff; the following is the subsequent connectivity milestone.
+
+The server-only adapter and fixed synthetic preview test were implemented in the existing HQ branch and independently reviewed by the coordinating task. Adapter/access/route checks passed (27 tests), with focused checks repeated after correcting the form's Referrer-Policy; typecheck and repository CI passed. The test retains exact owner, preview/branch and origin checks, bounded input/output, a 15-second deadline, no automatic retries, and a durable one-attempt reservation. This accepts the narrow synthetic connectivity contract only, not full M02 or procurement policy.
+
+HQ's deployed receipt records **HTTP 200 at 2026-09-20T15:50:55.365Z**, requesting `jev-latest` and returning `jev-1.13.0` in **334 ms**, with **317 input / 21 output tokens**. One provider attempt was made. Reported monetary cost is unavailable. The synthetic receipt-presence question returned `noul=0.99`; policy disposition and human procurement decision remain `not_evaluated`. Raw response hash: `246b96236d4acac0fa4c75e81c237ed3f76f1217340579ef594d764ff8e2f2ea`.
+
+Code: commit `378b9915947b713df62f40fdb4ba62448402a557` in [existing PR #21](https://github.com/odaykamal88/traceli/pull/21). Verified preview deployment: `dpl_AQ53QEt2sP7ridNJXhSwNBPRD4Bo`. [Private saved connection receipt](https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/api/hq/jev-smoke).
+
+Task #54 remains incomplete: the general reviewed evidence-packet workflow, constraint/policy handling, human disposition and export remain M09b/c work. The successful test establishes preview connectivity; it does not activate production Jev processing or establish procurement performance.

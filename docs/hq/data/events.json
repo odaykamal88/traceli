@@ -196,5 +196,14 @@
     "subject": "Three procurement lanes + Jev API integration",
     "summary": "Twelve moat packages mapped to live tasks: M01\u2013M10 #46\u201355; M11 reuses #31; M12 #56. Intake/baseline submitted for independent review. U/M/G inventories and Jev access readiness queued; no new workers enabled.",
     "evidence_ref": "moat/DISPATCH_2026-09-20.md"
+  },
+  {
+    "id": "EVT-JEV-CONNECTED-20260920",
+    "at": "2026-09-20T15:50:55.365Z",
+    "actor": "Builder / Supervisor",
+    "type": "connectivity_verified",
+    "subject": "Jev connected in the private preview",
+    "summary": "One synthetic TypeSafe call succeeded: jev-1.13.0, 334 ms, 317 input + 21 output tokens. Receipt persisted; the one-call allowance is consumed. Full policy/reviewer/Trace integration remains queued.",
+    "evidence_ref": "moat/M09_CONNECTIVITY_RUN_2026-09-20.md"
   }
 ]

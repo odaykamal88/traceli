@@ -3003,7 +3003,7 @@
   },
   {
     "id": "HQ-M09",
-    "version": 1,
+    "version": 2,
     "workstream": "E",
     "objective": "Jev API integration: readiness, connection and Trace workflow",
     "owner": "build",
@@ -3021,7 +3021,10 @@
       "moat/DISPATCH_2026-09-20.md",
       "Original Operating Room task #54",
       "charters/build.md",
-      "JEV_INTEGRATION_2026-09-20.md"
+      "JEV_INTEGRATION_2026-09-20.md",
+      "moat/M09_CONNECTIVITY_CONTRACT.md",
+      "moat/M09_CONNECTIVITY_REVIEW.md",
+      "moat/M09_CONNECTIVITY_RUN_2026-09-20.md"
     ],
     "allowed_tools": [
       "Read scoped public sources and current repository/queue metadata",
@@ -3064,9 +3067,10 @@
       "artifact_hash": null,
       "expires_at": null
     },
-    "status": "ready",
+    "status": "blocked",
     "dependencies": [
-      "HQ-M01"
+      "HQ-M02",
+      "HQ-M07"
     ],
     "reviewer": "Independent Auditor, then Supervisor; separate reviewer for Builder changes; qualified domain review where needed",
     "evidence": [
@@ -3080,25 +3084,38 @@
         "limitations": [
           "Registration is not execution, acceptance, publication authority or customer validation."
         ]
+      },
+      {
+        "id": "HQ-M09-live-connectivity",
+        "source_ref": "moat/M09_LIVE_RECEIPT_2026-09-20.json",
+        "location": "receipt",
+        "observed_at": "2026-09-20T15:50:55.365Z",
+        "claim": "One actual TypeSafe request completed and its receipt persisted; 317 input + 21 output tokens, 334 ms, jev-1.13.0.",
+        "kind": "test",
+        "limitations": [
+          "Synthetic connectivity only, not policy/benchmark/customer-data validation.",
+          "Cost unavailable; full M09 not accepted."
+        ]
       }
     ],
     "cost": {
       "currency": "USD",
       "new_spend_limit": 0,
       "actual": null,
-      "tokens": null,
-      "measurement": "Per-job Codex tokens/cost unavailable. No new paid provider call in registration."
+      "tokens": 338,
+      "measurement": "TypeSafe reported 317 input + 21 output tokens for the sole approved synthetic call; monetary cost and Codex job-level usage unavailable. No remaining provider-call allowance or new service budget is granted by this record."
     },
     "limits": {
       "max_tool_calls": 30,
       "max_revisions": 2
     },
     "result": {
-      "summary": "Registration/intake only. M09a readiness now: direct TypeSafe or Vercel Gateway; choose one route. M09b actual server-only connection after reviewed M02 contract and applicable access/budget authority. M09c policy/human-disposition/export flow after M07; accepted M08 before benchmark scoring. No 100-case or all-profile gate for connectivity. See JEV_INTEGRATION_2026-09-20.md; this turn registers only.",
+      "summary": "Connectivity milestone completed: TypeSafe HTTP200, returned jev-1.13.0, 334 ms, 338 reported tokens. Full M09 remains incomplete; policy and human procurement decisions were not evaluated.",
       "artifact_refs": [
-        "docs/hq/moat/REGISTRATION_2026-09-20.json"
+        "docs/hq/moat/M09_CONNECTIVITY_RUN_2026-09-20.md",
+        "docs/hq/moat/M09_LIVE_RECEIPT_2026-09-20.json"
       ],
-      "review_ref": null,
+      "review_ref": "docs/hq/moat/M09_CONNECTIVITY_REVIEW.md",
       "accepted_by": null,
       "accepted_at": null
     },
@@ -3112,9 +3129,10 @@
         "Live task ID, package/batch ID, version/hash, source locators, checks, gaps, cost or unknown, next owner"
       ]
     },
-    "blocker": null,
+    "blocker": "Live synthetic connectivity is verified. Remaining scoped workflow requires the full reviewed input contract and policy handling (M02/M07); M08 before benchmark scoring. The single provider-call allowance is consumed.",
     "dependency_requirements": {
-      "HQ-M01": "submitted"
+      "HQ-M02": "accepted",
+      "HQ-M07": "accepted"
     }
   },
   {
