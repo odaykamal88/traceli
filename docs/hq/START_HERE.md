@@ -1,5 +1,9 @@
 # Trace-li HQ operating package
 
+## 20 September: decision contract continuation
+
+[Continuation and queue recovery](moat/CONTINUATION_2026-09-20.md): M02's shared decision contract, field map, fictional examples and UX/security criteria passed independent Auditor and separate Supervisor internal acceptance. Original task47 is submitted for its own review. M03's first UN Secretariat inventory is partial: official source access403, no retained PDF/hash or admitted rule. Its live task48 closure needs a distinct claim ID after the existing lease expires; the handoff preserves that discrepancy. Current application/database code is unchanged.
+
 ## 20 September: Jev connectivity verified
 
 [Live result and remaining scope](moat/M09_CONNECTIVITY_RUN_2026-09-20.md): the owner-authorized synthetic TypeSafe test succeeded in the private preview (jev-1.13.0, 334 ms, 338 reported tokens). The full #54/M09 workflow remains incomplete behind reviewed input/policy definitions; no further calls or production rollout were enabled.

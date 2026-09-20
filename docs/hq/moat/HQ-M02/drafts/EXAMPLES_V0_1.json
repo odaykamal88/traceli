@@ -1,0 +1,1050 @@
+{
+  "contract_version": "decision-corpus-v0.1",
+  "notice": "All examples, rules, institutions and reviewer actions are fictional. No legal interpretation, real outcome, provider evaluation or release is asserted.",
+  "envelope_inheritance": "Each child record inherits its example organization_id, classification, created_at, created_by, source_job_id, record_state, version and supersedes_id unless explicitly specified. Production storage must enforce these per row.",
+  "examples": [
+    {
+      "id": "FIC-U-EXAMPLE",
+      "lane": "U",
+      "fixture_only": true,
+      "organization_id": "org_fictional_contract",
+      "classification": "synthetic",
+      "created_at": "2026-09-20T18:50:00Z",
+      "created_by": "Product Steward fixture author",
+      "source_job_id": "HQ-M02",
+      "record_state": "draft",
+      "version": 1,
+      "supersedes_id": null,
+      "source_versions": [
+        {
+          "id": "FIC-U-SOURCE-V1",
+          "document_id": "FIC-U-DOCUMENT-1",
+          "version": 1,
+          "issuer": "Fictional institution only",
+          "title": "Fictional U rule 1",
+          "instrument_type": "synthetic_fixture",
+          "jurisdiction_entity": "fictional-U-scope",
+          "language": "en",
+          "translation_status": "original_fictional_text",
+          "official_origin_ref": null,
+          "edition": "fixture-v1",
+          "published": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "effective": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "repealed": {
+            "value": null,
+            "precision": "unknown",
+            "basis_ref": null,
+            "unknown_reason": "No repeal fact supplied"
+          },
+          "retrieved_at": "2026-09-20T18:50:00Z",
+          "checked_at": "2026-09-20T18:50:00Z",
+          "storage_ref": "fixtures/FIC-U-SOURCE-1.txt",
+          "byte_hash": "388ae8441e99ad42fbb0e005cf7a0442ade07ae6f157a13766dffa73434ac7c1",
+          "hash_algorithm": "sha256",
+          "byte_verification_status": "verified_fixture_bytes",
+          "reuse_restrictions": "Synthetic local verification only; no real source rights asserted",
+          "custody": "retained_fixture_bytes",
+          "reviewer": null,
+          "record_state": "draft",
+          "supersedes_id": null
+        }
+      ],
+      "profile": {
+        "id": "FIC-U-PROFILE-V1",
+        "version": 1,
+        "lane": "U",
+        "institution": "Fictional agency",
+        "jurisdiction": "fictional-U",
+        "funding_instrument": null,
+        "procedure_method": "fictional_review",
+        "value_currency_basis": null,
+        "event_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "source_version_ids": [
+          "FIC-U-SOURCE-V1"
+        ],
+        "overlays": [],
+        "precedence_basis_ref": null,
+        "language_limits": "Original fictional English; no translation or actual legal instrument",
+        "record_state": "draft"
+      },
+      "applicability": {
+        "profile_id": "FIC-U-PROFILE-V1",
+        "resolver_version": "offline-human-fixture-v1",
+        "result": "applicable",
+        "supplied_context": [
+          "fictional institution",
+          "fictional procedure",
+          "fictional date"
+        ],
+        "missing_context": [],
+        "reason_code": "FICTIONAL_SCOPE_MATCH",
+        "confirmed_by": "FIC-U-REVIEWER",
+        "confirmation_status": "simulated_only"
+      },
+      "obligation": {
+        "id": "FIC-U-OBLIGATION-V1",
+        "source_version_id": "FIC-U-SOURCE-V1",
+        "locator": "Clause 1",
+        "excerpt": "Fictional rule only. Clause 1: Before making the fictional decision, the reviewer must sign a review note. The supplied packet may contain only part of the underlying record. This invented rule is not attributed to any real institution.",
+        "normalized_requirement": "The fictional reviewer signs a review note before the fictional decision.",
+        "actor": "fictional record owner",
+        "stage": "review",
+        "family": "required_evidence",
+        "evidence_required": "signed review note",
+        "timing": "before the fictional decision occasion",
+        "exceptions": [],
+        "exception_authority_ref": null,
+        "record_state": "draft"
+      },
+      "constraint": {
+        "id": "FIC-U-CONSTRAINT-V1",
+        "obligation_ids": [
+          "FIC-U-OBLIGATION-V1"
+        ],
+        "policy_pack_id": "FIC-U-POLICY-V1",
+        "check_kind": "deterministic",
+        "implementation_ref": "offline-illustration-only",
+        "required_inputs": [
+          "confirmed applicability",
+          "signed review note"
+        ],
+        "missing_behavior": "unknown",
+        "conflict_behavior": "conflict",
+        "reason_codes": [
+          "SIGNED_NOTE_PRESENT",
+          "SIGNED_NOTE_NOT_SUPPLIED",
+          "UNRESOLVED_ENTITY_EDITION_PRECEDENCE"
+        ],
+        "severity": "fixture-only-unrated",
+        "exception_authority_ref": null,
+        "fixture_ref": "FIC-U-EXAMPLE",
+        "record_state": "draft"
+      },
+      "policy_pack": {
+        "id": "FIC-U-POLICY-V1",
+        "constraint_ids": [
+          "FIC-U-CONSTRAINT-V1"
+        ],
+        "record_state": "draft",
+        "execution_scope": "synthetic_only"
+      },
+      "case": {
+        "id": "FIC-U-CASE",
+        "procurement_id": "FIC-U-PROCUREMENT",
+        "group_id": "FIC-U-GROUP",
+        "lane": "U",
+        "type": "synthetic",
+        "official_procedure_id": null,
+        "regime": "fictional-U",
+        "source_version_ids": [
+          "FIC-U-SOURCE-V1"
+        ],
+        "event_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "issue_ids": [
+          "FIC-U-ISSUE-1"
+        ],
+        "chronology": [
+          {
+            "date": {
+              "value": "2026-09-19",
+              "precision": "day",
+              "basis_ref": "fictional-fixture-author",
+              "unknown_reason": null
+            },
+            "kind": "hypothesis",
+            "text": "Fictional reviewer receives this packet."
+          }
+        ],
+        "completeness": "fixture_has_only_the_inputs_listed",
+        "response_appeal_correction_refs": [],
+        "selection_rationale": "Illustrates a contract state; not a sampled real case",
+        "dedup_key": "FIC-U-PROCUREMENT:ISSUE-1:OCCASION-1"
+      },
+      "evidence_snapshot": {
+        "id": "FIC-U-EVIDENCE-V1",
+        "case_id": "FIC-U-CASE",
+        "procurement_id": "FIC-U-PROCUREMENT",
+        "version": 1,
+        "source_version_ids": [
+          "FIC-U-SOURCE-V1"
+        ],
+        "evidence_as_of": "2026-09-20T00:00:00Z",
+        "assertions": [
+          {
+            "id": "FIC-U-ASSERTION-1",
+            "kind": "fact",
+            "text": "No signed review note is included in this fictional packet.",
+            "source_ref": "FIC-U-RECORD-V1"
+          }
+        ],
+        "record": {
+          "id": "FIC-U-RECORD-V1",
+          "text": "Fictional input manifest: signed review note not supplied.",
+          "synthetic": true
+        },
+        "missing_items": [
+          {
+            "id": "FIC-U-GAP-1",
+            "item": "signed review note",
+            "owner": null,
+            "due": null,
+            "meaning": "not supplied in packet; no claim of absence elsewhere"
+          }
+        ],
+        "redaction_version": "synthetic-no-private-content-v1",
+        "purpose": "offline contract illustration",
+        "permission_ref": "fictional-only-no-provider-or-release",
+        "hash_method": "python-json-sort-keys-compact-utf8-v1",
+        "snapshot_hash": "91f3e7eb969ca1c1f40654ff72d2b7d581dc509b20200e95c038cb666ba3d27d",
+        "source_version_hashes": {
+          "FIC-U-SOURCE-V1": "388ae8441e99ad42fbb0e005cf7a0442ade07ae6f157a13766dffa73434ac7c1"
+        }
+      },
+      "unit": {
+        "id": "FIC-U-UNIT-V1",
+        "logical_unit_id": "FIC-U-UNIT",
+        "case_id": "FIC-U-CASE",
+        "procurement_id": "FIC-U-PROCUREMENT",
+        "issue_id": "FIC-U-ISSUE-1",
+        "obligation_id": "FIC-U-OBLIGATION-V1",
+        "evidence_snapshot_id": "FIC-U-EVIDENCE-V1",
+        "profile_id": "FIC-U-PROFILE-V1",
+        "policy_pack_id": "FIC-U-POLICY-V1",
+        "constraint_ids": [
+          "FIC-U-CONSTRAINT-V1"
+        ],
+        "occasion_id": "FIC-U-OCCASION-1",
+        "decision_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "previous_unit_id": null,
+        "change_reason": "initial fictional illustration",
+        "benchmark_eligible": false,
+        "exclusion_reason": "synthetic contract fixture"
+      },
+      "evaluation": {
+        "id": "FIC-U-EVAL-1",
+        "unit_id": "FIC-U-UNIT-V1",
+        "mode": "rules_only_fixture",
+        "status": "provider_not_requested",
+        "provider": null,
+        "transport": null,
+        "requested_model": null,
+        "returned_model": null,
+        "question_rubric_version": null,
+        "input_snapshot_hash": "91f3e7eb969ca1c1f40654ff72d2b7d581dc509b20200e95c038cb666ba3d27d",
+        "normalized_model_result": null,
+        "raw_response_ref": null,
+        "raw_response_hash": null,
+        "usage": null,
+        "usage_status": "not_applicable_no_provider_call",
+        "provider_calls": 0,
+        "provider_cost_usd": 0,
+        "cost_basis": "no provider call; excludes Codex/hosting",
+        "retry_of": null
+      },
+      "policy_assessment": {
+        "id": "FIC-U-ASSESSMENT-1",
+        "unit_id": "FIC-U-UNIT-V1",
+        "evaluation_ids": [
+          "FIC-U-EVAL-1"
+        ],
+        "policy_pack_id": "FIC-U-POLICY-V1",
+        "constraint_id": "FIC-U-CONSTRAINT-V1",
+        "outcome": "unknown",
+        "proposed_disposition": "needs_evidence",
+        "reason_code": "SIGNED_NOTE_NOT_SUPPLIED",
+        "evidence_snapshot_id": "FIC-U-EVIDENCE-V1",
+        "simulated": true,
+        "real_decision_eligible": false
+      },
+      "human_disposition": {
+        "id": "FIC-U-DISPOSITION-1",
+        "unit_id": "FIC-U-UNIT-V1",
+        "assessment_id": "FIC-U-ASSESSMENT-1",
+        "decision": "request_evidence",
+        "actor_id": "FIC-U-REVIEWER",
+        "role": "fictional reviewer",
+        "timestamp": "2026-09-20T00:00:00Z",
+        "rationale": "Request missing input; make no substantive procurement determination.",
+        "evidence_refs": [
+          "FIC-U-EVIDENCE-V1"
+        ],
+        "authority_ref": "fictional-fixture-authority-only",
+        "input_snapshot_hash": "91f3e7eb969ca1c1f40654ff72d2b7d581dc509b20200e95c038cb666ba3d27d",
+        "simulated": true,
+        "actual_approval": false,
+        "override": false
+      },
+      "outcome": {
+        "unit_id": "FIC-U-UNIT-V1",
+        "issue_id": "FIC-U-ISSUE-1",
+        "value": null,
+        "source_ref": null,
+        "outcome_date": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No real outcome exists for this fictional example"
+        },
+        "quality": "unknown",
+        "procedural_scope": null,
+        "label_reviewer": null,
+        "unknown_reason": "Synthetic fixture, not a real decision"
+      },
+      "publication": {
+        "id": "FIC-U-EXPORT-1",
+        "case_id": "FIC-U-CASE",
+        "unit_ids": [
+          "FIC-U-UNIT-V1"
+        ],
+        "audience": "internal contract reviewers",
+        "status": "draft_example",
+        "approved": false,
+        "public_url": null,
+        "claims": [],
+        "benchmark_denominator": null,
+        "release_record": null,
+        "limitations": [
+          "Entirely fictional",
+          "No performance claim",
+          "No external publication or customer authority"
+        ]
+      }
+    },
+    {
+      "id": "FIC-M-EXAMPLE",
+      "lane": "M",
+      "fixture_only": true,
+      "organization_id": "org_fictional_contract",
+      "classification": "synthetic",
+      "created_at": "2026-09-20T18:50:00Z",
+      "created_by": "Product Steward fixture author",
+      "source_job_id": "HQ-M02",
+      "record_state": "draft",
+      "version": 1,
+      "supersedes_id": null,
+      "source_versions": [
+        {
+          "id": "FIC-M-SOURCE-V1",
+          "document_id": "FIC-M-DOCUMENT-1",
+          "version": 1,
+          "issuer": "Fictional institution only",
+          "title": "Fictional M rule 1",
+          "instrument_type": "synthetic_fixture",
+          "jurisdiction_entity": "fictional-M-scope",
+          "language": "en",
+          "translation_status": "original_fictional_text",
+          "official_origin_ref": null,
+          "edition": "fixture-v1",
+          "published": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "effective": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "repealed": {
+            "value": null,
+            "precision": "unknown",
+            "basis_ref": null,
+            "unknown_reason": "No repeal fact supplied"
+          },
+          "retrieved_at": "2026-09-20T18:50:00Z",
+          "checked_at": "2026-09-20T18:50:00Z",
+          "storage_ref": "fixtures/FIC-M-SOURCE-1.txt",
+          "byte_hash": "388ae8441e99ad42fbb0e005cf7a0442ade07ae6f157a13766dffa73434ac7c1",
+          "hash_algorithm": "sha256",
+          "byte_verification_status": "verified_fixture_bytes",
+          "reuse_restrictions": "Synthetic local verification only; no real source rights asserted",
+          "custody": "retained_fixture_bytes",
+          "reviewer": null,
+          "record_state": "draft",
+          "supersedes_id": null
+        }
+      ],
+      "profile": {
+        "id": "FIC-M-PROFILE-V1",
+        "version": 1,
+        "lane": "M",
+        "institution": "Fictional multilateral lender",
+        "jurisdiction": "fictional-M",
+        "funding_instrument": "FIC-M-AGREEMENT-1",
+        "procedure_method": "fictional_review",
+        "value_currency_basis": null,
+        "event_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "source_version_ids": [
+          "FIC-M-SOURCE-V1"
+        ],
+        "overlays": [],
+        "precedence_basis_ref": null,
+        "language_limits": "Original fictional English; no translation or actual legal instrument",
+        "record_state": "draft"
+      },
+      "applicability": {
+        "profile_id": "FIC-M-PROFILE-V1",
+        "resolver_version": "offline-human-fixture-v1",
+        "result": "applicable",
+        "supplied_context": [
+          "fictional institution",
+          "fictional procedure",
+          "fictional date"
+        ],
+        "missing_context": [],
+        "reason_code": "FICTIONAL_SCOPE_MATCH",
+        "confirmed_by": "FIC-M-REVIEWER",
+        "confirmation_status": "simulated_only"
+      },
+      "obligation": {
+        "id": "FIC-M-OBLIGATION-V1",
+        "source_version_id": "FIC-M-SOURCE-V1",
+        "locator": "Clause 1",
+        "excerpt": "Fictional rule only. Clause 1: Before making the fictional decision, the reviewer must sign a review note. The supplied packet may contain only part of the underlying record. This invented rule is not attributed to any real institution.",
+        "normalized_requirement": "The fictional reviewer signs a review note before the fictional decision.",
+        "actor": "fictional record owner",
+        "stage": "review",
+        "family": "required_evidence",
+        "evidence_required": "signed review note",
+        "timing": "before the fictional decision occasion",
+        "exceptions": [],
+        "exception_authority_ref": null,
+        "record_state": "draft"
+      },
+      "constraint": {
+        "id": "FIC-M-CONSTRAINT-V1",
+        "obligation_ids": [
+          "FIC-M-OBLIGATION-V1"
+        ],
+        "policy_pack_id": "FIC-M-POLICY-V1",
+        "check_kind": "deterministic",
+        "implementation_ref": "offline-illustration-only",
+        "required_inputs": [
+          "confirmed applicability",
+          "signed review note"
+        ],
+        "missing_behavior": "unknown",
+        "conflict_behavior": "conflict",
+        "reason_codes": [
+          "SIGNED_NOTE_PRESENT",
+          "SIGNED_NOTE_NOT_SUPPLIED",
+          "UNRESOLVED_ENTITY_EDITION_PRECEDENCE"
+        ],
+        "severity": "fixture-only-unrated",
+        "exception_authority_ref": null,
+        "fixture_ref": "FIC-M-EXAMPLE",
+        "record_state": "draft"
+      },
+      "policy_pack": {
+        "id": "FIC-M-POLICY-V1",
+        "constraint_ids": [
+          "FIC-M-CONSTRAINT-V1"
+        ],
+        "record_state": "draft",
+        "execution_scope": "synthetic_only"
+      },
+      "case": {
+        "id": "FIC-M-CASE",
+        "procurement_id": "FIC-M-PROCUREMENT",
+        "group_id": "FIC-M-GROUP",
+        "lane": "M",
+        "type": "synthetic",
+        "official_procedure_id": null,
+        "regime": "fictional-M",
+        "source_version_ids": [
+          "FIC-M-SOURCE-V1"
+        ],
+        "event_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "issue_ids": [
+          "FIC-M-ISSUE-1"
+        ],
+        "chronology": [
+          {
+            "date": {
+              "value": "2026-09-19",
+              "precision": "day",
+              "basis_ref": "fictional-fixture-author",
+              "unknown_reason": null
+            },
+            "kind": "hypothesis",
+            "text": "Fictional reviewer receives this packet."
+          }
+        ],
+        "completeness": "fixture_has_only_the_inputs_listed",
+        "response_appeal_correction_refs": [],
+        "selection_rationale": "Illustrates a contract state; not a sampled real case",
+        "dedup_key": "FIC-M-PROCUREMENT:ISSUE-1:OCCASION-1"
+      },
+      "evidence_snapshot": {
+        "id": "FIC-M-EVIDENCE-V1",
+        "case_id": "FIC-M-CASE",
+        "procurement_id": "FIC-M-PROCUREMENT",
+        "version": 1,
+        "source_version_ids": [
+          "FIC-M-SOURCE-V1"
+        ],
+        "evidence_as_of": "2026-09-20T00:00:00Z",
+        "assertions": [
+          {
+            "id": "FIC-M-ASSERTION-1",
+            "kind": "fact",
+            "text": "The supplied fictional note records a reviewer signature dated before the fictional decision occasion.",
+            "source_ref": "FIC-M-RECORD-V1"
+          }
+        ],
+        "record": {
+          "id": "FIC-M-RECORD-V1",
+          "text": "Fictional review note: reviewed and signed by FIC-M-REVIEWER on 2026-09-18, before the fictional decision on 2026-09-19.",
+          "synthetic": true
+        },
+        "missing_items": [],
+        "redaction_version": "synthetic-no-private-content-v1",
+        "purpose": "offline contract illustration",
+        "permission_ref": "fictional-only-no-provider-or-release",
+        "hash_method": "python-json-sort-keys-compact-utf8-v1",
+        "snapshot_hash": "5e493286ce9dfbfa3f9e84ddd68aeefcb495a75fc37d4188312037c88ea2c8f7",
+        "source_version_hashes": {
+          "FIC-M-SOURCE-V1": "388ae8441e99ad42fbb0e005cf7a0442ade07ae6f157a13766dffa73434ac7c1"
+        }
+      },
+      "unit": {
+        "id": "FIC-M-UNIT-V1",
+        "logical_unit_id": "FIC-M-UNIT",
+        "case_id": "FIC-M-CASE",
+        "procurement_id": "FIC-M-PROCUREMENT",
+        "issue_id": "FIC-M-ISSUE-1",
+        "obligation_id": "FIC-M-OBLIGATION-V1",
+        "evidence_snapshot_id": "FIC-M-EVIDENCE-V1",
+        "profile_id": "FIC-M-PROFILE-V1",
+        "policy_pack_id": "FIC-M-POLICY-V1",
+        "constraint_ids": [
+          "FIC-M-CONSTRAINT-V1"
+        ],
+        "occasion_id": "FIC-M-OCCASION-1",
+        "decision_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "previous_unit_id": null,
+        "change_reason": "initial fictional illustration",
+        "benchmark_eligible": false,
+        "exclusion_reason": "synthetic contract fixture"
+      },
+      "evaluation": {
+        "id": "FIC-M-EVAL-1",
+        "unit_id": "FIC-M-UNIT-V1",
+        "mode": "rules_only_fixture",
+        "status": "provider_not_requested",
+        "provider": null,
+        "transport": null,
+        "requested_model": null,
+        "returned_model": null,
+        "question_rubric_version": null,
+        "input_snapshot_hash": "5e493286ce9dfbfa3f9e84ddd68aeefcb495a75fc37d4188312037c88ea2c8f7",
+        "normalized_model_result": null,
+        "raw_response_ref": null,
+        "raw_response_hash": null,
+        "usage": null,
+        "usage_status": "not_applicable_no_provider_call",
+        "provider_calls": 0,
+        "provider_cost_usd": 0,
+        "cost_basis": "no provider call; excludes Codex/hosting",
+        "retry_of": null
+      },
+      "policy_assessment": {
+        "id": "FIC-M-ASSESSMENT-1",
+        "unit_id": "FIC-M-UNIT-V1",
+        "evaluation_ids": [
+          "FIC-M-EVAL-1"
+        ],
+        "policy_pack_id": "FIC-M-POLICY-V1",
+        "constraint_id": "FIC-M-CONSTRAINT-V1",
+        "outcome": "satisfied",
+        "proposed_disposition": "ready_for_review",
+        "reason_code": "SIGNED_NOTE_PRESENT",
+        "evidence_snapshot_id": "FIC-M-EVIDENCE-V1",
+        "simulated": true,
+        "real_decision_eligible": false
+      },
+      "human_disposition": {
+        "id": "FIC-M-DISPOSITION-1",
+        "unit_id": "FIC-M-UNIT-V1",
+        "assessment_id": "FIC-M-ASSESSMENT-1",
+        "decision": "accept_assessment",
+        "actor_id": "FIC-M-REVIEWER",
+        "role": "fictional reviewer",
+        "timestamp": "2026-09-20T00:00:00Z",
+        "rationale": "Accept this scoped fictional evidence check only.",
+        "evidence_refs": [
+          "FIC-M-EVIDENCE-V1"
+        ],
+        "authority_ref": "fictional-fixture-authority-only",
+        "input_snapshot_hash": "5e493286ce9dfbfa3f9e84ddd68aeefcb495a75fc37d4188312037c88ea2c8f7",
+        "simulated": true,
+        "actual_approval": false,
+        "override": false
+      },
+      "outcome": {
+        "unit_id": "FIC-M-UNIT-V1",
+        "issue_id": "FIC-M-ISSUE-1",
+        "value": null,
+        "source_ref": null,
+        "outcome_date": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No real outcome exists for this fictional example"
+        },
+        "quality": "unknown",
+        "procedural_scope": null,
+        "label_reviewer": null,
+        "unknown_reason": "Synthetic fixture, not a real decision"
+      },
+      "publication": {
+        "id": "FIC-M-EXPORT-1",
+        "case_id": "FIC-M-CASE",
+        "unit_ids": [
+          "FIC-M-UNIT-V1"
+        ],
+        "audience": "internal contract reviewers",
+        "status": "draft_example",
+        "approved": false,
+        "public_url": null,
+        "claims": [],
+        "benchmark_denominator": null,
+        "release_record": null,
+        "limitations": [
+          "Entirely fictional",
+          "No performance claim",
+          "No external publication or customer authority"
+        ]
+      }
+    },
+    {
+      "id": "FIC-G-EXAMPLE",
+      "lane": "G",
+      "fixture_only": true,
+      "organization_id": "org_fictional_contract",
+      "classification": "synthetic",
+      "created_at": "2026-09-20T18:50:00Z",
+      "created_by": "Product Steward fixture author",
+      "source_job_id": "HQ-M02",
+      "record_state": "draft",
+      "version": 1,
+      "supersedes_id": null,
+      "source_versions": [
+        {
+          "id": "FIC-G-SOURCE-V1",
+          "document_id": "FIC-G-DOCUMENT-1",
+          "version": 1,
+          "issuer": "Fictional institution only",
+          "title": "Fictional G rule 1",
+          "instrument_type": "synthetic_fixture",
+          "jurisdiction_entity": "Fictional Entity Q",
+          "language": "en",
+          "translation_status": "original_fictional_text",
+          "official_origin_ref": null,
+          "edition": "fixture-v1",
+          "published": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "effective": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "repealed": {
+            "value": null,
+            "precision": "unknown",
+            "basis_ref": null,
+            "unknown_reason": "No repeal fact supplied"
+          },
+          "retrieved_at": "2026-09-20T18:50:00Z",
+          "checked_at": "2026-09-20T18:50:00Z",
+          "storage_ref": "fixtures/FIC-G-SOURCE-1.txt",
+          "byte_hash": "af9719dafeede6cb3d4f03ce53136b3319a5311ae3c36865718ab36a1d3ba8d5",
+          "hash_algorithm": "sha256",
+          "byte_verification_status": "verified_fixture_bytes",
+          "reuse_restrictions": "Synthetic local verification only; no real source rights asserted",
+          "custody": "retained_fixture_bytes",
+          "reviewer": null,
+          "record_state": "draft",
+          "supersedes_id": null
+        },
+        {
+          "id": "FIC-G-SOURCE-V2",
+          "document_id": "FIC-G-DOCUMENT-2",
+          "version": 1,
+          "issuer": "Fictional institution only",
+          "title": "Fictional G rule 2",
+          "instrument_type": "synthetic_fixture",
+          "jurisdiction_entity": "Fictional Entity Q",
+          "language": "en",
+          "translation_status": "original_fictional_text",
+          "official_origin_ref": null,
+          "edition": "fixture-v1",
+          "published": {
+            "value": "2026-01-01",
+            "precision": "day",
+            "basis_ref": "fictional-fixture-author",
+            "unknown_reason": null
+          },
+          "effective": {
+            "value": null,
+            "precision": "unknown",
+            "basis_ref": null,
+            "unknown_reason": "Not provided in fictional instrument B"
+          },
+          "repealed": {
+            "value": null,
+            "precision": "unknown",
+            "basis_ref": null,
+            "unknown_reason": "No repeal fact supplied"
+          },
+          "retrieved_at": "2026-09-20T18:50:00Z",
+          "checked_at": "2026-09-20T18:50:00Z",
+          "storage_ref": "fixtures/FIC-G-SOURCE-2.txt",
+          "byte_hash": "f684e3c92de3f9fbf055a95608578e9c6dcf40a0516b5c2037b021f793b43d86",
+          "hash_algorithm": "sha256",
+          "byte_verification_status": "verified_fixture_bytes",
+          "reuse_restrictions": "Synthetic local verification only; no real source rights asserted",
+          "custody": "retained_fixture_bytes",
+          "reviewer": null,
+          "record_state": "draft",
+          "supersedes_id": null
+        }
+      ],
+      "profile": {
+        "id": "FIC-G-PROFILE-V1",
+        "version": 1,
+        "lane": "G",
+        "institution": "Fictional Entity Q",
+        "jurisdiction": "fictional-G",
+        "funding_instrument": null,
+        "procedure_method": "fictional_review",
+        "value_currency_basis": null,
+        "event_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "source_version_ids": [
+          "FIC-G-SOURCE-V1",
+          "FIC-G-SOURCE-V2"
+        ],
+        "overlays": [],
+        "precedence_basis_ref": null,
+        "language_limits": "Original fictional English; no translation or actual legal instrument",
+        "record_state": "draft"
+      },
+      "applicability": {
+        "profile_id": "FIC-G-PROFILE-V1",
+        "resolver_version": "offline-human-fixture-v1",
+        "result": "conflict",
+        "supplied_context": [
+          "Fictional Entity Q",
+          "FIC-G-PROCUREMENT",
+          "decision date 2026-09-19",
+          "two incompatible governing-instrument assertions"
+        ],
+        "missing_context": [
+          "effective date of B",
+          "precedence basis"
+        ],
+        "reason_code": "CONFLICTING_GOVERNING_INSTRUMENT_CLAIMS",
+        "confirmed_by": null,
+        "confirmation_status": "pending"
+      },
+      "obligation": {
+        "id": "FIC-G-OBLIGATION-V1",
+        "source_version_id": "FIC-G-SOURCE-V1",
+        "locator": "Clause 1",
+        "excerpt": "Fictional instrument A. Clause 1 and applicability note: For Entity Q procedure FIC-G-PROCUREMENT on 2026-09-19, A claims exclusive governing authority and requires exactly one reviewer signature. This is an invented conflicting source claim.",
+        "normalized_requirement": "Instrument A claims exactly one reviewer signature for the same fictional procedure for which B claims exactly two.",
+        "actor": "fictional record owner",
+        "stage": "review",
+        "family": "required_evidence",
+        "evidence_required": "signed review note",
+        "timing": "before fictional assessment",
+        "exceptions": [],
+        "exception_authority_ref": null,
+        "record_state": "draft"
+      },
+      "constraint": {
+        "id": "FIC-G-CONSTRAINT-V1",
+        "obligation_ids": [
+          "FIC-G-OBLIGATION-V1"
+        ],
+        "policy_pack_id": "FIC-G-POLICY-V1",
+        "check_kind": "deterministic",
+        "implementation_ref": "offline-illustration-only",
+        "required_inputs": [
+          "confirmed applicability",
+          "signed review note"
+        ],
+        "missing_behavior": "unknown",
+        "conflict_behavior": "conflict",
+        "reason_codes": [
+          "CONFLICTING_GOVERNING_INSTRUMENT_CLAIMS"
+        ],
+        "severity": "fixture-only-unrated",
+        "exception_authority_ref": null,
+        "fixture_ref": "FIC-G-EXAMPLE",
+        "record_state": "draft"
+      },
+      "policy_pack": {
+        "id": "FIC-G-POLICY-V1",
+        "constraint_ids": [
+          "FIC-G-CONSTRAINT-V1"
+        ],
+        "record_state": "draft",
+        "execution_scope": "synthetic_only"
+      },
+      "case": {
+        "id": "FIC-G-CASE",
+        "procurement_id": "FIC-G-PROCUREMENT",
+        "group_id": "FIC-G-GROUP",
+        "lane": "G",
+        "type": "synthetic",
+        "official_procedure_id": null,
+        "regime": "fictional-G",
+        "source_version_ids": [
+          "FIC-G-SOURCE-V1",
+          "FIC-G-SOURCE-V2"
+        ],
+        "event_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "issue_ids": [
+          "FIC-G-ISSUE-1"
+        ],
+        "chronology": [
+          {
+            "date": {
+              "value": "2026-09-19",
+              "precision": "day",
+              "basis_ref": "fictional-fixture-author",
+              "unknown_reason": null
+            },
+            "kind": "hypothesis",
+            "text": "Fictional reviewer receives this packet."
+          }
+        ],
+        "completeness": "fixture_has_only_the_inputs_listed",
+        "response_appeal_correction_refs": [],
+        "selection_rationale": "Illustrates a contract state; not a sampled real case",
+        "dedup_key": "FIC-G-PROCUREMENT:ISSUE-1:OCCASION-1"
+      },
+      "evidence_snapshot": {
+        "id": "FIC-G-EVIDENCE-V1",
+        "case_id": "FIC-G-CASE",
+        "procurement_id": "FIC-G-PROCUREMENT",
+        "version": 1,
+        "source_version_ids": [
+          "FIC-G-SOURCE-V1",
+          "FIC-G-SOURCE-V2"
+        ],
+        "evidence_as_of": "2026-09-20T00:00:00Z",
+        "assertions": [
+          {
+            "id": "FIC-G-ASSERTION-A",
+            "kind": "source_finding",
+            "text": "A claims exclusive authority and exactly one reviewer signature for this entity/procedure/date.",
+            "source_ref": "FIC-G-SOURCE-V1"
+          },
+          {
+            "id": "FIC-G-ASSERTION-B",
+            "kind": "source_finding",
+            "text": "B claims exclusive authority and exactly two reviewer signatures for the same entity/procedure/date.",
+            "source_ref": "FIC-G-SOURCE-V2"
+          }
+        ],
+        "record": {
+          "id": "FIC-G-RECORD-V1",
+          "text": "Fictional Entity Q procedure FIC-G-PROCUREMENT has two incompatible claims of governing authority; no precedence basis is supplied.",
+          "synthetic": true
+        },
+        "missing_items": [
+          {
+            "id": "FIC-G-GAP-1",
+            "item": "reviewed precedence basis and effective date of instrument B",
+            "owner": null,
+            "due": null,
+            "meaning": "not supplied in packet; no claim of absence elsewhere"
+          }
+        ],
+        "redaction_version": "synthetic-no-private-content-v1",
+        "purpose": "offline contract illustration",
+        "permission_ref": "fictional-only-no-provider-or-release",
+        "hash_method": "python-json-sort-keys-compact-utf8-v1",
+        "snapshot_hash": "ef2baf52740bf61703caf61873e8ca7bcab646c616aabd7e9f5eec2466541fb8",
+        "source_version_hashes": {
+          "FIC-G-SOURCE-V1": "af9719dafeede6cb3d4f03ce53136b3319a5311ae3c36865718ab36a1d3ba8d5",
+          "FIC-G-SOURCE-V2": "f684e3c92de3f9fbf055a95608578e9c6dcf40a0516b5c2037b021f793b43d86"
+        }
+      },
+      "unit": {
+        "id": "FIC-G-UNIT-V1",
+        "logical_unit_id": "FIC-G-UNIT",
+        "case_id": "FIC-G-CASE",
+        "procurement_id": "FIC-G-PROCUREMENT",
+        "issue_id": "FIC-G-ISSUE-1",
+        "obligation_id": "FIC-G-OBLIGATION-V1",
+        "evidence_snapshot_id": "FIC-G-EVIDENCE-V1",
+        "profile_id": "FIC-G-PROFILE-V1",
+        "policy_pack_id": "FIC-G-POLICY-V1",
+        "constraint_ids": [
+          "FIC-G-CONSTRAINT-V1"
+        ],
+        "occasion_id": "FIC-G-OCCASION-1",
+        "decision_date": {
+          "value": "2026-09-19",
+          "precision": "day",
+          "basis_ref": "fictional-fixture-author",
+          "unknown_reason": null
+        },
+        "previous_unit_id": null,
+        "change_reason": "initial fictional illustration",
+        "benchmark_eligible": false,
+        "exclusion_reason": "synthetic contract fixture"
+      },
+      "evaluation": {
+        "id": "FIC-G-EVAL-1",
+        "unit_id": "FIC-G-UNIT-V1",
+        "mode": "rules_only_fixture",
+        "status": "provider_not_requested",
+        "provider": null,
+        "transport": null,
+        "requested_model": null,
+        "returned_model": null,
+        "question_rubric_version": null,
+        "input_snapshot_hash": "ef2baf52740bf61703caf61873e8ca7bcab646c616aabd7e9f5eec2466541fb8",
+        "normalized_model_result": null,
+        "raw_response_ref": null,
+        "raw_response_hash": null,
+        "usage": null,
+        "usage_status": "not_applicable_no_provider_call",
+        "provider_calls": 0,
+        "provider_cost_usd": 0,
+        "cost_basis": "no provider call; excludes Codex/hosting",
+        "retry_of": null
+      },
+      "policy_assessment": {
+        "id": "FIC-G-ASSESSMENT-1",
+        "unit_id": "FIC-G-UNIT-V1",
+        "evaluation_ids": [
+          "FIC-G-EVAL-1"
+        ],
+        "policy_pack_id": "FIC-G-POLICY-V1",
+        "constraint_id": "FIC-G-CONSTRAINT-V1",
+        "outcome": "conflict",
+        "proposed_disposition": "needs_rule_review",
+        "reason_code": "CONFLICTING_GOVERNING_INSTRUMENT_CLAIMS",
+        "evidence_snapshot_id": "FIC-G-EVIDENCE-V1",
+        "simulated": true,
+        "real_decision_eligible": false
+      },
+      "human_disposition": {
+        "id": "FIC-G-DISPOSITION-1",
+        "unit_id": "FIC-G-UNIT-V1",
+        "assessment_id": "FIC-G-ASSESSMENT-1",
+        "decision": "request_rule_review",
+        "actor_id": "FIC-G-REVIEWER",
+        "role": "fictional reviewer",
+        "timestamp": "2026-09-20T00:00:00Z",
+        "rationale": "Request missing input; make no substantive procurement determination.",
+        "evidence_refs": [
+          "FIC-G-EVIDENCE-V1"
+        ],
+        "authority_ref": "fictional-fixture-authority-only",
+        "input_snapshot_hash": "ef2baf52740bf61703caf61873e8ca7bcab646c616aabd7e9f5eec2466541fb8",
+        "simulated": true,
+        "actual_approval": false,
+        "override": false
+      },
+      "outcome": {
+        "unit_id": "FIC-G-UNIT-V1",
+        "issue_id": "FIC-G-ISSUE-1",
+        "value": null,
+        "source_ref": null,
+        "outcome_date": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No real outcome exists for this fictional example"
+        },
+        "quality": "unknown",
+        "procedural_scope": null,
+        "label_reviewer": null,
+        "unknown_reason": "Synthetic fixture, not a real decision"
+      },
+      "publication": {
+        "id": "FIC-G-EXPORT-1",
+        "case_id": "FIC-G-CASE",
+        "unit_ids": [
+          "FIC-G-UNIT-V1"
+        ],
+        "audience": "internal contract reviewers",
+        "status": "draft_example",
+        "approved": false,
+        "public_url": null,
+        "claims": [],
+        "benchmark_denominator": null,
+        "release_record": null,
+        "limitations": [
+          "Entirely fictional",
+          "No performance claim",
+          "No external publication or customer authority"
+        ]
+      }
+    }
+  ],
+  "scope_note": "Compact design examples illustrate links and states, not ready-to-ingest canonical records. The final accepted implementation schema must supply and validate fields not exercised here. All example dates and reviewer actions are fictional."
+}

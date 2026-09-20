@@ -1,0 +1,78 @@
+{
+  "job_id": "HQ-M02",
+  "mandate_id": "product",
+  "artifact_id": "M02-DECISION-CONTRACT-V0_1",
+  "version": 1,
+  "classification": "internal",
+  "produced_at": "2026-09-20T18:55:51.157030Z",
+  "sources": [
+    {
+      "id": "M02-CONTRACT",
+      "source_ref": "DECISION_CORPUS_CONTRACT_V0_1.md",
+      "location": null,
+      "observed_at": "2026-09-20T18:55:51.157030Z",
+      "claim": "Defines scoped decision-data and future implementation acceptance requirements.",
+      "kind": "artifact",
+      "limitations": [
+        "Design handoff, not implemented controls or legal rules."
+      ]
+    },
+    {
+      "id": "M02-MAP",
+      "source_ref": "FIELD_MAP_V0_1.md",
+      "location": null,
+      "observed_at": "2026-09-20T18:55:51.157030Z",
+      "claim": "Maps actual baseline fields and security/data hygiene gaps.",
+      "kind": "artifact",
+      "limitations": [
+        "Read-only baseline code inspection; no live DB claim."
+      ]
+    },
+    {
+      "id": "M02-VERIFY",
+      "source_ref": "VERIFICATION_V0_1.json",
+      "location": null,
+      "observed_at": "2026-09-20T18:55:51.157030Z",
+      "claim": "Three synthetic fixture integrity checks pass.",
+      "kind": "test",
+      "limitations": [
+        "Not a production validator or benchmark."
+      ]
+    }
+  ],
+  "assumptions": [
+    "One shared contract can represent three distinct rule regimes without inventing common applicability."
+  ],
+  "known_gaps": [
+    "Real rule/source/domain review remains outstanding.",
+    "Future executable schema, migration, authorization and user testing required.",
+    "Four source-derived HQ UX fixes are deferred."
+  ],
+  "review_status": "review",
+  "next_owner": "Independent Supervisor after Auditor PASS; original room task47 disposition remains separate.",
+  "payload": {
+    "evidence_ids": [
+      "M02-CONTRACT",
+      "M02-MAP",
+      "M02-VERIFY"
+    ],
+    "user_task": "Understand the scoped finding, its evidence and the next useful review action.",
+    "hypothesis": "Separating evidence, applicability, judgment, policy and human disposition makes a Trace clearer and reconstructible without weakening security.",
+    "smallest_test": "Three fictional U/M/G packets and independent consistency review; later Builder implements one scoped flow.",
+    "measure": "All three examples preserve exact references, source-byte/snapshot hashes, distinct states and fictional-only limits; user comprehension checks are future.",
+    "disconfirmation": "State ambiguity, false clearance from missing evidence, cross-scope references or inability to reconstruct the supplied evidence requires revision.",
+    "scope": "Internal shared decision-corpus contract and field map; no application or database implementation.",
+    "acceptance": [
+      "Complete decision chain and exact field map.",
+      "Three internally consistent fictional lane examples.",
+      "Independent Auditor and separate Supervisor disposition.",
+      "Clear UX and security/data hygiene conditions, gaps and no implied legal/product readiness."
+    ],
+    "dependencies": [
+      "HQ-M01 submitted",
+      "M03-M05 source/domain review before real profile admission",
+      "M07 approved policy specification before full M09 workflow",
+      "Accepted M08 before benchmark scoring"
+    ]
+  }
+}
