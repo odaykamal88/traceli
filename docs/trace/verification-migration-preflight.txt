@@ -1,0 +1,3 @@
+PASS preflight rejects requirement/source procurement mismatch without changing schema
+PASS preflight rejects finding/requirement procurement mismatch without rewriting history
+PASS valid upgrade retains original legacy date/hash provenance and freezes locked source versions

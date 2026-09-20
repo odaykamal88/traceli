@@ -1,6 +1,7 @@
 import { authkit, handleAuthkitHeaders } from '@workos-inc/authkit-nextjs'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { isLoopbackHost, localTraceEnabled } from '@/lib/trace/access-policy'
 
 const workOSConfigured = Boolean(
   process.env.WORKOS_CLIENT_ID &&
@@ -10,6 +11,10 @@ const workOSConfigured = Boolean(
 )
 
 export default async function proxy(request: NextRequest) {
+  const isTrace = request.nextUrl.pathname === '/workspace/trace' || request.nextUrl.pathname.startsWith('/api/trace')
+  if (isTrace && localTraceEnabled(process.env) && isLoopbackHost(request.nextUrl.hostname)) {
+    return NextResponse.next()
+  }
   const isProtectedWorkspace = request.nextUrl.pathname.startsWith('/workspace')
 
   if (!workOSConfigured) {

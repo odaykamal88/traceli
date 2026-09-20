@@ -68,6 +68,13 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/workspace/trace/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
         source: '/hq/:path*',
         headers: [
           { key: 'Cache-Control', value: 'private, no-store, max-age=0' },

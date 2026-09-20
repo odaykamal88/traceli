@@ -1,0 +1,18 @@
+PASS fixture create, read, missing evidence remains unknown
+PASS all bounded scenarios persist with independently visible model and policy
+PASS idempotent same command; changed content and different actor rejected
+PASS cross-tenant read/list and revoked or weak roles denied
+PASS strict invalid decision, foreign evidence, unreviewed export, and stale hashes rejected
+PASS concurrent decisions produce one receipt and one stale-write conflict
+PASS authorized override preserves policy and binds rationale/version/authority
+PASS reconstructible full/redacted exports verify hashes without identity or rationale leakage
+PASS grant expiry and revocation rechecked at each download
+PASS new decisions invalidate grants made against earlier review sequence
+PASS revision race retains immutable previous source; old review/export becomes stale
+PASS restricted SQL role enforces tenant RLS and immutable units/decisions/grants/receipts
+PASS same-tenant foreign-procurement version/decision/grant/revocation/receipt links rejected
+PASS SQL null scope and mismatched actor payloads cannot bypass constraints
+PASS tampered stored source bytes fail read-time integrity validation
+PASS legacy sources preserve unknown provenance and enforce scope/locked immutability
+PASS audit failure rolls back unit, scaffold and idempotency receipt; retry succeeds
+Trace PostgreSQL integration: 17 checks passed; synthetic test tenant retained for disposable-DB inspection.
