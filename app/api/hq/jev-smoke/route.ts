@@ -17,7 +17,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (request.headers.get('origin') !== new URL(request.url).origin || request.headers.get('sec-fetch-site') !== 'same-origin') return new Response('Forbidden', { status: 403, headers })
+  const originMatches = request.headers.get('origin') === new URL(request.url).origin
+  const fetchSite = request.headers.get('sec-fetch-site')
+  if (!originMatches || fetchSite !== 'same-origin') {
+    console.info('HQ Jev form denied', { originMatches, fetchSite: fetchSite === null ? 'absent' : ['same-origin', 'same-site', 'cross-site', 'none'].includes(fetchSite) ? fetchSite : 'unrecognized' })
+    return new Response('Forbidden', { status: 403, headers })
+  }
   const owner = await requireJevSmokeOwner()
   if (!owner) return new Response('Not found', { status: 404, headers })
   if (!request.headers.get('content-type')?.startsWith('application/x-www-form-urlencoded')) return new Response('Unsupported content', { status: 415, headers })
