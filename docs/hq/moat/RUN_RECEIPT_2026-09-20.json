@@ -1,0 +1,38 @@
+{
+  "receipt": {
+    "id": "moat-intake-20260920-6b3e95a5",
+    "job_id": "execution-desk",
+    "occurred_at": "2026-09-20T15:07:28.268Z",
+    "outcome": "Completed",
+    "summary": "Completed planning/intake only: HQ-M01 task #46 submitted for independent review; M02-M10=#47-55, M11 reuses #31, M12=#56. Eleven new tasks, all 45 earlier records unchanged. U/M/G inventories and M09a access readiness eligible; dependent phases blocked. 30 job contracts schema-valid; 4/4 control-room checks passed. No source batch, Jev call, publication, new timer or production action executed. Dispatch SHA256 c712da58282d838df0764e8dacc69a3836490d0eefcc603239c612fb3117d363. Local artifact docs/hq/moat/DISPATCH_2026-09-20.md; 56 tasks/6 pending reviews read back.",
+    "source": "HQ moat intake; run 6b3e95a5-9107-4b7c-a59a-535c31fbfce7",
+    "source_url": "https://traceli-operating-room.odeyqemal.chatgpt.site"
+  },
+  "metadata": {
+    "started_at": "2026-09-20T14:52:21Z",
+    "finished_at": "2026-09-20T15:07:28.275Z",
+    "tasks_executed": [
+      46
+    ],
+    "scope": "planning/registration only",
+    "review_status": "pending",
+    "review_id": "6b3e95a5-9107-4b7c-a59a-535c31fbfce7",
+    "artifact_hashes": {
+      "dispatch": "c712da58282d838df0764e8dacc69a3836490d0eefcc603239c612fb3117d363",
+      "baseline": "3df09420d561b84f5be1da9f8f9a7b81255ebe399832b872591ccf6bea15c740",
+      "registration": "1fad7c031b93cf06a0aa3e365e3df727052b85c4d7e1605d74a824e82f986a1f"
+    },
+    "model_tokens": null,
+    "model_cost_usd": null,
+    "new_paid_provider_calls": 0,
+    "checks": [
+      "30 contracts valid against existing schema",
+      "18 previous HQ contracts unchanged",
+      "45 source tasks unchanged",
+      "12 unique live mappings",
+      "dependency and local link checks",
+      "4/4 existing control-room tests"
+    ],
+    "next": "Independent M01 review; M02 shared contract; one U/M/G inventory batch each; M09a readiness. Existing buyer task #31 extended via linked scope overlay."
+  }
+}

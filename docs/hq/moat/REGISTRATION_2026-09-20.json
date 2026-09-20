@@ -1,0 +1,438 @@
+{
+  "version": 1,
+  "scope": "planning/intake only",
+  "packages": [
+    {
+      "package_id": "HQ-M01",
+      "title": "Reconcile and register the three-lane moat program",
+      "owner": "institutional-memory",
+      "persona": "Supervisor + Librarian",
+      "workstream": "G",
+      "dependencies": {},
+      "checkpoint": "2026-09-22",
+      "ready_phase": true,
+      "stage": "Registration and baseline only; independent review remains pending.",
+      "existing_tasks": [
+        44,
+        45
+      ],
+      "existing_jobs": [
+        "HQ-G02",
+        "HQ-G04"
+      ],
+      "live_task_id": 46,
+      "reused": false,
+      "deliverable": "Reconcile current checkout, authoritative task queue, existing schemas, case assets and live capabilities. Inventory each as verified/reported/draft/unknown; link original task IDs and source dates. Register this program without duplicating existing jobs.",
+      "source_prerequisite": "None. Sep 21\u201322.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M01: Reconcile and register the three-lane moat program",
+        "detail": "moat-20260920:HQ-M01:v1. Owner: Supervisor + Librarian; workstream G. Deliverable: Reconcile current checkout, authoritative task queue, existing schemas, case assets and live capabilities. Inventory each as verified/reported/draft/unknown; link original task IDs and source dates. Register this program without duplicating existing jobs. Phase/gate: Registration and baseline only; independent review remains pending. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-22",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Registration and baseline only; independent review remains pending."
+      },
+      "live_status": "review",
+      "registration_state": "review submission packet prepared; verify after POST"
+    },
+    {
+      "package_id": "HQ-M02",
+      "title": "Decision corpus contract and field map",
+      "owner": "product",
+      "persona": "Product Steward",
+      "workstream": "E",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-09-23",
+      "ready_phase": true,
+      "stage": "Ready after M01 submission. Contract outline must cover all three lanes and distinguish fictional examples.",
+      "existing_tasks": [
+        25,
+        45
+      ],
+      "existing_jobs": [
+        "HQ-A01",
+        "HQ-E01"
+      ],
+      "live_task_id": 47,
+      "reused": false,
+      "deliverable": "Decision corpus contract v0.1 covering source version, applicability, obligation, constraint, case, unit, reviewer outcome and publication. Produce one explicitly fictional worked example per lane; map proposed fields to existing database fields and gaps.",
+      "source_prerequisite": "M01 inventory submitted. Sep 23.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M02: Decision corpus contract and field map",
+        "detail": "moat-20260920:HQ-M02:v1. Owner: Product Steward; workstream E. Deliverable: Decision corpus contract v0.1 covering source version, applicability, obligation, constraint, case, unit, reviewer outcome and publication. Produce one explicitly fictional worked example per lane; map proposed fields to existing database fields and gaps. Phase/gate: Ready after M01 submission. Contract outline must cover all three lanes and distinguish fictional examples. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-23",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Ready after M01 submission. Contract outline must cover all three lanes and distinguish fictional examples."
+      },
+      "live_status": "todo",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M03",
+      "title": "U: UN Secretariat / UNFPA source inventory",
+      "owner": "evidence-lab",
+      "persona": "Investigator + Librarian",
+      "workstream": "D",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-09-25",
+      "ready_phase": true,
+      "stage": "Inventory may start now. First bounded bundle: UN Secretariat manual, then UNFPA. Structured extraction waits for submitted M02; domain/source review before acceptance.",
+      "existing_tasks": [],
+      "existing_jobs": [
+        "HQ-D01"
+      ],
+      "live_task_id": 48,
+      "reused": false,
+      "deliverable": "UN/humanitarian lane source inventory and first UN Secretariat/UNFPA profile manifests. Pin actual editions, clauses, scope and language; identify donor/implementer overlays. Target 10 reviewed obligations and linked constraint specifications in this lane, with fixtures.",
+      "source_prerequisite": "M02 submitted; research inventory can start alongside it. First source bundle Sep 25; batch Oct 4.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M03: U: UN Secretariat / UNFPA source inventory",
+        "detail": "moat-20260920:HQ-M03:v1. Owner: Investigator + Librarian; workstream D. Deliverable: UN/humanitarian lane source inventory and first UN Secretariat/UNFPA profile manifests. Pin actual editions, clauses, scope and language; identify donor/implementer overlays. Target 10 reviewed obligations and linked constraint specifications in this lane, with fixtures. Phase/gate: Inventory may start now. First bounded bundle: UN Secretariat manual, then UNFPA. Structured extraction waits for submitted M02; domain/source review before acceptance. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-25",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Inventory may start now. First bounded bundle: UN Secretariat manual, then UNFPA. Structured extraction waits for submitted M02; domain/source review before acceptance."
+      },
+      "live_status": "todo",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M04",
+      "title": "M: World Bank / ADB source inventory",
+      "owner": "evidence-lab",
+      "persona": "Investigator + Librarian",
+      "workstream": "D",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-09-25",
+      "ready_phase": true,
+      "stage": "Inventory may start now. First bounded bundle: World Bank IPF regulations, then ADB. Structured extraction waits for submitted M02; project applicability must be explicit.",
+      "existing_tasks": [],
+      "existing_jobs": [
+        "HQ-D01"
+      ],
+      "live_task_id": 49,
+      "reused": false,
+      "deliverable": "MDB lane source inventory and first World Bank/ADB manifests. Record project/financing applicability, policy editions and required supplementary documents. Target 10 reviewed obligations and linked constraint specifications, with fixtures.",
+      "source_prerequisite": "M02 submitted; independent source inventory first. First source bundle Sep 25; batch Oct 4.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M04: M: World Bank / ADB source inventory",
+        "detail": "moat-20260920:HQ-M04:v1. Owner: Investigator + Librarian; workstream D. Deliverable: MDB lane source inventory and first World Bank/ADB manifests. Record project/financing applicability, policy editions and required supplementary documents. Target 10 reviewed obligations and linked constraint specifications, with fixtures. Phase/gate: Inventory may start now. First bounded bundle: World Bank IPF regulations, then ADB. Structured extraction waits for submitted M02; project applicability must be explicit. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-25",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Inventory may start now. First bounded bundle: World Bank IPF regulations, then ADB. Structured extraction waits for submitted M02; project applicability must be explicit."
+      },
+      "live_status": "todo",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M05",
+      "title": "G: Saudi central / UAE federal source inventory",
+      "owner": "evidence-lab",
+      "persona": "Investigator + Librarian",
+      "workstream": "D",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-09-25",
+      "ready_phase": true,
+      "stage": "Inventory may start now. First bounded bundle: Saudi central-government Arabic instruments, then UAE federal. Preserve translation/entity boundaries; structured extraction waits for submitted M02.",
+      "existing_tasks": [],
+      "existing_jobs": [],
+      "live_task_id": 50,
+      "reused": false,
+      "deliverable": "Gulf lane inventory and distinct Saudi central-government/UAE federal manifests. Preserve original-language source, translation status, amendments and entity scope. Target 10 reviewed obligations and linked constraint specifications, with fixtures; report unavailable public outcomes.",
+      "source_prerequisite": "M02 submitted; independent source inventory first. First source bundle Sep 25; batch Oct 4.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M05: G: Saudi central / UAE federal source inventory",
+        "detail": "moat-20260920:HQ-M05:v1. Owner: Investigator + Librarian; workstream D. Deliverable: Gulf lane inventory and distinct Saudi central-government/UAE federal manifests. Preserve original-language source, translation status, amendments and entity scope. Target 10 reviewed obligations and linked constraint specifications, with fixtures; report unavailable public outcomes. Phase/gate: Inventory may start now. First bounded bundle: Saudi central-government Arabic instruments, then UAE federal. Preserve translation/entity boundaries; structured extraction waits for submitted M02. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-25",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Inventory may start now. First bounded bundle: Saudi central-government Arabic instruments, then UAE federal. Preserve translation/entity boundaries; structured extraction waits for submitted M02."
+      },
+      "live_status": "todo",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M06",
+      "title": "Deduplicated case catalogue",
+      "owner": "evidence-lab",
+      "persona": "Investigator",
+      "workstream": "D",
+      "dependencies": {
+        "HQ-M01": "submitted",
+        "HQ-M02": "submitted"
+      },
+      "checkpoint": "2026-09-23",
+      "ready_phase": false,
+      "stage": "Blocked until M02 submitted. Reuse PC-001\u2013PC-007 and HQ account sources before verifying MI-001\u2013MI-018; candidates are not benchmark cases.",
+      "existing_tasks": [
+        5,
+        19
+      ],
+      "existing_jobs": [
+        "HQ-D01",
+        "HQ-D03"
+      ],
+      "live_task_id": 51,
+      "reused": false,
+      "deliverable": "Deduplicated case catalogue seeded from existing PC register, HQ source packets, 16 suggested cases and the earlier MRI example. Verify official identifiers and current procedural status before acceptance. First three complete packets include one from each lane; label adjudicated/audit/sanction/prospective separately.",
+      "source_prerequisite": "M01 and M02 submitted. Intake Sep 23; first packets Oct 4.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M06: Deduplicated case catalogue",
+        "detail": "moat-20260920:HQ-M06:v1. Owner: Investigator; workstream D. Deliverable: Deduplicated case catalogue seeded from existing PC register, HQ source packets, 16 suggested cases and the earlier MRI example. Verify official identifiers and current procedural status before acceptance. First three complete packets include one from each lane; label adjudicated/audit/sanction/prospective separately. Phase/gate: Blocked until M02 submitted. Reuse PC-001\u2013PC-007 and HQ account sources before verifying MI-001\u2013MI-018; candidates are not benchmark cases. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-23",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Blocked until M02 submitted. Reuse PC-001\u2013PC-007 and HQ account sources before verifying MI-001\u2013MI-018; candidates are not benchmark cases."
+      },
+      "live_status": "blocked",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M07",
+      "title": "Versioned constraint matrix implementation specification",
+      "owner": "product",
+      "persona": "Product Steward \u2192 Builder",
+      "workstream": "E",
+      "dependencies": {
+        "HQ-M02": "accepted",
+        "HQ-M03": "accepted",
+        "HQ-M04": "accepted",
+        "HQ-M05": "accepted"
+      },
+      "checkpoint": "2026-10-04",
+      "ready_phase": false,
+      "stage": "Blocked until M02 accepted and a reviewed clause batch in EACH of U/M/G. Specification only; implementation needs its accepted scope.",
+      "existing_tasks": [
+        45
+      ],
+      "existing_jobs": [
+        "HQ-E02",
+        "HQ-G04"
+      ],
+      "live_task_id": 52,
+      "reused": false,
+      "deliverable": "Matrix implementation specification: versioned policy packs, applicability resolver, deterministic versus judgment-assisted checks, exception authority, unknown/conflict handling, impact/replay map. Include pass/fail/missing/conflict/changed-version fixtures and a field-level migration plan.",
+      "source_prerequisite": "M02 accepted; reviewed clause batch from each M03\u2013M05. Spec Oct 4; implementation queued after review.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M07: Versioned constraint matrix implementation specification",
+        "detail": "moat-20260920:HQ-M07:v1. Owner: Product Steward \u2192 Builder; workstream E. Deliverable: Matrix implementation specification: versioned policy packs, applicability resolver, deterministic versus judgment-assisted checks, exception authority, unknown/conflict handling, impact/replay map. Include pass/fail/missing/conflict/changed-version fixtures and a field-level migration plan. Phase/gate: Blocked until M02 accepted and a reviewed clause batch in EACH of U/M/G. Specification only; implementation needs its accepted scope. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-10-04",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Blocked until M02 accepted and a reviewed clause batch in EACH of U/M/G. Specification only; implementation needs its accepted scope."
+      },
+      "live_status": "blocked",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M08",
+      "title": "Frozen benchmark protocol",
+      "owner": "product",
+      "persona": "Product Steward \u2192 independent Auditor",
+      "workstream": "E",
+      "dependencies": {
+        "HQ-M02": "submitted"
+      },
+      "checkpoint": "2026-09-25",
+      "ready_phase": false,
+      "stage": "Blocked until M02 submitted. Prepare alongside source intake; independent Auditor acceptance precedes scoring or public performance claims.",
+      "existing_tasks": [
+        16
+      ],
+      "existing_jobs": [
+        "HQ-G03"
+      ],
+      "live_task_id": 53,
+      "reused": false,
+      "deliverable": "Frozen benchmark protocol v0.1: issue-level labels, cohort definitions, group-separated holdout, masking/contamination limits, rules-only baseline, abstention and metric denominators. Reviewer must identify what a court/audit outcome actually labels.",
+      "source_prerequisite": "M02 submitted; complete before model scoring/public performance claims. Sep 25.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M08: Frozen benchmark protocol",
+        "detail": "moat-20260920:HQ-M08:v1. Owner: Product Steward \u2192 independent Auditor; workstream E. Deliverable: Frozen benchmark protocol v0.1: issue-level labels, cohort definitions, group-separated holdout, masking/contamination limits, rules-only baseline, abstention and metric denominators. Reviewer must identify what a court/audit outcome actually labels. Phase/gate: Blocked until M02 submitted. Prepare alongside source intake; independent Auditor acceptance precedes scoring or public performance claims. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-25",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Blocked until M02 submitted. Prepare alongside source intake; independent Auditor acceptance precedes scoring or public performance claims."
+      },
+      "live_status": "blocked",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M09",
+      "title": "Jev API integration: readiness, connection and Trace workflow",
+      "owner": "build",
+      "persona": "Builder",
+      "workstream": "E",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-10-04",
+      "ready_phase": true,
+      "stage": "M09a readiness now: direct TypeSafe or Vercel Gateway; choose one route. M09b actual server-only connection after reviewed M02 contract and applicable access/budget authority. M09c policy/human-disposition/export flow after M07; accepted M08 before benchmark scoring. No 100-case or all-profile gate for connectivity. See JEV_INTEGRATION_2026-09-20.md; this turn registers only.",
+      "existing_tasks": [
+        15,
+        42
+      ],
+      "existing_jobs": [
+        "HQ-A01"
+      ],
+      "live_task_id": 54,
+      "reused": false,
+      "deliverable": "Explicit [Jev API integration](JEV_INTEGRATION_2026-09-20.md): compare direct TypeSafe and Vercel AI Gateway, select one route, connect a server-only adapter, retain full results and connect the Evidence Gate/reviewer/audit workflow. Register readiness, connected prototype and end-to-end evaluation as distinct milestones. No model call is reported without raw receipt.",
+      "source_prerequisite": "Access/contract readiness starts with M01; connected prototype needs M02; policy flow needs M07; benchmark scoring needs accepted M08. Integration plan Oct 4; implementation within the accepted scope and applicable activation authority.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M09: Jev API integration: readiness, connection and Trace workflow",
+        "detail": "moat-20260920:HQ-M09:v1. Owner: Builder; workstream E. Deliverable: Explicit [Jev API integration](JEV_INTEGRATION_2026-09-20.md): compare direct TypeSafe and Vercel AI Gateway, select one route, connect a server-only adapter, retain full results and connect the Evidence Gate/reviewer/audit workflow. Register readiness, connected prototype and end-to-end evaluation as distinct milestones. No model call is reported without raw receipt. Phase/gate: M09a readiness now: direct TypeSafe or Vercel Gateway; choose one route. M09b actual server-only connection after reviewed M02 contract and applicable access/budget authority. M09c policy/human-disposition/export flow after M07; accepted M08 before benchmark scoring. No 100-case or all-profile gate for connectivity. See JEV_INTEGRATION_2026-09-20.md; this turn registers only. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-10-04",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: M09a readiness now: direct TypeSafe or Vercel Gateway; choose one route. M09b actual server-only connection after reviewed M02 contract and applicable access/budget authority. M09c policy/human-disposition/export flow after M07; accepted M08 before benchmark scoring. No 100-case or all-profile gate for connectivity. See JEV_INTEGRATION_2026-09-20.md; this turn registers only."
+      },
+      "live_status": "todo",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M10",
+      "title": "Four-week editorial plan linked to existing content job",
+      "owner": "distribution",
+      "persona": "Editor",
+      "workstream": "C",
+      "dependencies": {
+        "HQ-M06": "accepted"
+      },
+      "checkpoint": "2026-10-04",
+      "ready_phase": false,
+      "stage": "Blocked on accepted M06 case. Four-week production plan only; reuse HQ-C02 for the first exact content packet, not a duplicate packet. M08 accepted if evaluation results are included. Preserve Global Fund draft/release history.",
+      "existing_tasks": [
+        9,
+        10,
+        11,
+        24,
+        26
+      ],
+      "existing_jobs": [
+        "HQ-C02"
+      ],
+      "live_task_id": 55,
+      "reused": false,
+      "deliverable": "Four-week editorial production plan: one substantial packet weekly rotating U/M/G, up to two derived short notes, monthly synthesis. First exact packet includes sources, supported findings, method/limitations, claim map and any real-run evidence. Reconcile the existing Global Fund draft and approvals instead of silently replacing them.",
+      "source_prerequisite": "One M06 packet accepted + M08 method if presenting evaluation results. First packet Oct 4.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M10: Four-week editorial plan linked to existing content job",
+        "detail": "moat-20260920:HQ-M10:v1. Owner: Editor; workstream C. Deliverable: Four-week editorial production plan: one substantial packet weekly rotating U/M/G, up to two derived short notes, monthly synthesis. First exact packet includes sources, supported findings, method/limitations, claim map and any real-run evidence. Reconcile the existing Global Fund draft and approvals instead of silently replacing them. Phase/gate: Blocked on accepted M06 case. Four-week production plan only; reuse HQ-C02 for the first exact content packet, not a duplicate packet. M08 accepted if evaluation results are included. Preserve Global Fund draft/release history. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Publish",
+        "due": "2026-10-04",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Blocked on accepted M06 case. Four-week production plan only; reuse HQ-C02 for the first exact content packet, not a duplicate packet. M08 accepted if evaluation results are included. Preserve Global Fund draft/release history."
+      },
+      "live_status": "blocked",
+      "registration_state": "registered, not execution"
+    },
+    {
+      "package_id": "HQ-M11",
+      "title": "Extend the existing discovery guide",
+      "owner": "customer-evidence",
+      "persona": "Listener \u2192 Product Steward",
+      "workstream": "F",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-09-25",
+      "ready_phase": true,
+      "stage": "Reuse live task #31 for the discovery-guide extension. Prepare three generic lane prompts after M01 submission; recipient-specific messages retain #30/cohort dependency. Actual interviews #35 and synthesis #38 stay separate.",
+      "existing_tasks": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "existing_jobs": [
+        "HQ-F01",
+        "HQ-F02"
+      ],
+      "live_task_id": 31,
+      "reused": true,
+      "deliverable": "Extend existing discovery/pilot records with rule-profile needs, recent decision, buyer-owned effort baseline, reviewer acceptance/override/rationale, later outcome and permissions. Map to existing customer tasks and current offer; prepare three lane-specific discovery prompts and a private-data permissions proposal.",
+      "source_prerequisite": "M01 for task mapping; continue existing buyer work immediately. Sep 25 first draft.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M11: Extend the existing discovery guide",
+        "detail": "moat-20260920:HQ-M11:v1. Owner: Listener \u2192 Product Steward; workstream F. Deliverable: Extend existing discovery/pilot records with rule-profile needs, recent decision, buyer-owned effort baseline, reviewer acceptance/override/rationale, later outcome and permissions. Map to existing customer tasks and current offer; prepare three lane-specific discovery prompts and a private-data permissions proposal. Phase/gate: Reuse live task #31 for the discovery-guide extension. Prepare three generic lane prompts after M01 submission; recipient-specific messages retain #30/cohort dependency. Actual interviews #35 and synthesis #38 stay separate. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Buyers",
+        "due": "2026-09-25",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: Reuse live task #31 for the discovery-guide extension. Prepare three generic lane prompts after M01 submission; recipient-specific messages retain #30/cohort dependency. Actual interviews #35 and synthesis #38 stay separate."
+      },
+      "live_status": "todo",
+      "registration_state": "existing task reused; scope overlay in dispatch"
+    },
+    {
+      "package_id": "HQ-M12",
+      "title": "Moat scorecard definition and baseline",
+      "owner": "institutional-memory",
+      "persona": "Supervisor + Librarian",
+      "workstream": "G",
+      "dependencies": {
+        "HQ-M01": "submitted"
+      },
+      "checkpoint": "2026-09-25",
+      "ready_phase": true,
+      "stage": "After M01, baseline/definitions may start; final comparable denominators depend on M02/M08. Reuse existing readouts, do not create a new timer.",
+      "existing_tasks": [
+        23,
+        26,
+        38,
+        39,
+        44,
+        45
+      ],
+      "existing_jobs": [
+        "HQ-G02"
+      ],
+      "live_task_id": 56,
+      "reused": false,
+      "deliverable": "Weekly moat scorecard definition and first source-backed baseline. Separate real counts from targets, public/private units, prepared/published work and schedule/run/accepted states. Add dependency/owner view and monthly capacity decision to the existing HQ routine.",
+      "source_prerequisite": "M01; metric definitions from M02/M08. Baseline Sep 25; review Oct 4.",
+      "registration": {
+        "action": "create-task",
+        "title": "HQ-M12: Moat scorecard definition and baseline",
+        "detail": "moat-20260920:HQ-M12:v1. Owner: Supervisor + Librarian; workstream G. Deliverable: Weekly moat scorecard definition and first source-backed baseline. Separate real counts from targets, public/private units, prepared/published work and schedule/run/accepted states. Add dependency/owner view and monthly capacity decision to the existing HQ routine. Phase/gate: After M01, baseline/definitions may start; final comparable denominators depend on M02/M08. Reuse existing readouts, do not create a new timer. Review: independent Auditor, then Supervisor; unresolved domain expertise keeps rules draft. One source/profile/case per batch, max two tasks/45 active minutes per run. Internal planning/public-source drafts only. No new timers, publication, sends, spend, private-data import, provider activation or production change. See docs/hq/moat/DISPATCH_2026-09-20.md and MOAT_ACTIONS_2026-09-20.md. Preserve customer tasks 28-39.",
+        "owner": "Codex",
+        "lane": "Platform",
+        "due": "2026-09-25",
+        "evidence": "Planning intake 2026-09-20; proposed checkpoint, not a completed result. Canonical package: docs/hq/MOAT_ACTIONS_2026-09-20.md. Phase: After M01, baseline/definitions may start; final comparable denominators depend on M02/M08. Reuse existing readouts, do not create a new timer."
+      },
+      "live_status": "todo",
+      "registration_state": "registered, not execution"
+    }
+  ],
+  "read_back_at": "2026-09-20T15:02:11.048Z"
+}

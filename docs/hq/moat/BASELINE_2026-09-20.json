@@ -1,0 +1,74 @@
+{
+  "observed_at": "2026-09-20T15:04:18.867216+00:00",
+  "classification": "submitted inventory; not independent acceptance",
+  "source_queue_at": "2026-09-20T14:56:05.906Z",
+  "tasks_before": 45,
+  "pending_reviews_before": 5,
+  "active_worker_leases_before": 0,
+  "historical_desk_receipts_before": 112,
+  "new_original_tasks": 11,
+  "reused_original_task_ids": [
+    31
+  ],
+  "preexisting_hq_jobs": 18,
+  "preexisting_accepted_internal_jobs": 11,
+  "original_public_register_entries": 7,
+  "implementation_public_register_entries": 4,
+  "conversation_intake_rows": 18,
+  "new_program_accepted_profiles": 0,
+  "new_program_accepted_cases": 0,
+  "new_program_accepted_constraints": 0,
+  "existing_accepted_corpus_total": null,
+  "unique_public_decision_units": null,
+  "unique_private_decision_units": null,
+  "qualified_buyer_conversations": null,
+  "measured_model_cost_usd": null,
+  "measured_tokens": null,
+  "new_paid_provider_calls": 0,
+  "source_manifest": [
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/docs/hq/MOAT_PROGRAM_2026-09-20.md",
+      "sha256": "e39cbdbdc7b41862b134bdc5f3625e61a08b8ba3783dfb5a8597c4689ba4f4f8"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/docs/hq/MOAT_ACTIONS_2026-09-20.md",
+      "sha256": "c7ba15e865405ecdf57a74bec7d2059e07d408154857064bc91e21acd32bbeaa"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/docs/hq/MOAT_SOURCE_INTAKE_2026-09-20.md",
+      "sha256": "470275eaacff86e8a4eddb18fd6d70c4df8e3ec84c4c61357f002997cd561298"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/docs/hq/JEV_INTEGRATION_2026-09-20.md",
+      "sha256": "8fc6bc5a65d6e199fee824cdf2ccd69b1e0c2e28fbb0250a97e0d7247e72a719"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/docs/PUBLIC_CASE_STUDY_REGISTER.md",
+      "sha256": "b88cef630b66976623aeecb8f740a04b555ea9d56347a177754558fb52ebee4b"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/db/schema.ts",
+      "sha256": "02c1a39b5bf89756376d1a9819bbaa3727d865a1104175a86136e65bf6ff2db1"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/ChatGPT/Traceli/lib/traceli-demo-data.ts",
+      "sha256": "4e2ae591ab9a690a82b4ef27aa7553f201d09f2c344f25107ab453e486dcb285"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/Codex/2026-08-19/referenced-chatgpt-conversation-this-is-an/work/traceli-implementation/db/schema.ts",
+      "sha256": "f85916575aa72bc0cc866e468d2bf41970a4552844122ea9eb63d25647c07ca4"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/Codex/2026-08-19/referenced-chatgpt-conversation-this-is-an/work/traceli-implementation/lib/traceli-demo-data.ts",
+      "sha256": "4e2ae591ab9a690a82b4ef27aa7553f201d09f2c344f25107ab453e486dcb285"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/Codex/2026-08-19/referenced-chatgpt-conversation-this-is-an/work/traceli-implementation/docs/PUBLIC_CASE_STUDY_REGISTER.md",
+      "sha256": "e3be84b258d86a1c1db33de483867d9ed61a6c57dc49baae56fdbf085dae80f5"
+    },
+    {
+      "path": "/Users/odaykamal/Documents/Codex/2026-08-19/referenced-chatgpt-conversation-this-is-an/work/traceli-implementation/docs/hq/cloud/OPERATING_FEED_20260920.md",
+      "sha256": "30f7445e744ae63d1769d7a85ad12def4eed1f884e69b949181fc28e51df0428"
+    }
+  ]
+}

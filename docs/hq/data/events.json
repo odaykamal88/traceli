@@ -13,7 +13,7 @@
     "at": "2026-09-14",
     "actor": "Supervisor",
     "type": "queues_registered",
-    "subject": "Workstreams A–G",
+    "subject": "Workstreams A\u2013G",
     "summary": "Seven active queues registered; running jobs are tracked separately.",
     "evidence_ref": "data/jobs.json"
   },
@@ -86,7 +86,7 @@
     "actor": "Supervisor",
     "type": "runtime_connected",
     "subject": "Existing desks connected to HQ",
-    "summary": "Verified six ACTIVE schedules and saved Operating Room evidence; attached the visible charters and A–G handoff using the existing schedule IDs. Task #44 tracks the connection. No new timer, send or production deployment.",
+    "summary": "Verified six ACTIVE schedules and saved Operating Room evidence; attached the visible charters and A\u2013G handoff using the existing schedule IDs. Task #44 tracks the connection. No new timer, send or production deployment.",
     "evidence_ref": "RUNTIME_HANDOFF.md"
   },
   {
@@ -139,7 +139,7 @@
     "at": "2026-09-15T06:36:56Z",
     "actor": "Editor",
     "type": "saved_desk_result",
-    "subject": "Content readout still awaits Oday’s review",
+    "subject": "Content readout still awaits Oday\u2019s review",
     "summary": "The latest saved Editorial Desk receipt found no claimable Publish work. Task #26 remains pending; no newer buyer feedback or content analytics were recorded.",
     "evidence_ref": "operations/OPERATING_EVIDENCE.md"
   },
@@ -176,7 +176,7 @@
     "actor": "Supervisor",
     "type": "operating_review",
     "subject": "Operating Room reorganized around decisions and outcomes",
-    "summary": "The landing page now puts milestones, owner inputs, blockers and recent changes first. Today’s read found 45 original tasks, 5 pending reviews and unchanged Week 4 buyer counters. The latest saved desktop result remains 15 September; social analytics are unavailable.",
+    "summary": "The landing page now puts milestones, owner inputs, blockers and recent changes first. Today\u2019s read found 45 original tasks, 5 pending reviews and unchanged Week 4 buyer counters. The latest saved desktop result remains 15 September; social analytics are unavailable.",
     "evidence_ref": "operations/OPERATING_EVIDENCE.md"
   },
   {
@@ -187,5 +187,14 @@
     "subject": "Operating metadata now reaches HQ automatically",
     "summary": "Hosted source delivery verified. Railway produced one bounded Luna draft for review at about $0.0012 and skipped a repeat without a model call. The next daily run is due 21 September at 09:00 Cairo; six specialist desks remain to migrate.",
     "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
+  },
+  {
+    "id": "EVT-MOAT-20260920",
+    "at": "2026-09-20T15:07:50.499752+00:00",
+    "actor": "Supervisor / Librarian",
+    "type": "queues_registered",
+    "subject": "Three procurement lanes + Jev API integration",
+    "summary": "Twelve moat packages mapped to live tasks: M01\u2013M10 #46\u201355; M11 reuses #31; M12 #56. Intake/baseline submitted for independent review. U/M/G inventories and Jev access readiness queued; no new workers enabled.",
+    "evidence_ref": "moat/DISPATCH_2026-09-20.md"
   }
 ]

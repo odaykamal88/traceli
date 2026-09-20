@@ -55,3 +55,7 @@ Acceptance:
 - Oday publication approval still required
 
 Runtime status and evidence live in [jobs.json](../data/jobs.json). Charter limits override broader job defaults.
+
+## 20 September moat increment
+
+See [the mapped moat packages](../moat/DISPATCH_2026-09-20.md) for actual source task IDs, eligible phases, U/M/G batches and Jev readiness. Existing work and review states are preserved.

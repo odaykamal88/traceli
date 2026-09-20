@@ -1,5 +1,11 @@
 # Trace-li HQ operating package
 
+## 20 September: three-lane moat program
+
+[Live queue mapping and baseline](moat/DISPATCH_2026-09-20.md) · [Program](MOAT_PROGRAM_2026-09-20.md) · [Actions](MOAT_ACTIONS_2026-09-20.md) · [Jev API integration](JEV_INTEGRATION_2026-09-20.md).
+
+M01–M12 are registered against the original Operating Room; M11 reuses discovery-guide task #31. NOW: M01 review, M02 shared contract, one source inventory bundle in EACH of UN/donor, MDB and Gulf procurement, and M09a route/access readiness. NEXT: structured case/rule extraction, independently reviewed benchmark/policy definitions and authorized Jev connection. LATER: score benchmarks and publish exact reviewed assets. Existing customer tasks remain primary. These are bounded work packages, not new timers or completed results. See the dispatch receipt for phase gates and actual IDs.
+
 Updated 20 September 2026. Eight mandate charters and all seven A–G workstreams are written and visible. Eleven bootstrap jobs have accepted internal outputs. The six existing desktop schedules now read the HQ handoff and current charters; the original Operating Room remains the authority for its tasks, reviews and receipts.
 
 [Open local HQ](http://127.0.0.1:3014/hq) · [Current Supervisor handover](SUPERVISOR_BRIEF.md) · [Runtime and A–G mapping](RUNTIME_HANDOFF.md)

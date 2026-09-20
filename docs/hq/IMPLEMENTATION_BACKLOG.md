@@ -1,5 +1,11 @@
 # Prioritized implementation backlog
 
+## 20 September: three-lane moat program
+
+[Live queue mapping and baseline](moat/DISPATCH_2026-09-20.md) · [Program](MOAT_PROGRAM_2026-09-20.md) · [Actions](MOAT_ACTIONS_2026-09-20.md) · [Jev API integration](JEV_INTEGRATION_2026-09-20.md).
+
+M01–M12 are registered against the original Operating Room; M11 reuses discovery-guide task #31. NOW: M01 review, M02 shared contract, one source inventory bundle in EACH of UN/donor, MDB and Gulf procurement, and M09a route/access readiness. NEXT: structured case/rule extraction, independently reviewed benchmark/policy definitions and authorized Jev connection. LATER: score benchmarks and publish exact reviewed assets. Existing customer tasks remain primary. These are bounded work packages, not new timers or completed results. See the dispatch receipt for phase gates and actual IDs.
+
 Active queues A–G are separate from implementation priority. “NOW” means next useful work, not eight concurrent employees. Effort estimates are planning ranges after inputs are ready; they are not deadlines or spend approvals.
 
 ## Current completion and next priority · 15 September
