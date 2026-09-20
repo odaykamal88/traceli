@@ -1,8 +1,14 @@
 # Trace-li HQ operating package
 
-Updated 17 September 2026. Eight mandate charters and all seven A–G workstreams are written and visible. Eleven bootstrap jobs have accepted internal outputs. The six existing desktop schedules now read the HQ handoff and current charters; the original Operating Room remains the authority for its tasks, reviews and receipts.
+Updated 20 September 2026. Eight mandate charters and all seven A–G workstreams are written and visible. Eleven bootstrap jobs have accepted internal outputs. The six existing desktop schedules now read the HQ handoff and current charters; the original Operating Room remains the authority for its tasks, reviews and receipts.
 
 [Open local HQ](http://127.0.0.1:3014/hq) · [Current Supervisor handover](SUPERVISOR_BRIEF.md) · [Runtime and A–G mapping](RUNTIME_HANDOFF.md)
+
+## Operating Room overview
+
+The HQ landing page now leads with business and cloud milestones, the two most useful owner inputs, blockers, recent activity, A–G handoffs, channel feedback and evidence-backed lessons. Business metrics come from a dated, read-only snapshot of the original Operating Room; missing social analytics remain explicit. [Evidence and limits](operations/OPERATING_EVIDENCE.md) · [Update procedure](operations/DASHBOARD_MAINTENANCE.md).
+
+The first scheduled cloud check returned idle on 18 September at 09:02 Cairo without a model call. [Scheduled receipt](cloud/SCHEDULED_CHECK_20260918.md).
 
 ## Current delivery state
 
@@ -30,7 +36,7 @@ Current charters are v1.1. Bootstrap v1.0 bytes are retained under `history/boot
 | [D · Account pieces](queues/D.md) | Investigator → Auditor → Editor; four reviewed internal drafts | Exact external review, including fresh OCHA source check |
 | [E · Development sequence](queues/E.md) | Product → Builder; Trace/sharing before broad integrations | Secure recipient implementation and discovery evidence |
 | [F · Operating Room](queues/F.md) | Listener; existing Week 4 tasks preserved | Actual send/reply/conversation records and dated next step |
-| [G · HQ](queues/G.md) | Builder + Librarian + Auditor; private hosted HQ, scoped Postgres, one accepted cloud draft and bounded daily check | First scheduled check, then migrate a selected desktop desk with equivalent inputs and receipts |
+| [G · HQ](queues/G.md) | Builder + Librarian + Auditor; private hosted HQ, scoped Postgres, one accepted cloud draft and bounded daily check | Migrate a selected desktop desk with equivalent inputs and receipts; first scheduled check is verified |
 
 The queue files retain initial job-registration details; [jobs](data/jobs.json) and [runs](data/runs.json) record bootstrap progress. Current room task #44 tracks the connection and #45 tracks storage; they are not duplicate bootstrap completions. Active workstreams do not imply seven simultaneous workers.
 

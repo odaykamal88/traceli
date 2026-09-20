@@ -73,7 +73,7 @@
     "status": "active",
     "objective": "Keep actual commercial progress, evidence and next steps visible.",
     "handoff": "Oday supplies/authorizes scoped records → Listener reconciles IDs → Supervisor reviews → Product receives redacted evidence.",
-    "rules": "Original records unavailable. Counts are unknown. Do not overwrite or fabricate the earlier Operating Room.",
+    "rules": "Original task/review/metric metadata has a dated read-only snapshot. Actual send and conversation evidence still needs reconciliation. Preserve original IDs; do not count drafts or silence as outcomes.",
     "job_ids": [
       "HQ-F01",
       "HQ-F02"
@@ -85,8 +85,8 @@
     "owner": "build",
     "status": "active",
     "objective": "A visible portfolio of mandates, bounded jobs, review and durable memory contracts.",
-    "handoff": "Librarian writes contracts → Builder adds shell → Auditor challenges → Supervisor accepts local package.",
-    "rules": "Manual execution first. No always-on process, new framework, spend or consequential capability is enabled.",
+    "handoff": "Librarian maintains contracts; Builder delivers reviewed changes; Auditor challenges; Supervisor reviews exact outputs. Cloud pilot acceptance and desk migration are separate milestones.",
+    "rules": "The bounded cloud pilot is active under its recorded funding and review approvals. Existing desktop desks retain their charters; further migration and consequential actions stay scoped and gated.",
     "job_ids": [
       "HQ-G01",
       "HQ-G02",

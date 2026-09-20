@@ -1,0 +1,61 @@
+{
+  "checked_at": "2026-09-20T13:19:49.467Z",
+  "source_url": "https://traceli-operating-room.odeyqemal.chatgpt.site",
+  "receipt_count": 112,
+  "latest": [
+    {
+      "id": "customer-learning-2026-09-12-1c658c24-599b-428a-99e8-c72229f2b40c",
+      "job_id": "customer-learning",
+      "at": "2026-09-12T14:42:20Z",
+      "outcome": "Missing inputs"
+    },
+    {
+      "id": "github-34797018785-2026-09-14T01:47:41Z",
+      "job_id": "dependency-updates",
+      "at": "2026-09-14T01:47:41Z",
+      "outcome": "Passed"
+    },
+    {
+      "id": "editorial-desk-20260915-no-ready-publish",
+      "job_id": "editorial-desk",
+      "at": "2026-09-15T06:36:56Z",
+      "outcome": "Findings open"
+    },
+    {
+      "id": "hq-postgres-finalize-153e8a26-1361-4eda-9632-01de9d521ea5",
+      "job_id": "execution-desk",
+      "at": "2026-09-15T20:33:59.642868Z",
+      "outcome": "Completed"
+    },
+    {
+      "id": "funding-watch-2026-09-14-3a736e5f-d761-40d4-9649-7fce31e88063",
+      "job_id": "funding-watch",
+      "at": "2026-09-14T06:19:28Z",
+      "outcome": "Findings open"
+    },
+    {
+      "id": "github-34812832080-2026-09-14T06:19:17Z",
+      "job_id": "change-assurance",
+      "at": "2026-09-14T06:19:17Z",
+      "outcome": "Passed"
+    },
+    {
+      "id": "github-34832807019-2026-09-14T10:22:21Z",
+      "job_id": "production-smoke",
+      "at": "2026-09-14T10:22:21Z",
+      "outcome": "Passed"
+    },
+    {
+      "id": "learning-readiness-2026-09-11",
+      "job_id": "learning-readiness",
+      "at": "2026-09-11T15:31:28Z",
+      "outcome": "Gate unmet"
+    },
+    {
+      "id": "security-posture-friday-2026-09-11-f9a3ed67-cc8e-4ff7-933d-653cc244562b",
+      "job_id": "security-posture",
+      "at": "2026-09-11T08:55:03.854864Z",
+      "outcome": "Findings open"
+    }
+  ]
+}

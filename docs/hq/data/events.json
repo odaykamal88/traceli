@@ -13,7 +13,7 @@
     "at": "2026-09-14",
     "actor": "Supervisor",
     "type": "queues_registered",
-    "subject": "Workstreams A\u2013G",
+    "subject": "Workstreams A–G",
     "summary": "Seven active queues registered; running jobs are tracked separately.",
     "evidence_ref": "data/jobs.json"
   },
@@ -86,7 +86,7 @@
     "actor": "Supervisor",
     "type": "runtime_connected",
     "subject": "Existing desks connected to HQ",
-    "summary": "Verified six ACTIVE schedules and saved Operating Room evidence; attached the visible charters and A\u2013G handoff using the existing schedule IDs. Task #44 tracks the connection. No new timer, send or production deployment.",
+    "summary": "Verified six ACTIVE schedules and saved Operating Room evidence; attached the visible charters and A–G handoff using the existing schedule IDs. Task #44 tracks the connection. No new timer, send or production deployment.",
     "evidence_ref": "RUNTIME_HANDOFF.md"
   },
   {
@@ -115,5 +115,68 @@
     "subject": "First cloud draft accepted; daily check enabled",
     "summary": "Oday approved a one-time specialist-review exception for the exact first draft and bounded daily recurrence. Railway confirms 06:00 UTC daily; only new approved snapshots can trigger a model call. Existing desktop desks remain unchanged.",
     "evidence_ref": "cloud/LIVE_RUN_20260917.md"
+  },
+  {
+    "id": "EVT-ODAY-UPDATE-20260918",
+    "at": "2026-09-17T22:56:13.435Z",
+    "actor": "Oday",
+    "type": "owner_update",
+    "subject": "No new buyer or social updates to add",
+    "summary": "Oday confirmed no new buyer replies/conversations or unrecorded LinkedIn/X posts. The older outreach-history gap and unavailable social analytics remain explicit.",
+    "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+  },
+  {
+    "id": "EVT-SCHEDULED-20260918",
+    "at": "2026-09-18T06:02:22.431619201Z",
+    "actor": "Cloud worker",
+    "type": "scheduled_check_idle",
+    "subject": "First scheduled cloud check passed",
+    "summary": "Railway started the daily worker at 09:02 Cairo. It returned idle because the approved snapshot already has an accepted draft; no new model call was made. Six desktop desks still await migration.",
+    "evidence_ref": "cloud/SCHEDULED_CHECK_20260918.md"
+  },
+  {
+    "id": "ROOM-editorial-desk-20260915-no-ready-publish",
+    "at": "2026-09-15T06:36:56Z",
+    "actor": "Editor",
+    "type": "saved_desk_result",
+    "subject": "Content readout still awaits Oday’s review",
+    "summary": "The latest saved Editorial Desk receipt found no claimable Publish work. Task #26 remains pending; no newer buyer feedback or content analytics were recorded.",
+    "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+  },
+  {
+    "id": "ROOM-customer-learning-2026-09-12-1c658c24-599b-428a-99e8-c72229f2b40c",
+    "at": "2026-09-12T14:42:20Z",
+    "actor": "Listener",
+    "type": "saved_desk_result",
+    "subject": "Customer learning stopped at missing inputs",
+    "summary": "The recorded review found no new buyer-grounded conversation, named file, deadline or purchasing route. It kept the service hypothesis unvalidated and requested a concrete Week 4 note.",
+    "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+  },
+  {
+    "id": "ROOM-learning-readiness-2026-09-11",
+    "at": "2026-09-11T15:31:28Z",
+    "actor": "Librarian",
+    "type": "saved_desk_result",
+    "subject": "Learning-loop readiness gate was unmet",
+    "summary": "The recorded review found zero qualifying human-dispositioned summaries across zero qualifying job classes. Later infrastructure work still needs a fresh readiness assessment.",
+    "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+  },
+  {
+    "id": "EVT-SCHEDULED-20260920",
+    "at": "2026-09-20T06:04:07.782689568Z",
+    "actor": "Cloud worker",
+    "type": "scheduled_check_idle",
+    "subject": "Daily cloud checks verified on three consecutive days",
+    "summary": "Railway checks on 18, 19 and 20 September returned idle. No new approved snapshot meant no model call. Migrating an operating desk remains the next cloud delivery gate.",
+    "evidence_ref": "cloud/DAILY_CHECKS_20260920.md"
+  },
+  {
+    "id": "EVT-OVERVIEW-20260920",
+    "at": "2026-09-20T13:21:01.229156+00:00",
+    "actor": "Supervisor",
+    "type": "operating_review",
+    "subject": "Operating Room reorganized around decisions and outcomes",
+    "summary": "The landing page now puts milestones, owner inputs, blockers and recent changes first. Today’s read found 45 original tasks, 5 pending reviews and unchanged Week 4 buyer counters. The latest saved desktop result remains 15 September; social analytics are unavailable.",
+    "evidence_ref": "operations/OPERATING_EVIDENCE.md"
   }
 ]
