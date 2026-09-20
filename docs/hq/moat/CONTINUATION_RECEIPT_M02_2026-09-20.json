@@ -1,0 +1,38 @@
+{
+  "receipt": {
+    "id": "continuation-20260920-m02-61110869",
+    "job_id": "execution-desk",
+    "occurred_at": "2026-09-20T19:00:31.224665Z",
+    "outcome": "Completed",
+    "summary": "M02 task47 decision contract v0.1, exact field map, U/M/G fictional examples and UX/security handoff passed independent Auditor and separate Supervisor internal acceptance. Original room task47 saved review; human disposition pending. Contract SHA25631d52b12a0bd095c0c498612c5f85e9261abacb5aa21217d628efd96f048c044. docs/hq/moat/HQ-M02/drafts/ contains exact packet/checks. No app/database implementation or provider calls; Codex cost unavailable.",
+    "source": "User-triggered bounded HQ continuation",
+    "source_url": ""
+  },
+  "metadata": {
+    "trigger": "user-authorized continuation",
+    "session_id": "61110869-c955-4456-9c43-a3112cf5832a",
+    "environment": "local isolated continuation worktree; private original Operating Room",
+    "code_version": "df126c4; product tree identical to reviewed cd59c74",
+    "model_tokens": null,
+    "cost_usd": null,
+    "new_provider_calls": 0,
+    "checks": [
+      "offline fictional fixture integrity",
+      "independent Auditor bound hashes",
+      "independent Supervisor disposition",
+      "output schema",
+      "local links"
+    ],
+    "original_task_47": "review; human disposition pending",
+    "original_task_48": "doing; source blocked, closure409; active lease expires2026-09-20T19:35:12.127Z",
+    "artifact_path": "docs/hq/moat/HQ-M02/drafts/",
+    "artifact_hashes": {
+      "HQ-M02/drafts/REVIEW_PACKET_V0_1.md": "6a0223f851b622367a7662c97322aaca7301557feefa1e037c04352abeaf3399",
+      "HQ-M02/drafts/DECISION_CORPUS_CONTRACT_V0_1.md": "31d52b12a0bd095c0c498612c5f85e9261abacb5aa21217d628efd96f048c044",
+      "HQ-M02/drafts/SUPERVISOR_DISPOSITION_V0_1.md": "d168658a4563d6842c65ee597e4b347c3ac5b779994100fd2e1e3c3ea8017a7b",
+      "HQ-M02/drafts/AUDITOR_REVIEW_V0_1.md": "a42eb06c0dd8cbbad614c567ce74803febe1ed6383c5fe6fe151857b26c00971",
+      "HQ-M02/drafts/FIELD_MAP_V0_1.md": "9befe268de76aa72f01aff0b90c64ff30401c2dd366702d3a638564344e81c4e",
+      "HQ-M02/drafts/UX_ACCEPTANCE_V0_1.md": "dc2a87c3a93c224d9ac78fc79b88af68d11bd8e981be04314351829ba264bd15"
+    }
+  }
+}

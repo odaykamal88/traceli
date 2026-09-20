@@ -2250,7 +2250,7 @@
       "artifact_hash": null,
       "expires_at": null
     },
-    "status": "ready",
+    "status": "review",
     "dependencies": [
       "HQ-M01"
     ],
@@ -2280,13 +2280,14 @@
       "max_revisions": 2
     },
     "result": {
-      "summary": "Registration/intake only. Ready after M01 submission. Contract outline must cover all three lanes and distinguish fictional examples.",
+      "summary": "Exact M02 v0.1 internal design package accepted by independent Auditor and separate Supervisor; original task47 review/human disposition remains pending. No implementation or real-rule admission.",
       "artifact_refs": [
-        "docs/hq/moat/REGISTRATION_2026-09-20.json"
+        "docs/hq/moat/HQ-M02/drafts/DECISION_CORPUS_CONTRACT_V0_1.md",
+        "docs/hq/moat/HQ-M02/drafts/PACKAGE_MANIFEST_V0_1.json"
       ],
-      "review_ref": null,
-      "accepted_by": null,
-      "accepted_at": null
+      "review_ref": "moat/HQ-M02/drafts/SUPERVISOR_DISPOSITION_V0_1.md",
+      "accepted_by": "Independent supervisor_disposition agent (internal artifact only)",
+      "accepted_at": "2026-09-20T18:57:40.008678Z"
     },
     "handoff": {
       "to": [
@@ -2365,7 +2366,7 @@
       "artifact_hash": null,
       "expires_at": null
     },
-    "status": "ready",
+    "status": "blocked",
     "dependencies": [
       "HQ-M01"
     ],
@@ -2395,11 +2396,12 @@
       "max_revisions": 2
     },
     "result": {
-      "summary": "Registration/intake only. Inventory may start now. First bounded bundle: UN Secretariat manual, then UNFPA. Structured extraction waits for submitted M02; domain/source review before acceptance.",
+      "summary": "Partial first UN Secretariat inventory. Official PDF403 twice; no retained bytes/hash or admitted source/rule. Original task48 still doing until closure recovery after lease expiry2026-09-20T19:35:12.127Z; this blocked label describes source work.",
       "artifact_refs": [
-        "docs/hq/moat/REGISTRATION_2026-09-20.json"
+        "docs/hq/moat/HQ-M03/drafts/UN_SECRETARIAT_INVENTORY_V0_1.md",
+        "docs/hq/moat/CONTINUATION_2026-09-20.md"
       ],
-      "review_ref": null,
+      "review_ref": "moat/HQ-M03/drafts/AUDITOR_REVIEW_V0_1.md",
       "accepted_by": null,
       "accepted_at": null
     },
@@ -2413,7 +2415,7 @@
         "Live task ID, package/batch ID, version/hash, source locators, checks, gaps, cost or unknown, next owner"
       ]
     },
-    "blocker": null,
+    "blocker": "Official source retrieval403; no source/domain admission. Original-task closure409 from reused review run ID needs new claim after current lease expires.",
     "dependency_requirements": {
       "HQ-M01": "submitted"
     }

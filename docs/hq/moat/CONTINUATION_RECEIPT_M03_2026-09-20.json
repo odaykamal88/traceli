@@ -1,0 +1,34 @@
+{
+  "receipt": {
+    "id": "continuation-20260920-m03-61110869",
+    "job_id": "execution-desk",
+    "occurred_at": "2026-09-20T19:00:31.224665Z",
+    "outcome": "Findings open",
+    "summary": "M03 task48 first UN Secretariat inventory partial: official PDF403 via two methods; no source bytes/hash or rule admission. Independent honesty review saved in docs/hq/moat/HQ-M03/drafts/. Finish blocked failed409 because task48 reused task47 review runID; live task48 remains doing until lease2026-09-20T19:35:12.127Z. After expiry inspect/reclaim with new per-task UUID and finish blocked using existing evidence. No review overwritten or source rule invented.",
+    "source": "User-triggered bounded HQ continuation",
+    "source_url": ""
+  },
+  "metadata": {
+    "trigger": "user-authorized continuation",
+    "session_id": "61110869-c955-4456-9c43-a3112cf5832a",
+    "environment": "local isolated continuation worktree; private original Operating Room",
+    "code_version": "df126c4; product tree identical to reviewed cd59c74",
+    "model_tokens": null,
+    "cost_usd": null,
+    "new_provider_calls": 0,
+    "checks": [
+      "offline fictional fixture integrity",
+      "independent Auditor bound hashes",
+      "independent Supervisor disposition",
+      "output schema",
+      "local links"
+    ],
+    "original_task_47": "review; human disposition pending",
+    "original_task_48": "doing; source blocked, closure409; active lease expires2026-09-20T19:35:12.127Z",
+    "artifact_path": "docs/hq/moat/HQ-M03/drafts/",
+    "artifact_hashes": {
+      "HQ-M03/drafts/AUDITOR_REVIEW_V0_1.md": "76b133e2737b61ca8206a4cd0001e734ad3428b8472136a26f739d3fe8f68abd",
+      "HQ-M03/drafts/UN_SECRETARIAT_INVENTORY_V0_1.md": "5307ddaf15f0e1bc565aeae389e8c115fb48af5ede2271102ba8fb6255c421b5"
+    }
+  }
+}

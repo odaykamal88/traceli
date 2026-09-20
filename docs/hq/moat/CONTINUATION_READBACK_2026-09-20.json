@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-09-20 19:02:27 UTC",
+  "session_id": "61110869-c955-4456-9c43-a3112cf5832a",
+  "counts": {
+    "tasks": 56,
+    "pending_reviews": 8,
+    "receipts": 134
+  },
+  "tasks": [
+    {
+      "id": 47,
+      "status": "review",
+      "claim_id": "61110869-c955-4456-9c43-a3112cf5832a",
+      "claim_until": null,
+      "checkpoint": "M02 v0.1 contract, exact field map, three fictional U/M/G examples and UX/security acceptance complete. Independent Auditor PASS and separate Supervisor internal acceptance; original room disposition pending. Contract SHA25631d52b12a0bd095c0c498612c5f85e9261abacb5aa21217d628efd96f048c044. Scope/checks/hashes: docs/hq/moat/HQ-M02/drafts/REVIEW_PACKET_V0_1.md. No application/database implementation, provider call or real-rule admission."
+    },
+    {
+      "id": 48,
+      "status": "doing",
+      "claim_id": "61110869-c955-4456-9c43-a3112cf5832a",
+      "claim_until": "2026-09-20T19:35:12.127Z",
+      "checkpoint": "Bounded first U-lane source inventory only: verify the official UN Secretariat Procurement Manual edition, retrieval/custody and applicability limits. No obligation extraction, legal acceptance, provider calls or publication."
+    }
+  ],
+  "reviews": [
+    {
+      "id": "61110869-c955-4456-9c43-a3112cf5832a",
+      "task_id": 47,
+      "status": "pending"
+    }
+  ],
+  "confirmed_receipts": [
+    "continuation-20260920-m02-61110869",
+    "continuation-20260920-m03-61110869"
+  ],
+  "recovery": "Task48 source work is blocked. Finish failed409 from reused review run ID; reclaim only after expiry and fresh claim check, with a distinct per-task UUID.",
+  "hq_snapshot_refresh": "confirmed connected at2026-09-20T19:00:43.359919Z"
+}

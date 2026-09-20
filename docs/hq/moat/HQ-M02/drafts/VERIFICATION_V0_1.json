@@ -1,0 +1,18 @@
+{
+  "result": "pass",
+  "examples": 3,
+  "fixture_source_files": 4,
+  "checked": [
+    "duplicate JSON keys",
+    "source byte hashes",
+    "snapshot hashes",
+    "unknown source date representation",
+    "same-case/procurement links",
+    "source/obligation/constraint/profile references",
+    "U/M/G expected states",
+    "synthetic-only decisions",
+    "no provider calls or publication",
+    "benchmark exclusion and unknown outcomes"
+  ],
+  "limits": "Integrity checks for compact design examples only; not a production schema, authorization test, legal review or benchmark."
+}
