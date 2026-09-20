@@ -17,3 +17,11 @@ Reviewed file hashes:
 - `scripts/hq/test-jev-smoke.mjs`: `a7645f7b1a1027527086774a221f3b05b35cc05081c6784e0a002e8248757c58`
 
 Authority: Oday confirmed the saved TypeSafe key and authorized the concrete preview connection plus one minimal synthetic/public-input smoke test, relayed by the coordinating task. No billing, new payment settings, private-data processing, global schedules or production promotion.
+
+## Preview form correction
+
+Actual owner-authenticated GET and scoped database read succeeded with `key_present: true` and no reservation. Deployed POST failed before dispatch with `originMatches: false` and `fetchSite: same-origin`. The reviewer independently identified the page's `no-referrer` policy as inconsistent with strict Origin checks on native form posts (Fetch/MDN). Changed only that policy to `same-origin`, preserving exact Origin equality and Fetch Metadata checks. Added form-header and null-Origin regression assertions; 14/14 focused tests pass. No provider call occurred during these rejected submissions. Live result follows separately.
+
+Updated route/test hashes:
+- `app/api/hq/jev-smoke/route.ts`: `ce8ad6a2f28ed457c29f0ff9cc6de4c5ff0653a3df38ed1a004274efbcaaf510`
+- `scripts/hq/test-jev-smoke.mjs`: `4b0b560bfc50bd2ca9a65f4357d3bff9ae4a369c6548e6ec07ab275f7c2de25b`

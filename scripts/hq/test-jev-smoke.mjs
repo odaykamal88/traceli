@@ -22,7 +22,7 @@ beforeEach(()=>{process.env={...original,VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_
 after(()=>{process.env=original;mock.restoreAll()})
 const post=(options={})=>new Request('https://hq.example.invalid/api/hq/jev-smoke',{method:'POST',headers:{origin:'https://hq.example.invalid','sec-fetch-site':'same-origin','content-type':'application/x-www-form-urlencoded',...options.headers},body:options.body??'test_id=jev-connectivity-20260920-v1'})
 test('GET never generates; repeated POST returns original receipt without another call',async()=>{
- assert.equal((await GET()).status,200);assert.equal(calls,0)
+ const page=await GET();assert.equal(page.status,200);assert.equal(page.headers.get('Referrer-Policy'),'same-origin');assert.equal(calls,0)
  assert.equal((await POST(post())).status,200);assert.equal(calls,1)
  const again=await (await POST(post())).json();assert.equal(again.reused,true);assert.equal(calls,1);assert.equal(events.size,2)
  await GET();assert.equal(calls,1)
@@ -36,6 +36,7 @@ test('preview and owner gates reject production, other branch and local access',
 })
 test('foreign origin, unexpected input and extra fields never reserve or dispatch',async()=>{
  assert.equal((await POST(post({headers:{origin:'https://other.invalid'}}))).status,403)
+ assert.equal((await POST(post({headers:{origin:'null'}}))).status,403)
  assert.equal((await POST(post({headers:{'sec-fetch-site':'cross-site'}}))).status,403)
  assert.equal((await POST(post({body:'test_id=other'}))).status,400)
  assert.equal((await POST(post({body:'test_id=jev-connectivity-20260920-v1&state=private'}))).status,400)
