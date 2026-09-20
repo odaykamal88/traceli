@@ -1,0 +1,19 @@
+{
+  "at": "2026-09-20T15:06:20.817Z",
+  "task_id": 46,
+  "status": "review",
+  "claim_until": null,
+  "review_id": "6b3e95a5-9107-4b7c-a59a-535c31fbfce7",
+  "review_status": "pending",
+  "hashes": {
+    "dispatch": "c712da58282d838df0764e8dacc69a3836490d0eefcc603239c612fb3117d363",
+    "baseline": "3df09420d561b84f5be1da9f8f9a7b81255ebe399832b872591ccf6bea15c740",
+    "registration": "1fad7c031b93cf06a0aa3e365e3df727052b85c4d7e1605d74a824e82f986a1f"
+  },
+  "task_count": 56,
+  "pending_reviews": 6,
+  "hq_sync": {
+    "status": "synced",
+    "captured_at": "2026-09-20T15:06:18.975Z"
+  }
+}

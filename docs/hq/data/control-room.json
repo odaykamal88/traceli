@@ -1,0 +1,305 @@
+{
+  "reviewed_at": "2026-09-20",
+  "business_milestone": {
+    "title": "Earn one dated commercial next step",
+    "period": "Week 4 · 14–18 September",
+    "due": "2026-09-18",
+    "owner": "Oday + Listener",
+    "definition": "A real procurement task, an accountable owner and a dated scope or purchasing discussion. A polite reply does not qualify.",
+    "evidence_ref": "operations/WEEK_4_ACTION_PLAN.md",
+    "metric_ids": [
+      "w4-people",
+      "w4-sent",
+      "w4-conversations",
+      "w4-next-steps"
+    ],
+    "next": "Reconcile the overdue Week 4 outreach record and hold the delayed Week 5 decision. Use substantive conversations to qualify a real need; Codex prepares a tailored scope within 24 hours of qualified evidence."
+  },
+  "cloud_milestone": {
+    "title": "Move an operating desk off the laptop",
+    "owner": "Builder + Supervisor",
+    "reviewed_at": "2026-09-20",
+    "gates": [
+      {
+        "title": "Private owner access verified",
+        "status": "done"
+      },
+      {
+        "title": "One bounded cloud draft accepted",
+        "status": "done"
+      },
+      {
+        "title": "Daily check deployed and enabled",
+        "status": "done"
+      },
+      {
+        "title": "First scheduled check verified · idle, no model call",
+        "status": "done"
+      },
+      {
+        "title": "One desk migrated with equivalent inputs and receipts",
+        "status": "pending"
+      }
+    ],
+    "next": "One bounded customer-evidence memo is now delivered and reviewed in the cloud; this is not full desk migration. Preserve the older readiness review, verify the next scheduled occurrence and resolve equivalent inputs/receipts plus hosting continuity.",
+    "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
+  },
+  "blockers": [
+    {
+      "id": "buyer-evidence",
+      "title": "Buyer evidence is missing",
+      "impact": "We cannot qualify a paid assignment or judge which product change buyers need.",
+      "owner": "Oday → Listener",
+      "next": "Supply the actual outreach history and any existing notes; reconcile delivery, replies and conversations separately.",
+      "task_ids": [
+        28,
+        29,
+        35,
+        36,
+        37
+      ],
+      "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+    },
+    {
+      "id": "content-feedback",
+      "title": "Distribution is ahead of measurement",
+      "impact": "Published content has no attributable buyer response in the last readout. LinkedIn analytics and an X publication URL are missing.",
+      "owner": "Editor + Oday",
+      "next": "Capture a dated LinkedIn analytics export or post metrics; verify the X destination before any publishing work.",
+      "task_ids": [
+        26,
+        38
+      ],
+      "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+    },
+    {
+      "id": "desk-migration",
+      "title": "Six desks still depend on desktop",
+      "impact": "The metadata feed and bounded brief now run in the cloud. The six specialist desk workflows still need their own equivalent inputs and review controls.",
+      "owner": "Builder + Supervisor",
+      "next": "Use the first cloud loop as the foundation, then migrate one specialist workflow and resolve hosting continuity beyond the trial.",
+      "task_ids": [
+        44,
+        45
+      ],
+      "evidence_ref": "cloud/OPERATING_FEED_20260920.md"
+    }
+  ],
+  "asks": [
+    {
+      "id": "outreach-history",
+      "priority": "First",
+      "title": "Close the outreach evidence gap",
+      "why": "This unlocks funnel diagnosis, useful follow-ups and the next commercial decision.",
+      "request": "Record who was actually contacted, when, the ask, delivery/reply status and any next step. Redacted notes are enough to start. No new replies were reported in your latest update; the original send history still needs reconciliation.",
+      "owner": "Oday",
+      "task_ids": [
+        28,
+        35
+      ],
+      "next_owner": "Listener reconciles the record; Supervisor recommends the next action.",
+      "href": "https://traceli-operating-room.odeyqemal.chatgpt.site",
+      "link_label": "Open original tasks"
+    },
+    {
+      "id": "customer-readout-review",
+      "priority": "Then",
+      "title": "Review the customer evidence memo",
+      "why": "Task 38 has an independently reviewed cloud memo; task 39 is your Week 5 priority decision.",
+      "request": "Accept or return the exact task 38 memo, then choose the next access experiment in task 39. Provide actual send history first; zero recorded counters do not prove no activity.",
+      "owner": "Oday",
+      "task_ids": [
+        38,
+        39
+      ],
+      "next_owner": "Listener reconciles the supplied evidence; Oday owns sending.",
+      "href": "https://traceli-operating-room.odeyqemal.chatgpt.site",
+      "link_label": "Review original task 38"
+    },
+    {
+      "id": "editorial-review",
+      "priority": "Then",
+      "title": "Accept or return the content readout",
+      "why": "Task #26 is a completed review packet waiting for your disposition.",
+      "request": "Review the exact content-to-buyer readout. Accept it or give a specific correction; this does not authorize another publication.",
+      "owner": "Oday",
+      "task_ids": [
+        26
+      ],
+      "next_owner": "Editor carries the accepted learning into the next eligible piece.",
+      "href": "https://traceli-operating-room.odeyqemal.chatgpt.site",
+      "link_label": "Open the review queue"
+    }
+  ],
+  "workstreams": [
+    {
+      "id": "A",
+      "name": "Shareable Trace",
+      "owner": "Product → Builder → Listener",
+      "state": "Ready for next step",
+      "tone": "neutral",
+      "now": "Trace contract and sanitized sharing test accepted; fictional walkthrough available.",
+      "next": "Review the recipient prototype, then observe who a buyer would send it to.",
+      "evidence_ref": "specs/TRACE_AND_SHARING.md"
+    },
+    {
+      "id": "B",
+      "name": "Product explainer",
+      "owner": "Editor + Auditor",
+      "state": "Internal draft accepted",
+      "tone": "good",
+      "now": "“Your ERP records what happened. Trace-li makes it provable.” Copy reviewed.",
+      "next": "Choose the exact asset and destination when it is needed.",
+      "evidence_ref": "artifacts/HOW_TRACE_LI_WORKS.md"
+    },
+    {
+      "id": "C",
+      "name": "Content & distribution",
+      "owner": "Editor",
+      "state": "Feedback missing",
+      "tone": "warning",
+      "now": "First release is published; the content playbook is accepted. Buyer response is unproven.",
+      "next": "Resolve the readout review and collect meaningful feedback.",
+      "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+    },
+    {
+      "id": "D",
+      "name": "Four account pieces",
+      "owner": "Investigator → Editor",
+      "state": "Internal drafts accepted",
+      "tone": "good",
+      "now": "UNFPA, OCHA, Chemonics and DAI packets have source and copy reviews.",
+      "next": "Refresh time-sensitive sources and prepare an exact external action packet.",
+      "evidence_ref": "artifacts/ACCOUNT_PIECES.md"
+    },
+    {
+      "id": "E",
+      "name": "Product delivery",
+      "owner": "Product + Builder",
+      "state": "Waiting on buyer evidence",
+      "tone": "warning",
+      "now": "Trace-first development sequence accepted; live secure sharing remains to be built.",
+      "next": "Use the sanitized Trace test to choose the smallest useful recipient workflow.",
+      "evidence_ref": "specs/DEVELOPMENT_SEQUENCE.md"
+    },
+    {
+      "id": "F",
+      "name": "Buyer discovery",
+      "owner": "Oday + Listener",
+      "state": "Needs your input",
+      "tone": "warning",
+      "now": "Task 38 decision memo produced on Railway and passed independent review. Week 4 counters remain zero recorded; actual denominators are unavailable.",
+      "next": "Oday reviews task 38, supplies task 28 send history and chooses the next access test in task 39.",
+      "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
+    },
+    {
+      "id": "G",
+      "name": "HQ & cloud operations",
+      "owner": "Builder + Librarian",
+      "state": "First economical loop live",
+      "tone": "good",
+      "now": "One customer evidence memo ran in the cloud, persisted and passed independent review at zero model cost; replay returned the same artifact.",
+      "next": "Keep the earlier readiness draft at review. Observe the existing daily schedule; full desk parity and hosting continuity remain open.",
+      "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
+    }
+  ],
+  "channels": [
+    {
+      "name": "LinkedIn",
+      "state": "Published · feedback unmeasured",
+      "recorded_at": "2026-09-15",
+      "publication": "The first company post and seven-page document have recorded publication URLs. The ArriveCAN LinkedIn handoff has no verified owner-published URL.",
+      "feedback": "No attributable substantive buyer response in the latest editorial readout. Impressions, saves and profile visits were unavailable.",
+      "next": "Add a dated analytics export and any substantive comments or messages, with a link to the post.",
+      "links": [
+        {
+          "label": "Company post",
+          "url": "https://www.linkedin.com/feed/update/urn:li:share:7503328533331566592"
+        },
+        {
+          "label": "Native document",
+          "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7503493067388366849/"
+        }
+      ]
+    },
+    {
+      "name": "X",
+      "state": "Publication unverified",
+      "recorded_at": "2026-09-15",
+      "publication": "The prepared thread has no verified live URL. A completed board task is not proof that the X post was published.",
+      "feedback": "No attributable engagement or buyer-response evidence is available.",
+      "next": "Confirm the company handle and any existing post URL before interpreting performance or preparing a release.",
+      "links": []
+    },
+    {
+      "name": "Website",
+      "state": "Two articles published",
+      "recorded_at": "2026-09-12",
+      "publication": "The first evidence-chain article and ArriveCAN article have verified release records and downloadable PDFs.",
+      "feedback": "Target-buyer visits and content-to-conversation attribution are not established.",
+      "next": "Track a concrete reply, introduction or named procurement task back to its source asset.",
+      "links": [
+        {
+          "label": "First article",
+          "url": "https://www.trace-li.com/insights/the-award-was-signed-the-proof-was-not-ready"
+        },
+        {
+          "label": "ArriveCAN article",
+          "url": "https://www.trace-li.com/insights/the-app-was-delivered-the-fallout-lasted-years"
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "L-05",
+      "title": "Require the send record before interpreting silence",
+      "state": "Proposed",
+      "observed_at": "2026-09-20",
+      "observation": "The cloud memo could verify saved zero counters but could not reconstruct actual outreach denominators or buyer language.",
+      "change": "Proposal only: require send timestamp, delivery evidence and exact ask in the next owner handoff. No canonical memory change.",
+      "next_check": "Oday reviews the proposal; then test whether the task 28 handoff supports a defensible task 29 denominator. Self-improvement gate remains unmet.",
+      "evidence_ref": "artifacts/CUSTOMER_READOUT_20260920.md"
+    },
+    {
+      "id": "L-01",
+      "title": "Verify deployment behavior, not just settings",
+      "state": "Applied",
+      "observed_at": "2026-09-17",
+      "observation": "The first scheduled deployment failed during build even though the service schedule was saved.",
+      "change": "Use an isolated worker bundle and check the actual deployment manifest and saved result.",
+      "next_check": "First scheduled check verified 18 September: idle, no model call. Keep checking actual receipts on future runs.",
+      "evidence_ref": "cloud/LIVE_RUN_20260917.md"
+    },
+    {
+      "id": "L-02",
+      "title": "Unchanged inputs should not buy another model call",
+      "state": "Applied",
+      "observed_at": "2026-09-17",
+      "observation": "The restricted runner returned idle for the already-accepted source snapshot.",
+      "change": "Deduplicate approved snapshots and keep cost reservations for uncertain calls.",
+      "next_check": "A new draft requires a new approved snapshot and still stops for review.",
+      "evidence_ref": "reviews/cloud-worker-verification.md"
+    },
+    {
+      "id": "L-03",
+      "title": "Publication proves distribution, not demand",
+      "state": "Working rule",
+      "observed_at": "2026-09-15",
+      "observation": "Published assets exist, but the editorial readout has no attributable buyer response and no usable analytics.",
+      "change": "Keep publication, engagement and commercial evidence separate. Do not infer product demand from silence.",
+      "next_check": "Record a substantive reply or named task before changing the product thesis.",
+      "evidence_ref": "operations/OPERATING_EVIDENCE.md"
+    },
+    {
+      "id": "L-04",
+      "title": "A review exception must stay specific",
+      "state": "Applied",
+      "observed_at": "2026-09-17",
+      "observation": "The output Auditor hit its usage limit on the first cloud draft.",
+      "change": "Oday approved an exception for that exact artifact. Future drafts retain their normal review requirements.",
+      "next_check": "Check the reviewer and exact artifact before accepting the next output.",
+      "evidence_ref": "reviews/cloud-output-20260917.md"
+    }
+  ]
+}

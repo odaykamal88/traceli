@@ -1,0 +1,12 @@
+[
+  {
+    "id": "MEM-001",
+    "status": "proposed",
+    "scope": "company/positioning",
+    "summary": "Promote ERP-complement positioning from Oday brief; clarify older implementation plan wording.",
+    "source_ref": "DEC-006",
+    "reviewer": "Librarian → Supervisor",
+    "diff": "Use “evidence and assurance layer”; ERP remains transaction system of record.",
+    "canonical_write": "pending exact promotion review"
+  }
+]

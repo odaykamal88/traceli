@@ -1,0 +1,21 @@
+# Operating feed and efficient cloud loop — 20 September 2026
+
+## Deployed and observed
+
+- Private HQ preview: implementation commit `63316c4`; Vercel deployment `dpl_2xrN1WpcQh9tssS5mXmQNwbUHooc`, READY. Migration `0006_hq_operating_feed.sql` applied to managed Postgres after verifying checksums for 0001–0005. Separate ingestor login has no direct customer/HQ table access or approval authority.
+- Original private Operating Room: Sites version 11, source `5bb3a2ec42e8149776fa3f435d8c6e2715a522fd`, deployment `appgdep_6aafe8c529b48191836a69b896b4977e`, succeeded. Owner-only audience retained. Hosted API returned `hqSync.status = synced`, capture `2026-09-20T14:08:42.721Z`. It exported 45 tasks, metric metadata, 10 review records (5 pending) and a count of 112 historical desk receipts with latest outcomes; contact records/full packets stayed in the source.
+- Railway bundle: deployment `4dbe5253-28b7-4d82-8252-dcd76efce371`; worker SHA256 `b9dfd56e5b9bc126dd9e894094bfcbdcfc1aad03959c840ff4b05f446352a900`. One replica, restart NEVER, daily 06:00 UTC retained. Platform reports next run 21 September 06:00 UTC / 09:00 Cairo. The new version's first automatic scheduled occurrence has not happened yet.
+- First manually triggered **cloud** run: `cloud-brief-20260920`, saved for review at `2026-09-20T14:04:00.602454650Z`. Artifact hash `a81a979f4364a2043ed32a892d68881af35aadaf829938cda29d0ee5ad3d2a6e`; 1,306 input / 756 output tokens; estimated $0.001234. Its approved source was a minimized source API read manually transported during connection verification; automatic source-side delivery was verified separately afterward. No claim that this was a scheduled invocation.
+- Repeat cloud invocation at `2026-09-20T14:05:47.212344393Z`: `review_pending`, `model_eligible=false`, `model_called=false`. No additional charge. Existing pilot total: two paid calls, $0.003425 estimated and $0.10 reservations held. The $8 monthly API ceiling remains unchanged. Reservations are conservative and are not released after uncertain calls.
+
+## Authentication and source transport
+
+Sites stores only the HMAC signing key and a named Vercel automation protection secret. Vercel stores the HMAC key and the distinct restricted ingest database URL for this branch. No temporary Sites access bearer was persisted. [Vercel automation protection](https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation) authenticates server delivery through the platform's preview protection; it does not authorize the HQ app. Verified: that credential alone receives HQ's `/hq/sign-in` redirect and an unsigned source POST receives application 401. The source sends it only in a header to the fixed HQ endpoint. Redirects are returned manually and rejected, so credentials cannot follow a redirect.
+
+A first delivery correctly failed at platform protection. Cloudflare subsequently rejected the original redirect mode; explicit manual redirect handling resolved hosted transport. Source reads/writes keep their original success and report pending delivery if HQ is unavailable. The next source read/change retries; this is not a durable retry queue or a scheduled private-source poll.
+
+## Validation and limits
+
+Source build and two export/signing/failure checks pass. HQ TypeScript and production build pass. Nine existing worker request tests, three new signature/schema/no-model test groups, seven existing cloud database groups and the new restricted-login integration (10 check receipts) pass against a fresh isolated PostgreSQL 18.4 database. No test called a paid provider. Live cloud execution and the no-spend repeat were verified separately in Railway logs and Postgres.
+
+The new draft is not accepted or promoted to canonical memory. Supervisor source check found the recorded task counts, pending IDs, metric limits and historical receipt distinctions supported; separate Auditor review is still due. The one-time exception for 17 September does not carry forward. Six specialist desktop desks, social analytics, and paid hosting continuity after the existing Railway trial remain separate work. A configured economical model and zero-token checks do not establish a measured 99% efficiency claim.

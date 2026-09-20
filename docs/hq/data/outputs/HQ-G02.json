@@ -1,0 +1,56 @@
+{
+  "job_id": "HQ-G02",
+  "mandate_id": "institutional-memory",
+  "artifact_id": "HQ-G02-OUTPUT",
+  "version": 1,
+  "classification": "internal",
+  "produced_at": "2026-09-14T21:04:29.035064+00:00",
+  "sources": [
+    {
+      "id": "HQ-G02-artifact",
+      "source_ref": "CHARTERS.md",
+      "location": null,
+      "observed_at": "2026-09-14T16:01:37.524940+00:00",
+      "claim": "The artifact exists and is submitted for review.",
+      "kind": "artifact",
+      "limitations": [
+        "Submission is not acceptance or authority for external use."
+      ]
+    },
+    {
+      "id": "HQ-G02-review",
+      "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "location": "Disposition and coverage",
+      "observed_at": "2026-09-14T21:04:29.035064+00:00",
+      "claim": "Independent review permits internal acceptance within its stated scope.",
+      "kind": "artifact",
+      "limitations": [
+        "No consequential external action authorized."
+      ]
+    }
+  ],
+  "assumptions": [
+    "Acceptance is limited to the internal scope recorded in the review."
+  ],
+  "known_gaps": [
+    "Original Operating Room/customer evidence unavailable.",
+    "No consequential external action authorized."
+  ],
+  "review_status": "accepted",
+  "next_owner": "Supervisor",
+  "payload": {
+    "diff_ref": "docs/hq/AGENT_CONSTITUTION.md",
+    "evidence_ids": [
+      "source:oday-current-hq-brief"
+    ],
+    "conflicts": [
+      "Existing approved messaging stays canonical pending exact promotion."
+    ],
+    "scope": "Bootstrap operating rules and mandates",
+    "classification": "internal",
+    "retention": "Versioned policy history; no customer data",
+    "reviewer": "Independent Auditor + Supervisor",
+    "decision_ref": "DEC-004",
+    "supersedes": null
+  }
+}

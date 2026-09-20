@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decided_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recorded_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "accepted",
+        "proposed",
+        "superseded",
+        "rejected"
+      ]
+    },
+    "authority": {
+      "enum": [
+        "Oday",
+        "Supervisor"
+      ]
+    },
+    "approval_level": {
+      "enum": [
+        "Green",
+        "Amber",
+        "Red"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "consequences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_trigger": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "superseded_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "execution_authorized": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "decided_at",
+    "recorded_at",
+    "status",
+    "authority",
+    "approval_level",
+    "scope",
+    "decision",
+    "rationale",
+    "alternatives",
+    "evidence_refs",
+    "consequences",
+    "owner",
+    "review_trigger",
+    "supersedes",
+    "superseded_by",
+    "execution_authorized"
+  ]
+}

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "RUN-D01",
+    "job_ids": [
+      "HQ-D01"
+    ],
+    "executor": "/root/investigator",
+    "mode": "temporary session worker",
+    "status": "completed",
+    "result_status": "reviewed_internal_only",
+    "artifact_refs": [
+      "research/ACCOUNT_EVIDENCE.md"
+    ],
+    "recorded_at": "2026-09-14T16:01:37.524940+00:00",
+    "cost_usd": null,
+    "persistent": false
+  },
+  {
+    "id": "RUN-B01-C01",
+    "job_ids": [
+      "HQ-B01",
+      "HQ-C01"
+    ],
+    "executor": "/root/editor",
+    "mode": "temporary session worker, sequential jobs",
+    "status": "completed",
+    "result_status": "reviewed_internal_only",
+    "artifact_refs": [
+      "artifacts/HOW_TRACE_LI_WORKS.md",
+      "artifacts/CONTENT_PLAYBOOK.md"
+    ],
+    "recorded_at": "2026-09-14T16:01:37.524940+00:00",
+    "cost_usd": null,
+    "persistent": false
+  },
+  {
+    "id": "RUN-AUDIT",
+    "job_ids": [
+      "HQ-D02",
+      "HQ-B02",
+      "HQ-G03"
+    ],
+    "executor": "/root/auditor",
+    "mode": "temporary session worker, sequential reviews",
+    "status": "completed",
+    "result_status": "reviewed_internal_only",
+    "artifact_refs": [
+      "reviews/accounts-review.md",
+      "reviews/explainer-review.md",
+      "reviews/HQ_REVIEW.md"
+    ],
+    "recorded_at": "2026-09-14T16:01:37.524940+00:00",
+    "cost_usd": null,
+    "persistent": false
+  },
+  {
+    "id": "RUN-D03",
+    "job_ids": [
+      "HQ-D03"
+    ],
+    "executor": "/root/editor",
+    "mode": "temporary session worker",
+    "status": "completed",
+    "result_status": "accepted_internal_draft",
+    "artifact_refs": [
+      "artifacts/ACCOUNT_PIECES.md"
+    ],
+    "recorded_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "persistent": false
+  },
+  {
+    "id": "RUN-D03-REVIEW",
+    "job_ids": [
+      "HQ-D03"
+    ],
+    "executor": "/root/auditor",
+    "mode": "independent derivative wording review",
+    "status": "completed",
+    "result_status": "pass_after_cta_correction",
+    "artifact_refs": [
+      "reviews/account-copy-review.md"
+    ],
+    "recorded_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "persistent": false
+  }
+]

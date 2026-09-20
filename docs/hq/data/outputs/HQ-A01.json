@@ -1,0 +1,59 @@
+{
+  "job_id": "HQ-A01",
+  "mandate_id": "product",
+  "artifact_id": "HQ-A01-OUTPUT",
+  "version": 1,
+  "classification": "internal",
+  "produced_at": "2026-09-14T21:04:29.035064+00:00",
+  "sources": [
+    {
+      "id": "HQ-A01-artifact",
+      "source_ref": "specs/TRACE_AND_SHARING.md",
+      "location": null,
+      "observed_at": "2026-09-14T16:01:37.524940+00:00",
+      "claim": "The artifact exists and is submitted for review.",
+      "kind": "artifact",
+      "limitations": [
+        "Submission is not acceptance or authority for external use."
+      ]
+    },
+    {
+      "id": "HQ-A01-review",
+      "source_ref": "docs/hq/reviews/HQ_REVIEW.md",
+      "location": "Disposition and coverage",
+      "observed_at": "2026-09-14T21:04:29.035064+00:00",
+      "claim": "Independent review permits internal acceptance within its stated scope.",
+      "kind": "artifact",
+      "limitations": [
+        "No consequential external action authorized."
+      ]
+    }
+  ],
+  "assumptions": [
+    "Acceptance is limited to the internal scope recorded in the review."
+  ],
+  "known_gaps": [
+    "Original Operating Room/customer evidence unavailable.",
+    "No consequential external action authorized."
+  ],
+  "review_status": "accepted",
+  "next_owner": "Supervisor",
+  "payload": {
+    "evidence_ids": [
+      "source:oday-current-hq-brief",
+      "source:local-repository-inspection"
+    ],
+    "user_task": "Explain a procurement decision to the next authorized reviewer.",
+    "hypothesis": "Useful evidence output may be shared as part of completing the work.",
+    "smallest_test": "Fictional Trace during existing authorized discovery.",
+    "measure": "Named recipient/task, requested redactions, observed action and dated next step.",
+    "disconfirmation": "No concrete recipient task or practical permitted sharing route.",
+    "scope": "Define the atomic Trace and a sanitized sharing test",
+    "acceptance": [
+      "Explicit conclusion, rule, approvals, evidence, gaps, exceptions and provenance",
+      "Recipient access/expiry/redaction/log requirements distinguish prototype from implementation",
+      "Preserve discovery and define observable sharing test"
+    ],
+    "dependencies": []
+  }
+}

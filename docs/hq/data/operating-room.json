@@ -1,0 +1,631 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-20T13:19:49.467Z",
+  "source_url": "https://traceli-operating-room.odeyqemal.chatgpt.site",
+  "source_kind": "Read-only Sites database snapshot; not a live dashboard connection",
+  "metrics": [
+    {
+      "id": "calls",
+      "label": "Fit calls",
+      "current": 0,
+      "target": 2,
+      "sort_order": 3
+    },
+    {
+      "id": "replies",
+      "label": "Substantive replies",
+      "current": 0,
+      "target": 3,
+      "sort_order": 2
+    },
+    {
+      "id": "tenders",
+      "label": "Qualified tenders",
+      "current": 0,
+      "target": 1,
+      "sort_order": 4
+    },
+    {
+      "id": "touches",
+      "label": "Direct buyer touches",
+      "current": 7,
+      "target": 15,
+      "sort_order": 1
+    },
+    {
+      "id": "w3-briefs",
+      "label": "Briefs actually sent",
+      "current": 0,
+      "target": 5,
+      "sort_order": 1
+    },
+    {
+      "id": "w3-calls",
+      "label": "Qualification calls",
+      "current": 0,
+      "target": 2,
+      "sort_order": 3
+    },
+    {
+      "id": "w3-replies",
+      "label": "Substantive replies",
+      "current": 0,
+      "target": 3,
+      "sort_order": 2
+    },
+    {
+      "id": "w3-scopes",
+      "label": "Paid-scope opportunities",
+      "current": 0,
+      "target": 1,
+      "sort_order": 4
+    },
+    {
+      "id": "w4-conversations",
+      "label": "Substantive conversations",
+      "current": 0,
+      "target": 5,
+      "sort_order": 3
+    },
+    {
+      "id": "w4-next-steps",
+      "label": "Dated commercial next steps",
+      "current": 0,
+      "target": 1,
+      "sort_order": 4
+    },
+    {
+      "id": "w4-people",
+      "label": "Relevant people selected",
+      "current": 0,
+      "target": 10,
+      "sort_order": 1
+    },
+    {
+      "id": "w4-sent",
+      "label": "Personal approaches sent",
+      "current": 0,
+      "target": 10,
+      "sort_order": 2
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Ring UNFPA and WFP procurement",
+      "owner": "Oday",
+      "lane": "Pitching",
+      "status": "done",
+      "due": "Mon",
+      "week": "2026-08-31",
+      "updated_at": "2026-08-31T19:30:28.557Z"
+    },
+    {
+      "id": 2,
+      "title": "Follow up the six DIHAD contacts",
+      "owner": "Oday",
+      "lane": "Pipeline",
+      "status": "done",
+      "due": "Tue",
+      "week": "2026-08-31",
+      "updated_at": "2026-09-01T13:03:53.165Z"
+    },
+    {
+      "id": 3,
+      "title": "Capture one named tender and trigger",
+      "owner": "Oday",
+      "lane": "Demand",
+      "status": "todo",
+      "due": "Fri",
+      "week": "2026-08-31",
+      "updated_at": "2026-08-30T19:33:00.017Z"
+    },
+    {
+      "id": 4,
+      "title": "Approve the first evidence-led article",
+      "owner": "Oday",
+      "lane": "Approval",
+      "status": "done",
+      "due": "Thu",
+      "week": "2026-08-31",
+      "updated_at": "2026-09-09T05:43:38.327Z"
+    },
+    {
+      "id": 5,
+      "title": "Verify the four first-piece sources",
+      "owner": "Codex",
+      "lane": "Research",
+      "status": "done",
+      "due": "Tue",
+      "week": "2026-08-31",
+      "updated_at": "2026-09-01T13:22:30.732Z"
+    },
+    {
+      "id": 6,
+      "title": "Draft the publication and source sheet",
+      "owner": "Codex",
+      "lane": "Editorial",
+      "status": "done",
+      "due": "Wed",
+      "week": "2026-08-31",
+      "updated_at": "2026-09-02T20:43:37.431Z"
+    },
+    {
+      "id": 7,
+      "title": "Run security posture review",
+      "owner": "Codex",
+      "lane": "Security",
+      "status": "done",
+      "due": "Fri",
+      "week": "2026-08-31",
+      "updated_at": "2026-09-07T21:30:28.377Z"
+    },
+    {
+      "id": 8,
+      "title": "Synthesize customer learning",
+      "owner": "Codex",
+      "lane": "Learning",
+      "status": "todo",
+      "due": "Fri",
+      "week": "2026-08-31",
+      "updated_at": "2026-08-30T19:33:00.017Z"
+    },
+    {
+      "id": 9,
+      "title": "Finalize the article",
+      "owner": "Oday",
+      "lane": "Publish",
+      "status": "done",
+      "due": "2026-09-08",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T06:05:40.438Z"
+    },
+    {
+      "id": 10,
+      "title": "Finish the publication packet",
+      "owner": "Codex",
+      "lane": "Publish",
+      "status": "done",
+      "due": "2026-09-09",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T05:43:44.573Z"
+    },
+    {
+      "id": 11,
+      "title": "Publish and verify the approved assets",
+      "owner": "Oday",
+      "lane": "Publish",
+      "status": "done",
+      "due": "2026-09-10",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T06:05:45.358Z"
+    },
+    {
+      "id": 12,
+      "title": "Rebuild the operating room",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "done",
+      "due": "2026-09-07",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-07T21:30:28.377Z"
+    },
+    {
+      "id": 13,
+      "title": "Clear the dependency security gate",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "done",
+      "due": "2026-09-09",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T17:01:13.463Z"
+    },
+    {
+      "id": 14,
+      "title": "Connect automatic run reporting",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "done",
+      "due": "2026-09-09",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-08T06:57:29.147Z"
+    },
+    {
+      "id": 15,
+      "title": "Prove delivery inside an existing agent",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "blocked",
+      "due": "2026-09-10",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-10T07:23:14.577Z"
+    },
+    {
+      "id": 16,
+      "title": "Exercise the evidence and tool boundaries",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "done",
+      "due": "2026-09-11",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-10T11:41:42.822Z"
+    },
+    {
+      "id": 17,
+      "title": "Review all Gojiberry imports",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "done",
+      "due": "2026-09-07",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-07T21:30:28.377Z"
+    },
+    {
+      "id": 18,
+      "title": "Verify five current buyer triggers",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "done",
+      "due": "2026-09-08",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-08T11:30:33.876Z"
+    },
+    {
+      "id": 19,
+      "title": "Prepare three prospect evidence briefs",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "review",
+      "due": "2026-09-09",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-08T11:31:53.009Z"
+    },
+    {
+      "id": 20,
+      "title": "Send the first five reviewed briefs",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "doing",
+      "due": "2026-09-09",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T16:43:46.129Z"
+    },
+    {
+      "id": 21,
+      "title": "Record the useful discussions",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "done",
+      "due": "2026-09-10",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T06:06:17.439Z"
+    },
+    {
+      "id": 22,
+      "title": "Turn one live pain into a service scope",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-11",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-07T21:30:28.377Z"
+    },
+    {
+      "id": 23,
+      "title": "Close the week against real evidence",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "review",
+      "due": "2026-09-11",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-11T08:55:33.520Z"
+    },
+    {
+      "id": 24,
+      "title": "Publication packet: apply the service positioning",
+      "owner": "Codex",
+      "lane": "Publish",
+      "status": "done",
+      "due": "2026-09-09",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-08T11:22:49.344Z"
+    },
+    {
+      "id": 25,
+      "title": "Product presentation: show one readable evidence example",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "done",
+      "due": "2026-09-10",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-09T17:00:16.111Z"
+    },
+    {
+      "id": 26,
+      "title": "Friday review: connect content to buyer responses",
+      "owner": "Codex",
+      "lane": "Publish",
+      "status": "review",
+      "due": "2026-09-11",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-14T06:19:30.032Z"
+    },
+    {
+      "id": 27,
+      "title": "Repair PostCSS updates and resolve scanning follow-up",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "done",
+      "due": "2026-09-12",
+      "week": "2026-09-07",
+      "updated_at": "2026-09-12T19:46:55.981Z"
+    },
+    {
+      "id": 28,
+      "title": "Confirm who received our outreach",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-14",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 29,
+      "title": "Reconstruct the outreach funnel",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-14",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 30,
+      "title": "Select ten people who do the work",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-14",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 31,
+      "title": "Prepare the messages and conversation guide",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-15",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 32,
+      "title": "Send the ten personal approaches",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-16",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 33,
+      "title": "Diagnose replies and prepare eligible follow-ups",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-17",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 34,
+      "title": "Follow up only where the window has elapsed",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-18",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 35,
+      "title": "Hold and capture five problem conversations",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-18",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 36,
+      "title": "Scope one paid assignment if a real need emerges",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "blocked",
+      "due": "2026-09-18",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 37,
+      "title": "Secure a dated commercial next step",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "blocked",
+      "due": "2026-09-18",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 38,
+      "title": "Recommend what to work on next",
+      "owner": "Codex",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-18",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 39,
+      "title": "Choose the Week 5 priority",
+      "owner": "Oday",
+      "lane": "Buyers",
+      "status": "todo",
+      "due": "2026-09-18",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:48:03.094Z"
+    },
+    {
+      "id": 40,
+      "title": "Tool backlog: fal.ai for LinkedIn and social outbound hooks",
+      "owner": "Codex",
+      "lane": "Publish",
+      "status": "blocked",
+      "due": "After audience selection",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:58:05.732Z"
+    },
+    {
+      "id": 41,
+      "title": "Tool backlog: Axiom for an evidenced logging gap",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "blocked",
+      "due": "On trigger",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:58:13.678Z"
+    },
+    {
+      "id": 42,
+      "title": "Tool backlog: Railway for a defined cloud worker",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "blocked",
+      "due": "On trigger",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:58:21.483Z"
+    },
+    {
+      "id": 43,
+      "title": "Tool backlog: Convex only for a justified backend requirement",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "blocked",
+      "due": "On trigger",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-12T08:58:28.434Z"
+    },
+    {
+      "id": 44,
+      "title": "HQ G: connect mandate charters and schedule evidence",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "review",
+      "due": "2026-09-15",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-15T11:57:57.540Z"
+    },
+    {
+      "id": 45,
+      "title": "HQ G: extend Postgres memory and job foundation",
+      "owner": "Codex",
+      "lane": "Platform",
+      "status": "review",
+      "due": "2026-09-15",
+      "week": "2026-09-14",
+      "updated_at": "2026-09-15T20:33:58.472Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "026278d8-21e0-45aa-b958-af9bd73aac7c",
+      "task_id": 26,
+      "title": "Friday review: connect content to buyer responses",
+      "status": "pending",
+      "created_at": "2026-09-14T06:19:30.032Z",
+      "reviewed_at": null
+    },
+    {
+      "id": "358d8bfe-9765-4bcf-8f4e-ea8799b49ccc",
+      "task_id": 27,
+      "title": "Repair PostCSS updates and resolve scanning follow-up",
+      "status": "accepted",
+      "created_at": "2026-09-12T14:44:38.963Z",
+      "reviewed_at": "2026-09-12T19:46:55.981Z"
+    },
+    {
+      "id": "85f3118a-5b2d-4ce4-8c6e-c201ea07b920-16",
+      "task_id": 16,
+      "title": "Exercise the evidence and tool boundaries",
+      "status": "accepted",
+      "created_at": "2026-09-10T07:26:15.285Z",
+      "reviewed_at": "2026-09-10T11:41:42.822Z"
+    },
+    {
+      "id": "f9a3ed67-cc8e-4ff7-933d-653cc244562b",
+      "task_id": 23,
+      "title": "Close the week against real evidence",
+      "status": "pending",
+      "created_at": "2026-09-11T08:55:33.520Z",
+      "reviewed_at": null
+    },
+    {
+      "id": "hq-connect-finalize-73090c45-5682-468a-880c-95e729b9baed",
+      "task_id": 44,
+      "title": "HQ G: connect mandate charters and schedule evidence",
+      "status": "pending",
+      "created_at": "2026-09-15T11:57:57.540Z",
+      "reviewed_at": null
+    },
+    {
+      "id": "hq-postgres-finalize-153e8a26-1361-4eda-9632-01de9d521ea5",
+      "task_id": 45,
+      "title": "HQ G: extend Postgres memory and job foundation",
+      "status": "pending",
+      "created_at": "2026-09-15T20:33:58.472Z",
+      "reviewed_at": null
+    },
+    {
+      "id": "manual-7893d5890dea43e4aeb93a0bf55d8666",
+      "task_id": 24,
+      "title": "Publication packet: apply the service positioning",
+      "status": "accepted",
+      "created_at": "2026-09-08T06:56:39.600Z",
+      "reviewed_at": "2026-09-08T11:22:49.344Z"
+    },
+    {
+      "id": "resume-2605ef590f8244a08fa9c7adcadde3e5",
+      "task_id": 19,
+      "title": "Prepare three prospect evidence briefs",
+      "status": "pending",
+      "created_at": "2026-09-08T11:31:53.009Z",
+      "reviewed_at": null
+    },
+    {
+      "id": "resume-39a7d8c79f3848569ded37f0ee417be9",
+      "task_id": 13,
+      "title": "Clear the dependency security gate",
+      "status": "accepted",
+      "created_at": "2026-09-09T16:37:38.972Z",
+      "reviewed_at": "2026-09-09T17:01:13.463Z"
+    },
+    {
+      "id": "resume-70e7d56f3e5248c3848c442dd904bf9e",
+      "task_id": 25,
+      "title": "Product presentation: show one readable evidence example",
+      "status": "accepted",
+      "created_at": "2026-09-09T10:56:16.134Z",
+      "reviewed_at": "2026-09-09T17:00:16.111Z"
+    }
+  ],
+  "owner_update": {
+    "recorded_at": "2026-09-17T22:56:13.435Z",
+    "summary": "Oday reports no new buyer replies/conversations or LinkedIn/X posts missing from the existing record.",
+    "evidence": "Current HQ dashboard conversation: Oday replied “nope” to the missing-update question on 18 September 2026 (Cairo)."
+  }
+}

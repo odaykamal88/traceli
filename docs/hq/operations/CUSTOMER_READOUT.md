@@ -1,0 +1,17 @@
+# Task 38: bounded customer evidence decision memo
+
+20 September 2026. This implements the existing Week 4 readout, not a new workstream. The Customer Evidence mandate owns the recommendation; the existing Institutional Memory runner prepares its deterministic metadata summary. Oday owns task 39's priority choice and all sends.
+
+The input is the already permitted Operating Room metadata mirror, pinned by SHA-256 after task 38 is claimed. No contacts, messages, customer documents or conversation notes are transported. Version 1 handles only the recorded-zero Week 4 case: four expected counters and all twelve task IDs must be present. Nonzero or missing evidence requires review rather than a guessed recommendation. Recorded zeros are not independently verified actual event totals.
+
+A trusted operator provisions `hq_readout_authorizations` from a fresh authoritative task claim, with its exact UUID, expiry (at most 45 minutes) and source hash. The runner cannot issue or extend this authorization. It checks policy enablement, claim expiry, source age/hash and task status. The existing worker’s outer ten-second statement bound, a two-second lock bound and the existing 110-second Railway process limit apply. This is one fixed job, one attempt, no provider request, no model reservation, no new scheduler.
+
+One transaction saves the existing HQ job, run, immutable artifact and event. A rollback leaves no partial artifact; concurrent calls serialize on the authorization row; retries after a committed-but-lost response return the original artifact hash. Missing/stale/changed inputs, expired claim, paused policy and running work return explicit check outcomes. Database/transport failures remain failures and must not be reported as completed. They incur no model spend; hosting cost is unavailable.
+
+The current Railway bundle calls the existing `hq_operating_tick` entry point. The migration adds this explicitly authorized readout before its readiness path. With no readout authorization, prior readiness behavior is unchanged. Once submitted, the readout authorization holds further processing at `already_submitted`, including after expiry, until the trusted operator removes it after reviewing the handoff. This prevents both repeated output and accidental paid continuation. Do not remove it merely to make a schedule produce activity. Existing readiness review and all desktop pauses are preserved.
+
+The artifact and exact source inputs remain in existing Postgres tables and the owner-authenticated cloud panel. Copy the exact artifact/hash to original Operating Room task 38's review packet, record its receipt, and read both back. Independent Auditor and Supervisor review are required; Oday's disposition is separate. No worker function accepts its own output, sends a message, promotes a lesson or changes canonical memory. The source hash/capture precedes later task/receipt updates and must remain dated.
+
+The proposed lesson is to require send timestamp, delivery evidence and exact ask in the next owner handoff. It stays a proposal. Two complete weekly cycles, six human-dispositioned run summaries and three job classes remain prerequisites for any self-improvement claim.
+
+Verification: `scripts/db/test-hq-customer-readout.mjs` uses a disposable local PostgreSQL database only and exercises restricted identities, source/claim gates, rollback recovery, concurrency, immutable artifacts, reader visibility and zero charges. No hosted customer data is used by fixtures.

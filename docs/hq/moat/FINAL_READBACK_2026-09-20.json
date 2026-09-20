@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-20T15:07:33.757Z",
+  "receipt_id": "moat-intake-20260920-6b3e95a5",
+  "task_count": 56,
+  "receipt_count": 113,
+  "pending_reviews": 6,
+  "active_claims": [],
+  "preexisting_tasks_unchanged": true,
+  "hq_sync": {
+    "status": "synced",
+    "captured_at": "2026-09-20T15:07:32.007Z"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "job_id": "HQ-D02",
+  "mandate_id": "risk",
+  "artifact_id": "HQ-D02-OUTPUT",
+  "version": 1,
+  "classification": "internal",
+  "produced_at": "2026-09-14T21:04:29.035064+00:00",
+  "sources": [
+    {
+      "id": "D02-review",
+      "source_ref": "docs/hq/reviews/accounts-review.md",
+      "location": null,
+      "observed_at": "2026-09-14T20:55:51.388233+00:00",
+      "claim": "Independent source-location review covers all 18 material claims.",
+      "kind": "artifact",
+      "limitations": [
+        "OCHA checked against saved historical snapshots, not independent live retrieval.",
+        "No external action authorized."
+      ]
+    },
+    {
+      "id": "HQ-D02-review",
+      "source_ref": "docs/hq/reviews/accounts-review.md",
+      "location": "Disposition and coverage",
+      "observed_at": "2026-09-14T21:04:29.035064+00:00",
+      "claim": "Independent review permits internal acceptance within its stated scope.",
+      "kind": "artifact",
+      "limitations": [
+        "No consequential external action authorized."
+      ]
+    }
+  ],
+  "assumptions": [
+    "Acceptance is limited to the internal scope recorded in the review."
+  ],
+  "known_gaps": [
+    "Original Operating Room/customer evidence unavailable.",
+    "No consequential external action authorized."
+  ],
+  "review_status": "accepted",
+  "next_owner": "Supervisor",
+  "payload": {
+    "artifact_version": "docs/hq/reviews/accounts-review.md",
+    "criteria": [
+      "Reopen every material source and check claim/location",
+      "Check entity/program/time-window attribution",
+      "Pass each account separately or block with precise fixes"
+    ],
+    "evidence_inspected": [
+      "docs/hq/reviews/accounts-review.md"
+    ],
+    "decision": "pass",
+    "severity": "none",
+    "blocking_findings": [],
+    "retest_conditions": [
+      "Changed claim/capability/authority boundary",
+      "Fresh OCHA public-access/status check before publication"
+    ],
+    "coverage_limits": [
+      "Exact coverage and hashes in the independent review.",
+      "No consequential action authorized."
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "test_id": "jev-connectivity-20260920-v1",
+  "state": "finished",
+  "key_present": true,
+  "receipt": {
+    "usage": {
+      "input_tokens": 317,
+      "output_tokens": 21
+    },
+    "status": "ok",
+    "cost_usd": null,
+    "provider": "TypeSafe",
+    "transport": "direct-http",
+    "input_hash": "9a6e8cb0cf7fbb8fceb3be0f8ef37f454d1b48f7a6a80e64d45b15f187b042c7",
+    "latency_ms": 334,
+    "normalized": {
+      "receipt_present": {
+        "noul": 0.99,
+        "type": "noul"
+      }
+    },
+    "started_at": "2026-09-20T15:50:55.365Z",
+    "http_status": 200,
+    "usage_status": "reported",
+    "human_decision": "not_evaluated",
+    "input_manifest": {
+      "case_id": "SYN-JEV-001",
+      "request": {
+        "model": "jev-latest",
+        "state": "Fictional test record SYN-EVIDENCE-001. A delivery receipt is present. A reviewer signature is absent. This is synthetic test data, not a real procurement.",
+        "questions": {
+          "receipt_present": {
+            "type": "noul",
+            "instructions": "Does the supplied record explicitly state that a delivery receipt is present?"
+          }
+        }
+      },
+      "version": "jev-connectivity-v0.1",
+      "source_ids": [
+        "SYN-EVIDENCE-001"
+      ],
+      "classification": "synthetic",
+      "requirement_ids": [
+        "SYN-RECEIPT-001"
+      ]
+    },
+    "returned_model": "jev-1.13.0",
+    "requested_model": "jev-latest",
+    "contract_version": "jev-connectivity-v0.1",
+    "raw_response_hash": "246b96236d4acac0fa4c75e81c237ed3f76f1217340579ef594d764ff8e2f2ea",
+    "policy_disposition": "not_evaluated"
+  }
+}

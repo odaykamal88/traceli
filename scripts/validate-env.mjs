@@ -57,6 +57,23 @@ if (isConfigured('TRACELI_SEED_ORGANIZATION_ID') && !databaseConfigured) {
   throw new Error('TRACELI_SEED_ORGANIZATION_ID requires complete database configuration.')
 }
 
+const hqAccess = process.env.TRACELI_HQ_ACCESS
+if (hqAccess && !['disabled', 'local', 'workos'].includes(hqAccess)) {
+  throw new Error('TRACELI_HQ_ACCESS must be disabled, local or workos.')
+}
+if (hqAccess === 'local' && (process.env.VERCEL || process.env.NODE_ENV === 'production')) {
+  throw new Error('Local HQ access cannot be enabled on a hosted or production build.')
+}
+if (hqAccess === 'workos') {
+  if (!workOSConfigured) throw new Error('HQ WorkOS access requires complete WorkOS configuration.')
+  if (!/^user_[A-Z0-9]{26}$/.test(process.env.TRACELI_HQ_OWNER_USER_ID || '')) {
+    throw new Error('HQ requires an exact WorkOS owner user ID.')
+  }
+  if (!/^org_[A-Z0-9]{26}$/.test(process.env.TRACELI_HQ_ORGANIZATION_ID || '')) {
+    throw new Error('HQ requires an exact WorkOS organization ID.')
+  }
+}
+
 console.log(
   `Environment configuration valid: WorkOS ${workOSConfigured ? 'configured' : 'disabled'}; database ${databaseConfigured ? 'configured' : 'disabled'}.`,
 )

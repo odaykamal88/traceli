@@ -1,0 +1,16 @@
+[
+  {
+    "job_id": "HQ-G02",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/AGENT_CONSTITUTION.md",
+      "docs/hq/CHARTERS.md",
+      "docs/hq/JOB_CONTRACT.md",
+      "docs/hq/DECISION_LEDGER.md"
+    ],
+    "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "job_id": "HQ-B01",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/artifacts/HOW_TRACE_LI_WORKS.md"
+    ],
+    "review_ref": "docs/hq/reviews/explainer-review.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  },
+  {
+    "job_id": "HQ-C01",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/artifacts/CONTENT_PLAYBOOK.md"
+    ],
+    "review_ref": "docs/hq/reviews/explainer-review.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  },
+  {
+    "job_id": "HQ-D03",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "docs/hq/artifacts/ACCOUNT_PIECES.md"
+    ],
+    "review_ref": "docs/hq/reviews/account-copy-review.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "LOOP-01",
+    "name": "Existing shortlist watch",
+    "owner": "Scout",
+    "trigger": "Weekly or new official source",
+    "state": "Existing Funding Watch · bounded internal scope",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-02",
+    "name": "Case → review → content",
+    "owner": "Investigator / Auditor / Editor",
+    "trigger": "Manual accepted-source handoff",
+    "state": "Existing Editorial Desk · eligible queued work",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-03",
+    "name": "Discovery → product evidence",
+    "owner": "Listener / Product Steward",
+    "trigger": "Authorized actual conversation",
+    "state": "Existing Customer Learning Review · actual inputs required",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-04",
+    "name": "Memory promotion",
+    "owner": "Librarian / Supervisor",
+    "trigger": "Reviewed proposal and exact approval",
+    "state": "Prepared · manual review",
+    "evidence": "data/memory-proposals.json"
+  },
+  {
+    "id": "LOOP-05",
+    "name": "CI and production smoke",
+    "owner": "Existing repository operations",
+    "trigger": "Repository workflow definitions",
+    "state": "Saved result dates shown in runtime snapshot; each result has its own scope",
+    "evidence": "RUNTIME_HANDOFF.md"
+  },
+  {
+    "id": "LOOP-CLOUD-01",
+    "name": "Operating metadata → bounded cloud brief",
+    "owner": "Librarian / Supervisor",
+    "trigger": "Daily 06:00 UTC; signed source metadata; fresh changed evidence and no pending draft required",
+    "state": "Cloud execution and no-spend review hold verified 20 September; next scheduled occurrence pending",
+    "evidence": "cloud/LIVE_RUN_20260917.md"
+  }
+]

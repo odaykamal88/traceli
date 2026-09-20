@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-09-18T07:44:23.816880+00:00",
+  "deployment_id": "2d50f299-7fa7-4f24-bddc-73077f867518",
+  "scheduled_for": "2026-09-18T06:00:00Z",
+  "container_started_at": "2026-09-18T06:02:19.923333815Z",
+  "outcome_at": "2026-09-18T06:02:22.431619201Z",
+  "outcome": "idle",
+  "model_calls": 0,
+  "evidence": "Railway deployment logs for the approved preview service; fixed worker returns idle before the provider path.",
+  "next_scheduled_run_at": "2026-09-19T06:00:00Z",
+  "schedule": "0 6 * * *",
+  "replicas": 1,
+  "restart_policy": "NEVER"
+}

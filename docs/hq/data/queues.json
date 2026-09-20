@@ -1,0 +1,109 @@
+[
+  {
+    "id": "A",
+    "title": "Product sharing / usage = sharing",
+    "owner": "product",
+    "status": "active",
+    "objective": "Test an atomic Trace inside existing discovery.",
+    "handoff": "A01 \u2192 A02 \u2192 A03. Product scopes; Builder prototypes; Listener records observed feedback; Auditor checks evidence and permissions.",
+    "rules": "Do not build live sharing until the sanitized test has evidence. Secure access is a release gate, not an assumed prototype capability.",
+    "job_ids": [
+      "HQ-A01",
+      "HQ-A02",
+      "HQ-A03"
+    ]
+  },
+  {
+    "id": "B",
+    "title": "How Trace-li works",
+    "owner": "distribution",
+    "status": "active",
+    "objective": "Make the ERP boundary and source-linked value easy to understand.",
+    "handoff": "Editor drafts; Auditor checks product truth; Supervisor accepts canonical internal copy; Oday approves publication.",
+    "rules": "Use the exact core line while labeling intended versus available functionality.",
+    "job_ids": [
+      "HQ-B01",
+      "HQ-B02"
+    ]
+  },
+  {
+    "id": "C",
+    "title": "Organic content loop",
+    "owner": "distribution",
+    "status": "active",
+    "objective": "Expose broken evidence chains through verified public cases.",
+    "handoff": "Investigator \u2192 Auditor \u2192 Editor \u2192 Auditor \u2192 Supervisor \u2192 Oday external action. Listener receives actual replies.",
+    "rules": "Metrics require observed events; no fabricated reach, replies or conversion.",
+    "job_ids": [
+      "HQ-C01",
+      "HQ-C02",
+      "HQ-M10"
+    ]
+  },
+  {
+    "id": "D",
+    "title": "Four account-specific pieces",
+    "owner": "evidence-lab",
+    "status": "active",
+    "objective": "UNFPA, OCHA, Chemonics and DAI, each grounded in inspected primary evidence.",
+    "handoff": "D01 research \u2192 D02 independent review \u2192 D03 four drafts \u2192 copy review \u2192 Oday publication.",
+    "rules": "Distinct mechanisms only where supported. No source means blocked account, not an invented example.",
+    "job_ids": [
+      "HQ-D01",
+      "HQ-D02",
+      "HQ-D03",
+      "HQ-M03",
+      "HQ-M04",
+      "HQ-M05",
+      "HQ-M06"
+    ]
+  },
+  {
+    "id": "E",
+    "title": "Development sequence",
+    "owner": "product",
+    "status": "active",
+    "objective": "Trace model, shareable artifact and recipient workflow before broad integrations.",
+    "handoff": "Product reconciles existing plan; Listener supplies discovery evidence; Builder implements accepted narrow scope; Auditor checks.",
+    "rules": "Preserve current customer discovery and existing code; no rewrite of the product.",
+    "job_ids": [
+      "HQ-E01",
+      "HQ-E02",
+      "HQ-M02",
+      "HQ-M07",
+      "HQ-M08",
+      "HQ-M09"
+    ]
+  },
+  {
+    "id": "F",
+    "title": "Customer-development Operating Room",
+    "owner": "customer-evidence",
+    "status": "active",
+    "objective": "Keep actual commercial progress, evidence and next steps visible.",
+    "handoff": "Oday supplies/authorizes scoped records \u2192 Listener reconciles IDs \u2192 Supervisor reviews \u2192 Product receives redacted evidence.",
+    "rules": "Original task/review/metric metadata has a dated read-only snapshot. Actual send and conversation evidence still needs reconciliation. Preserve original IDs; do not count drafts or silence as outcomes.",
+    "job_ids": [
+      "HQ-F01",
+      "HQ-F02",
+      "HQ-M11"
+    ]
+  },
+  {
+    "id": "G",
+    "title": "Trace-li HQ operating system",
+    "owner": "build",
+    "status": "active",
+    "objective": "A visible portfolio of mandates, bounded jobs, review and durable memory contracts.",
+    "handoff": "Librarian maintains contracts; Builder delivers reviewed changes; Auditor challenges; Supervisor reviews exact outputs. Cloud pilot acceptance and desk migration are separate milestones.",
+    "rules": "The bounded cloud pilot is active under its recorded funding and review approvals. Existing desktop desks retain their charters; further migration and consequential actions stay scoped and gated.",
+    "job_ids": [
+      "HQ-G01",
+      "HQ-G02",
+      "HQ-G03",
+      "HQ-G04",
+      "HQ-M01",
+      "HQ-M12"
+    ]
+  }
+]

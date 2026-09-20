@@ -1,0 +1,34 @@
+{
+  "observed_at": "2026-09-20T17:31:22.858Z",
+  "trigger": "manual Railway restart after reviewed check-ledger correction",
+  "check": {
+    "current_source_capture": "2026-09-20T17:27:32.279Z",
+    "current_source_hash": "ee683bc202dba63a406f31eb209e9514c07347171c590e1c5338fb436603d3b8",
+    "checked_at": "2026-09-20T17:30:52.979Z",
+    "status": "customer_readout:already_submitted",
+    "checked_artifact_source_hash": "2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a",
+    "model_eligible": false
+  },
+  "prior_model_charges_unchanged": {
+    "calls": 2,
+    "estimated_microusd": "3425",
+    "reserved_microusd": "100000"
+  },
+  "jobs": [
+    {
+      "id": "cloud-brief-20260920",
+      "status": "review",
+      "artifact_hash": "a81a979f4364a2043ed32a892d68881af35aadaf829938cda29d0ee5ad3d2a6e"
+    },
+    {
+      "id": "customer-readout-w4-20260914",
+      "status": "accepted",
+      "artifact_hash": "0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d"
+    }
+  ],
+  "model_calls_for_readout": 0,
+  "model_tokens_for_readout": 0,
+  "model_cost_for_readout": 0,
+  "hosting_cost_for_readout": "unavailable",
+  "codex_orchestration_tokens_cost": "unavailable"
+}

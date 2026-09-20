@@ -1,0 +1,402 @@
+[
+  {
+    "id": "DEC-001",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Organize around durable mandates; personas are replaceable.",
+    "rationale": "Preserve institutional history without one giant context.",
+    "alternatives": [
+      "Unbounded persona chats",
+      "Premature always-on automation"
+    ],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Use mandate IDs for memory and jobs."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-002",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Oday owns strategy and consequential external, commercial, spend, production and customer-data decisions.",
+    "rationale": "Retain founder control of material outcomes.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Red execution requires exact action approval."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-003",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Supervisor delegates, reviews, arbitrates and manages exceptions.",
+    "rationale": "Keep routine work moving while surfacing important decisions.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Green work proceeds within scope; Amber acceptance belongs to Supervisor."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-004",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Write all eight charters before spawning workers.",
+    "rationale": "Make roles and boundaries visible before execution.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Charters v1.0 exist; consequential tools remain disabled."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-005",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Shared canonical memory uses Librarian/Supervisor promotion.",
+    "rationale": "Prevent unreviewed guesses from becoming company facts.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Separate proposals, accepted facts and supersessions."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-006",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Trace-li complements the ERP; ERP remains transaction system of record.",
+    "rationale": "Explain the assurance layer clearly.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Canonical line: Your ERP records what happened. Trace-li makes it provable."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-007",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Prioritize a sanitized Trace and test who buyers would send it to next.",
+    "rationale": "Learn whether useful work creates distribution.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Run inside current discovery; do not assume sharing has occurred."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-008",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Public content starts from verified evidence-chain cases.",
+    "rationale": "Help buyers recognize an operational problem.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Four named-account pieces need primary evidence and review; publication is separately gated."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-009",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Preserve actual sends, replies, conversations and dated commercial next steps.",
+    "rationale": "Commercial progress needs observable evidence.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Silence, compliments and missing records remain unvalidated."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-010",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "operating policy only",
+    "decision": "Build HQ within existing Trace-li where possible; avoid framework proliferation.",
+    "rationale": "Keep the system small and visible.",
+    "alternatives": [],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "Begin with local records and a review shell; persistent orchestration is a later gated increment."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Explicit Oday change or material contradictory evidence",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-011",
+    "decided_at": "2026-09-14",
+    "recorded_at": "2026-09-14",
+    "status": "accepted",
+    "authority": "Supervisor",
+    "approval_level": "Amber",
+    "scope": "reversible local implementation",
+    "decision": "Implement a development-only read-only /hq route on the existing repository branch.",
+    "rationale": "The refreshed repository has WorkOS and tenant-scoped storage foundations, but no HQ roles, durable job runner or verified HQ production authorization. Keep the initial shell local and reuse existing foundations later.",
+    "alternatives": [
+      "Separate agent product",
+      "Remote deployment now"
+    ],
+    "evidence_refs": [
+      "source:local-repository-inspection"
+    ],
+    "consequences": [
+      "No scheduler, writes, approvals, customer data or production exposure in the shell."
+    ],
+    "owner": "Builder",
+    "review_trigger": "Authenticated durable state is implemented and reviewed.",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
+  },
+  {
+    "id": "DEC-012",
+    "decided_at": null,
+    "recorded_at": "2026-09-14",
+    "status": "proposed",
+    "authority": "Supervisor",
+    "approval_level": "Amber",
+    "scope": "initial attention allocation",
+    "decision": "Allocate 50% discovery, 25% Trace sharing, 15% content and 10% HQ maintenance per work cycle.",
+    "rationale": "Protect discovery while testing distribution and building only enough supervision.",
+    "alternatives": [
+      "Equal staffing for eight mandates"
+    ],
+    "evidence_refs": [
+      "source:oday-current-hq-brief"
+    ],
+    "consequences": [
+      "No spending authority; revise after actual useful outcomes."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "First completed work cycle or changed founder priority.",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": false
+  },
+  {
+    "id": "DEC-013",
+    "decided_at": "2026-09-15",
+    "recorded_at": "2026-09-15",
+    "status": "accepted",
+    "authority": "Supervisor",
+    "approval_level": "Amber",
+    "scope": "Connect existing internal schedules and preserve current authority",
+    "decision": "Reuse the six existing desks for the HQ mandates and A\u2013G handoff.",
+    "rationale": "Original operations already have schedules, claims, reviews and cloud receipts. Connect the package and expose verified status rather than duplicate timers or tasks.",
+    "alternatives": [
+      "Create eight new agent schedules",
+      "Leave HQ disconnected"
+    ],
+    "evidence_refs": [
+      "RUNTIME_HANDOFF.md",
+      "source:oday-hq-activation-request-2026-09-15"
+    ],
+    "consequences": [
+      "Existing schedule IDs, cadence, targets, models and notification settings preserved.",
+      "Charters v1.1 explicitly permit eligible bounded work through the existing desks.",
+      "Red actions and new cloud-worker deployment remain gated."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "First post-handoff scheduled runs, missing evidence, or scope conflict",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
+  },
+  {
+    "id": "DEC-014",
+    "decided_at": "2026-09-15",
+    "recorded_at": "2026-09-15",
+    "status": "accepted",
+    "authority": "Supervisor",
+    "approval_level": "Amber",
+    "scope": "Local durable HQ foundation and bounded runtime evaluation",
+    "decision": "Extend existing Postgres with mandate-scoped jobs and reviewed memory; keep the current Operating Room authoritative and evaluate QM only as a replaceable worker backend.",
+    "rationale": "Oday requested the Postgres extension and reference review. One shared database with enforced scopes preserves memory without a database per persona.",
+    "alternatives": [
+      "Adopt a second complete agent platform now",
+      "Create separate memory databases for every agent"
+    ],
+    "evidence_refs": [
+      "POSTGRES_FOUNDATION.md",
+      "QM_ASSESSMENT.md",
+      "REFERENCE_EXTRACT.md",
+      "source:oday-postgres-and-runtime-request-2026-09-15"
+    ],
+    "consequences": [
+      "Local implementation and fictional verification only; production migration and cloud worker are not authorized by this record.",
+      "HQ retains canonical memory review; current room tasks are not dispatched twice.",
+      "Discovery and accepted repeated work justify future automation."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Internal identity integration and first proposed worker cutover",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
+  },
+  {
+    "id": "DEC-CLOUD-BUDGET-20260917",
+    "decided_at": "2026-09-17",
+    "recorded_at": "2026-09-17",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "Bounded HQ preview worker pilot only",
+    "decision": "Approve up to $20/month additional pilot spend: $10 Railway, $8 OpenAI API, $2 contingency.",
+    "rationale": "Prove one supervised cloud job before broader desktop migration.",
+    "alternatives": [
+      "Continue desktop-only execution"
+    ],
+    "evidence_refs": [
+      "cloud/FUNDING_APPROVAL.md",
+      "cloud/LIVE_RUN_20260917.md"
+    ],
+    "consequences": [
+      "One bounded cloud run completed; independent output review and recurring activation remain open.",
+      "No external sends, publication, production release or customer import is authorized."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Pricing revalidation by 1 October 2026, exhausted budget or material scope change",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
+  },
+  {
+    "id": "DEC-CLOUD-EXCEPTION-20260917",
+    "decided_at": "2026-09-17",
+    "recorded_at": "2026-09-17",
+    "status": "accepted",
+    "authority": "Oday",
+    "approval_level": "Red",
+    "scope": "Exact first internal cloud draft and bounded daily check",
+    "decision": "Approve the one-time additional specialist-review exception and daily cloud check for new approved snapshots.",
+    "rationale": "Specialist output Auditor reached the Codex usage limit; Supervisor independently checked source fidelity.",
+    "alternatives": [
+      "Keep paused until specialist capacity returns"
+    ],
+    "evidence_refs": [
+      "reviews/cloud-output-20260917.md",
+      "cloud/LIVE_RUN_20260917.md",
+      "sha256:3b89575576bbc11e36e073d23a520ce2fec02f9f2efffd8bdb41c8da45c0fefb"
+    ],
+    "consequences": [
+      "First draft accepted internally; no canonical promotion.",
+      "Daily check enabled; unchanged snapshot produces no model call.",
+      "Future drafts retain ordinary review; six desktop desks are not replaced."
+    ],
+    "owner": "Supervisor",
+    "review_trigger": "Next output, changed scope, budget exhaustion or pricing revalidation on 1 October",
+    "supersedes": null,
+    "superseded_by": null,
+    "execution_authorized": true
+  }
+]

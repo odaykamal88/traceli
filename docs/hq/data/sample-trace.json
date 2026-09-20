@@ -1,0 +1,96 @@
+{
+  "trace_id": "FIC-TRACE-001",
+  "version": 1,
+  "classification": "internal",
+  "fictional": true,
+  "organization_id": "fictional-demo",
+  "case_id": "fictional-storage-purchase",
+  "transaction": {
+    "system": "Fictional order register",
+    "external_ref": "PO-001"
+  },
+  "conclusion": {
+    "claim_id": "FIC-C01",
+    "text": "The available record does not yet support closing the procurement review.",
+    "state": "unresolved",
+    "evidence_ids": [
+      "FIC-E01",
+      "FIC-E02"
+    ]
+  },
+  "obligations": [
+    {
+      "id": "FIC-R01",
+      "text": "Record the comparison and rationale before closing the review.",
+      "source_ref": "Fictional policy v1",
+      "location": "§3.2",
+      "applicability": "Invented rule for this walkthrough only; not a donor/legal requirement."
+    }
+  ],
+  "approvals": [
+    {
+      "id": "FIC-A01",
+      "actor": "Fictional operations reviewer",
+      "state": "purchase request approved; procurement review completion not established",
+      "at": "2026-09-10",
+      "evidence_ref": "FIC-E01"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "FIC-E01",
+      "source_ref": "Fictional NOTE-01",
+      "version": "1",
+      "location": "approval note",
+      "content_hash": null,
+      "custody": "fictional",
+      "excerpt": "Purchase request approved; no comparison included."
+    },
+    {
+      "id": "FIC-E02",
+      "source_ref": "Fictional PO-001",
+      "version": "1",
+      "location": "order record",
+      "content_hash": null,
+      "custody": "fictional",
+      "excerpt": "Field storage equipment; 1,200 units of fictional currency, recorded 11 September 2026."
+    }
+  ],
+  "missing_evidence": [
+    {
+      "id": "FIC-G01",
+      "item": "Comparison and rationale",
+      "owner": "Fictional procurement reviewer",
+      "due_at": null,
+      "state": "missing"
+    }
+  ],
+  "exceptions": [
+    {
+      "id": "FIC-X01",
+      "question": "Was an exception permitted and approved?",
+      "owner": null,
+      "resolution_criteria": "Reviewer attaches applicable rule and approval evidence.",
+      "state": "unresolved"
+    }
+  ],
+  "provenance": {
+    "prepared_at": "2026-09-14",
+    "evidence_as_of": "2026-09-14",
+    "reviewed_at": null,
+    "author": "Supervisor fictional walkthrough",
+    "review_ref": null,
+    "limitations": [
+      "All records are fictional.",
+      "No secure sharing or byte-integrity verification implemented."
+    ]
+  },
+  "sharing": {
+    "mode": "disabled",
+    "recipient_ids": [],
+    "expires_at": null,
+    "redaction_version": null,
+    "access_log_ref": null,
+    "revoked_at": null
+  }
+}

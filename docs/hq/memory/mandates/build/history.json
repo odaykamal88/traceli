@@ -1,0 +1,15 @@
+[
+  {
+    "job_id": "HQ-G01",
+    "disposition": "accepted",
+    "artifact_refs": [
+      "app/hq/page.tsx",
+      "app/hq/hq.module.css",
+      "docs/hq/VERIFICATION.md"
+    ],
+    "review_ref": "docs/hq/reviews/HQ_REVIEW.md",
+    "accepted_at": "2026-09-14T21:04:29.035064+00:00",
+    "cost_usd": null,
+    "outcome": "internal artifact accepted; external/customer outcome unmeasured"
+  }
+]
