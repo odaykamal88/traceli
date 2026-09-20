@@ -57,8 +57,11 @@ try {
   const result=await Promise.all([run(),competitor.query('SELECT hq_customer_readout() value').then(r=>r.rows[0].value)])
   assert.deepEqual(result.map(r=>r.status).sort(),['already_submitted','review']); assert.equal(result[0].artifactHash,result[1].artifactHash)
   const replay=await run(); assert.equal(replay.artifactHash,result[0].artifactHash)
+  await admin.query('UPDATE hq_readout_authorizations SET source_hash=$2 WHERE login_name=$1',[runner,'b'.repeat(64)])
   const tick=(await worker.query('SELECT hq_operating_tick() value')).rows[0].value
   assert.equal(tick.model_eligible,false); assert.equal(tick.model_called,false)
+  const check=(await admin.query('SELECT status,content_hash,model_eligible FROM hq_operating_checks WHERE organization_id=$1 ORDER BY checked_at DESC LIMIT 1',[org])).rows[0]
+  assert.equal(check.status,'customer_readout:already_submitted'); assert.equal(check.content_hash,'a'.repeat(64)); assert.equal(check.model_eligible,false)
   const snap=(await viewer.query('SELECT hq_cloud_snapshot() value')).rows[0].value
   assert.equal(snap.runs.length,1); assert.equal(snap.runs[0].status,'review'); assert.equal(snap.runs[0].estimated_microusd,0)
   assert.match(snap.runs[0].draft.observations[1].statement,/denominators are unavailable/)

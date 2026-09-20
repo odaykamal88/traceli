@@ -56,3 +56,17 @@ The recorded run reports zero input/output model tokens and zero model cost, con
 The task 38/39 request preserves Oday's unrecorded disposition and priority choice. Workstreams F/G distinguish the completed bounded memo from full specialist-desk migration and identify the missing send evidence. The checkpoint and new event distinguish internal acceptance from human acceptance and manual execution from scheduled execution; the older readiness draft and desktop pauses remain explicit. L-05 is marked Proposed, repeats that canonical memory has not changed, and retains the unmet learning gate. Its conditional UI label now says “Proposed change,” accurately matching that state. Existing historical events retain their prior meaning; the Unicode serialization changes do not alter their text.
 
 The addendum changes this report's file hash after its original acceptance reference was recorded. The original acceptance hash is a historical reference to the earlier review, not the hash of this expanded report. This addendum changes neither the artifact decision nor its exact body hash. Supervisor-reported four passing tests and TypeScript verification were not rerun for this text/presentation addendum.
+
+## Check-receipt addendum
+
+20 September 2026. **PASS after correction.** Reviewed migration 0009, its regression assertion and the G evidence link change. Migration 0009 had not been applied to the hosted database at this review; this is code and local-fixture approval only.
+
+| File | SHA-256 |
+| --- | --- |
+| `db/migrations/0009_hq_readout_check_receipts.sql` | `3599ad9e38fcde157696bd5ee2b0ac44b506b16b8849bf34cd090099ee7644d7` |
+| `scripts/db/test-hq-customer-readout.mjs` | `da7a1e3c982bf414281e24b23f27c06456f1cf01ce4aa7de85d9062530d51553` |
+| `docs/hq/data/control-room.json` | `9358950247bc9dc56e92c3a59699a8d87cd28438799de940f63f1400631019c0` |
+
+**P2 identified and resolved before hosted application:** the first version read the check's source hash from the mutable authorization row. Re-provisioning that authorization could make an old artifact replay appear to refer to a newer source. The corrected wrapper obtains the saved job's input hash by authenticated organization and the returned job ID, fails explicitly if it is absent, and keeps model eligibility false. Success/replay checks now preserve the original artifact source without implying source refresh, new output or scheduled execution. The no-authorization readiness path and existing failure paths are unchanged.
+
+I independently reran the updated disposable-local fixture suite successfully. Its new regression rotates the authorization hash from `a…` to `b…`, then verifies that the replay check remains `customer_readout:already_submitted`, retains the saved `a…` hash and has false model eligibility. Existing immutable artifact, role restrictions, rollback/concurrency and zero-charge assertions also pass. The G evidence link now targets the available reviewed Markdown memo, which links onward to the JSON readback; the displayed claims are unchanged. No live mutation or additional model invocation was performed by the Auditor.

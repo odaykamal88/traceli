@@ -1,0 +1,57 @@
+{
+  "task": {
+    "id": 38,
+    "title": "Recommend what to work on next",
+    "detail": "Friday before the joint review; 60-minute cap. Depends on all actual sends, replies and conversation notes available by the cutoff. Compare repeated tasks, effort, urgency, workarounds, owners and commitments. Separate direct buyers, referrers and partners. With no replies, recommend the next access/delivery/ask test; with conversations but little costly pain, reconsider use case/segment; with a current owned need, recommend the paid scope. Do not infer feature demand from silence.",
+    "owner": "Codex",
+    "lane": "Buyers",
+    "due": "2026-09-18",
+    "evidence": "Task38 cloud memo completed on existing Railway worker; immutable hash 0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d. Independent Auditor PASS, Supervisor internal acceptance; Oday disposition pending. PR21 c161ced; zero model calls/tokens/$0 model cost; hosting unavailable per run. Manual replay same hash, focused tests/build/HQ readback passed. Exact packet and source saved under docs/hq/cloud/CUSTOMER_READOUT*; next task28 send history then task39 choice.",
+    "status": "review",
+    "requires_human": 0,
+    "sort_order": 11,
+    "created_at": "2026-09-12T08:48:03.094Z",
+    "updated_at": "2026-09-20T17:26:52.220Z",
+    "week": "2026-09-14",
+    "seed_key": "w4-11-readout",
+    "claim_id": "5931a68c-2ff9-46be-b3ec-40b207ddf6f5",
+    "claim_until": null,
+    "checkpoint": "Task38 cloud memo completed on existing Railway worker; immutable hash 0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d. Independent Auditor PASS, Supervisor internal acceptance; Oday disposition pending. PR21 c161ced; zero model calls/tokens/$0 model cost; hosting unavailable per run. Manual replay same hash, focused tests/build/HQ readback passed. Exact packet and source saved under docs/hq/cloud/CUSTOMER_READOUT*; next task28 send history then task39 choice."
+  },
+  "review": {
+    "id": "5931a68c-2ff9-46be-b3ec-40b207ddf6f5",
+    "task_id": 38,
+    "title": "Recommend what to work on next",
+    "packet": "# Week 4 customer evidence decision memo\n\nWeek 4 decision memo: establish the send evidence and test access before changing the offer. Draft for task 38; customer demand remains untested.\n\nThe saved Week 4 counters record 0/10 relevant people selected, 0/10 approaches sent, 0/5 substantive conversations and 0/1 dated commercial next steps. These are recorded counters, not independently verified event totals.\n\nThe actual sent, delivered, bounced, replied and met denominators are unavailable in this metadata-only input. Do not calculate a response rate or conclude that silence means rejection. The earlier seven-touch counter belongs to a different period and is not a Week 4 denominator.\n\nRecent task, steps, hours, workaround, consequence, owner, deadline, purchasing route and exact buyer language are unavailable. Direct buyer, referrer and partner comparisons therefore cannot be made. Confidence is high in the saved zero counters, low in actual funnel completeness; no costly-pain or willingness-to-pay conclusion is supported.\n\nRecommended experiment: Oday supplies the existing send-history handoff in task 28; Codex reconciles task 29, selects the first relevant warm route in task 30 and prepares one exact recent-task question through task 31. Oday alone sends after review and records the event in task 32. Change only the access route/ask first; success is one substantive recent-task example or named relevant introduction.\n\nOwner action: Oday reviews this memo and records the Week 5 choice in task 39. Codex prepares from available permitted inputs. Preserve follow-up windows of 3\u20135 recipient business days from each actual send; no date is inferred from draft creation. Tasks 36/37 need a current task, owner, deadline and plausible purchasing route before a commercial scope.\n\nDefer speculative features, integrations, expanded lead research and new major content until buyer evidence justifies them. Proposed lesson only: make send timestamp, delivery evidence and exact ask the minimum next handoff. No canonical memory promotion; the two-week/six-human-disposition/three-job-class learning gate is not established.\n\n## Review and owner actions\n\n- Oday: provide the task 28 send history or explicitly confirm that no Week 4 approach was sent.\n- Independent Auditor and Supervisor: verify this exact artifact against its pinned counters and weekly plan before acceptance.\n- Oday: disposition task 38 and choose the next access experiment in task 39. Acceptance does not authorize sending.\n\n## Exact evidence\n\nArtifact SHA-256 (Postgres JSONB): `0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d`. Source SHA-256: `2fb393ee3ed404368425f0289fdd3c2f90f58957cdcc02daee2b1bf63d8af90a`, captured 2026-09-20T17:16:21.656+00:00. Full minimized metadata and immutable body are saved alongside this memo.\n\nManual Railway execution: 2026-09-20T17:17:07.421Z. Zero model calls, zero input/output tokens, $0 model cost; per-run hosting cost unavailable. Existing two prior paid calls remain $0.003425 estimated total with $0.10 reservations. These are not charges for this memo.\n\nIndependent Auditor: PASS after correcting the timeout contract to the existing worker\u2019s ten-second outer bound. Supervisor: accepted internally. Oday\u2019s task38 disposition and task39 priority decision remain pending. The original readiness brief is still awaiting review. No send, publication, production promotion, schedule resume, Jev call or canonical-memory promotion occurred.\n\n[Independent audit](../reviews/customer-readout-audit.md) \u00b7 [Cloud run](../cloud/CUSTOMER_READOUT_RUN_20260920.json) \u00b7 [Source metadata](../cloud/CUSTOMER_READOUT_SOURCE_20260920.json) \u00b7 [Review/replay readback](../cloud/CUSTOMER_READOUT_REVIEW_READBACK_20260920.json)\n\n\nImplementation c161cedcad3968fd85185c50a1007867b6e171aa in draft PR21: https://github.com/odaykamal88/traceli/pull/21\n\nFocused local PostgreSQL authorization/recovery/immutability tests, nine worker tests, four control-room checks, TypeScript and full Next build passed. Core hosted CI passed; current presentation deployment is being checked separately. Exact core Auditor report SHA256 c7e7235b8f69039139f9fe02d553eee1426efdb00061c1ffcc3d1d650d5809a3. Full review including presentation: /Users/odaykamal/Documents/ChatGPT/Traceli/docs/hq/reviews/customer-readout-audit.md\n\nDecision requested: accept or request corrections to this missing-input memo, then choose the next access experiment in task39. Supply actual task28 send history. No response rate or buyer validation is claimed.",
+    "status": "pending",
+    "note": "",
+    "created_at": "2026-09-20T17:26:52.220Z",
+    "reviewed_at": null
+  },
+  "receipts": [
+    {
+      "id": "customer-readout-20260920-873e4799",
+      "job_id": "customer-learning",
+      "occurred_at": "2026-09-20T17:26:49.178486Z",
+      "outcome": "Completed",
+      "summary": "Task38 missing-input decision memo completed on Railway; exact artifact0ac8620b8797830920a3317edabf3beb92d2d801086ee8b8a8ff83550f465a7d. Independent Auditor PASS; Supervisor internal acceptance; Oday disposition pending. Zero model calls/tokens/$0 model cost; per-run hosting unavailable. Manual replay same hash. Next: task28 actual send history and task39 access decision; no demand conclusion.",
+      "source": "Private HQ customer readout \u00b7 PR21 \u00b7 original task38",
+      "source_url": "https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq?view=systems",
+      "recorded_at": "2026-09-20T17:27:03.501Z"
+    },
+    {
+      "id": "hq-loop-session1-5931a68c",
+      "job_id": "execution-desk",
+      "occurred_at": "2026-09-20T17:22:00Z",
+      "outcome": "Completed",
+      "summary": "Session1 checkpoint: task38 cloud memo produced, persisted, independently reviewed and replayed; zero model calls/tokens/$0 model cost. Buyer evidence remains missing. Session2 finalizes HQ and source review/receipt handoff.",
+      "source": "Private HQ customer readout \u00b7 PR21 \u00b7 original task38",
+      "source_url": "https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq?view=systems",
+      "recorded_at": "2026-09-20T17:26:58.273Z"
+    }
+  ],
+  "hqSync": {
+    "status": "synced",
+    "captured_at": "2026-09-20T17:27:32.279Z"
+  }
+}
