@@ -148,15 +148,15 @@ export default function DocsPage() {
             </div>
 
             <section id="available-now" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
-              <SectionHeading eyebrow="Available now" title="Follow one decision from evidence to review." description="The public Trace demo shows the current evidence workflow: inspect a fictional rule, see what the supplied evidence supports, add a new evidence version, record a review and download the demonstration record." />
+              <SectionHeading eyebrow="Available now" title="Follow one decision from interruption to record." description="The public Award desk is the product demo: a fictional award needs reconstruction, overnight agent prep is already done, a human records the disposition, and the souvenir is a shareable decision record." />
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                <PrincipleCard icon={BookOpenCheck} title="Public Trace demo">Eight fictional scenarios distinguish missing evidence, failed requirements, rule conflicts and unavailable model results. Reviews stay in the browser tab; the download is a simulation.</PrincipleCard>
-                <PrincipleCard icon={UserCheck} title="Protected workflow">The separate authenticated Trace implementation supports stored evidence versions, human review and controlled exports. Hosted activation and customer-data use remain gated.</PrincipleCard>
+                <PrincipleCard icon={BookOpenCheck} title="Public Award desk">One fictional award under pressure. The agent linked a requirement, scored the packet, flagged a gap and drafted a note. You record the judgment. No model-probability bars on this path.</PrincipleCard>
+                <PrincipleCard icon={UserCheck} title="How Trace reasons">The method sandbox at /method keeps the eight fictional scenarios, practice reviews and demonstration download for diligence buyers. It is not the landing demo.</PrincipleCard>
                 <PrincipleCard icon={FileLock2} title="Real sources and decisions">Official-source admission, customer permissions and production document handling still require verification. The public demonstration makes no real procurement or compliance determination.</PrincipleCard>
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-semibold">
-                <Link href="/demo" className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#071d39] px-5 py-3 text-white">Try the Trace demo<ArrowRight className="size-4" aria-hidden="true" /></Link>
-                <Link href="/demo/classic" className="text-[#1f6f61] underline underline-offset-4">Earlier procurement walkthrough</Link>
+                <Link href="/demo" className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#071d39] px-5 py-3 text-white">Open Award desk<ArrowRight className="size-4" aria-hidden="true" /></Link>
+                <Link href="/method" className="text-[#1f6f61] underline underline-offset-4">How Trace reasons</Link>
               </div>
             </section>
 

@@ -79,12 +79,12 @@ export default function PublicTraceDemo({ packet }: { packet: PublicDemoPacket }
     <a className={s.skip} href="#demo-main">Skip to demo</a>
     <header className={s.header}>
       <Link className={s.brand} href="/" aria-label="Traceli home"><ShieldCheck size={25} strokeWidth={1.5} aria-hidden="true" /><span>traceli</span></Link>
-      <nav aria-label="Public navigation"><Link href="/docs">How it works</Link><Link href="/insights">Research</Link></nav>
+      <nav aria-label="Public navigation"><Link href="/demo">Award desk</Link><Link href="/docs">How it works</Link><Link href="/insights">Research</Link></nav>
     </header>
     <main id="demo-main" tabIndex={-1} className={s.main}>
       <section className={s.intro} aria-labelledby="demo-title">
-        <div><p className={s.eyebrow}>The Trace workflow</p><h1 id="demo-title">Trace an award decision.</h1>
-          <p className={s.lede}>See what the evidence supports, what needs attention, and why a human makes the next call.</p></div>
+        <div><p className={s.eyebrow}>How Trace reasons</p><h1 id="demo-title">Trace an award decision.</h1>
+          <p className={s.lede}>A method sandbox for diligence: see what the evidence supports, what needs attention, and why a human makes the next call.</p></div>
         <span className={s.demoBadge}><span aria-hidden="true" />Public demo · Fictional data</span>
       </section>
       <div className={s.boundary}><ShieldCheck size={17} aria-hidden="true" /><p>Changes stay in this browser tab and clear on refresh. No live model calls, uploads or real procurement approvals.</p></div>
@@ -114,7 +114,8 @@ export default function PublicTraceDemo({ packet }: { packet: PublicDemoPacket }
             </button></li>)}</ol>
             <p className={s.small}>New evidence creates a new version. Earlier evidence and practice reviews stay separate.</p>
           </section>
-          <Link href="/demo/classic" className={s.classic}>Earlier procurement walkthrough<ArrowRight size={14} aria-hidden="true" /></Link>
+          <Link href="/demo" className={s.classic}>Back to Award desk<ArrowRight size={14} aria-hidden="true" /></Link>
+          <Link href="/method/classic" className={s.classic}>Earlier procurement walkthrough<ArrowRight size={14} aria-hidden="true" /></Link>
         </aside>
         <div className={s.content}>
           <section className={s.result} data-outcome={snapshot.policy.result} aria-labelledby="result-title">
@@ -172,7 +173,7 @@ export default function PublicTraceDemo({ packet }: { packet: PublicDemoPacket }
           </section>
         </div>
       </div>
-      <footer className={s.footer}><p>Evidence. Policy. Human review.<br /><span>Fictional examples for exploring the current Trace workflow.</span></p><Link href="/docs">Read the availability notes<ArrowRight size={15} aria-hidden="true" /></Link></footer>
+      <footer className={s.footer}><p>Evidence. Policy. Human review.<br /><span>Fictional examples for exploring how Trace reasons. The product demo is Award desk.</span></p><Link href="/demo">Open Award desk<ArrowRight size={15} aria-hidden="true" /></Link></footer>
     </main>
   </div>
 }
