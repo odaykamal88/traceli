@@ -43,6 +43,9 @@ try {
     assert.match(await page.getByTestId('agent-timeline').innerText(), /23:14/)
     assert.match(await page.locator('main').innerText(), /Human decision required/)
     assert.match(await page.locator('main').innerText(), /Ethiopia/)
+    assert.match(await page.getByTestId('packs-in-force').innerText(), /Checked against 4 packs in force/)
+    assert.match(await page.getByTestId('packs-in-force').innerText(), /Procurement manual/)
+    assert.doesNotMatch(await page.locator('main').innerText(), /What is checking tonight\?/)
   })
   await check('Recording a disposition lands on a shareable decision record', async () => {
     await page.getByRole('link', { name: 'Accept agent draft & request evidence' }).click()
@@ -51,6 +54,8 @@ try {
     await page.getByRole('heading', { name: 'Decision record · RFP-2026-041' }).waitFor()
     assert.match(await page.getByTestId('recorded-reason').innerText(), /Ethiopia/)
     assert.match(await page.locator('main').innerText(), /Reconstruction in progress/)
+    assert.match(await page.getByTestId('frozen-packs').innerText(), /Governing packs at disposition/)
+    assert.match(await page.getByTestId('frozen-packs').innerText(), /Frozen at disposition/)
     assert.ok(page.url().includes('/demo/rfp-2026-041/record'))
   })
   await check('/demo/classic redirects into Award desk and /method is not the landing', async () => {
