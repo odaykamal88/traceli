@@ -1,0 +1,112 @@
+{
+  "checked_at": "2026-09-21T08:03:39.453Z",
+  "jobs": [
+    {
+      "id": "official-sources-49-20260921",
+      "status": "review",
+      "attempts": 1,
+      "result": {
+        "job_id": "official-sources-49-20260921",
+        "run_id": "71bbafff-2276-4a5c-aa48-4692d59e1860",
+        "summary": "Official-source evidence bundle for task 49: 1/2 PDFs retrieved and matched to approved byte hashes. Private draft for source review; no real rules admitted.",
+        "artifactRef": "postgres:hq_cloud_artifacts/71bbafff-2276-4a5c-aa48-4692d59e1860",
+        "artifactHash": "f42bcab1f42cf94719753cf9fcf6b3fb4c63e4ba9f30a1209bf06af74c4c0d58",
+        "hosting_cost": "unavailable",
+        "input_tokens": 0,
+        "manifestHash": "2ff96a4ab1cc40822e99dea6ae23ff289a68f976082e642c2e92d933b29ed484",
+        "reviewStatus": "pending",
+        "output_tokens": 0,
+        "total_sources": 2,
+        "model_cost_usd": 0,
+        "retained_sources": 1
+      }
+    },
+    {
+      "id": "official-sources-50-20260921",
+      "status": "review",
+      "attempts": 1,
+      "result": {
+        "job_id": "official-sources-50-20260921",
+        "run_id": "6e68eb18-31c9-4a1d-b4d9-b3274d6b9332",
+        "summary": "Official-source evidence bundle for task 50: 1/2 PDFs retrieved and matched to approved byte hashes. Private draft for source review; no real rules admitted.",
+        "artifactRef": "postgres:hq_cloud_artifacts/6e68eb18-31c9-4a1d-b4d9-b3274d6b9332",
+        "artifactHash": "1e8af1dbe4e4a2b48b389747622b4f93c8abab8f2a6fe49249dce11eb46cc931",
+        "hosting_cost": "unavailable",
+        "input_tokens": 0,
+        "manifestHash": "b1a35bb041fb3575c79f12e0df996f20d70e13a94efb545bf16c5f349a15d047",
+        "reviewStatus": "pending",
+        "output_tokens": 0,
+        "total_sources": 2,
+        "model_cost_usd": 0,
+        "retained_sources": 1
+      }
+    }
+  ],
+  "sources": [
+    {
+      "job_id": "official-sources-49-20260921",
+      "source_id": "adb-directive-2026",
+      "status": "http_error",
+      "captured_at": "2026-09-21T08:01:14.086Z",
+      "byte_length": null,
+      "byte_hash": null
+    },
+    {
+      "job_id": "official-sources-49-20260921",
+      "source_id": "wb-ipf-2025",
+      "status": "retained",
+      "captured_at": "2026-09-21T08:01:14.052Z",
+      "byte_length": 1315218,
+      "byte_hash": "7f118ac8fa8949ef23790d84f74c975a98c4bba4effd69328ead58d71578b6f3"
+    },
+    {
+      "job_id": "official-sources-50-20260921",
+      "source_id": "saudi-law-ar-2019",
+      "status": "retained",
+      "captured_at": "2026-09-21T08:02:46.578Z",
+      "byte_length": 893363,
+      "byte_hash": "09677b3e5f3308a58982dde8d949d8c71024ce6db273bc282ae4deac516680ec"
+    },
+    {
+      "job_id": "official-sources-50-20260921",
+      "source_id": "uae-law-ar-2023",
+      "status": "deadline",
+      "captured_at": "2026-09-21T08:03:31.581Z",
+      "byte_length": null,
+      "byte_hash": null
+    }
+  ],
+  "model_charges": 0,
+  "deployment": {
+    "id": "2630a3eb-918b-4e52-93ec-ebf724a88278",
+    "image_digest": "sha256:3f875f9d12d256cec65d4558f275fac7e58eda5dfc11cd321fe98bf4984b677d",
+    "trigger": "manual Railway restart, two invocations",
+    "schedule": "0 6 * * *",
+    "timezone": "UTC",
+    "next_due": "2026-09-22T06:00:00Z",
+    "scheduled_source_run": "not yet observed",
+    "restart_policy": "NEVER",
+    "replicas": 1
+  },
+  "browser_verification": {
+    "at": "2026-09-21T08:04:00Z",
+    "url": "https://traceli-new-git-codex-trace-li-hq-odaykamal-9099s-projects.vercel.app/hq?view=systems",
+    "owner_access": true,
+    "database_connected": true,
+    "both_artifact_hashes_and_partial_states_visible": true
+  },
+  "tests": {
+    "worker": 19,
+    "postgres_groups": 9,
+    "independent_review": "PASS"
+  },
+  "scope": "Bounded public-source retrieval and private custody, not full desk migration or real-rule admission",
+  "idle_replay": {
+    "at": "2026-09-21T08:05:59.521897983Z",
+    "source_jobs_created": 0,
+    "source_downloads": 0,
+    "fallback_status": "already_submitted",
+    "model_called": false,
+    "model_eligible": false
+  }
+}

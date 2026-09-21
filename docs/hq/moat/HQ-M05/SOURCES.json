@@ -1,0 +1,978 @@
+{
+  "schema": "traceli-source-intake-v0.1",
+  "package": "HQ-M05",
+  "task_id": 50,
+  "claim_run_id": "f57583bc-f6a2-4340-8f90-1ea627b83875",
+  "created_at": "2026-09-21T07:24:52.274140Z",
+  "producer": "gulf_inventory",
+  "status": "draft_inventory_for_independent_review",
+  "contract_ref": "../HQ-M02/drafts/DECISION_CORPUS_CONTRACT_V0_1.md",
+  "scope": "Saudi central-government and UAE federal official-source inventory only",
+  "counts": {
+    "source_objects": 13,
+    "retained_objects": 12,
+    "retained_pdfs": 8,
+    "retained_html": 4,
+    "not_retained": 1,
+    "accepted_rule_profiles": 0,
+    "accepted_obligations": 0,
+    "benchmark_units": 0
+  },
+  "custody_note": "Local temporary research custody outside git. No durable approved store has been assigned; no raw source bytes are committed.",
+  "date_note": "ISO dates are source-supported only. Original Hijri dates are preserved separately without inferred conversion; website posting and retrieval never substitute for legal publication/effect.",
+  "review": {
+    "artifact_review": "pending",
+    "qualified_source_domain_review": "pending",
+    "original_room_review": "separate"
+  },
+  "sources": [
+    {
+      "source_id": "ksa-law-ncgr",
+      "source_version_id": "ksa-law-ncgr-sha256-09677b3e5f3308a5",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Arabia; Ministry of Finance / NCGR official host",
+      "title": "نظام المنافسات والمشتريات الحكومية",
+      "instrument_type": "law",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Royal Decree M/128; base law PDF",
+      "official_url": "https://ncgr.gov.sa/documents/194168/197296/tender2019%2BN.pdf/8f40185e-8b92-7260-e18d-a03b16955794?download=true&t=1781209588289&version=1.0",
+      "retrieved_at": "2026-09-21T07:16:22.151682Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://ncgr.gov.sa/documents/194168/197296/tender2019%2BN.pdf/8f40185e-8b92-7260-e18d-a03b16955794?download=true&t=1781209588289&version=1.0",
+      "bytes": 893363,
+      "sha256": "09677b3e5f3308a58982dde8d949d8c71024ce6db273bc282ae4deac516680ec",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-law-ncgr.pdf",
+      "approved_storage_ref": null,
+      "page_count": 40,
+      "source_locators": [
+        "PDF p. 1 article 1; p. 5 articles 10–11; p. 40 article 99",
+        "M/128 reference corroborated by ksa-reg-ncgr PDF pp. 1–2"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Article 99 uses 120 days after Gazette publication; base Gazette date is not retained."
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "royal_decree_issue",
+          "value": "13/11/1440H",
+          "basis_ref": "ksa-reg-ncgr PDF pp. 1–2"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Full amendment/status reconciliation; entity and procurement facts; Gazette issue/date"
+      ],
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-reg-ncgr",
+      "source_version_id": "ksa-reg-ncgr-sha256-c3552d8bd0b586c7",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Ministry of Finance; NCGR official host",
+      "title": "اللائحة التنفيذية لنظام المنافسات والمشتريات الحكومية",
+      "instrument_type": "implementing_regulations",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Decision 1242 as amended by 3479",
+      "official_url": "https://ncgr.gov.sa/documents/194168/197296/1Approved_Regulations.pdf/32a4ed55-b1a6-320d-63fb-921514231e27?version=1.0&t=1781209588064&download=true",
+      "retrieved_at": "2026-09-21T07:17:59.076233Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://ncgr.gov.sa/documents/194168/197296/1Approved_Regulations.pdf/32a4ed55-b1a6-320d-63fb-921514231e27?version=1.0&t=1781209588064&download=true",
+      "bytes": 11093594,
+      "sha256": "c3552d8bd0b586c7241d78eaa9611f53acda602cc7a026487c5a5215b0c222a8",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-reg-ncgr.pdf",
+      "approved_storage_ref": null,
+      "page_count": 73,
+      "source_locators": [
+        "PDF pp. 1–2: signed Decision 3479 and cover"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": "2020-04-24",
+          "precision": "day",
+          "basis_ref": "PDF pp. 1–2",
+          "unknown_reason": null
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "original_issue",
+          "value": "21/3/1441H",
+          "basis_ref": "PDF pp. 1–2"
+        },
+        {
+          "kind": "amendment_issue",
+          "value": "11/8/1441H",
+          "basis_ref": "PDF pp. 1–2"
+        },
+        {
+          "kind": "effective",
+          "value": "1/9/1441H = 24/4/2020",
+          "basis_ref": "PDF p. 1 paragraph 2; p. 2 cover"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Baseline must be reconciled with later amendments before any rule admission"
+      ],
+      "known_later_amendment_refs": [
+        "ksa-reg-amend451",
+        "ksa-reg-amend1090",
+        "ksa-reg-amend1097",
+        "ksa-reg-amend1097-text"
+      ],
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-compilation-expro",
+      "source_version_id": "ksa-compilation-expro-sha256-e94d93ed423c4569",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi MOF and EXPRO",
+      "title": "نظام المنافسات والمشتريات الحكومية ولائحته التنفيذية",
+      "instrument_type": "editorial_compilation",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "04; April 2024; MOF-AN0-PO-000001",
+      "official_url": "https://expro.gov.sa/guides/TP.pdf",
+      "retrieved_at": "2026-09-21T07:20:45.529347Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://expro.gov.sa/guides/TP.pdf",
+      "bytes": 1823731,
+      "sha256": "e94d93ed423c4569327f7064bc75de21e1155c6f3bf4e2e035148441c92af847",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-compilation-expro.pdf",
+      "approved_storage_ref": null,
+      "page_count": 120,
+      "source_locators": [
+        "PDF p. 1 cover"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        }
+      },
+      "as_printed_dates": [],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "No current-consolidation claim; later amendment chain and exact incorporation check needed"
+      ],
+      "edition_date": {
+        "value": "2024-04",
+        "precision": "month",
+        "basis_ref": "PDF p. 1",
+        "unknown_reason": null
+      },
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-reg-amend451",
+      "source_version_id": "ksa-reg-amend451-sha256-f8ab8f1b8f3e85c3",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Ministry of Finance; Umm al-Qura official publisher",
+      "title": "Saudi Ministerial Decision 451",
+      "instrument_type": "amending_decision",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Decision 451",
+      "official_url": "https://www.uqn.gov.sa/details?p=20795",
+      "retrieved_at": "2026-09-21T07:20:35.586147Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.uqn.gov.sa/details?p=20795",
+      "bytes": 800022,
+      "sha256": "f8ab8f1b8f3e85c3252273293c0174631821837f16990a3689624ac38f099e38",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-reg-amend451.html",
+      "approved_storage_ref": null,
+      "page_count": null,
+      "source_locators": [
+        "Decision paragraphs 1–4; attached text is linked, not retained in this object"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Paragraph 4 uses Gazette publication; website posting is kept separate pending Gazette issue verification."
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "instrument_issue",
+          "value": "7/4/1444H",
+          "basis_ref": "ksa-reg-amend451 decision heading"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Retain attached amended text and Gazette issue before clause intake"
+      ],
+      "web_posting_date": {
+        "value": "2022-11-02",
+        "precision": "day",
+        "basis_ref": "ksa-reg-amend451 date beneath heading",
+        "unknown_reason": null
+      },
+      "related_baseline_ref": "ksa-reg-ncgr",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-reg-amend1090",
+      "source_version_id": "ksa-reg-amend1090-sha256-71ababcc2a3ece4d",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Ministry of Finance; Umm al-Qura official publisher",
+      "title": "Saudi Ministerial Decision 1090",
+      "instrument_type": "amending_decision",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Decision 1090",
+      "official_url": "https://www.uqn.gov.sa/details?p=24851",
+      "retrieved_at": "2026-09-21T07:20:38.970933Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.uqn.gov.sa/details?p=24851",
+      "bytes": 826738,
+      "sha256": "71ababcc2a3ece4d2872b453b1655c95df328cb57f3786df9918428a09fa7679",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-reg-amend1090.html",
+      "approved_storage_ref": null,
+      "page_count": null,
+      "source_locators": [
+        "Decision paragraph 2; appended before/after table"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": "2024-05-19",
+          "precision": "day",
+          "basis_ref": "Decision paragraph 2",
+          "unknown_reason": null
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "instrument_issue",
+          "value": "21/9/1445H",
+          "basis_ref": "ksa-reg-amend1090 decision heading"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [],
+      "web_posting_date": {
+        "value": "2024-04-26",
+        "precision": "day",
+        "basis_ref": "ksa-reg-amend1090 date beneath heading",
+        "unknown_reason": null
+      },
+      "related_baseline_ref": "ksa-reg-ncgr",
+      "temporal_scope_note": "Paragraph 2 identifies tenders created from the stated date.",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-reg-amend1097",
+      "source_version_id": "ksa-reg-amend1097-sha256-968c034fefe228af",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Ministry of Finance; Umm al-Qura official publisher",
+      "title": "Saudi Ministerial Decision 1097",
+      "instrument_type": "amending_decision",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Decision 1097",
+      "official_url": "https://www.uqn.gov.sa/decisions-and-regulations/4001123",
+      "retrieved_at": "2026-09-21T07:20:41.018343Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.uqn.gov.sa/decisions-and-regulations/4001123",
+      "bytes": 799238,
+      "sha256": "968c034fefe228af4462156d7963520e52a4351b16024455a9ea2b887b67ba75",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-reg-amend1097.html",
+      "approved_storage_ref": null,
+      "page_count": null,
+      "source_locators": [
+        "Decision paragraphs 1–3"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Paragraph 2 uses from its date wording; qualified reconciliation to instrument/publication date and Gregorian date is pending."
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "instrument_issue",
+          "value": "9/12/1447H",
+          "basis_ref": "ksa-reg-amend1097 decision heading"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [],
+      "web_posting_date": {
+        "value": "2026-06-05",
+        "precision": "day",
+        "basis_ref": "ksa-reg-amend1097 date beneath heading",
+        "unknown_reason": null
+      },
+      "related_baseline_ref": "ksa-reg-ncgr",
+      "related_text_ref": "ksa-reg-amend1097-text",
+      "changed_article_locators": [
+        "88",
+        "111",
+        "114",
+        "132"
+      ],
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-reg-amend1097-text",
+      "source_version_id": "ksa-reg-amend1097-text-sha256-25b94f270e89a222",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Umm al-Qura official publisher",
+      "title": "تعديل اللائحة التنفيذية لنظام المنافسات والمشتريات الحكومية",
+      "instrument_type": "amendment_text",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Companion text to Decision 1097",
+      "official_url": "https://www.uqn.gov.sa/decisions-and-regulations/4001126",
+      "retrieved_at": "2026-09-21T07:20:43.577921Z",
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.uqn.gov.sa/decisions-and-regulations/4001126",
+      "bytes": 807453,
+      "sha256": "25b94f270e89a222c4444252cc9833b31120dc91f833b76d5ec5de40691ed261",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-reg-amend1097-text.html",
+      "approved_storage_ref": null,
+      "page_count": null,
+      "source_locators": [
+        "Headnote and numbered amended articles 88, 111, 114, 132"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        }
+      },
+      "as_printed_dates": [],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [],
+      "web_posting_date": {
+        "value": "2026-06-05",
+        "precision": "day",
+        "basis_ref": "Date beneath heading",
+        "unknown_reason": null
+      },
+      "related_decision_ref": "ksa-reg-amend1097",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-decision202",
+      "source_version_id": "ksa-decision202-sha256-8ee9c51c3073f594",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Ministry of Finance; NCGR official host",
+      "title": "المقابل المالي لخدمات بيانات اعتماد",
+      "instrument_type": "ancillary_service_fee_decision",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Decision 202",
+      "official_url": "https://ncgr.gov.sa/documents/d/ncgr/1-202-17-2-1447-pdf-1",
+      "retrieved_at": "2026-09-21T07:18:07.907374Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://ncgr.gov.sa/documents/d/ncgr/1-202-17-2-1447-pdf-1",
+      "bytes": 2043109,
+      "sha256": "8ee9c51c3073f594ef035dd744447846654282a4c31bbbcef612cea61dfadf36",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-decision202.pdf",
+      "approved_storage_ref": null,
+      "page_count": 4,
+      "source_locators": [
+        "PDF pp. 1–2: instrument heading and operative paragraphs"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "instrument_issue",
+          "value": "17/2/1447H",
+          "basis_ref": "PDF p. 1 instrument heading"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Specific service applicability; distinguish dispatch stamp from instrument date"
+      ],
+      "scope_note": "Ancillary Etimad service fees; not classified as a general procurement-regulations amendment.",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "ksa-decision1098",
+      "source_version_id": "ksa-decision1098-sha256-d671752ea74f6f3d",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "Saudi Ministry of Finance; NCGR official host",
+      "title": "المقابل المالي لخدمة الإركاب الحكومي",
+      "instrument_type": "ancillary_service_fee_decision",
+      "jurisdiction": "Saudi Arabia",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Decision 1098",
+      "official_url": "https://ncgr.gov.sa/documents/d/ncgr/14471211-pdf",
+      "retrieved_at": "2026-09-21T07:18:09.934225Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://ncgr.gov.sa/documents/d/ncgr/14471211-pdf",
+      "bytes": 1606432,
+      "sha256": "d671752ea74f6f3d04cf1355778b6e7ba6f80f2a0d2030ca6b96f6a94241580f",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/ksa-decision1098.pdf",
+      "approved_storage_ref": null,
+      "page_count": 4,
+      "source_locators": [
+        "PDF pp. 1–2: instrument heading and operative paragraphs"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "instrument_issue",
+          "value": "11/12/1447H",
+          "basis_ref": "PDF p. 1 instrument heading"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Specific service applicability; distinguish dispatch stamp from instrument date"
+      ],
+      "scope_note": "Ancillary Etimad service fees; not classified as a general procurement-regulations amendment.",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "uae-law-ar-mof",
+      "source_version_id": "uae-law-ar-mof-sha256-82b19b1c36115867",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "United Arab Emirates; MOF official host",
+      "title": "قانون اتحادي رقم (11) لسنة 2023 بشأن المشتريات في الحكومة الاتحادية",
+      "instrument_type": "federal_law",
+      "jurisdiction": "United Arab Emirates (federal)",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Federal Law 11/2023",
+      "official_url": "https://mof.gov.ae/wp-content/uploads/2024/01/%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D9%85%D8%B4%D8%AA%D8%B1%D9%8A%D8%A7%D8%AA-%D9%81%D9%8A-%D8%A7%D9%84%D8%AD%D9%83%D9%88%D9%85%D8%A9-%D8%A7%D9%84%D8%A7%D8%AA%D8%AD%D8%A7%D8%AF%D9%8A%D8%A9.pdf",
+      "retrieved_at": "2026-09-21T07:18:42.450761Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://mof.gov.ae/wp-content/uploads/2024/01/%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D9%85%D8%B4%D8%AA%D8%B1%D9%8A%D8%A7%D8%AA-%D9%81%D9%8A-%D8%A7%D9%84%D8%AD%D9%83%D9%88%D9%85%D8%A9-%D8%A7%D9%84%D8%A7%D8%AA%D8%AD%D8%A7%D8%AF%D9%8A%D8%A9.pdf",
+      "bytes": 1379542,
+      "sha256": "82b19b1c36115867514d099f3a48d8054284495c70b0da54aa13093fe9a0087d",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/uae-law-ar-mof.pdf",
+      "approved_storage_ref": null,
+      "page_count": 19,
+      "source_locators": [
+        "PDF pp. 4–5 / printed pp. 30–31: articles 3–4",
+        "PDF p. 19 / printed p. 45: article 45 and signed issue date"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": "2023-11-27",
+          "precision": "day",
+          "basis_ref": "PDF p. 19 signed date",
+          "unknown_reason": null
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Article 45: day after Gazette publication; Gazette issue/date not retained."
+        }
+      },
+      "as_printed_dates": [
+        {
+          "kind": "issued",
+          "value": "13 Jumada I 1445H / 27 November 2023",
+          "basis_ref": "PDF p. 19"
+        }
+      ],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Gazette date, temporal transition/current status, entity classification and exception evidence"
+      ],
+      "scope_note": "Federal entity scope and enumerated exclusions, not emirate procurement regimes.",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "uae-reg-en-mof",
+      "source_version_id": "uae-reg-en-mof-sha256-2fc499cc506b9814",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "UAE Cabinet; MOF official host",
+      "title": "Cabinet Resolution No. 122 of 2024 — Implementing Regulations of Federal Law 11/2023",
+      "instrument_type": "federal_implementing_regulations",
+      "jurisdiction": "United Arab Emirates (federal)",
+      "language": "en",
+      "translation_status": "official_hosted_English_translation_unreviewed",
+      "edition": "Resolution 122/2024",
+      "official_url": "https://mof.gov.ae/wp-content/uploads/2024/12/MoF-English-Procurement-Bylaws-11.12.2024.pdf",
+      "retrieved_at": "2026-09-21T07:16:24.355808Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://mof.gov.ae/wp-content/uploads/2024/12/MoF-English-Procurement-Bylaws-11.12.2024.pdf",
+      "bytes": 435530,
+      "sha256": "2fc499cc506b9814e64d7a8a8d53dab7c2d1ca28579d8e7c2e2d479ff56e9fb7",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/uae-reg-en-mof.pdf",
+      "approved_storage_ref": null,
+      "page_count": 31,
+      "source_locators": [
+        "PDF p. 1 title; p. 31 articles 53–55 and issue date"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": "2024-11-04",
+          "precision": "day",
+          "basis_ref": "PDF p. 31",
+          "unknown_reason": null
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Article 55: six months after Gazette publication; retained PDF does not establish Gazette date."
+        }
+      },
+      "as_printed_dates": [],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Arabic bytes, direct Gazette/currentness verification, entity/temporal scope"
+      ],
+      "original_language_source_ref": "uae-reg-ar",
+      "indexed_official_metadata": {
+        "source_url": "https://uaelegislation.gov.ae/en/legislations/2709?keyword=copyright",
+        "checked_at": "2026-09-21T07:24:52.274140Z",
+        "custody": "not_retained; official indexed metadata only, direct access error",
+        "gazette_date": "2024-11-14",
+        "gazette_number": "787",
+        "effective_date": "2025-05-14",
+        "limitations": "Do not silently replace retained-evidence date facts with unretained portal metadata."
+      },
+      "translation_note": "Official legislation portal instructs reference to Arabic for interpretation/application; Arabic prevails on conflict. Equivalence is unreviewed.",
+      "assertion_type": "source_finding"
+    },
+    {
+      "source_id": "uae-reg-ar",
+      "source_version_id": "uae-reg-ar-intake-20260921",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "UAE Cabinet; official legislation portal",
+      "title": "قرار مجلس الوزراء رقم (122) لسنة 2024 بشأن اللائحة التنفيذية للقانون الاتحادي رقم (11) لسنة 2023 بشأن المشتريات في الحكومة الاتحادية",
+      "instrument_type": "federal_implementing_regulations",
+      "jurisdiction": "United Arab Emirates (federal)",
+      "language": "ar",
+      "translation_status": "original_arabic_locator_only",
+      "edition": "Resolution 122/2024",
+      "official_url": "https://uaelegislation.gov.ae/ar/legislations/2709/download",
+      "checked_at": "2026-09-21T07:16:23.860325Z",
+      "retrieved_at": null,
+      "http_status": 403,
+      "byte_verification_status": "not_retained",
+      "bytes": null,
+      "sha256": null,
+      "hash_algorithm": null,
+      "local_custody_path": null,
+      "approved_storage_ref": null,
+      "source_locators": [
+        "Official indexed PDF title and article 1; original bytes unavailable in this run"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not independently read from retained Arabic bytes."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        }
+      },
+      "access_note": "Normal public request returned HTTP403. No authentication, paywall or anti-bot bypass attempted.",
+      "reviewer": null,
+      "supersedes_id": null,
+      "applicability_result": "unknown",
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown",
+      "missing_inputs": [
+        "Permitted official Arabic retrieval; frozen hash; qualified comparison with English translation"
+      ],
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    },
+    {
+      "source_id": "uae-guide-ar",
+      "source_version_id": "uae-guide-ar-sha256-c31d8d552453082b",
+      "version": 1,
+      "lane": "G",
+      "classification": "public_source",
+      "record_state": "draft",
+      "issuer": "UAE Ministry of Finance",
+      "title": "دليل إجراءات المشتريات في الحكومة الاتحادية",
+      "instrument_type": "federal_procurement_procedures_guide",
+      "jurisdiction": "United Arab Emirates (federal)",
+      "language": "ar",
+      "translation_status": "original_arabic",
+      "edition": "Cover year 2025; current MOF-linked file retrieved in 2026",
+      "official_url": "https://mof.gov.ae/wp-content/uploads/2026/05/Government-Procurement-Procedures-Manual-Ar-20260520.pdf",
+      "retrieved_at": "2026-09-21T07:18:11.574051Z",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "final_url": "https://mof.gov.ae/wp-content/uploads/2026/05/Government-Procurement-Procedures-Manual-Ar-20260520.pdf",
+      "bytes": 9987153,
+      "sha256": "c31d8d552453082b127191856d9d90fe137e181e6bd7fac18d95b175e3e41817",
+      "hash_algorithm": "SHA-256",
+      "byte_verification_status": "verified_retained_local",
+      "local_custody_path": "/private/tmp/traceli-source-bytes/gulf/uae-guide-ar.pdf",
+      "approved_storage_ref": null,
+      "page_count": 287,
+      "source_locators": [
+        "PDF p. 1 cover; p. 2 issue register",
+        "MOF official guide page, Download the Guide"
+      ],
+      "date_facts": {
+        "issued": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "published": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Not established in this bounded intake."
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "PDF p. 2 approval/effective-date cells are blank. URL date suffix 20260520 is not legal-date evidence."
+        }
+      },
+      "as_printed_dates": [],
+      "applicability_result": "unknown",
+      "reviewer": null,
+      "supersedes_id": null,
+      "amendment_completeness": "unverified",
+      "reuse_license_status": "unknown; public official retrieval, no redistribution approval",
+      "missing_inputs": [
+        "Adopting Ministerial Decision 49/2025 and delegation matrix; revision confirmation and effective date"
+      ],
+      "edition_date": {
+        "value": "2025",
+        "precision": "year",
+        "basis_ref": "PDF p. 1 cover",
+        "unknown_reason": null
+      },
+      "origin_index_url": "https://mof.gov.ae/en/public-finance/government-procurement/federal-government-procurement-procedures-guide/",
+      "missing_input_discovery_basis": "MOF Federal General Accounting Procedures guide legal-reference list identifies Ministerial Decision 49/2025; not retained or verified as adoption evidence here.",
+      "missing_input_discovery_url": "https://mof.gov.ae/wp-content/uploads/2026/01/FGAAP-Combined-ar-21.01.26.pdf.pdf",
+      "assertion_type": "source_finding",
+      "text_extraction_note": "Original bytes control. Some Arabic extraction is absent or distorted; visual source checking required before clause extraction."
+    }
+  ],
+  "access_issues": [
+    {
+      "source": "https://uaelegislation.gov.ae/ar/legislations/2165/download",
+      "status": "403; permitted MOF official alternate retained as uae-law-ar-mof"
+    },
+    {
+      "source": "https://www.mof.gov.sa/Knowledgecenter/newGovTendandProcLow/Documents/%D8%B1%D8%A8%D8%B7%20%D8%A7%D9%84%D9%86%D8%B8%D8%A7%D9%85%20%D8%A8%D8%A7%D9%84%D9%84%D8%A7%D8%A6%D8%AD%D8%A9%2004.pdf",
+      "status": "redirected to MOF HTML404 page with HTTP200, 1596 bytes; not a PDF; EXPRO official alternate retained"
+    },
+    {
+      "source": "local Python urllib TLS trust",
+      "status": "initial DNS/sandbox then certificate-store failures; successful retries used system curl validated TLS, never disabled certificate verification"
+    }
+  ],
+  "verification": {
+    "retained_hashes_recomputed": true,
+    "pdf_magic_checked": true,
+    "pdf_counts_read": true,
+    "visual_checks": [
+      "ksa-reg-ncgr pp.1–2",
+      "ksa-decision202 pp.1–2",
+      "ksa-compilation-expro p.1",
+      "uae-law-ar-mof pp.4–5,19",
+      "uae-guide-ar pp.1–2"
+    ],
+    "limits": "Not all pages, translations, clause content or amendment completeness verified."
+  },
+  "provider_calls": 0,
+  "codex_job_cost": {
+    "value": null,
+    "status": "unavailable"
+  }
+}

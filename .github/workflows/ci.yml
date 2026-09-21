@@ -77,6 +77,17 @@ jobs:
         run: pnpm test:trace:postgres
       - name: Test safe Trace migration preflight
         run: pnpm test:trace:migration
+      - name: Test bounded HQ worker
+        run: pnpm test:hq:worker
+      - name: Create isolated source collector fixture database
+        run: createdb -h 127.0.0.1 -U postgres traceli_hq_test
+        env:
+          PGPASSWORD: postgres
+      - name: Test source collection database boundaries
+        run: pnpm db:migrate && pnpm test:hq:sources
+        env:
+          DATABASE_URL_UNPOOLED: postgres://postgres:postgres@127.0.0.1:5432/traceli_hq_test
+          HQ_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/traceli_hq_test
 
   supply-chain:
     name: Dependency and secret checks

@@ -26,7 +26,8 @@
     "test:hq": "node --conditions=react-server --import ./scripts/agent/register.mjs scripts/db/test-hq-postgres.mjs",
     "test:hq:access": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/test-access.mjs",
     "test:hq:cloud": "node scripts/db/test-hq-cloud.mjs",
-    "test:hq:worker": "node --test workers/hq/worker.test.mjs",
+    "test:hq:worker": "node --test workers/hq/worker.test.mjs workers/hq/source-collector.test.mjs",
+    "test:hq:sources": "node scripts/db/test-hq-source-collection.mjs",
     "test:hq:jev": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/test-jev.mjs scripts/hq/test-jev-smoke.mjs"
   },
   "dependencies": {

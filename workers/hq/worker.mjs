@@ -1,5 +1,6 @@
 import { pathToFileURL } from 'node:url'
 import pg from 'pg'
+import { runSourceCycle } from './source-collector.mjs'
 
 const endpoint = 'https://api.openai.com/v1/responses'
 const schema = {
@@ -101,10 +102,12 @@ async function main() {
   if (!['postgres:', 'postgresql:'].includes(address.protocol) || address.searchParams.get('sslmode') !== 'verify-full') throw new Error('Verified TLS database connection required')
   const db = new pg.Client({ connectionString: address.toString(), connectionTimeoutMillis: 10000, statement_timeout: 10000, query_timeout: 12000, application_name: 'traceli-hq-brief-worker' })
   const hardStop = setTimeout(() => { console.error('HQ worker stopped at runtime limit; reservation retained'); process.exit(1) }, 110000)
+  const overallDeadline=performance.now()+105000
   try {
     await db.connect()
     await db.query('SET ROLE traceli_hq_cloud_runner')
-    console.log(JSON.stringify(await runCycle({ db, apiKey: process.env.OPENAI_API_KEY })))
+    const sourceResult=await runSourceCycle({db,overallDeadline})
+    console.log(JSON.stringify(sourceResult ?? await runCycle({ db, apiKey: process.env.OPENAI_API_KEY })))
   } finally { clearTimeout(hardStop); await db.end() }
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
