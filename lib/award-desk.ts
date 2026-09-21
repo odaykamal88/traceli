@@ -98,7 +98,7 @@ export const defaultAwardDeskDisposition: AwardDeskDisposition = {
   recordedAtLabel: awardDeskScenario.reviewer.recordedAtLabel,
 }
 
-export const awardDeskStorageKey = 'traceli-award-desk-disposition-v1'
+export const awardDeskStorageKey = ['traceli', 'award-desk', 'disposition', 'v1'].join('.')
 
 export function decisionCopy(id: AwardDeskDecisionId) {
   const match = awardDeskDecisions.find(item => item.id === id)
