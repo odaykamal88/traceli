@@ -1,5 +1,29 @@
 export type Metric = { id: string; label: string; current: number | null; target: number }
 
+export const updatesDesk = 'https://traceli-operating-room.odeyqemal.chatgpt.site/updates'
+export function updatesDeskUrl(taskId?: number) {
+  if (taskId === undefined) return updatesDesk
+  if (!Number.isSafeInteger(taskId) || taskId <= 0) throw new Error('Invalid task link')
+  return `${updatesDesk}?task=${taskId}`
+}
+
+/** A missing priority in an older snapshot is unknown, never an inferred decision. */
+export function taskPriorityLabel(priority?: 'normal' | 'later') {
+  return priority === 'later' ? 'Later' : priority === 'normal' ? 'Normal priority' : 'Priority not recorded'
+}
+
+export function requestTaskState(ids: number[], tasks: { id: number; status: string; priority?: 'normal' | 'later' }[]) {
+  const current: number[] = [], later: number[] = [], completed: number[] = []
+  for (const id of ids) {
+    const task = tasks.find(task => task.id === id)
+    if (!task) continue
+    if (task.status === 'done') completed.push(id)
+    else if (task.priority === 'later') later.push(id)
+    else current.push(id)
+  }
+  return { current, later, completed, completeRequest: current.length === ids.length }
+}
+
 /** Missing evidence must never look like a measured zero or a completed goal. */
 export function metricProgress(metric: Metric | undefined) {
   if (!metric || metric.current === null || !Number.isFinite(metric.current) || metric.current < 0 || !Number.isFinite(metric.target) || metric.target <= 0) return null

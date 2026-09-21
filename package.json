@@ -23,7 +23,9 @@
     "test:hq:access": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/test-access.mjs",
     "test:hq:cloud": "node scripts/db/test-hq-cloud.mjs",
     "test:hq:worker": "node --test workers/hq/worker.test.mjs",
-    "test:hq:jev": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/test-jev.mjs scripts/hq/test-jev-smoke.mjs"
+    "test:hq:jev": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/test-jev.mjs scripts/hq/test-jev-smoke.mjs",
+    "test:hq:feed": "node --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/operating-feed.test.mjs scripts/hq/test-control-room.mjs",
+    "test:hq:planning": "node scripts/db/test-hq-task-planning.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

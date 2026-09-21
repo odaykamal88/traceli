@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import type { CloudState } from '@/lib/hq/cloud-reader'
-import { metricProgress, newestFirst, snapshotAge } from './control-model'
+import type { OperatingTask } from '@/lib/hq/operating-contract'
+import { metricProgress, newestFirst, snapshotAge, taskPriorityLabel, updatesDeskUrl, requestTaskState } from './control-model'
 import s from './control-room.module.css'
 
 export type Control = typeof import('@/docs/hq/data/control-room.json')
-export type Room = typeof import('@/docs/hq/data/operating-room.json')
+type SavedRoom = typeof import('@/docs/hq/data/operating-room.json')
+export type Room = Omit<SavedRoom, 'tasks'> & { tasks: OperatingTask[] }
 export type DeskResults = typeof import('@/docs/hq/data/desk-results.json')
 type Event = (typeof import('@/docs/hq/data/events.json'))[number]
 
@@ -61,15 +63,40 @@ export function Milestones({ control, room }: { control: Control; room: Room }) 
 
 export function NeedsOday({ control, room, compact = false }: { control: Control; room: Room; compact?: boolean }) {
   const pending = room.reviews.filter(r => r.status === 'pending')
+  const asks = control.asks.map(ask => ({ ask, ...requestTaskState(ask.task_ids, room.tasks) }))
+    .filter(({ ask, current }) => current.some(id => ask.id !== 'editorial-review' || pending.some(review => review.task_id === id)))
   return <section id="needs-you" className={s.anchor}>
     <SectionTitle number="02" title="What I need from you" href={compact ? '/hq?view=needs-you' : undefined} action="All requests & reviews"/>
-    <div className={s.askGrid}>{control.asks.filter(ask => ask.id === 'editorial-review' ? pending.some(review => ask.task_ids.includes(review.task_id)) : ask.task_ids.some(id => room.tasks.find(t => t.id === id)?.status !== 'done')).map(ask => <article className={`${s.card} ${s.askCard}`} key={ask.id}>
-      <div className={s.cardTop}><Status tone="warning">{ask.priority}</Status><span className={s.fine}>{ask.task_ids.map(id => '#' + id).join(' · ')}</span></div>
-      <h3>{ask.title}</h3><p>{ask.why}</p>
-      <details className={s.disclosure}><summary>What to provide</summary><p>{ask.request}</p><p className={s.fine}>{ask.next_owner}</p></details>
-      <a className={s.actionLink} href={ask.href} target="_blank" rel="noopener noreferrer">{ask.link_label} <span aria-hidden="true">↗</span></a>
+    <p className={s.sectionNote}><a href={updatesDeskUrl()}>Open Updates →</a> Add a note, return work to the backlog or move it to later in the private Operating Room.</p>
+    {!asks.length && <p className={s.sectionNote}>No current requests in this snapshot. Deferred work remains visible in <Link href="/hq?view=tasks">Tasks</Link>.</p>}
+    <div className={s.askGrid}>{asks.map(({ ask, current, later, completed, completeRequest }) => <article className={`${s.card} ${s.askCard}`} key={ask.id}>
+      <div className={s.cardTop}><Status tone="warning">{ask.priority}</Status><span className={s.fine}>{current.map(id => '#' + id).join(' · ')}</span></div>
+      <h3>{completeRequest ? ask.title : 'Update the remaining ' + (current.length === 1 ? 'task' : 'tasks')}</h3>
+      {completeRequest ? <><p>{ask.why}</p><details className={s.disclosure}><summary>What to provide</summary><p>{ask.request}</p><p className={s.fine}>{ask.next_owner}</p></details></> : <p>Open the current {current.length === 1 ? 'task' : 'tasks'} below to review its next step and add your update.</p>}
+      <div className={s.linkRow}>{current.map(id => <a key={id} href={updatesDeskUrl(id)}>Update #{id} →</a>)}</div>
+      {later.length > 0 && <p className={s.fine}>Later: {later.map(id => '#' + id).join(', ')}</p>}
+      {completed.length > 0 && <p className={s.fine}>Completed: {completed.map(id => '#' + id).join(', ')}</p>}
     </article>)}</div>
-    {!compact && <article className={s.card}><h3>Original review queue <span className={s.fine}>· {pending.length} pending at last read</span></h3><p className={s.fine}>Review decisions belong to the original Operating Room. Later HQ cloud approvals do not silently close its older packets.</p>{pending.map(review => <div className={s.reviewRow} key={review.id}><span>#{review.task_id}</span><strong>{review.title}</strong><Status>Pending</Status></div>)}<a className={s.actionLink} href={room.source_url} target="_blank" rel="noopener noreferrer">Review exact packets ↗</a></article>}
+    {!compact && <article className={s.card}><h3>Review queue <span className={s.fine}>· {pending.length} pending at last read</span></h3><p className={s.fine}>Open a task to read its packet and record your update. Moving work to later keeps its review pending.</p>{pending.length ? pending.map(review => <div className={s.reviewRow} key={review.id}><span>#{review.task_id}</span><div><strong><a href={updatesDeskUrl(review.task_id)}>{review.title}</a></strong><p className={s.fine}>{taskPriorityLabel(room.tasks.find(t => t.id === review.task_id)?.priority)}</p></div><Status>Pending</Status></div>) : <p>No pending reviews in this snapshot.</p>}<a className={s.actionLink} href={updatesDeskUrl()}>Open Updates →</a></article>}
+  </section>
+}
+
+export function TaskBoard({ room }: { room: Room }) {
+  const groups = [
+    { title: 'Current work', tasks: room.tasks.filter(task => task.status !== 'done' && task.priority !== 'later') },
+    { title: 'Later', tasks: room.tasks.filter(task => task.status !== 'done' && task.priority === 'later') },
+    { title: 'Completed', tasks: room.tasks.filter(task => task.status === 'done') },
+  ]
+  const status: Record<OperatingTask['status'], string> = { todo: 'To do', doing: 'Doing', blocked: 'Blocked', review: 'Review', done: 'Done' }
+  return <section className={s.anchor}>
+    <p className={s.sectionNote}>Open a task in Updates to add context or change its priority. Status and priority below reflect the board read on {recordedTime(room.checked_at)}. A blocked task may need Codex work, a source or buyer evidence.</p>
+    <p><a className={s.actionLink} href={updatesDeskUrl()}>Add an update →</a></p>
+    {groups.map(group => <details key={group.title} className={`${s.card} ${s.taskGroup}`} open={group.title !== 'Completed'}>
+      <summary>{group.title} <span className={s.fine}>· {group.tasks.length}</span></summary>
+      {group.tasks.length ? group.tasks.map(task => <div className={s.reviewRow} key={task.id}>
+        <span>#{task.id}</span><div><strong><a href={updatesDeskUrl(task.id)}>{task.title}</a></strong><p className={s.fine}>{task.owner} · {taskPriorityLabel(task.priority)} · Due {task.due}</p></div><Status tone={task.status === 'done' ? 'good' : task.status === 'blocked' ? 'warning' : 'neutral'}>{status[task.status]}</Status>
+      </div>) : <p className={s.fine}>No tasks in this group.</p>}
+    </details>)}
   </section>
 }
 
@@ -126,7 +153,7 @@ export function ControlHome({ control, room, events, cloud }: { control: Control
   return <div className={s.control}>
     <section className={s.brief} aria-label="Supervisor brief">
       <div><p className={s.kicker}>SUPERVISOR BRIEF · {recordedTime(control.reviewed_at)}</p><h2>The next bottleneck is buyer evidence.</h2><p>The cloud pilot has an accepted result. Now we need the actual outreach record and substantive conversations to turn the prepared work into a commercial next step.</p></div>
-      <div className={s.briefAside}><span className={s.kicker}>MOST USEFUL INPUT</span><strong>Your actual outreach history</strong><p>Who received what, when, and what happened next.</p><a href="#needs-you">See what I need from you →</a></div>
+      <div className={s.briefAside}><span className={s.kicker}>ONE PLACE TO UPDATE</span><strong>What changed or should wait?</strong><p>Add a note or move a task to later in the private Operating Room.</p><a href={updatesDeskUrl()}>Open Updates →</a></div>
     </section>
     <nav className={s.quickNav} aria-label="Operating room questions"><a href="#milestones"><span>01</span>How close are we?</a><a href="#needs-you"><span>02</span>What needs me?</a><a href="#blockers"><span>03</span>What is blocked?</a><a href="#activity"><span>04</span>What changed?</a></nav>
     <div className={s.sourceStrip}><span><i className={fresh === 'recent' ? s.dot : s.dotWarning}/>{fresh === 'recent' ? 'Board read' : 'Board snapshot needs refresh'} · {recordedTime(room.checked_at)}</span>{lastBoardChange && <span>Last task change: {recordedTime(lastBoardChange)}</span>}<span>Cloud: {cloud.connection === 'connected' ? latestRun ? 'latest draft ' + latestRun.status : 'no run recorded' : 'live status unavailable'}</span><Link href="/hq?view=systems">Sources & system status ↗</Link></div>

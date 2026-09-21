@@ -72,6 +72,13 @@ jobs:
         env:
           TRACELI_AGENT_FIXTURE: '1'
 
+      - name: Test HQ feed compatibility and task links
+        run: pnpm test:hq:feed
+      - name: Test task planning metadata database boundary
+        run: pnpm test:hq:planning
+        env:
+          HQ_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/traceli_agent_demo
+
   supply-chain:
     name: Dependency and secret checks
     runs-on: ubuntu-latest

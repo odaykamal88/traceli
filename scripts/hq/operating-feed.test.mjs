@@ -24,6 +24,21 @@ test('private fields, wrong source, orphan reviews and oversized payloads are re
   const p = packet(); p.records.reviews.push({ id: 'r', task_id: 9, title: 'fixture', status: 'pending', created_at: p.captured_at, reviewed_at: null })
   assert.equal(operatingPacketSchema.safeParse(p).success, false)
 })
+test('optional task planning metadata preserves legacy packets and rejects private or malformed fields', async () => {
+  const p = packet()
+  const task = { id: 48, title: 'Fictional task', owner: 'Codex', lane: 'Platform', status: 'blocked', due: 'TBD', week: '2026-09-14', updated_at: p.captured_at }
+  p.records.tasks = [task]
+  assert.deepEqual(operatingPacketSchema.parse(p).records.tasks[0], task)
+  for (const priority of ['normal', 'later']) {
+    p.records.tasks = [{ ...task, priority, revision: 0 }]
+    assert.deepEqual(operatingPacketSchema.parse(p).records.tasks[0], p.records.tasks[0])
+  }
+  for (const fields of [{ priority: null }, { priority: 'urgent' }, { revision: -1 }, { revision: 1.5 }, { revision: null }, { revision: '1' }, { revision: Number.MAX_SAFE_INTEGER + 1 }, { note: 'Private owner note' }, { update_count: 2 }]) {
+    p.records.tasks = [{ ...task, ...fields }]
+    assert.equal(operatingPacketSchema.safeParse(p).success, false)
+    assert.equal((await ingestOperatingSource(request(p))).status, 422)
+  }
+})
 test('ineligible cloud checks never claim, reserve or call a model', async () => {
   for (const status of ['source_missing', 'source_stale', 'review_pending', 'unchanged', 'daily_job_exists', 'job_running', 'budget_exhausted', 'model_policy_paused']) {
     const queries = []

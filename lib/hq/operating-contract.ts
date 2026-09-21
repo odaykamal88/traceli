@@ -6,8 +6,17 @@ const timestamp = z.string().datetime({ offset: true })
 const id = text(200).min(1)
 const integer = z.number().int().nonnegative().max(1000000)
 const unique = (rows: { id: string | number }[]) => new Set(rows.map(row => row.id)).size === rows.length
+export const operatingTaskSchema = z.object({
+  id: z.number().int().positive(), title: text(300), owner: z.enum(['Oday', 'Codex']), lane: text(100),
+  status: z.enum(['todo', 'doing', 'blocked', 'done', 'review']), due: text(40), week: text(20), updated_at: timestamp,
+  // Optional so older source packets and dated snapshots remain readable.
+  // Notes and review packets stay in the owner-only Operating Room.
+  priority: z.enum(['normal', 'later']).optional(),
+  revision: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER).optional(),
+}).strict()
+export type OperatingTask = z.infer<typeof operatingTaskSchema>
 export const operatingRecordsSchema = z.object({
-  tasks: z.array(z.object({ id: z.number().int().positive(), title: text(300), owner: z.enum(['Oday', 'Codex']), lane: text(100), status: z.enum(['todo', 'doing', 'blocked', 'done', 'review']), due: text(40), week: text(20), updated_at: timestamp }).strict()).max(500).refine(unique),
+  tasks: z.array(operatingTaskSchema).max(500).refine(unique),
   metrics: z.array(z.object({ id, label: text(200), current: integer, target: integer, sort_order: integer }).strict()).max(100).refine(unique),
   reviews: z.array(z.object({ id, task_id: z.number().int().positive(), title: text(300), status: z.enum(['pending', 'accepted', 'changes']), created_at: timestamp, reviewed_at: timestamp.nullable() }).strict()).max(500).refine(unique),
   receipt_count: integer,

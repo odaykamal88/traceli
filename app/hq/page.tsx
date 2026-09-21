@@ -9,9 +9,10 @@ import { isStale, readRuntime } from './runtime'
 import { RuntimePanel } from './runtime-panel'
 import { RuntimeRefresh } from './runtime-refresh'
 import { requireHQViewer } from '@/lib/hq/access'
+import { updatesDeskUrl } from './control-model'
 import { readCloudHQ } from '@/lib/hq/cloud-reader'
 import { CloudPanel } from './cloud-panel'
-import { ControlHome, Milestones, NeedsOday, Activity, Feedback, Lessons, DeskEvidence, SourceConnection, type DeskResults, type Control, type Room } from './control-room'
+import { ControlHome, Milestones, NeedsOday, TaskBoard, Activity, Feedback, Lessons, DeskEvidence, SourceConnection, type DeskResults, type Control, type Room } from './control-room'
 
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { title: 'Trace-li HQ · Company operations', robots: { index: false, follow: false } }
@@ -24,7 +25,7 @@ type Approval = (typeof import('@/docs/hq/data/approvals.json'))[number]
 type Proposal = (typeof import('@/docs/hq/data/memory-proposals.json'))[number]
 type Loop = (typeof import('@/docs/hq/data/loops.json'))[number]
 const root = path.join(process.cwd(), 'docs/hq')
-const views = [['overview','Operating Room'],['milestones','Milestones'],['needs-you','Needs Oday'],['queues','Workstreams'],['activity','Activity'],['feedback','Feedback'],['lessons','Lessons'],['systems','Systems'],['mandates','Mandates'],['jobs','Jobs'],['approvals','Approvals'],['decisions','Decisions'],['memory','Memory'],['library','Library'],['trace','Sample Trace']]
+const views = [['overview','Operating Room'],['milestones','Milestones'],['needs-you','Needs Oday'],['tasks','Tasks'],['queues','Workstreams'],['activity','Activity'],['feedback','Feedback'],['lessons','Lessons'],['systems','Systems'],['mandates','Mandates'],['jobs','Jobs'],['approvals','Approvals'],['decisions','Decisions'],['memory','Memory'],['library','Library'],['trace','Sample Trace']]
 async function read<T>(name: string): Promise<T> { return JSON.parse(await readFile(path.join(root, 'data', name + '.json'), 'utf8')) }
 async function documents(dir = ''): Promise<string[]> {
   const entries = await readdir(path.join(root, dir), { withFileTypes: true })
@@ -59,7 +60,8 @@ export default async function HQ({searchParams}: {searchParams: Promise<Record<s
   const enabled=runtime?.schedules.filter(s=>s.status==='ACTIVE').length
   return <div className={styles.hq}><RuntimeRefresh/>
     <aside className={styles.sidebar}><Link href="/hq" className={styles.brand}>Trace-li<span>HQ</span></Link><p className={styles.eyebrow}>COMPANY OPERATIONS</p>
-      <nav aria-label="HQ navigation">{views.filter(([id])=>['overview','milestones','needs-you','queues','activity','feedback','lessons','systems'].includes(id)).map(([id,title])=><Link key={id} href={'/hq?view='+id} aria-current={!doc&&view===id?'page':undefined}>{title}</Link>)}</nav><details className={styles.referenceNav} open={!!doc||['mandates','jobs','approvals','decisions','memory','library','trace'].includes(view)}><summary>Records & reference</summary><nav aria-label="HQ records">{views.filter(([id])=>['mandates','jobs','approvals','decisions','memory','library','trace'].includes(id)).map(([id,title])=><Link key={id} href={'/hq?view='+id} aria-current={!doc&&view===id?'page':undefined}>{title}</Link>)}</nav></details>
+      <a className={styles.updatesLink} href={updatesDeskUrl()}>Add an update →</a>
+      <nav aria-label="HQ navigation">{views.filter(([id])=>['overview','milestones','needs-you','tasks','queues','activity','feedback','lessons','systems'].includes(id)).map(([id,title])=><Link key={id} href={'/hq?view='+id} aria-current={!doc&&view===id?'page':undefined}>{title}</Link>)}</nav><details className={styles.referenceNav} open={!!doc||['mandates','jobs','approvals','decisions','memory','library','trace'].includes(view)}><summary>Records & reference</summary><nav aria-label="HQ records">{views.filter(([id])=>['mandates','jobs','approvals','decisions','memory','library','trace'].includes(id)).map(([id,title])=><Link key={id} href={'/hq?view='+id} aria-current={!doc&&view===id?'page':undefined}>{title}</Link>)}</nav></details>
       <div className={styles.sidebarBottom}><p><strong>Oday</strong><br/>Founder</p><p><strong>Supervisor</strong><br/>Mandates & review</p><Link href="/">Open Trace-li ↗</Link></div>
     </aside>
     <main className={styles.main}>
@@ -75,6 +77,7 @@ export default async function HQ({searchParams}: {searchParams: Promise<Record<s
       {view==='overview'&&<ControlHome control={control} room={room} events={events} cloud={cloud}/>}
       {view==='milestones'&&<><p className={styles.intro}>Outcome targets and evidence gates. Prepared artifacts do not count as buyer progress.</p><Milestones control={control} room={room}/></>}
       {view==='needs-you'&&<NeedsOday control={control} room={room}/>}
+      {view==='tasks'&&<TaskBoard room={room}/>}
       {view==='activity'&&<Activity events={events}/>}
       {view==='feedback'&&<Feedback control={control} room={room}/>}
       {view==='lessons'&&<Lessons control={control}/>}
