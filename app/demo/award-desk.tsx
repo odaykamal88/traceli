@@ -163,7 +163,7 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
         {screen === 'desk' && (
           <section className={s.screen} aria-labelledby="desk-title">
             <div className={s.greeting}>
-              <h1 id="desk-title" ref={headingRef} tabIndex={-1} data-testid="desk-greeting">Good morning, {awardDeskScenario.reviewer.firstName}.</h1>
+              <h1 id="desk-title" ref={headingRef} tabIndex={-1} data-testid="desk-greeting">{`Good morning, ${awardDeskScenario.reviewer.firstName}.`}</h1>
               <p className={s.time}>{awardDeskScenario.reviewer.greetingTime} · {awardDeskScenario.reviewer.locale}</p>
             </div>
             <article className={`${s.card} ${s.primaryCard}`}>
