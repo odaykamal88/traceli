@@ -31,7 +31,7 @@ import {
   useVideoConfig,
 } from 'remotion'
 
-const palette = {
+export const palette = {
   navy: '#061a33',
   ink: '#071d39',
   ivory: '#fbf5ea',
@@ -49,12 +49,12 @@ const palette = {
   muted: '#6d777d',
 } as const
 
-const sans = '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif'
-const display = 'Georgia, "Times New Roman", serif'
-const mono = 'ui-monospace, "SFMono-Regular", Menlo, Monaco, monospace'
+export const sans = '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif'
+export const display = 'Georgia, "Times New Roman", serif'
+export const mono = 'ui-monospace, "SFMono-Regular", Menlo, Monaco, monospace'
 const smooth = Easing.bezier(0.22, 1, 0.36, 1)
 
-const clamp = (frame: number, input: [number, number], output: [number, number]) =>
+export const clamp = (frame: number, input: [number, number], output: [number, number]) =>
   interpolate(frame, input, output, {
     easing: smooth,
     extrapolateLeft: 'clamp',
@@ -71,7 +71,7 @@ const fadeForScene = (frame: number, duration: number, fadeIn = 18, fadeOut = 18
   )
 }
 
-function Scene({
+export function Scene({
   children,
   duration,
   background = palette.paper,
@@ -100,7 +100,7 @@ function Scene({
   )
 }
 
-function TraceliMark({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
+export function TraceliMark({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
   const size = compact ? 29 : 36
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: compact ? 10 : 13 }}>
@@ -152,7 +152,7 @@ function TraceliMark({ dark = false, compact = false }: { dark?: boolean; compac
   )
 }
 
-function Chapter({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
+export function Chapter({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
   return (
     <div
       style={{
@@ -177,7 +177,7 @@ function Chapter({ children, dark = false }: { children: ReactNode; dark?: boole
   )
 }
 
-function Disclosure({ dark = false }: { dark?: boolean }) {
+export function Disclosure({ dark = false }: { dark?: boolean }) {
   return (
     <div
       style={{
@@ -196,14 +196,16 @@ function Disclosure({ dark = false }: { dark?: boolean }) {
   )
 }
 
-function ProductWindow({
+export function ProductWindow({
   children,
   style,
   title = 'RFP-2026-041 · Emergency Shelter & NFI Logistics',
+  crumb = 'Procurements',
 }: {
   children: ReactNode
   style?: CSSProperties
   title?: string
+  crumb?: string
 }) {
   return (
     <div
@@ -249,14 +251,14 @@ function ProductWindow({
           background: '#fbfaf6',
         }}
       >
-        Procurements <ChevronRight size={11} /> <span style={{ color: palette.ink, fontWeight: 650 }}>{title}</span>
+        {crumb} <ChevronRight size={11} /> <span style={{ color: palette.ink, fontWeight: 650 }}>{title}</span>
       </div>
       {children}
     </div>
   )
 }
 
-function StatCard({
+export function StatCard({
   label,
   value,
   detail,
@@ -287,7 +289,7 @@ function StatCard({
   )
 }
 
-function Cursor({ x, y, click = 0, label }: { x: number; y: number; click?: number; label?: string }) {
+export function Cursor({ x, y, click = 0, label }: { x: number; y: number; click?: number; label?: string }) {
   return (
     <div style={{ position: 'absolute', left: x, top: y, transform: `scale(${1 - click * 0.08})`, zIndex: 30 }}>
       {click > 0 && <div style={{ position: 'absolute', width: 34 + click * 24, height: 34 + click * 24, left: -14 - click * 12, top: -14 - click * 12, borderRadius: 99, border: `2px solid ${palette.mint}`, opacity: 1 - click }} />}

@@ -4,7 +4,7 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 
 ## Current pilot baseline
 
-- A public award-assurance story at `/` and a 44-second illustrative film.
+- A public award-assurance story at `/` and a 44-second illustrative film. A second silent film, composition `TraceliAwardDeskProof` (67 seconds), follows Rule library through the frozen Award desk record at `/traceli-award-desk-proof.mp4`. The homepage stays on the original film.
 - The public Award desk at `/demo`: a fictional award under reconstruction, overnight agent prep, a human disposition and a shareable decision record.
 - A workspace **Rule library** at `/workspace/library`: switchboard of governing packs the desk may cite. Public `/demo` stays Award desk.
 - How Trace reasons remains at `/method` (the previous interactive sandbox). `/demo/classic` redirects to Award desk; the earlier walkthrough is at `/method/classic`.
