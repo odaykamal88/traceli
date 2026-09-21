@@ -140,10 +140,10 @@ function IntroScene() {
   const second = spring({ frame: frame - 24, fps, config: { damping: 18, mass: 0.8, stiffness: 95 } })
   const windowSpring = spring({ frame: frame - 62, fps, config: { damping: 20, mass: 1.1, stiffness: 88 } })
   const chips = [
-    { label: 'Procurement manual', x: 78, y: 168, delay: 8 },
-    { label: '4 packs in force', x: 1018, y: 146, delay: 16 },
-    { label: 'Human disposition', x: 92, y: 508, delay: 24 },
-    { label: 'Frozen record', x: 1048, y: 486, delay: 32 },
+    { label: 'After you sign', x: 72, y: 118, delay: 8 },
+    { label: 'The question later', x: 1010, y: 118, delay: 16 },
+    { label: 'Your name on it', x: 86, y: 500, delay: 24 },
+    { label: 'What you can show', x: 1024, y: 478, delay: 32 },
   ]
   return (
     <Scene duration={beats.intro.duration} background={palette.lavender} fadeIn={8}>
@@ -190,39 +190,41 @@ function IntroScene() {
           </div>
         )
       })}
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 168, textAlign: 'center' }}>
-        <div style={{ height: 96, overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', left: 36, right: 36, top: 176, textAlign: 'center' }}>
+        <div style={{ height: 78, overflow: 'hidden' }}>
           <div
             style={{
-              transform: `translateY(${(1 - first) * 100}px)`,
+              transform: `translateY(${(1 - first) * 84}px)`,
               opacity: first,
               color: palette.plum,
               fontFamily: display,
-              fontSize: 86,
-              letterSpacing: '-.055em',
-              lineHeight: 1,
+              fontSize: 58,
+              letterSpacing: '-.045em',
+              lineHeight: 1.08,
+              whiteSpace: 'nowrap',
             }}
           >
-            What checks tonight
+            You won't be judged on what you signed.
           </div>
         </div>
-        <div style={{ height: 96, overflow: 'hidden', marginTop: -2 }}>
+        <div style={{ height: 78, overflow: 'hidden', marginTop: 4 }}>
           <div
             style={{
-              transform: `translateY(${(1 - second) * 104}px)`,
+              transform: `translateY(${(1 - second) * 84}px)`,
               opacity: second,
               color: palette.plum,
               fontFamily: display,
-              fontSize: 86,
-              letterSpacing: '-.055em',
-              lineHeight: 1,
+              fontSize: 58,
+              letterSpacing: '-.045em',
+              lineHeight: 1.08,
+              whiteSpace: 'nowrap',
             }}
           >
-            freezes with you.
+            You'll be judged on what you can show.
           </div>
         </div>
-        <div style={{ marginTop: 14, color: 'rgba(33,0,61,.62)', fontSize: 16, opacity: clamp(frame, [46, 70], [0, 1]) }}>
-          Rule packs in force. A human disposition. A record that does not rewrite itself.
+        <div style={{ marginTop: 16, color: 'rgba(33,0,61,.62)', fontSize: 16, opacity: clamp(frame, [46, 70], [0, 1]) }}>
+          The question comes after the signature.
         </div>
       </div>
       <div
@@ -236,18 +238,18 @@ function IntroScene() {
           opacity: windowSpring,
         }}
       >
-        <ProductWindow crumb="Workspace" title="Rule library" style={{ height: 250 }}>
+        <ProductWindow crumb="The file" title="What you can show" style={{ height: 250 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 12, padding: 16 }}>
             <div style={{ borderRadius: 12, background: palette.navy, color: 'white', padding: '14px 16px' }}>
               <div style={{ fontFamily: mono, color: palette.mint, fontSize: 8, letterSpacing: '.12em', textTransform: 'uppercase' }}>
-                In force tonight
+                The question
               </div>
-              <div style={{ marginTop: 8, fontFamily: display, fontSize: 28, letterSpacing: '-.04em' }}>4 packs</div>
+              <div style={{ marginTop: 8, fontFamily: display, fontSize: 26, letterSpacing: '-.04em' }}>What did you check?</div>
             </div>
             <div style={{ borderRadius: 12, border: `1px solid ${palette.line}`, padding: '12px 14px' }}>
-              <div style={{ fontSize: 11, fontWeight: 720 }}>Then a person decides</div>
+              <div style={{ fontSize: 11, fontWeight: 720 }}>Your name stays on it</div>
               <div style={{ marginTop: 8, color: palette.muted, fontSize: 10, lineHeight: 1.45 }}>
-                Overnight prep cites the packs. It does not close the award.
+                The signature does not answer for you.
               </div>
             </div>
           </div>
