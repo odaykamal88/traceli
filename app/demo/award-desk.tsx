@@ -16,6 +16,17 @@ import {
   type AwardDeskDecisionId,
   type AwardDeskDisposition,
 } from '@/lib/award-desk'
+import {
+  categoryLabel,
+  freezeGoverningPacks,
+  inForcePacks,
+  inForceSignature,
+  packsShownOnRecord,
+  ruleLibraryPrepSignatureKey,
+  ruleLibraryStorageKey,
+  sanitizeStoredBoard,
+  seedInForcePacks,
+} from '@/lib/rule-library'
 import s from './award-desk.module.css'
 
 export type AwardDeskScreen = 'desk' | 'award' | 'disposition' | 'record'
@@ -52,7 +63,7 @@ function readStored(): AwardDeskDisposition | null {
   try {
     const raw = sessionStorage.getItem(awardDeskStorageKey)
     if (!raw) return null
-    return sanitizeDisposition(JSON.parse(raw) as { decision: string; reason: string })
+    return sanitizeDisposition(JSON.parse(raw) as AwardDeskDisposition)
   } catch {
     return null
   }
@@ -60,6 +71,15 @@ function readStored(): AwardDeskDisposition | null {
 
 function writeStored(value: AwardDeskDisposition) {
   sessionStorage.setItem(awardDeskStorageKey, JSON.stringify(value))
+}
+
+function readLiveBoard() {
+  try {
+    const raw = sessionStorage.getItem(ruleLibraryStorageKey)
+    return sanitizeStoredBoard(raw ? JSON.parse(raw) : null)
+  } catch {
+    return sanitizeStoredBoard(null)
+  }
 }
 
 function noticeCopy(notice: 'workspace' | 'auth' | null) {
@@ -82,7 +102,12 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
   const [reason, setReason] = useState(agentDraftReason)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
-  const [recorded, setRecorded] = useState<AwardDeskDisposition>(defaultAwardDeskDisposition)
+  const [recorded, setRecorded] = useState<AwardDeskDisposition>({
+    ...defaultAwardDeskDisposition,
+    governingPacks: freezeGoverningPacks(seedInForcePacks()),
+  })
+  const [inForce, setInForce] = useState(seedInForcePacks)
+  const [recordFrozen, setRecordFrozen] = useState(false)
 
   useEffect(() => {
     headingRef.current?.focus()
@@ -112,9 +137,28 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
   }, [preset, screen])
 
   useEffect(() => {
-    if (screen !== 'record') return
-    setRecorded(readStored() ?? defaultAwardDeskDisposition)
+    const board = readLiveBoard()
+    const live = inForcePacks(board)
+    setInForce(live)
+    if (screen === 'award') {
+      sessionStorage.setItem(ruleLibraryPrepSignatureKey, inForceSignature(board))
+    }
   }, [screen])
+
+  useEffect(() => {
+    if (screen !== 'record') return
+    const stored = readStored()
+    if (stored) {
+      setRecorded(stored)
+      setRecordFrozen(true)
+      return
+    }
+    setRecorded({
+      ...defaultAwardDeskDisposition,
+      governingPacks: freezeGoverningPacks(inForce),
+    })
+    setRecordFrozen(false)
+  }, [screen, inForce])
 
   useEffect(() => {
     if (!toast) return
@@ -125,9 +169,14 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
   function confirmDisposition() {
     setError('')
     try {
-      const next = sanitizeDisposition({ decision, reason })
+      const next = sanitizeDisposition({
+        decision,
+        reason,
+        governingPacks: freezeGoverningPacks(inForcePacks(readLiveBoard())),
+      })
       writeStored(next)
       setRecorded(next)
+      setRecordFrozen(true)
       router.push(`${awardHref}/record`)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'The disposition could not be recorded.')
@@ -220,6 +269,21 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
                     </li>
                   ))}
                 </ol>
+                <div className={s.prepLine} data-testid="packs-in-force">
+                  <span className={s.prepMark} aria-hidden="true" />
+                  <div>
+                    <p className={s.prepTitle}>Checked against {inForce.length} pack{inForce.length === 1 ? '' : 's'} in force</p>
+                    {inForce.length ? (
+                      <ul className={s.packNames}>
+                        {inForce.map(pack => (
+                          <li key={pack.id}>{pack.name} <span className={s.prepVersion}>v{pack.version}</span></li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className={s.muted}>No packs currently in force.</p>
+                    )}
+                  </div>
+                </div>
                 <div className={s.splitPanels}>
                   <div className={`${s.panel} ${s.panelShow}`}>
                     <div className={s.panelTitle}>What the file can show</div>
@@ -329,6 +393,36 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
               <p><strong>{recordedCopy.label}</strong></p>
               <p data-testid="recorded-reason">{recorded.reason}</p>
               <p className={s.who}>{recorded.recordedAtLabel}</p>
+            </div>
+            <div className={s.recordSection} data-testid="frozen-packs">
+              <h3>Governing packs at disposition</h3>
+              {packsShownOnRecord(recorded.governingPacks).length ? (
+                <table className={s.packTable}>
+                  <thead>
+                    <tr>
+                      <th>Pack</th>
+                      <th>Version</th>
+                      <th>Category</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {packsShownOnRecord(recorded.governingPacks).map(pack => (
+                      <tr key={pack.id}>
+                        <td>{pack.name}</td>
+                        <td>{pack.version}</td>
+                        <td>{categoryLabel(pack.category)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className={s.muted}>No packs were marked to show on this record.</p>
+              )}
+              <p className={s.freezeNote}>
+                {recordFrozen
+                  ? 'Frozen at disposition. Turning a pack off later does not rewrite this record.'
+                  : 'Not frozen yet — record a disposition to lock which packs applied.'}
+              </p>
             </div>
             <div className={s.recordActions}>
               <button type="button" className={`${s.btn} ${s.btnMint}`} onClick={copyLink}>Copy link</button>

@@ -2,6 +2,7 @@ import { authkit, handleAuthkitHeaders } from '@workos-inc/authkit-nextjs'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { isLoopbackHost, localTraceEnabled } from '@/lib/trace/access-policy'
+import { isWorkspaceProductPath } from '@/lib/workspace-product'
 
 const workOSConfigured = Boolean(
   process.env.WORKOS_CLIENT_ID &&
@@ -18,6 +19,9 @@ export default async function proxy(request: NextRequest) {
   const isProtectedWorkspace = request.nextUrl.pathname.startsWith('/workspace')
 
   if (!workOSConfigured) {
+    if (isWorkspaceProductPath(request.nextUrl.pathname)) {
+      return NextResponse.next()
+    }
     if (isProtectedWorkspace) {
       const demoUrl = new URL('/demo', request.url)
       demoUrl.search = request.nextUrl.search

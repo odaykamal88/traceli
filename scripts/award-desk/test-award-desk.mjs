@@ -43,4 +43,20 @@ test('disposition requires a reasoned human judgment and does not invent authori
   assert.equal(recorded.recordedAtLabel, awardDeskScenario.reviewer.recordedAtLabel)
   assert.equal(decisionCopy('request').recordStatus, 'Reconstruction in progress — evidence requested')
   assert.equal(defaultAwardDeskDisposition.decision, 'request')
+  assert.deepEqual(recorded.governingPacks, [])
+})
+
+test('Award desk freeze keeps the supplied pack snapshot', () => {
+  const packs = [
+    { id: 'procurement-manual', name: 'Procurement manual v4.1', version: '4.1', category: 'procurement', showOnRecord: true },
+    { id: 'echo-donor-conditions', name: 'ECHO-style donor conditions', version: '2026.2', category: 'donor', showOnRecord: true },
+  ]
+  const recorded = sanitizeDisposition({
+    decision: 'escalate',
+    reason: agentDraftReason,
+    governingPacks: packs,
+  })
+  assert.deepEqual(recorded.governingPacks, packs)
+  packs[0].name = 'changed later'
+  assert.equal(recorded.governingPacks[0].name, 'Procurement manual v4.1')
 })

@@ -86,16 +86,37 @@ export const awardDeskScenario = {
   ],
 } as const
 
+export type FrozenGoverningPack = {
+  id: string
+  name: string
+  version: string
+  category: string
+  showOnRecord: boolean
+}
+
 export type AwardDeskDisposition = {
   decision: AwardDeskDecisionId
   reason: string
   recordedAtLabel: string
+  governingPacks: FrozenGoverningPack[]
 }
 
 export const defaultAwardDeskDisposition: AwardDeskDisposition = {
   decision: 'request',
   reason: agentDraftReason,
   recordedAtLabel: awardDeskScenario.reviewer.recordedAtLabel,
+  governingPacks: [],
+}
+
+function freezePacks(packs: FrozenGoverningPack[] | undefined) {
+  if (!packs) return []
+  return packs.map(pack => ({
+    id: String(pack.id),
+    name: String(pack.name),
+    version: String(pack.version),
+    category: String(pack.category),
+    showOnRecord: Boolean(pack.showOnRecord),
+  }))
 }
 
 export const awardDeskStorageKey = ['traceli', 'award-desk', 'disposition', 'v1'].join('.')
@@ -106,7 +127,11 @@ export function decisionCopy(id: AwardDeskDecisionId) {
   return match
 }
 
-export function sanitizeDisposition(input: { decision: string; reason: string }): AwardDeskDisposition {
+export function sanitizeDisposition(input: {
+  decision: string
+  reason: string
+  governingPacks?: FrozenGoverningPack[]
+}): AwardDeskDisposition {
   const decision = awardDeskDecisions.find(item => item.id === input.decision)
   const reason = input.reason.trim()
   if (!decision) throw new Error('Choose a disposition.')
@@ -117,6 +142,7 @@ export function sanitizeDisposition(input: { decision: string; reason: string })
     decision: decision.id,
     reason,
     recordedAtLabel: awardDeskScenario.reviewer.recordedAtLabel,
+    governingPacks: freezePacks(input.governingPacks),
   }
 }
 

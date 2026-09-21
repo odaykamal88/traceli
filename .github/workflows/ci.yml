@@ -75,6 +75,8 @@ jobs:
         run: pnpm test:trace
       - name: Test public Award desk scenario
         run: pnpm test:award-desk
+      - name: Test Rule library packs and freeze
+        run: pnpm test:rule-library
       - name: Test Trace persistence, review and export boundaries
         run: pnpm test:trace:postgres
       - name: Test safe Trace migration preflight
