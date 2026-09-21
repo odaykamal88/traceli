@@ -19,7 +19,7 @@
     "test:tenant": "node --env-file-if-exists=.env.local scripts/db/test-tenant-isolation.mjs",
     "demo:agent": "node --conditions=react-server --import ./scripts/agent/register.mjs scripts/agent/demo.mjs",
     "test:agent": "node --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/agent/test-evidence.mjs",
-    "test:trace": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/trace/test-access.mjs scripts/trace/test-contract.mjs",
+    "test:trace": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/trace/test-access.mjs scripts/trace/test-contract.mjs scripts/trace/test-public-contract.mjs",
     "test:trace:postgres": "node --conditions=react-server --import ./scripts/agent/register.mjs scripts/trace/test-postgres.mjs",
     "test:trace:migration": "node scripts/trace/test-migration.mjs",
     "trace:seed": "node scripts/trace/seed-local.mjs",

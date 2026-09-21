@@ -42,7 +42,10 @@ assert.match(healthResponse.headers.get('cache-control') ?? '', /no-store/i)
 console.log('PASS /api/health · live and uncached')
 
 await expectHtml('/', 'Prove the award')
-await expectHtml('/demo', 'Fictional demo data')
+await expectHtml('/demo', 'Trace an award decision.')
+await expectHtml('/demo/classic', 'Fictional demo data')
+await expectHtml('/docs', 'Follow one decision from evidence to review.')
+await expectHtml('/insights', 'Before You Sign')
 
 const videoResponse = await request('/traceli-tender-to-proof.mp4', {
   headers: {
@@ -60,5 +63,13 @@ assert.ok(
 )
 assert.ok(workspaceResponse.headers.get('location'), '/workspace redirect had no destination.')
 console.log('PASS /workspace · anonymous access redirected')
+
+for (const path of ['/api/trace', '/api/trace/export?grantId=00000000-0000-4000-8000-000000000000']) {
+  const response = await request(path)
+  assert.equal(response.status, 403, `${path} must deny anonymous access; received ${response.status}.`)
+  assert.match(response.headers.get('cache-control') ?? '', /private.*no-store/i)
+  assert.equal(typeof (await response.json()).error, 'string')
+  console.log(`PASS ${path} · anonymous access denied`)
+}
 
 console.log(`Production smoke checks passed for ${baseUrl.origin}.`)

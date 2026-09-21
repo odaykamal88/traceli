@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 type Availability = 'Demo available' | 'In implementation' | 'Private alpha planned' | 'Pilot dependent'
 
 const sections = [
+  { href: '#available-now', label: 'Available now' },
   { href: '#why-assurance', label: 'Why award assurance' },
   { href: '#control-model', label: 'Control model' },
   { href: '#security', label: 'Security and data' },
@@ -47,7 +48,7 @@ const publicCases = [
     title: 'Incomplete bid evaluation files',
     detail: 'UN OIOS found that bid evaluations at UNMISS were not timely and their documentation was inadequate, and recommended complete evaluation files and delay justifications.',
     source: 'UN OIOS · Report 2024/064',
-    href: 'https://oios.un.org/file/10525/download?token=XrBorFi3',
+    href: 'https://oios.un.org/system/files/confidential-files/Reports/2024_064_pd.pdf',
   },
   {
     metric: '€7.5m',
@@ -141,10 +142,23 @@ export default function DocsPage() {
         <main id="docs-content" className="min-w-0 px-5 py-12 sm:px-8 lg:px-12 lg:py-16 xl:px-16">
           <div className="max-w-5xl">
             <div className="max-w-4xl border-b border-[#d8d5cc] pb-14">
-              <div className="flex flex-wrap items-center gap-2"><AvailabilityPill status="Demo available" /><span className="text-xs text-[#7a858b]">Last reviewed 27 August 2026</span></div>
+              <div className="flex flex-wrap items-center gap-2"><AvailabilityPill status="Demo available" /><span className="text-xs text-[#7a858b]">Availability reviewed 21 September 2026</span></div>
               <h1 className="mt-6 font-display text-6xl leading-[0.9] tracking-[-0.035em] sm:text-7xl">Prove the award before you sign it.</h1>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-[#5f6f77]">Traceli is the award-assurance layer for donor-funded procurement. It connects governing rules, supplier evidence, human judgment and required approval before donor review, complaint or audit.</p>
             </div>
+
+            <section id="available-now" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
+              <SectionHeading eyebrow="Available now" title="Follow one decision from evidence to review." description="The public Trace demo shows the current evidence workflow: inspect a fictional rule, see what the supplied evidence supports, add a new evidence version, record a review and download the demonstration record." />
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                <PrincipleCard icon={BookOpenCheck} title="Public Trace demo">Eight fictional scenarios distinguish missing evidence, failed requirements, rule conflicts and unavailable model results. Reviews stay in the browser tab; the download is a simulation.</PrincipleCard>
+                <PrincipleCard icon={UserCheck} title="Protected workflow">The separate authenticated Trace implementation supports stored evidence versions, human review and controlled exports. Hosted activation and customer-data use remain gated.</PrincipleCard>
+                <PrincipleCard icon={FileLock2} title="Real sources and decisions">Official-source admission, customer permissions and production document handling still require verification. The public demonstration makes no real procurement or compliance determination.</PrincipleCard>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-semibold">
+                <Link href="/demo" className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#071d39] px-5 py-3 text-white">Try the Trace demo<ArrowRight className="size-4" aria-hidden="true" /></Link>
+                <Link href="/demo/classic" className="text-[#1f6f61] underline underline-offset-4">Earlier procurement walkthrough</Link>
+              </div>
+            </section>
 
             <section id="why-assurance" className="scroll-mt-28 border-b border-[#d8d5cc] py-14">
               <SectionHeading eyebrow="Why award assurance" title="The cost of missing proof appears after the decision." description="Public institutional records show four consequence categories: audit findings, ineligible spend, funding conditions and integrity sanctions. Award assurance moves the proof test before sign-off." />
@@ -178,9 +192,9 @@ export default function DocsPage() {
               <div className="flex flex-wrap items-start justify-between gap-4"><SectionHeading eyebrow="Security and data" title="The document boundary comes first." description="Real buyer documents will enter Traceli only after the private file room, organization isolation, scanning, retention and access evidence pass their pilot gates." /><AvailabilityPill status="In implementation" /></div>
               <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-[#d8d5cc] bg-[#d8d5cc] sm:grid-cols-2">
                 {[
-                  [LockKeyhole, 'Tenant isolation', 'Every read, write, search, export and generated URL is authorized on the server.'],
-                  [Database, 'Private evidence custody', 'Originals remain private, hashed and versioned; short-lived access is granted only after a fresh check.'],
-                  [KeyRound, 'Minimum model exposure', 'Providers receive only the text required for the task, under explicit buyer policy.'],
+                  [LockKeyhole, 'Tenant isolation', 'Required for customer use: server authorization on every read, write, search, export and generated URL.'],
+                  [Database, 'Private evidence custody', 'Required for customer use: private, versioned originals and short-lived access after a fresh authorization check.'],
+                  [KeyRound, 'Minimum model exposure', 'Required for customer use: minimal provider disclosure under explicit buyer policy. The public demo makes no model calls.'],
                   [ShieldCheck, 'No autonomous award', 'Models do not exclude suppliers, approve exceptions or make the award decision.'],
                 ].map(([Icon, title, detail]) => {
                   const ItemIcon = Icon as LucideIcon
