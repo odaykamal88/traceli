@@ -5,8 +5,8 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 ## Current pilot baseline
 
 - A public award-assurance story at `/` and a 44-second illustrative film.
-- The current public Trace simulation at `/demo`: fictional evidence, deterministic checks, browser-only human review and a demonstration JSON download.
-- The earlier procurement walkthrough remains at `/demo/classic`.
+- The public Award desk at `/demo`: a fictional award under reconstruction, overnight agent prep, a human disposition and a shareable decision record.
+- How Trace reasons remains at `/method` (the previous interactive sandbox). `/demo/classic` redirects to Award desk; the earlier walkthrough is at `/method/classic`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
 - A non-production Lakebase Postgres control graph with tenant-scoped reads, a restricted application role, and row-level isolation.
 - Source-linked requirements, submissions, clarifications, approvals, and audit chronology using fictional demo data.
@@ -37,6 +37,8 @@ pnpm typecheck
 pnpm db:migrate
 pnpm db:seed
 pnpm test:tenant
+pnpm test:award-desk
+pnpm build
 pnpm build
 pnpm smoke:production
 npx workos doctor --json --skip-ai

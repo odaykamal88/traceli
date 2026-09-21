@@ -91,6 +91,15 @@ const nextConfig = {
     unoptimized: true,
   },
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: '/demo/classic',
+        destination: '/demo',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 export default nextConfig

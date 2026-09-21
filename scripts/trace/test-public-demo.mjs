@@ -52,7 +52,7 @@ function canonical(value) {
   return JSON.stringify(value)
 }
 try {
-  const response = await page.goto(`${base.replace(/\/$/, '')}/demo`)
+  const response = await page.goto(`${base.replace(/\/$/, '')}/method`)
   assert.equal(response.status(), 200)
   await page.getByLabel('Choose a scenario', { exact: true }).waitFor()
   await check('Public demo starts with missing evidence and makes its fictional scope visible', async () => {
@@ -154,7 +154,7 @@ try {
   await check('New tabs and page reloads do not inherit practice reviews or drafts', async () => {
     await rationale().fill('Fictional unsaved text in the original tab.')
     const other = await context.newPage()
-    await other.goto(`${base.replace(/\/$/, '')}/demo`)
+    await other.goto(`${base.replace(/\/$/, '')}/method`)
     await other.getByLabel('Choose a scenario', { exact: true }).waitFor()
     assert.equal(await other.getByLabel('Choose a scenario', { exact: true }).inputValue(), 'missing')
     assert.equal(await other.getByLabel('Reason for this practice decision', { exact: true }).inputValue(), '')

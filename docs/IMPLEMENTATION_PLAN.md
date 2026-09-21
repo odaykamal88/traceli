@@ -42,7 +42,7 @@ If this journey is not obvious without explanation, we simplify it before adding
 | Capability | Current state | Honest boundary |
 | --- | --- | --- |
 | Public story | Core promise complete; conversion refinement queued | Static, fictional DIHAD scenario; no customer or endorsement claims |
-| Fictional interactive demo | Complete | Explicit `/demo`; state remains browser-local |
+| Fictional Award desk demo | Complete | Explicit `/demo`; browser-local disposition; method sandbox parked at `/method` |
 | Protected workspace route | Complete | Fails closed without WorkOS, a Traceli role, and a provisioned tenant; production credentials not provisioned |
 | Identity roles | Configured in WorkOS staging | First finding command is role-enforced on the server; remaining commands follow in Sprint 1 |
 | Tenant-safe data spine | First vertical slice complete | Non-production Postgres only; one fictional award is persisted |

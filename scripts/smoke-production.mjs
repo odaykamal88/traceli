@@ -42,10 +42,18 @@ assert.match(healthResponse.headers.get('cache-control') ?? '', /no-store/i)
 console.log('PASS /api/health · live and uncached')
 
 await expectHtml('/', 'Prove the award')
-await expectHtml('/demo', 'Trace an award decision.')
-await expectHtml('/demo/classic', 'Fictional demo data')
-await expectHtml('/docs', 'Follow one decision from evidence to review.')
+await expectHtml('/demo', 'Good morning, Leila')
+await expectHtml('/method', 'Trace an award decision.')
+await expectHtml('/docs', 'Follow one decision from interruption to record.')
 await expectHtml('/insights', 'Before You Sign')
+
+const classicResponse = await request('/demo/classic')
+assert.ok(
+  classicResponse.status >= 300 && classicResponse.status < 400,
+  `/demo/classic must redirect to Award desk; received ${classicResponse.status}.`,
+)
+assert.match(classicResponse.headers.get('location') ?? '', /\/demo\/?$/)
+console.log('PASS /demo/classic · redirected to Award desk')
 
 const videoResponse = await request('/traceli-tender-to-proof.mp4', {
   headers: {

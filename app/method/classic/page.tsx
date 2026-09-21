@@ -9,7 +9,8 @@ export default function ClassicDemoPage() {
   return <>
     <div className="flex flex-wrap items-center justify-center gap-3 bg-[#071d39] px-4 py-3 text-center text-sm text-white">
       <span>Earlier fictional procurement walkthrough</span>
-      <Link href="/demo" className="font-semibold text-[#8be1cf] underline underline-offset-4">Open the current Trace demo →</Link>
+      <Link href="/demo" className="font-semibold text-[#8be1cf] underline underline-offset-4">Open Award desk →</Link>
+      <Link href="/method" className="text-white/80 underline underline-offset-4">How Trace reasons</Link>
     </div>
     <TenderWorkbench initialView="overview" viewer={demoWorkspaceViewer} workspaceMode />
   </>

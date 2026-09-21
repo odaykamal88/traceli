@@ -450,7 +450,7 @@ export default function LandingPage() {
             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#52696a]">In a six-week retrospective, reconstruct the rules-to-award evidence chain, expose missing proof and test whether an independent reviewer can defend the decision.</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#071d39] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0d3057]">Test one completed tender<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></a>
-              <Link href="/demo" className="inline-flex min-h-14 items-center px-5 py-3.5 text-sm font-semibold text-[#1f6f61] transition hover:text-[#124c43]">Try the Trace demo</Link>
+              <Link href="/demo" className="inline-flex min-h-14 items-center px-5 py-3.5 text-sm font-semibold text-[#1f6f61] transition hover:text-[#124c43]">Open Award desk</Link>
             </div>
             <p className="mx-auto mt-5 max-w-2xl text-xs leading-5 text-[#52696a]">No sensitive document enters Traceli until the NDA, data classification, approved transfer route and security gate are agreed.</p>
           </div>
@@ -460,7 +460,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/10 bg-[#061a33] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1320px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <TraceliMark compact />
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Trace demo</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Award desk</Link><Link href="/method" className="hover:text-white">How Trace reasons</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
         </div>
       </footer>
     </div>

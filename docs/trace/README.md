@@ -1,6 +1,6 @@
 # Trace: synthetic workflow
 
-The public `/demo` presents this evidence and review path using fixed fictional sources, tab-local simulated reviews and a distinct demonstration download. The earlier procurement walkthrough is at `/demo/classic`. Neither public route activates the protected persistence path described below. See [website reconciliation](WEBSITE_RECONCILIATION_2026-09-21.md).
+The public `/demo` is Award desk: a fictional award under reconstruction, overnight agent prep as labor, a human disposition, and a shareable decision record. How Trace reasons — the previous interactive sandbox — is at `/method`. The earlier procurement walkthrough is at `/method/classic`; `/demo/classic` redirects to Award desk. Neither public route activates the protected persistence path described below. See [website reconciliation](WEBSITE_RECONCILIATION_2026-09-21.md).
 
 A working local vertical slice at `/workspace/trace`: retained source bytes → frozen evidence → deterministic policy checks → human decision/override → authorized JSON export. The eight fictional scenarios cover missing evidence, supported and failed requirements, explicit exclusion, conflicting instruments, unknown effective dates, model timeout and invalid model output. There are no external provider calls.
 
@@ -35,6 +35,7 @@ Exports bind the authenticated recipient, unit hash, review sequence, purpose, r
 
 ```sh
 pnpm test:trace
+pnpm test:award-desk
 pnpm test:trace:postgres
 pnpm typecheck
 pnpm build
