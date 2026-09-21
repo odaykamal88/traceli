@@ -74,10 +74,15 @@ jobs:
 
       - name: Test HQ feed compatibility and task links
         run: pnpm test:hq:feed
-      - name: Test task planning metadata database boundary
-        run: pnpm test:hq:planning
+      - name: Create isolated HQ planning fixture database
+        run: createdb -h 127.0.0.1 -U postgres traceli_hq_test
         env:
-          HQ_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/traceli_agent_demo
+          PGPASSWORD: postgres
+      - name: Test task planning metadata database boundary
+        run: pnpm db:migrate && pnpm test:hq:planning
+        env:
+          DATABASE_URL_UNPOOLED: postgres://postgres:postgres@127.0.0.1:5432/traceli_hq_test
+          HQ_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/traceli_hq_test
 
   supply-chain:
     name: Dependency and secret checks
