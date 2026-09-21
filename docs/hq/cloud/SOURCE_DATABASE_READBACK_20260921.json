@@ -1,0 +1,691 @@
+{
+  "checked_at": "2026-09-21T10:39:39.873Z",
+  "reviewer": "gulf_inventory",
+  "scope": "Read-only live preview DB verification; no source claim, submission, role alteration or provider call",
+  "database": {
+    "host": "ep-damp-union-b2li8ybn.c-6.eu-central-1.aws.neon.tech",
+    "baseline_host_matches_runner": true,
+    "verified_tls": true,
+    "transaction_read_only": "on"
+  },
+  "binding": {
+    "login_name": "traceli_hq_preview_runner",
+    "kind": "runner",
+    "organization_id": "org_01M2MDYMMMY9SWVAC8VWE52BM3",
+    "actor_id": "traceli_hq_preview_runner",
+    "mandate_id": "institutional-memory",
+    "enabled": true
+  },
+  "migration": {
+    "name": "0011_hq_source_collection.sql",
+    "checksum": "906b6304dee639fd2b8f7ec0e0ba5306eebefaa67b6067c9143f84a23943698b",
+    "local_sha256": "906b6304dee639fd2b8f7ec0e0ba5306eebefaa67b6067c9143f84a23943698b",
+    "exact_match": true
+  },
+  "functions": [
+    {
+      "signature": "hq_cloud_base_snapshot()",
+      "owner": "neondb_owner",
+      "security_definer": true,
+      "configuration": [
+        "search_path=pg_catalog, public, pg_temp"
+      ],
+      "deployed_definition_sha256": "e70fb01e8bcbfd421d4a3b59ae4e00ab332ec2738b778534d82a91686ca6696b"
+    },
+    {
+      "signature": "hq_cloud_identity(text)",
+      "owner": "neondb_owner",
+      "security_definer": true,
+      "configuration": [
+        "search_path=pg_catalog, public, pg_temp"
+      ],
+      "deployed_definition_sha256": "ac49344866d4c436509b1b575ce6e31167f877831c4b050a5ead4a935920e60f"
+    },
+    {
+      "signature": "hq_cloud_snapshot()",
+      "owner": "neondb_owner",
+      "security_definer": true,
+      "configuration": [
+        "search_path=pg_catalog, public, pg_temp"
+      ],
+      "deployed_definition_sha256": "e8caa585b344a4587b6d3aee0247815d1d294e752ea5457efe95489ec9d158d6"
+    },
+    {
+      "signature": "hq_source_authorization_guard()",
+      "owner": "neondb_owner",
+      "security_definer": false,
+      "configuration": null,
+      "deployed_definition_sha256": "ba6ee3a0fb5f3022780b270ce1f22dc73d910a5ca592c986a8bbcc8bb1a4ea8f"
+    },
+    {
+      "signature": "hq_source_claim()",
+      "owner": "neondb_owner",
+      "security_definer": true,
+      "configuration": [
+        "search_path=pg_catalog, public, pg_temp",
+        "lock_timeout=2s"
+      ],
+      "deployed_definition_sha256": "3b2f15c7062f76097e8daacfd8cd2f9038cde94cca266f7ec3e29380b8714a7f"
+    },
+    {
+      "signature": "hq_source_submit(text,text,text,jsonb)",
+      "owner": "neondb_owner",
+      "security_definer": true,
+      "configuration": [
+        "search_path=pg_catalog, public, pg_temp",
+        "lock_timeout=2s"
+      ],
+      "deployed_definition_sha256": "de7a46bccc0df103297d4855dc733bd5a68bab15860aae0d444cfea9b5338376"
+    }
+  ],
+  "roles": [
+    {
+      "rolname": "neondb_owner",
+      "rolcanlogin": true,
+      "rolinherit": true,
+      "rolsuper": false,
+      "rolcreatedb": true,
+      "rolcreaterole": true,
+      "rolbypassrls": true
+    },
+    {
+      "rolname": "traceli_hq_cloud_reader",
+      "rolcanlogin": false,
+      "rolinherit": false,
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false
+    },
+    {
+      "rolname": "traceli_hq_cloud_runner",
+      "rolcanlogin": false,
+      "rolinherit": false,
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false
+    },
+    {
+      "rolname": "traceli_hq_preview_reader",
+      "rolcanlogin": true,
+      "rolinherit": false,
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false
+    },
+    {
+      "rolname": "traceli_hq_preview_runner",
+      "rolcanlogin": true,
+      "rolinherit": false,
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false
+    }
+  ],
+  "memberships": [
+    {
+      "member": "neondb_owner",
+      "granted_role": "neon_superuser",
+      "admin_option": false,
+      "inherit_option": true,
+      "set_option": true
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_app",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_app",
+      "admin_option": false,
+      "inherit_option": true,
+      "set_option": true
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_cloud_reader",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_cloud_runner",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_librarian",
+      "admin_option": false,
+      "inherit_option": true,
+      "set_option": true
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_librarian",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_preview_ingestor",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_preview_reader",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_preview_runner",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_source_ingestor",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_supervisor",
+      "admin_option": false,
+      "inherit_option": true,
+      "set_option": true
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_supervisor",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_worker",
+      "admin_option": true,
+      "inherit_option": false,
+      "set_option": false
+    },
+    {
+      "member": "neondb_owner",
+      "granted_role": "traceli_hq_worker",
+      "admin_option": false,
+      "inherit_option": true,
+      "set_option": true
+    },
+    {
+      "member": "traceli_hq_preview_reader",
+      "granted_role": "traceli_hq_cloud_reader",
+      "admin_option": false,
+      "inherit_option": false,
+      "set_option": true
+    },
+    {
+      "member": "traceli_hq_preview_runner",
+      "granted_role": "traceli_hq_cloud_runner",
+      "admin_option": false,
+      "inherit_option": false,
+      "set_option": true
+    }
+  ],
+  "tables": [
+    {
+      "table_name": "hq_cloud_artifacts",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_cloud_bindings",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_cloud_charges",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_cloud_policies",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_decision_ledger",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_events",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_jobs",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_memory_proposals",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_memory_reviews",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_memory_versions",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_operating_checks",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_operating_ingestors",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_operating_sources",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_readout_authorizations",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_runs",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_scopes",
+      "owner": "neondb_owner",
+      "rls_enabled": true,
+      "rls_forced": true
+    },
+    {
+      "table_name": "hq_source_authorizations",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    },
+    {
+      "table_name": "hq_source_evidence",
+      "owner": "neondb_owner",
+      "rls_enabled": false,
+      "rls_forced": false
+    }
+  ],
+  "direct_source_table_privileges": [
+    {
+      "role": "traceli_hq_cloud_reader",
+      "table": "public.hq_source_authorizations",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_cloud_reader",
+      "table": "public.hq_source_evidence",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_cloud_runner",
+      "table": "public.hq_source_authorizations",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_cloud_runner",
+      "table": "public.hq_source_evidence",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_preview_reader",
+      "table": "public.hq_source_authorizations",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_preview_reader",
+      "table": "public.hq_source_evidence",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_preview_runner",
+      "table": "public.hq_source_authorizations",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    },
+    {
+      "role": "traceli_hq_preview_runner",
+      "table": "public.hq_source_evidence",
+      "checked_privileges": [
+        "DELETE",
+        "INSERT",
+        "REFERENCES",
+        "SELECT",
+        "TRIGGER",
+        "TRUNCATE",
+        "UPDATE"
+      ],
+      "allowed_privileges": []
+    }
+  ],
+  "public_source_acls": [
+    {
+      "table_name": "hq_source_authorizations",
+      "public_privileges": []
+    },
+    {
+      "table_name": "hq_source_evidence",
+      "public_privileges": []
+    }
+  ],
+  "function_execute_privileges": [
+    {
+      "role_name": "traceli_hq_cloud_reader",
+      "signature": "hq_cloud_snapshot()",
+      "allowed": true
+    },
+    {
+      "role_name": "traceli_hq_cloud_reader",
+      "signature": "hq_source_claim()",
+      "allowed": false
+    },
+    {
+      "role_name": "traceli_hq_cloud_reader",
+      "signature": "hq_source_submit(text,text,text,jsonb)",
+      "allowed": false
+    },
+    {
+      "role_name": "traceli_hq_cloud_runner",
+      "signature": "hq_cloud_snapshot()",
+      "allowed": false
+    },
+    {
+      "role_name": "traceli_hq_cloud_runner",
+      "signature": "hq_source_claim()",
+      "allowed": true
+    },
+    {
+      "role_name": "traceli_hq_cloud_runner",
+      "signature": "hq_source_submit(text,text,text,jsonb)",
+      "allowed": true
+    }
+  ],
+  "source_triggers": [
+    {
+      "table_name": "hq_cloud_artifacts",
+      "name": "hq_cloud_artifact_hash",
+      "enabled": "O",
+      "definition": "CREATE TRIGGER hq_cloud_artifact_hash BEFORE INSERT ON public.hq_cloud_artifacts FOR EACH ROW EXECUTE FUNCTION hq_cloud_hash_artifact()"
+    },
+    {
+      "table_name": "hq_cloud_artifacts",
+      "name": "hq_cloud_artifact_immutable",
+      "enabled": "O",
+      "definition": "CREATE TRIGGER hq_cloud_artifact_immutable BEFORE DELETE OR UPDATE ON public.hq_cloud_artifacts FOR EACH ROW EXECUTE FUNCTION traceli_hq_append_only()"
+    },
+    {
+      "table_name": "hq_source_authorizations",
+      "name": "hq_source_authorization_guard",
+      "enabled": "O",
+      "definition": "CREATE TRIGGER hq_source_authorization_guard BEFORE INSERT OR UPDATE ON public.hq_source_authorizations FOR EACH ROW EXECUTE FUNCTION hq_source_authorization_guard()"
+    },
+    {
+      "table_name": "hq_source_evidence",
+      "name": "hq_source_evidence_immutable",
+      "enabled": "O",
+      "definition": "CREATE TRIGGER hq_source_evidence_immutable BEFORE DELETE OR UPDATE ON public.hq_source_evidence FOR EACH ROW EXECUTE FUNCTION traceli_hq_append_only()"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "official-sources-49-20260921",
+      "status": "review",
+      "attempts": 1,
+      "max_attempts": 2,
+      "task_id": 49,
+      "source_claim_id": "49b2efbd-f5a4-4e87-a3ac-7742a2cd61f8",
+      "authorization_enabled": true,
+      "expires_at": "2026-09-23T07:56:44.311Z",
+      "manifest_hash": "2ff96a4ab1cc40822e99dea6ae23ff289a68f976082e642c2e92d933b29ed484",
+      "recomputed_manifest_hash": "2ff96a4ab1cc40822e99dea6ae23ff289a68f976082e642c2e92d933b29ed484",
+      "result_artifact_hash": "f42bcab1f42cf94719753cf9fcf6b3fb4c63e4ba9f30a1209bf06af74c4c0d58",
+      "summary": "Official-source evidence bundle for task 49: 1/2 PDFs retrieved and matched to approved byte hashes. Private draft for source review; no real rules admitted."
+    },
+    {
+      "id": "official-sources-50-20260921",
+      "status": "review",
+      "attempts": 1,
+      "max_attempts": 2,
+      "task_id": 50,
+      "source_claim_id": "f57583bc-f6a2-4340-8f90-1ea627b83875",
+      "authorization_enabled": true,
+      "expires_at": "2026-09-23T07:57:56.367Z",
+      "manifest_hash": "b1a35bb041fb3575c79f12e0df996f20d70e13a94efb545bf16c5f349a15d047",
+      "recomputed_manifest_hash": "b1a35bb041fb3575c79f12e0df996f20d70e13a94efb545bf16c5f349a15d047",
+      "result_artifact_hash": "1e8af1dbe4e4a2b48b389747622b4f93c8abab8f2a6fe49249dce11eb46cc931",
+      "summary": "Official-source evidence bundle for task 50: 1/2 PDFs retrieved and matched to approved byte hashes. Private draft for source review; no real rules admitted."
+    }
+  ],
+  "evidence": [
+    {
+      "job_id": "official-sources-49-20260921",
+      "run_id": "71bbafff-2276-4a5c-aa48-4692d59e1860",
+      "source_id": "adb-directive-2026",
+      "status": "http_error",
+      "captured_at": "2026-09-21T08:01:14.086Z",
+      "size_bytes": null,
+      "byte_hash": null,
+      "recomputed_byte_hash": null,
+      "approved_byte_hash": "14006d5077000d3be2ca9e858ab1175aae6293eae66525ef2f2a6de4025e2928",
+      "hashes_match": null,
+      "payload_state_valid": true
+    },
+    {
+      "job_id": "official-sources-49-20260921",
+      "run_id": "71bbafff-2276-4a5c-aa48-4692d59e1860",
+      "source_id": "wb-ipf-2025",
+      "status": "retained",
+      "captured_at": "2026-09-21T08:01:14.052Z",
+      "size_bytes": 1315218,
+      "byte_hash": "7f118ac8fa8949ef23790d84f74c975a98c4bba4effd69328ead58d71578b6f3",
+      "recomputed_byte_hash": "7f118ac8fa8949ef23790d84f74c975a98c4bba4effd69328ead58d71578b6f3",
+      "approved_byte_hash": "7f118ac8fa8949ef23790d84f74c975a98c4bba4effd69328ead58d71578b6f3",
+      "hashes_match": true,
+      "payload_state_valid": true
+    },
+    {
+      "job_id": "official-sources-50-20260921",
+      "run_id": "6e68eb18-31c9-4a1d-b4d9-b3274d6b9332",
+      "source_id": "saudi-law-ar-2019",
+      "status": "retained",
+      "captured_at": "2026-09-21T08:02:46.578Z",
+      "size_bytes": 893363,
+      "byte_hash": "09677b3e5f3308a58982dde8d949d8c71024ce6db273bc282ae4deac516680ec",
+      "recomputed_byte_hash": "09677b3e5f3308a58982dde8d949d8c71024ce6db273bc282ae4deac516680ec",
+      "approved_byte_hash": "09677b3e5f3308a58982dde8d949d8c71024ce6db273bc282ae4deac516680ec",
+      "hashes_match": true,
+      "payload_state_valid": true
+    },
+    {
+      "job_id": "official-sources-50-20260921",
+      "run_id": "6e68eb18-31c9-4a1d-b4d9-b3274d6b9332",
+      "source_id": "uae-law-ar-2023",
+      "status": "deadline",
+      "captured_at": "2026-09-21T08:03:31.581Z",
+      "size_bytes": null,
+      "byte_hash": null,
+      "recomputed_byte_hash": null,
+      "approved_byte_hash": "82b19b1c36115867514d099f3a48d8054284495c70b0da54aa13093fe9a0087d",
+      "hashes_match": null,
+      "payload_state_valid": true
+    }
+  ],
+  "artifacts": [
+    {
+      "job_id": "official-sources-49-20260921",
+      "run_id": "71bbafff-2276-4a5c-aa48-4692d59e1860",
+      "content_hash": "f42bcab1f42cf94719753cf9fcf6b3fb4c63e4ba9f30a1209bf06af74c4c0d58",
+      "recomputed_content_hash": "f42bcab1f42cf94719753cf9fcf6b3fb4c63e4ba9f30a1209bf06af74c4c0d58",
+      "hashes_match": true
+    },
+    {
+      "job_id": "official-sources-50-20260921",
+      "run_id": "6e68eb18-31c9-4a1d-b4d9-b3274d6b9332",
+      "content_hash": "1e8af1dbe4e4a2b48b389747622b4f93c8abab8f2a6fe49249dce11eb46cc931",
+      "recomputed_content_hash": "1e8af1dbe4e4a2b48b389747622b4f93c8abab8f2a6fe49249dce11eb46cc931",
+      "hashes_match": true
+    }
+  ],
+  "model_charges": 0,
+  "negative_select_checks": [
+    {
+      "role": "traceli_hq_preview_runner",
+      "table": "hq_source_authorizations",
+      "denied": true,
+      "probe_stage": "select",
+      "sqlstate": "42501"
+    },
+    {
+      "role": "traceli_hq_preview_runner",
+      "table": "hq_source_evidence",
+      "denied": true,
+      "probe_stage": "select",
+      "sqlstate": "42501"
+    },
+    {
+      "role": "traceli_hq_cloud_runner",
+      "table": "hq_source_authorizations",
+      "denied": true,
+      "probe_stage": "select",
+      "sqlstate": "42501"
+    },
+    {
+      "role": "traceli_hq_cloud_runner",
+      "table": "hq_source_evidence",
+      "denied": true,
+      "probe_stage": "select",
+      "sqlstate": "42501"
+    }
+  ],
+  "boundary_note": "Existing core HQ tables use forced RLS as individually reported. New source tables do not enable RLS; their boundary is denied direct privileges plus explicit authenticated-login/organization bindings inside restricted security-definer functions. No claim that all HQ tables have RLS.",
+  "limits": [
+    "SELECT-denial probes connect as the actual runner login, both directly and using its allowed SET LOCAL ROLE capability. Reader effective privileges and membership are catalog-verified; no reader-login probe was performed.",
+    "An initial admin SET ROLE capability probe returned 42501 before reaching SELECT, consistent with the cataloged set_option=false; it was not counted as evidence of table denial.",
+    "The function owner neondb_owner has BYPASSRLS, CREATEDB and CREATEROLE. Forced RLS is not a restriction on that privileged owner; security-definer isolation relies on explicit organization/login checks and restricted execution.",
+    "No claim/submit/ingest/provider function was called; no cross-tenant write probe was performed against live data.",
+    "Hashes prove stored bytes/artifact identity, not legal applicability or completeness."
+  ],
+  "validation": {
+    "migration_matches": true,
+    "all_direct_source_privileges_denied": true,
+    "all_runner_select_probes_denied": true,
+    "positive_retained_bytes_present": true,
+    "all_retained_byte_hashes_match": true,
+    "all_payload_states_valid": true,
+    "artifacts_present": true,
+    "all_artifact_hashes_match": true,
+    "all_manifest_hashes_match": true
+  }
+}

@@ -100,5 +100,13 @@
     "postgres_groups": 9,
     "independent_review": "PASS"
   },
-  "scope": "Bounded public-source retrieval and private custody, not full desk migration or real-rule admission"
+  "scope": "Bounded public-source retrieval and private custody, not full desk migration or real-rule admission",
+  "idle_replay": {
+    "at": "2026-09-21T08:05:59.521897983Z",
+    "source_jobs_created": 0,
+    "source_downloads": 0,
+    "fallback_status": "already_submitted",
+    "model_called": false,
+    "model_eligible": false
+  }
 }
