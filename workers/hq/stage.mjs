@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 // its .env files, local databases or an incidental research directory.
 const repo = fileURLToPath(new URL('../../', import.meta.url))
 const output = await mkdtemp(join(tmpdir(), 'traceli-hq-worker-'))
-const files = ['workers/hq/package.json', 'workers/hq/package-lock.json', 'workers/hq/worker.mjs', 'workers/hq/Dockerfile']
+const files = ['workers/hq/package.json', 'workers/hq/package-lock.json', 'workers/hq/worker.mjs', 'workers/hq/source-collector.mjs', 'workers/hq/Dockerfile']
 const hashes = {}
 for (const name of files) {
   const target = join(output, name)

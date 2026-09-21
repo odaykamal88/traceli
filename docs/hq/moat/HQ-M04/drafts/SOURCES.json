@@ -1,0 +1,619 @@
+{
+  "schema_version": "mdb-source-inventory-0.1",
+  "package_id": "HQ-M04",
+  "task_id": 49,
+  "task_claim_run_id": "49b2efbd-f5a4-4e87-a3ac-7742a2cd61f8",
+  "generated_at": "2026-09-21T07:21:41.549715+00:00",
+  "status": "draft_inventory_complete_pending_review",
+  "contract": {
+    "path": "../../HQ-M02/drafts/DECISION_CORPUS_CONTRACT_V0_1.md",
+    "sha256": "31d52b12a0bd095c0c498612c5f85e9261abacb5aa21217d628efd96f048c044"
+  },
+  "scope": "One World Bank IPF source bundle and one ADB policy/directive/technical/legacy source bundle; metadata only.",
+  "counts": {
+    "pdf_sources_retained": 5,
+    "supporting_html_pages_retained": 4,
+    "admitted_rule_profiles": 0,
+    "extracted_obligations": 0,
+    "benchmark_cases_created": 0,
+    "model_or_provider_api_calls": 0
+  },
+  "sources": [
+    {
+      "id": "M-WB-IPF-2025-09-v1",
+      "issuer": "World Bank",
+      "title": "Procurement Regulations for IPF Borrowers: Procurement in Investment Project Financing - Goods, Works, Non-Consulting, and Consulting Services",
+      "instrument_type": "procurement_regulations",
+      "url": "https://thedocs.worldbank.org/en/doc/c84273d1b230aeb2b0b8134de5dc8cd7-0290012025/original/Procurement-Regulations-7th-Edition-Sep-2025.pdf",
+      "official_origin_page": "https://www.worldbank.org/ext/en/what-we-do/project-procurement/framework",
+      "edition": "Seventh Edition, September 2025",
+      "edition_locator": "PDF pp.1-2 (cover and edition/copyright page)",
+      "date_facts": {
+        "publication": {
+          "value": "2025-09",
+          "precision": "month",
+          "basis_ref": "PDF pp.1-2",
+          "unknown_reason": null
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Edition month does not establish a universal effective date or application to a project."
+        },
+        "repeal": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No repeal fact established in bounded inventory."
+        }
+      },
+      "language": "en",
+      "translation": {
+        "status": "official_english_publication",
+        "translated_by_traceli": false,
+        "authority_note": "Official framework page, Procurement Framework paragraph, says English prevails over translations."
+      },
+      "entity_project_scope": {
+        "institution": "IBRD/IDA World Bank IPF",
+        "summary": "Goods, works and services in IPF, as provided by the Legal Agreement; exclusions and other financed/nonfinanced arrangements require review.",
+        "locators": [
+          "PDF p.21, printed p.1, §1.2",
+          "PDF p.23, printed p.3, §§2.1-2.3",
+          "PDF p.33, printed p.13, §§4.1-4.5"
+        ],
+        "project_applicability": "unknown",
+        "missing": [
+          "project identity and financing instrument",
+          "Legal Agreement and incorporated documents",
+          "procurement plan/PPSD",
+          "decision/procedure dates and relevant amendments",
+          "country/entity overlays and any alternative arrangements"
+        ]
+      },
+      "reuse": {
+        "status": "restricted_reuse",
+        "terms_locator": "PDF p.2",
+        "summary": "Attribution required; stated permission is noncommercial use/reproduction, with no modification. Commercial product/corpus reuse is not cleared.",
+        "commercial_reuse_permission": "unverified",
+        "redistribution_in_this_packet": false
+      },
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/wb-ipf-2025.pdf",
+        "size_bytes": 1315218,
+        "sha256": "7f118ac8fa8949ef23790d84f74c975a98c4bba4effd69328ead58d71578b6f3",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_download_and_parsed_as_pdf",
+        "retrieved_at": "2026-09-21T07:15:24.449951+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/wb-ipf-2025.headers",
+        "http_headers_sha256": "6497138cbc8c46633169bbab0e748ab67de8ac8e5ca814d3ef5ea5f55b9e1503",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "pdf_pages": 154,
+      "currentness": {
+        "status": "listed_current_on_official_framework_at_retrieval",
+        "checked_at": "2026-09-21T07:21:41.549715+00:00",
+        "limitations": [
+          "A current publication is not automatically the applicable project edition.",
+          "No comprehensive amendment, corrigendum or project-specific transition audit performed.",
+          "HTTP Last-Modified is transport metadata, not legal effectiveness."
+        ]
+      },
+      "classification": "public_source",
+      "record_state": "draft",
+      "source_review": "pending_independent_review",
+      "qualified_domain_review": "pending",
+      "admitted_rule_profile": false
+    },
+    {
+      "id": "M-ADB-POLICY-2017-v1",
+      "issuer": "Asian Development Bank",
+      "title": "ADB Procurement Policy: Goods, Works, Nonconsulting and Consulting Services",
+      "instrument_type": "procurement_policy",
+      "url": "https://www.adb.org/sites/default/files/institutional-document/1144596/adb-procurement-policy.pdf",
+      "official_origin_page": "https://www.adb.org/documents/adb-procurement-policy",
+      "edition": "2017 publication, publisher landing dated October 2017",
+      "edition_locator": "PDF p.3 copyright; official landing heading",
+      "date_facts": {
+        "publication": {
+          "value": "2017-10",
+          "precision": "month",
+          "basis_ref": "Official landing: Institutional Document | October 2017; PDF p.3 confirms year only",
+          "unknown_reason": null
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No standalone effective date verified; concept-note applicability date recorded separately."
+        },
+        "concept_note_cutoff": {
+          "value": "2017-07-01",
+          "precision": "day",
+          "basis_ref": "Official policy landing paragraph below citable URL",
+          "unknown_reason": null
+        },
+        "repeal": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No repeal established; policy remains linked by 2026 Directive."
+        }
+      },
+      "language": "en",
+      "translation": {
+        "status": "official_english_publication",
+        "translated_by_traceli": false
+      },
+      "entity_project_scope": {
+        "institution": "ADB project procurement",
+        "summary": "Landing identifies concept notes approved on/after 1 July 2017; financing agreement controls project application. Sovereign borrower definition and nonsovereign limits need review.",
+        "locators": [
+          "PDF p.4, printed p.1, §§1-2 and footnote2",
+          "Official policy landing, applicability paragraph"
+        ],
+        "project_applicability": "unknown",
+        "missing": [
+          "project concept-note date",
+          "financing agreement and project identity",
+          "sovereign/nonsovereign status",
+          "amendment history"
+        ]
+      },
+      "reuse": {
+        "status": "restricted_reuse",
+        "license": "CC BY-NC-ND 3.0 IGO",
+        "terms_locator": "PDF p.3",
+        "terms_url": "https://www.adb.org/terms-use#openaccess",
+        "commercial_reuse_permission": "unverified",
+        "third_party_materials_excluded": true,
+        "redistribution_in_this_packet": false
+      },
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-policy-2017.pdf",
+        "size_bytes": 2190071,
+        "sha256": "dea122242b2822d1cf2ff3099d7b696a6588197938608f95be6af11b9332366e",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_download_and_parsed_as_pdf",
+        "retrieved_at": "2026-09-21T07:16:04.611520+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-policy-2017.headers",
+        "http_headers_sha256": "03dc9a5ffdac73b32a95afb7b22d86dff661c13beae461ad08e90bda521b8863",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "pdf_pages": 10,
+      "currentness": {
+        "status": "linked_current_by_official_framework",
+        "checked_at": "2026-09-21T07:21:41.549715+00:00",
+        "limitations": [
+          "No claim that mutable current bytes are unchanged since 2017.",
+          "Amendment/corrigendum completeness and pre-July-2017 guidelines remain unreviewed."
+        ]
+      },
+      "classification": "public_source",
+      "record_state": "draft",
+      "source_review": "pending_independent_review",
+      "qualified_domain_review": "pending",
+      "admitted_rule_profile": false
+    },
+    {
+      "id": "M-ADB-DIRECTIVE-2026-01-v1",
+      "issuer": "Asian Development Bank",
+      "title": "Procurement Directive for ADB Borrowers: Goods, Works, Nonconsulting, and Consulting Services",
+      "instrument_type": "procurement_directive",
+      "url": "https://www.adb.org/sites/default/files/institutional-document/1144641/procurement-directive-adb-borrowers.pdf",
+      "official_origin_page": "https://www.adb.org/documents/procurement-directive-adb-borrowers",
+      "edition": "January 2026",
+      "edition_locator": "PDF p.1 cover",
+      "date_facts": {
+        "publication": {
+          "value": "2026-01",
+          "precision": "month",
+          "basis_ref": "PDF p.1 cover",
+          "unknown_reason": null
+        },
+        "effective": {
+          "value": "2026-01-01",
+          "precision": "day",
+          "basis_ref": "PDF p.9, printed p.1, footnote1",
+          "unknown_reason": null
+        },
+        "repeal": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No repeal of this directive established."
+        }
+      },
+      "language": "en",
+      "translation": {
+        "status": "official_english_publication",
+        "translated_by_traceli": false
+      },
+      "entity_project_scope": {
+        "institution": "ADB project procurement",
+        "summary": "Investment loans, grants and administered funds where financing agreement provides; results-/policy-based lending excluded.",
+        "locators": [
+          "PDF p.9, printed p.1, §1.3 footnote3",
+          "PDF p.10, printed p.2, §§2.1-2.4"
+        ],
+        "project_applicability": "unknown",
+        "missing": [
+          "project identity and concept-note history",
+          "financing agreement",
+          "funding type and procedure date",
+          "procurement strategy/plan",
+          "operational instructions and approved exceptions"
+        ]
+      },
+      "supersession": {
+        "source_id": "M-ADB-REGULATIONS-2017-v1",
+        "relationship": "amends_restates_supersedes",
+        "basis": "PDF p.9, printed p.1, §1.1 and footnote1",
+        "summary": "Footnote1 redirects documentation references to Regulations to Directive from 1 January 2026; requires project/domain review, not automatic application."
+      },
+      "reuse": {
+        "status": "restricted_reuse",
+        "license": "CC BY-NC-ND 3.0 IGO",
+        "terms_locator": "PDF p.4",
+        "terms_url": "https://www.adb.org/terms-use#openaccess",
+        "commercial_reuse_permission": "unverified",
+        "third_party_materials_excluded": true,
+        "redistribution_in_this_packet": false
+      },
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-directive-2026.pdf",
+        "size_bytes": 1469569,
+        "sha256": "14006d5077000d3be2ca9e858ab1175aae6293eae66525ef2f2a6de4025e2928",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_download_and_parsed_as_pdf",
+        "retrieved_at": "2026-09-21T07:16:00.246673+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-directive-2026.headers",
+        "http_headers_sha256": "a9f28a702525298f11d75191e8e82cb2c5c86b555cfeaa13397771c3731c8d97",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "pdf_pages": 40,
+      "currentness": {
+        "status": "linked_current_by_official_framework",
+        "checked_at": "2026-09-21T07:21:41.549715+00:00",
+        "limitations": [
+          "Latest document listing does not settle individual project applicability.",
+          "Instructions, corrigenda and project overlays not comprehensively reviewed."
+        ]
+      },
+      "classification": "public_source",
+      "record_state": "draft",
+      "source_review": "pending_independent_review",
+      "qualified_domain_review": "pending",
+      "admitted_rule_profile": false
+    },
+    {
+      "id": "M-ADB-TECHNICAL-2026-09-v1",
+      "issuer": "Asian Development Bank",
+      "title": "Technical Instruction on Borrower-Administered Procurement",
+      "instrument_type": "technical_instruction",
+      "url": "https://www.adb.org/sites/default/files/institutional-document/1144631/technical-instruction-borrower-administered-procurement.pdf",
+      "official_origin_page": "https://www.adb.org/documents/technical-instruction-borrower-administered-procurement",
+      "edition": "Version effective 1 September 2026; no numbered edition verified",
+      "edition_locator": "PDF p.1, Section I, §1",
+      "date_facts": {
+        "publication": {
+          "value": "2026-09",
+          "precision": "month",
+          "basis_ref": "Official landing heading; not inferred from HTTP date",
+          "unknown_reason": null
+        },
+        "effective": {
+          "value": "2026-09-01",
+          "precision": "day",
+          "basis_ref": "PDF p.1, Section I, §1",
+          "unknown_reason": null
+        },
+        "repeal": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "No repeal fact established."
+        }
+      },
+      "language": "en",
+      "translation": {
+        "status": "official_english_publication",
+        "translated_by_traceli": false
+      },
+      "entity_project_scope": {
+        "institution": "ADB sovereign operations",
+        "summary": "Sovereign borrowers, including grant and administered-fund recipients; elaborates policy/directive for borrower-administered procurement.",
+        "locators": [
+          "PDF p.1, Section I, §§1-2"
+        ],
+        "project_applicability": "unknown",
+        "missing": [
+          "project/financing applicability",
+          "version transition and project date",
+          "staff instructions and overlays"
+        ]
+      },
+      "reuse": {
+        "status": "unverified",
+        "terms_locator": null,
+        "summary": "No explicit license established from this PDF; do not inherit neighboring PDFs licenses. Commercial reuse and redistribution remain uncleared.",
+        "commercial_reuse_permission": "unverified",
+        "redistribution_in_this_packet": false
+      },
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-technical-2026.pdf",
+        "size_bytes": 227167,
+        "sha256": "b75192cebe669fd166627c3c8b0b08c84c28af613d1d4f1d698ea829a426d52d",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_download_and_parsed_as_pdf",
+        "retrieved_at": "2026-09-21T07:16:10.181354+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-technical-2026.headers",
+        "http_headers_sha256": "6687b1b6b11b6536ca8f3f680af65210d6103da1d0a96d35e613d05e204278a1",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "pdf_pages": 5,
+      "currentness": {
+        "status": "current_linked_pdf_with_landing_discrepancy",
+        "checked_at": "2026-09-21T07:21:41.549715+00:00",
+        "limitations": [
+          "Framework card says effective 1 January 2026; downloaded PDF §1 and dedicated landing say 1 September 2026. Record the discrepancy, do not silently conflate versions.",
+          "Earlier technical instruction bytes and explicit supersession chain not retrieved."
+        ]
+      },
+      "classification": "public_source",
+      "record_state": "draft",
+      "source_review": "pending_independent_review",
+      "qualified_domain_review": "pending",
+      "admitted_rule_profile": false
+    },
+    {
+      "id": "M-ADB-REGULATIONS-2017-v1",
+      "issuer": "Asian Development Bank",
+      "title": "Procurement Regulations for ADB Borrowers: Goods, Works, Nonconsulting and Consulting Services",
+      "instrument_type": "procurement_regulations_historical",
+      "url": "https://www.adb.org/sites/default/files/procurement-regulations-adb-borrowers.pdf",
+      "official_origin_page": "https://www.adb.org/documents/procurement-regulations-adb-borrowers",
+      "edition": "2017 publication; amendment state unverified",
+      "edition_locator": "PDF p.3 copyright/publication statement",
+      "date_facts": {
+        "publication": {
+          "value": "2017",
+          "precision": "year",
+          "basis_ref": "PDF p.3",
+          "unknown_reason": null
+        },
+        "effective": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "This legacy PDF does not establish a standalone effective date in inspected metadata."
+        },
+        "superseded": {
+          "value": "2026-01-01",
+          "precision": "day",
+          "basis_ref": "M-ADB-DIRECTIVE-2026-01-v1 PDF p.9 §1.1/footnote1",
+          "unknown_reason": null
+        },
+        "repeal": {
+          "value": null,
+          "precision": "unknown",
+          "basis_ref": null,
+          "unknown_reason": "Supersession is recorded distinctly from an unverified legal repeal date."
+        }
+      },
+      "language": "en",
+      "translation": {
+        "status": "official_english_publication",
+        "translated_by_traceli": false
+      },
+      "entity_project_scope": {
+        "institution": "ADB legacy project procurement",
+        "summary": "Historical version retained for transition and dated evidence, not a current default profile.",
+        "locators": [
+          "PDF p.13, printed p.4, §1.11",
+          "2026 Directive PDF p.9 §1.1/footnote1"
+        ],
+        "project_applicability": "unknown",
+        "missing": [
+          "historical project/decision date",
+          "exact governing agreement and amendment version",
+          "transition review"
+        ]
+      },
+      "reuse": {
+        "status": "restricted_reuse",
+        "license": "CC BY-NC-ND 3.0 IGO",
+        "terms_locator": "PDF p.3",
+        "terms_url": "https://www.adb.org/terms-use#openaccess",
+        "commercial_reuse_permission": "unverified",
+        "third_party_materials_excluded": true,
+        "redistribution_in_this_packet": false
+      },
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-regulations-legacy.pdf",
+        "size_bytes": 2454581,
+        "sha256": "1411575cec12fd7d6856c316c2261eb890baa08340d79e68f1c713f6e8840340",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_download_and_parsed_as_pdf",
+        "retrieved_at": "2026-09-21T07:17:16.392282+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-regulations-legacy.headers",
+        "http_headers_sha256": "de2fbc8f6baa4409149ae301d678e856379177f7594f3ff99bea898de80e83fc",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "pdf_pages": 82,
+      "currentness": {
+        "status": "superseded_historical_reference",
+        "checked_at": "2026-09-21T07:21:41.549715+00:00",
+        "limitations": [
+          "Old landing redirects to Directive; do not interpret redirect as retained legacy bytes.",
+          "Official direct legacy file was separately retrieved; its intermediate revision history remains unverified."
+        ]
+      },
+      "classification": "public_source",
+      "record_state": "draft",
+      "source_review": "pending_independent_review",
+      "qualified_domain_review": "pending",
+      "admitted_rule_profile": false
+    }
+  ],
+  "supporting_observations": [
+    {
+      "id": "wb-framework",
+      "url": "https://www.worldbank.org/ext/en/what-we-do/project-procurement/framework",
+      "locator": "Mandatory Requirements / Regulations and Procurement Framework translation paragraph",
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/wb-framework.html",
+        "size_bytes": 199367,
+        "sha256": "a3e7c60d579817a06f276677b72a38c9e86f739fb414c3190a46f18297173cd8",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_http_body",
+        "retrieved_at": "2026-09-21T07:19:03.894363+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/wb-framework.headers",
+        "http_headers_sha256": "ae3a03e3cc6ce18c45d7fad1810afaaba7f8bd3f0fb3a91d6a99a6cea6c675b0",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "use": "publisher metadata/link support only; no rule admission",
+      "reuse_status": "not assessed for republication; retained only for internal verification"
+    },
+    {
+      "id": "adb-framework",
+      "url": "https://www.adb.org/business/project-procurement/framework",
+      "locator": "Document Hierarchy; Key Resources / Technical Instruction card",
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-framework.html",
+        "size_bytes": 199220,
+        "sha256": "1408a8fc27813f359cfccff46b61fcb480b382bd15941793ce1cb626ebc13993",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_http_body",
+        "retrieved_at": "2026-09-21T07:19:05.798671+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-framework.headers",
+        "http_headers_sha256": "b645db3c05968f2945b53562a06522a5e8b7c942806e111dbc63c075d729ebad",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "use": "publisher metadata/link support only; no rule admission",
+      "reuse_status": "not assessed for republication; retained only for internal verification"
+    },
+    {
+      "id": "adb-policy-landing",
+      "url": "https://www.adb.org/documents/adb-procurement-policy",
+      "locator": "Institutional Document heading and applicability paragraph below citable URL",
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-policy-landing.html",
+        "size_bytes": 101706,
+        "sha256": "5ed315e067fe52a6a589d0dca1772d9ca0b2c64d31f7e0b7b9ffae1c97b13d07",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_http_body",
+        "retrieved_at": "2026-09-21T07:19:04.307178+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-policy-landing.headers",
+        "http_headers_sha256": "62cda58ff8feb854b83fab02267511e5835815b160f8a3b1e27469618568d4ab",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "use": "publisher metadata/link support only; no rule admission",
+      "reuse_status": "not assessed for republication; retained only for internal verification"
+    },
+    {
+      "id": "adb-technical-landing",
+      "url": "https://www.adb.org/documents/technical-instruction-borrower-administered-procurement",
+      "locator": "Institutional Document heading and first description paragraph",
+      "custody": {
+        "status": "retained_local_temporary",
+        "execution_environment": "local_desktop_agent",
+        "cloud_retrieval": false,
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "original_bytes_path": "/private/tmp/traceli-source-bytes/mdb/adb-technical-landing.html",
+        "size_bytes": 97070,
+        "sha256": "975063510200127d1305d99b0a90ddebe62e9aa829f387b25e6ca518057db0d5",
+        "hash_algorithm": "SHA-256",
+        "byte_verification": "hashed_original_http_body",
+        "retrieved_at": "2026-09-21T07:19:04.622858+00:00",
+        "http_headers_path": "/private/tmp/traceli-source-bytes/mdb/adb-technical-landing.headers",
+        "http_headers_sha256": "7d035fc422b5cdc670601c66d3c29bc3dba9bf4a03f680228c9c91998fdff0a0",
+        "approved_immutable_store_ref": null,
+        "custody_limit": "Temporary local custody only; migrate or re-retrieve verified bytes to an approved durable store before admission."
+      },
+      "use": "publisher metadata/link support only; no rule admission",
+      "reuse_status": "not assessed for republication; retained only for internal verification"
+    }
+  ],
+  "extraction": {
+    "purpose": "Local metadata and exact-page reading aids only; no normalized obligation extraction",
+    "tools": [
+      "pypdf",
+      "Poppler pdftoppm",
+      "SHA-256 hashlib",
+      "standard-library HTMLParser"
+    ],
+    "temporary_text_directory": "/private/tmp/traceli-source-bytes/mdb",
+    "limitations": [
+      "WB cover text is image-based; visually verified cover and edition/copyright page.",
+      "Layout extraction warned about rotated text; cited PDF pages were checked with ordinary extraction and relevant rendered pages.",
+      "Rendered ADB Directive introduction/applicability and Technical Instruction §1 confirm date/scope locators."
+    ]
+  },
+  "access_log": [
+    {
+      "attempt": "World Bank HEAD using default shell sandbox",
+      "result": "DNS resolution unavailable; no source bytes from failed request"
+    },
+    {
+      "attempt": "Read-only approved network escalation for each listed official URL",
+      "result": "HTTP200 for all retained five PDFs and four HTML pages; source hashes are original response bodies"
+    }
+  ],
+  "remaining_review": [
+    "Independent inventory/source-integrity review of exact manifest and retained bytes.",
+    "Qualified domain review of funding, entity, dates, transition, overlays and governing project documents before any rule admission.",
+    "Resolve commercial/derivative rights and applicable retention/custody before corpus/product use.",
+    "Review amendments/corrigenda and old-regime guidance only when selected project requires them."
+  ],
+  "cloud_status": "This artifact records desktop retrieval only. Separate cloud execution receipt required; none is implied."
+}
