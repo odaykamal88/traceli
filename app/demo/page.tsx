@@ -1,19 +1,13 @@
 import type { Metadata } from 'next'
-
-import TenderWorkbench from '@/components/tender-workbench'
-import { demoWorkspaceViewer } from '@/lib/workspace-viewer'
+import { buildPublicDemoPacket } from '@/lib/trace/public-demo-data'
+import PublicTraceDemo from './public-trace-demo'
 
 export const metadata: Metadata = {
-  title: 'Interactive demo — Traceli',
-  description: 'Explore Traceli with a clearly labelled fictional procurement scenario.',
+  title: 'Trace an award decision — interactive demo',
+  description: 'Follow fictional evidence through a rule check, human review and downloadable Trace record. Try the current Traceli workflow in your browser.',
+  alternates: { canonical: '/demo' },
 }
 
-export default function DemoWorkspacePage() {
-  return (
-    <TenderWorkbench
-      initialView="overview"
-      viewer={demoWorkspaceViewer}
-      workspaceMode
-    />
-  )
+export default function DemoPage() {
+  return <PublicTraceDemo packet={buildPublicDemoPacket()} />
 }

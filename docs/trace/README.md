@@ -1,5 +1,7 @@
 # Trace: synthetic workflow
 
+The public `/demo` presents this evidence and review path using fixed fictional sources, tab-local simulated reviews and a distinct demonstration download. The earlier procurement walkthrough is at `/demo/classic`. Neither public route activates the protected persistence path described below. See [website reconciliation](WEBSITE_RECONCILIATION_2026-09-21.md).
+
 A working local vertical slice at `/workspace/trace`: retained source bytes → frozen evidence → deterministic policy checks → human decision/override → authorized JSON export. The eight fictional scenarios cover missing evidence, supported and failed requirements, explicit exclusion, conflicting instruments, unknown effective dates, model timeout and invalid model output. There are no external provider calls.
 
 ## Run locally

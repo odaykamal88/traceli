@@ -1298,7 +1298,7 @@ function OverviewScreen({
     <div className="workspace-enter mx-auto flex w-full max-w-[1180px] flex-col gap-8">
       <header className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Today · 25 August</p>
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Fictional procurement walkthrough</p>
           <h1 className="mt-2 text-[clamp(2rem,4vw,3.15rem)] font-semibold leading-[1.05] tracking-[-0.045em] text-[#071d39]">Good morning, {viewerFirstName}.</h1>
           <p className="mt-3 text-[15px] text-[#657078]">One tender needs your attention.</p>
         </div>

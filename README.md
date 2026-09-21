@@ -4,7 +4,9 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 
 ## Current pilot baseline
 
-- A public 90-second DIHAD story at `/`.
+- A public award-assurance story at `/` and a 44-second illustrative film.
+- The current public Trace simulation at `/demo`: fictional evidence, deterministic checks, browser-only human review and a demonstration JSON download.
+- The earlier procurement walkthrough remains at `/demo/classic`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
 - A non-production Lakebase Postgres control graph with tenant-scoped reads, a restricted application role, and row-level isolation.
 - Source-linked requirements, submissions, clarifications, approvals, and audit chronology using fictional demo data.
