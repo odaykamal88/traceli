@@ -88,3 +88,26 @@ export { getExtractionProvider, resolveExtractionProviderId } from '@/lib/field-
 export { MockExtractionProvider } from '@/lib/field-registry/extract-mock'
 export { TalonicExtractionProvider } from '@/lib/field-registry/extract-talonic'
 export type { PlaybookEvaluate, PlaybookInput } from '@/lib/field-registry/playbook'
+export {
+  SYNTHETIC_SHELTER_RULES,
+  JudgmentError,
+  contradictionSchema,
+  evaluateJudgment,
+  evidencePointerSchema,
+  findingKinds,
+  findingSchema,
+  findingSeverities,
+  isContradiction,
+  judgmentPassed,
+  judgmentResultSchema,
+  judgmentRuleSchema,
+} from '@/lib/field-registry/judgment'
+export type {
+  Contradiction,
+  EvidencePointer,
+  Finding,
+  FindingKind,
+  FindingSeverity,
+  JudgmentResult,
+  JudgmentRule,
+} from '@/lib/field-registry/judgment'

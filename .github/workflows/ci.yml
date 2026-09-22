@@ -81,6 +81,8 @@ jobs:
         run: pnpm test:field-registry
       - name: Test extraction adapter
         run: pnpm test:extraction
+      - name: Test contradiction judgment scaffold
+        run: pnpm test:contradiction
       - name: Test Trace persistence, review and export boundaries
         run: pnpm test:trace:postgres
       - name: Test safe Trace migration preflight

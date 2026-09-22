@@ -96,7 +96,7 @@ The disposition actor must equal `frozenBy`, and the disposition timestamp must 
 - `semanticAnomalyIds`: string ids
 - `readiness`: `unknown`, `red`, `amber`, or `green`
 
-v1 does not compute these. Omitted status becomes empty flags and readiness `unknown`. `unknown` means the loop has not run. It is not an amber judgment and not a negative finding. P4 owns the catalog of flag codes and anomaly ids.
+Omitted status becomes empty flags and readiness `unknown`. `unknown` means the loop has not run. It is not an amber judgment and not a negative finding. P4's deterministic evaluator in [contradiction-judgment-v0.md](./contradiction-judgment-v0.md) fills flags, anomaly ids, and readiness from registry fields only.
 
 `PlaybookEvaluate` in `lib/field-registry/playbook.ts` is the later function type. Its input is the snapshot and the pack toggles. It has no file parameter.
 

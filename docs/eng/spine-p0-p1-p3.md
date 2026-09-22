@@ -213,13 +213,13 @@ Role authorization stays in domain commands such as `recordFindingDetermination`
 | Project | Boundary | In this pull request |
 | --- | --- | --- |
 | P2 Ingestion adapter | `extract(input) -> ExtractionResult` of `Fragment` values. Talonic sits behind `ExtractionProvider`. | [extraction-adapter.md](./extraction-adapter.md). Mock provider and `POST /api/extract`. No Talonic SDK. |
-| P4 Contradiction and judgment loop | Reads registry fields, emits deterministic flags and semantic anomaly ids, then waits for a human disposition. | `Disposition` and `PipelineStatus` shapes only. Readiness defaults to `unknown`. |
+| P4 Contradiction and judgment loop | Reads registry fields, emits deterministic flags and semantic anomaly ids, then waits for a human disposition. | v0 scaffold: [contradiction-judgment-v0.md](./contradiction-judgment-v0.md). `evaluateJudgment` fills `PipelineStatus`; Award desk freeze wiring is later. |
 | P5 Server decision record | Durable award record behind Award desk and `/workspace/records`, replacing the sessionStorage souvenir. | Not started. Demo record stays as it is. |
 | P6 Immutable audit export | Buyer and donor export of a frozen registry record. `lib/trace/export.ts` is the synthetic precursor. | Not started. |
 | P7 Connectors | SharePoint, ERP, and tender-portal adapters over the same domain services. | Named only. |
 | P8 Model workers | Commodity models as replaceable workers with a receipt. They may propose field values or anomaly ids. They do not own donor interpretation, and they do not freeze a record. | Named only. |
 
-P2's runnable adapter is [extraction-adapter.md](./extraction-adapter.md). P3's playbook input stays types only. P4's disposition and pipeline shapes ride on the frozen record and do not run. P5 through P8 have no code in this slice.
+P2's runnable adapter is [extraction-adapter.md](./extraction-adapter.md). P3's playbook input stays types only. P4's judgment scaffold is [contradiction-judgment-v0.md](./contradiction-judgment-v0.md); disposition UI wiring is later. P5 through P8 have no code in this slice.
 
 ## 5. Done when
 
