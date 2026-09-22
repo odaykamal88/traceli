@@ -23,6 +23,8 @@
     "test:award-desk": "node --experimental-strip-types --test scripts/award-desk/test-award-desk.mjs",
     "test:rule-library": "node --experimental-strip-types --test scripts/rule-library/test-rule-library.mjs",
     "test:field-registry": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-field-registry.mjs",
+    "test:extraction": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-extraction.mjs",
+    "extract:stub": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/field-registry/extract-stub.mjs",
     "test:trace:postgres": "node --conditions=react-server --import ./scripts/agent/register.mjs scripts/trace/test-postgres.mjs",
     "test:trace:migration": "node scripts/trace/test-migration.mjs",
     "trace:seed": "node scripts/trace/seed-local.mjs",

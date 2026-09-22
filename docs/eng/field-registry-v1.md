@@ -140,20 +140,11 @@ A new judgment after someone turns a pack off is a new record. The previous reco
 
 ## Extraction adapter
 
-`lib/field-registry/extract.ts` defines:
+P2 now has a provider interface, an offline mock, and a Talonic skeleton. The contract, environment variables, and the buy-versus-build line are in [extraction-adapter.md](./extraction-adapter.md).
 
-```ts
-type RawFile = { fileName: string; mediaType: string; bytes: Uint8Array }
+`ExtractionProvider.extract` returns `ExtractionResult`: a file hash plus `Fragment` values. The fragment schema is still the registry's. A fragment has an id, `sourceFileHash`, `sourceRef`, text, `extractedAt`, `confidence`, and `extractorId`. Optional `kind`, `tags`, and `spans` are closed hints for later alignment (`pricing_table`, `waiver`, `email_header`, and the other names in `fragmentKindHints`). The schema rejects unknown keys, including `bytes` and any vendor payload.
 
-type ExtractionAdapter = {
-  readonly adapterId: string
-  extract(rawFile: RawFile): readonly Fragment[]
-}
-```
-
-There is no implementation, no Talonic SDK, and no OCR.
-
-A `Fragment` has an id, `sourceFileHash`, `sourceRef`, text, `extractedAt`, `confidence`, and `extractorId`. The fragment schema rejects unknown keys, including `bytes`, so an extractor cannot smuggle the file into the fragment list. P1 maps fragments onto registry fields later. Until that mapper exists, nothing in this package turns a file into a snapshot.
+`fragmentsTowardRegistryDraft` turns hinted fragments into a partial draft. That draft is not an `AwardRegistrySnapshot`. `freezeAtJudgment` will not accept it. Rules and freeze do not import a provider.
 
 ## Limits
 

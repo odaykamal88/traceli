@@ -12,7 +12,9 @@ export {
   fieldProvenanceSchema,
   fieldValueSchema,
   fieldValueStates,
+  fragmentKindHints,
   fragmentSchema,
+  fragmentSpanSchema,
   frameworkRefSchema,
   freezeAtJudgmentInputSchema,
   frozenDecisionRecordSchema,
@@ -39,6 +41,8 @@ export type {
   FieldProvenance,
   FieldValue,
   Fragment,
+  FragmentKindHint,
+  FragmentSpan,
   FreezeAtJudgmentInput,
   FrozenDecisionRecordBody,
   PackInForce,
@@ -63,5 +67,24 @@ export {
 } from '@/lib/field-registry/freeze'
 
 export type { FrozenDecisionRecord } from '@/lib/field-registry/freeze'
-export type { ExtractionAdapter, RawFile } from '@/lib/field-registry/extract'
+export {
+  EXTRACTION_BYTE_LIMIT,
+  ExtractionError,
+  extractionInputSchema,
+  extractionResultSchema,
+  fragmentsTowardRegistryDraft,
+  parseExtractionInput,
+  registryEntityDraftSchema,
+  resolveExtractionMedia,
+  sourceFileHashOf,
+} from '@/lib/field-registry/extract'
+export type {
+  ExtractionInput,
+  ExtractionProvider,
+  ExtractionResult,
+  RegistryEntityDraft,
+} from '@/lib/field-registry/extract'
+export { getExtractionProvider, resolveExtractionProviderId } from '@/lib/field-registry/extract-provider'
+export { MockExtractionProvider } from '@/lib/field-registry/extract-mock'
+export { TalonicExtractionProvider } from '@/lib/field-registry/extract-talonic'
 export type { PlaybookEvaluate, PlaybookInput } from '@/lib/field-registry/playbook'
