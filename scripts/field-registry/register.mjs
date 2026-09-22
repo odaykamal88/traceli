@@ -9,6 +9,7 @@ const root = fileURLToPath(new URL('../../', import.meta.url))
 const nodeModule = await import('node:module')
 
 function resolveAlias(specifier, context, nextResolve) {
+  if (specifier === 'next/headers') return nextResolve('next/headers.js', context)
   if (specifier.startsWith('@/')) {
     const path = resolvePath(root, specifier.slice(2)) + '.ts'
     if (existsSync(path)) return nextResolve(pathToFileURL(path).href, context)

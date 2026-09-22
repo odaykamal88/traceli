@@ -201,6 +201,24 @@ export const frozenDecisionRecordSchema = z.strictObject({
   pipelineStatus: pipelineStatusSchema,
 })
 
+/**
+ * Kind hints are for later alignment onto registry fields.
+ * They are optional, closed, and vendor-neutral. A provider-specific payload is not a kind.
+ */
+export const fragmentKindHints = [
+  'text',
+  'pricing_table',
+  'waiver',
+  'email_header',
+  'capacity_letter',
+  'annex',
+] as const
+
+export const fragmentSpanSchema = z.strictObject({
+  text: z.string().min(1).max(4000),
+  label: z.string().trim().min(1).max(80).optional(),
+})
+
 export const fragmentSchema = z.strictObject({
   fragmentId: idSchema,
   sourceFileHash: hashSchema,
@@ -209,6 +227,9 @@ export const fragmentSchema = z.strictObject({
   extractedAt: z.iso.datetime(),
   confidence: z.number().min(0).max(1),
   extractorId: idSchema,
+  kind: z.enum(fragmentKindHints).optional(),
+  tags: z.array(z.string().trim().regex(/^[a-z][a-z0-9_]{0,63}$/)).max(16).optional(),
+  spans: z.array(fragmentSpanSchema).max(32).optional(),
 })
 
 export type SourceRef = z.infer<typeof sourceRefSchema>
@@ -224,6 +245,8 @@ export type Disposition = z.infer<typeof dispositionSchema>
 export type PipelineStatus = z.infer<typeof pipelineStatusSchema>
 export type FreezeAtJudgmentInput = z.infer<typeof freezeAtJudgmentInputSchema>
 export type FrozenDecisionRecordBody = z.infer<typeof frozenDecisionRecordSchema>
+export type FragmentKindHint = (typeof fragmentKindHints)[number]
+export type FragmentSpan = z.infer<typeof fragmentSpanSchema>
 export type Fragment = z.infer<typeof fragmentSchema>
 export type AwardDeskDecisionId = (typeof awardDeskDecisionIds)[number]
 export type ActorRole = (typeof actorRoles)[number]

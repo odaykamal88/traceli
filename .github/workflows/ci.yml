@@ -79,6 +79,8 @@ jobs:
         run: pnpm test:rule-library
       - name: Test Field Registry freeze contract
         run: pnpm test:field-registry
+      - name: Test extraction adapter
+        run: pnpm test:extraction
       - name: Test Trace persistence, review and export boundaries
         run: pnpm test:trace:postgres
       - name: Test safe Trace migration preflight

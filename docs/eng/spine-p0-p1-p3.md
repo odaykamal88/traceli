@@ -21,7 +21,7 @@ That path is the product. A chat window on a folder of PDFs is a different produ
 
 | Build and keep | Rent | Refuse |
 | --- | --- | --- |
-| Field Registry with provenance on every value | Document and email extraction behind `ExtractionAdapter` | Chat as the core experience |
+| Field Registry with provenance on every value | Document and email extraction behind `ExtractionProvider` | Chat as the core experience |
 | Deterministic Rule Library and, later, playbook checks over registry fields | Commodity model APIs as workers with a stored receipt | Donor interpretation owned by an outside model or vendor |
 | Freeze at judgment | Hosting, identity (WorkOS), and Postgres | Rules that read raw PDFs, spreadsheets, or mail instead of registry fields |
 | Contradiction and judgment loop over those fields | SharePoint / ERP connectors, later | A model output as the award decision |
@@ -95,7 +95,7 @@ The protected synthetic workflow at `/workspace/trace` is the server-side proof 
 
 - Identity checks to P0. The snapshot carries `organizationId` so P0 can reject a mismatch with the session. The helper does not do that check.
 - Pack meaning to P3. The registry stores the toggled scope it was given.
-- Fragment production to P2. Mapping a `Fragment` onto a `RegistryField` is later P1 work and is not in this slice.
+- Fragment production to P2. A best-effort draft is described in [extraction-adapter.md](./extraction-adapter.md). A full map onto `RegistryField` inside a snapshot is still later P1 work.
 
 **Refuses**
 
@@ -141,7 +141,7 @@ For each pack that is in force at judgment:
 ## 3. Interface contracts
 
 ```text
-P2  extract(rawFile) -> Fragment[]
+P2  extract(input) -> ExtractionResult (Fragment[])
         |
         v
 P1  map fragments onto AwardRegistrySnapshot fields     (later)
@@ -206,20 +206,20 @@ Role authorization stays in domain commands such as `recordFindingDetermination`
 | This brief and [field-registry-v1.md](./field-registry-v1.md) | Yes |
 | Zod schemas, `freezeAtJudgment`, `verifyFrozenRecord`, unit tests | Yes |
 | Bridge from Rule library packs and Award desk decision ids | Yes, pure functions, demo UI unchanged |
-| `ExtractionAdapter` and `PlaybookEvaluate` | Types only |
+| `ExtractionProvider` and `PlaybookEvaluate` | Playbook types only. Extraction: see [extraction-adapter.md](./extraction-adapter.md) |
 
 ### Named boundaries beyond this slice
 
 | Project | Boundary | In this pull request |
 | --- | --- | --- |
-| P2 Ingestion adapter | `extract(rawFile) -> Fragment[]`. Talonic-class extraction sits behind that type. | Interface only. No SDK, no OCR, no upload pipeline. |
+| P2 Ingestion adapter | `extract(input) -> ExtractionResult` of `Fragment` values. Talonic sits behind `ExtractionProvider`. | [extraction-adapter.md](./extraction-adapter.md). Mock provider and `POST /api/extract`. No Talonic SDK. |
 | P4 Contradiction and judgment loop | Reads registry fields, emits deterministic flags and semantic anomaly ids, then waits for a human disposition. | `Disposition` and `PipelineStatus` shapes only. Readiness defaults to `unknown`. |
 | P5 Server decision record | Durable award record behind Award desk and `/workspace/records`, replacing the sessionStorage souvenir. | Not started. Demo record stays as it is. |
 | P6 Immutable audit export | Buyer and donor export of a frozen registry record. `lib/trace/export.ts` is the synthetic precursor. | Not started. |
 | P7 Connectors | SharePoint, ERP, and tender-portal adapters over the same domain services. | Named only. |
 | P8 Model workers | Commodity models as replaceable workers with a receipt. They may propose field values or anomaly ids. They do not own donor interpretation, and they do not freeze a record. | Named only. |
 
-P2's adapter and P3's playbook input are types only. P4's disposition and pipeline shapes ride on the frozen record and do not run. P5 through P8 have no code in this slice.
+P2's runnable adapter is [extraction-adapter.md](./extraction-adapter.md). P3's playbook input stays types only. P4's disposition and pipeline shapes ride on the frozen record and do not run. P5 through P8 have no code in this slice.
 
 ## 5. Done when
 

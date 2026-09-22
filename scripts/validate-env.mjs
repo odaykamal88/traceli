@@ -79,6 +79,14 @@ if (hqAccess && !['disabled', 'local', 'workos'].includes(hqAccess)) {
 if (hqAccess === 'local' && (process.env.VERCEL || process.env.NODE_ENV === 'production')) {
   throw new Error('Local HQ access cannot be enabled on a hosted or production build.')
 }
+const extractionProvider = process.env.TRACE_EXTRACTION_PROVIDER?.trim()
+if (extractionProvider && !['mock', 'talonic'].includes(extractionProvider)) {
+  throw new Error('TRACE_EXTRACTION_PROVIDER must be mock or talonic.')
+}
+if (isConfigured('TRACE_TALONIC_BASE_URL')) {
+  validateUrl('TRACE_TALONIC_BASE_URL', ['https:'])
+}
+
 if (hqAccess === 'workos') {
   if (!workOSConfigured) throw new Error('HQ WorkOS access requires complete WorkOS configuration.')
   if (!/^user_[A-Z0-9]{26}$/.test(process.env.TRACELI_HQ_OWNER_USER_ID || '')) {

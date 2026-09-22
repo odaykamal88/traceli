@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const root = fileURLToPath(new URL('../../', import.meta.url))
 
 export async function resolve(specifier, context, nextResolve) {
+  if (specifier === 'next/headers') return nextResolve('next/headers.js', context)
   if (specifier.startsWith('@/')) {
     const path = resolvePath(root, specifier.slice(2)) + '.ts'
     if (existsSync(path)) return nextResolve(pathToFileURL(path).href, context)
