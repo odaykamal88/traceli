@@ -42,6 +42,20 @@ assert.match(healthResponse.headers.get('cache-control') ?? '', /no-store/i)
 console.log('PASS /api/health · live and uncached')
 
 await expectHtml('/', 'Prove the award')
+
+const landingResponse = await request('/')
+const landingHtml = await landingResponse.text()
+assert.ok(landingHtml.includes('href="/login"'), 'Landing page is missing a Login link to /login.')
+assert.ok(
+  landingHtml.includes('/traceli-award-desk-proof.mp4'),
+  'Landing page is missing the Award desk product film.',
+)
+assert.equal(
+  landingHtml.includes('traceli-tender-to-proof.mp4'),
+  false,
+  'Landing page still references the tender-to-proof film.',
+)
+console.log('PASS / · Login and Award desk film')
 await expectHtml('/demo', 'Good morning, Leila')
 await expectHtml('/method', 'Trace an award decision.')
 await expectHtml('/docs', 'Follow one decision from interruption to record.')
@@ -55,7 +69,7 @@ assert.ok(
 assert.match(classicResponse.headers.get('location') ?? '', /\/demo\/?$/)
 console.log('PASS /demo/classic · redirected to Award desk')
 
-const videoResponse = await request('/traceli-tender-to-proof.mp4', {
+const videoResponse = await request('/traceli-award-desk-proof.mp4', {
   headers: {
     Range: 'bytes=0-1023',
   },

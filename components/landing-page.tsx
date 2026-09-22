@@ -238,17 +238,26 @@ export default function LandingPage() {
       <a href="#main-content" className="sr-only z-[80] rounded-lg bg-[#fbf5ea] px-4 py-2 text-[#071d39] focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to main content</a>
 
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061a33]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-5 px-5 py-4 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-x-3 gap-y-3 px-4 py-3 sm:gap-5 sm:px-8 sm:py-4 lg:flex-nowrap lg:px-12">
           <Link href="/" aria-label="Traceli home"><TraceliMark /></Link>
-          <nav aria-label="Public navigation" className="flex items-center gap-2 sm:gap-5">
-            <Link href="/insights" className="rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white">Research</Link>
-            <Link href="/docs" className="hidden rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Documentation</Link>
-            <Link href="/demo" className="group inline-flex min-h-11 items-center gap-3 rounded-xl border border-white/18 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08]">
+          <nav aria-label="Public navigation" className="flex items-center gap-1.5 sm:gap-3 lg:gap-5">
+            <Link href="/insights" className="hidden whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Research</Link>
+            <Link href="/docs" className="hidden whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Documentation</Link>
+            <Link href="/login" className="inline-flex min-h-11 items-center whitespace-nowrap rounded-xl border border-white/18 px-3 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08] sm:px-4">
+              Login
+            </Link>
+            <Link href="/demo" className="group inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-xl border border-white/18 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08] sm:gap-3 sm:px-4">
               Open demo
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <ArrowRight className="hidden size-4 transition-transform group-hover:translate-x-0.5 sm:block" aria-hidden="true" />
             </Link>
           </nav>
         </div>
+        <nav aria-label="Mobile public navigation" className="overflow-x-auto border-t border-white/10 sm:hidden">
+          <div className="mx-auto flex min-w-max max-w-[1500px] items-center gap-5 px-4 py-2.5 text-xs font-medium text-white/58">
+            <Link href="/insights" className="py-1 hover:text-white">Research</Link>
+            <Link href="/docs" className="py-1 hover:text-white">Documentation</Link>
+          </div>
+        </nav>
       </header>
 
       <main id="main-content">
@@ -274,7 +283,7 @@ export default function LandingPage() {
                 </a>
                 <button type="button" onClick={startFilm} className="group inline-flex min-h-12 items-center gap-3 px-2 text-sm font-semibold text-white/78 transition hover:text-white">
                   <Play className="size-3.5 fill-current" aria-hidden="true" />
-                  See the 44-second proof path
+                  See the 52-second proof path
                 </button>
               </div>
               <p className="mt-6 flex max-w-[600px] items-start gap-2 text-xs leading-5 text-white/42"><Clock3 className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />A bounded six-week paid pilot. Your existing process remains authoritative, and no sensitive files move before the data route is agreed.</p>
@@ -289,8 +298,8 @@ export default function LandingPage() {
                   loop
                   playsInline
                   preload="auto"
-                  poster="/traceli-tender-to-proof-poster.png"
-                  aria-label="Traceli product film showing a tender moving from a clean workspace to an audit-ready award record"
+                  poster="/traceli-award-desk-proof-poster.png"
+                  aria-label="Traceli product film showing the Award desk from the rule library through disposition to a frozen record"
                   onCanPlay={(event) => {
                     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && event.currentTarget.paused) {
                       void event.currentTarget.play()
@@ -300,12 +309,12 @@ export default function LandingPage() {
                   onPause={() => setFilmPlaying(false)}
                   className="aspect-video w-full bg-[#f8f4eb] object-cover"
                 >
-                  <source src="/traceli-tender-to-proof.mp4" type="video/mp4" />
+                  <source src="/traceli-award-desk-proof.mp4" type="video/mp4" />
                 </video>
 
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#061a33]/72 to-transparent" aria-hidden="true" />
                 <div className="absolute left-3 top-3 rounded-full border border-white/45 bg-[#061a33]/72 px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.13em] text-white backdrop-blur-md sm:left-4 sm:top-4">
-                  Product film · 44 sec
+                  Product film · 52 sec
                 </div>
                 <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 sm:inset-x-4 sm:bottom-4">
                   <button type="button" onClick={toggleFilm} aria-label={filmPlaying ? 'Pause product film' : 'Play product film'} className="flex size-11 items-center justify-center rounded-full border border-white/25 bg-[#061a33]/82 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-[#071d39]">
@@ -460,7 +469,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/10 bg-[#061a33] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1320px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <TraceliMark compact />
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Award desk</Link><Link href="/method" className="hover:text-white">How Trace reasons</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/login" className="hover:text-white">Login</Link><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Award desk</Link><Link href="/method" className="hover:text-white">How Trace reasons</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
         </div>
       </footer>
     </div>
