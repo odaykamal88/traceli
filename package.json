@@ -21,6 +21,7 @@
     "test:agent": "node --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/agent/test-evidence.mjs",
     "test:trace": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/trace/test-access.mjs scripts/trace/test-contract.mjs scripts/trace/test-public-contract.mjs",
     "test:award-desk": "node --experimental-strip-types --test scripts/award-desk/test-award-desk.mjs",
+    "test:award-desk-freeze": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-award-desk-freeze.mjs",
     "test:rule-library": "node --experimental-strip-types --test scripts/rule-library/test-rule-library.mjs",
     "test:field-registry": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-field-registry.mjs",
     "test:extraction": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-extraction.mjs",

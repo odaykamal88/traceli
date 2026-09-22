@@ -4,7 +4,7 @@ Status: schema and freeze helper. 22 September 2026.
 Code: `lib/field-registry/`.
 Ownership and sequencing: [spine-p0-p1-p3.md](./spine-p0-p1-p3.md).
 
-The registry is the award-shaped snapshot that rules, judgment, and the frozen record share. Award desk, the Rule library, and the synthetic Trace unit stay in place. This module sits beside them. It is not wired into the public demo, and it does not persist rows.
+The registry is the award-shaped snapshot that rules, judgment, and the frozen record share. Award desk, the Rule library, and the synthetic Trace unit stay in place. Public demo disposition freezes through [award-desk-freeze.md](./award-desk-freeze.md). This module still does not persist tenant rows.
 
 Import it from server and test code:
 

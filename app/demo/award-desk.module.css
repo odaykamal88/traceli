@@ -620,6 +620,41 @@
   margin: 12px 0 0;
   line-height: 1.5;
 }
+.frozenBadge {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 4px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+}
+.frozenMeta {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.frozenMeta div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) 1fr;
+  gap: 8px 12px;
+  align-items: baseline;
+}
+.frozenMeta dt {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--navy-mid);
+}
+.frozenMeta dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+  word-break: break-all;
+  color: var(--navy);
+}
 
 .tinyFooter {
   margin-top: 32px;

@@ -9,6 +9,8 @@ import {
   decisionCopy,
   defaultAwardDeskDisposition,
   sanitizeDisposition,
+  sanitizeFrozenRecordView,
+  shortHash,
 } from '../../lib/award-desk.ts'
 
 test('Award desk is a single fictional reconstruction, not a method chooser', () => {
@@ -59,4 +61,21 @@ test('Award desk freeze keeps the supplied pack snapshot', () => {
   assert.deepEqual(recorded.governingPacks, packs)
   packs[0].name = 'changed later'
   assert.equal(recorded.governingPacks[0].name, 'Procurement manual v4.1')
+})
+
+test('frozen record view sanitizer rejects bad hashes', () => {
+  assert.throws(() => sanitizeFrozenRecordView(null))
+  assert.throws(() => sanitizeFrozenRecordView({
+    recordId: 'record_x',
+    snapshotHash: 'abc',
+    packsHash: 'd'.repeat(64),
+    hashMethod: 'sha256:sorted-json-v1',
+    frozenAt: '2026-09-22T07:14:00.000Z',
+    frozenBy: 'user_leila',
+    readiness: 'red',
+    findingCount: 1,
+    packIds: [],
+    dispositionDecision: 'request_evidence',
+  }))
+  assert.equal(shortHash('a'.repeat(64)), `${'a'.repeat(8)}…${'a'.repeat(6)}`)
 })

@@ -179,7 +179,7 @@ P6  audit export of that record                            (later)
 | Check before serve | `verifyFrozenRecord`. Reject a snapshot whose `organizationId` is not the session organization. |
 | Leave untouched | Live Rule library board (`traceli.rule-library.board.v1` in the browser today). |
 
-The current Award desk write is `sessionStorage` key `traceli.award-desk.disposition.v1` through `sanitizeDisposition`. That remains the demo souvenir. P0's server write is the later durable form of the same freeze.
+The current Award desk write is `sessionStorage` keys `traceli.award-desk.disposition.v1` and `traceli.award-desk.frozen.v1` after `freezeAwardDeskDisposition` (see [award-desk-freeze.md](./award-desk-freeze.md)). That remains the demo souvenir. P0's server write is the later durable form of the same freeze.
 
 ### What the registry guarantees
 
@@ -213,7 +213,7 @@ Role authorization stays in domain commands such as `recordFindingDetermination`
 | Project | Boundary | In this pull request |
 | --- | --- | --- |
 | P2 Ingestion adapter | `extract(input) -> ExtractionResult` of `Fragment` values. Talonic sits behind `ExtractionProvider`. | [extraction-adapter.md](./extraction-adapter.md). Mock provider and `POST /api/extract`. No Talonic SDK. |
-| P4 Contradiction and judgment loop | Reads registry fields, emits deterministic flags and semantic anomaly ids, then waits for a human disposition. | v0 scaffold: [contradiction-judgment-v0.md](./contradiction-judgment-v0.md). `evaluateJudgment` fills `PipelineStatus`; Award desk freeze wiring is later. |
+| P4 Contradiction and judgment loop | Reads registry fields, emits deterministic flags and semantic anomaly ids, then waits for a human disposition. | v0 scaffold: [contradiction-judgment-v0.md](./contradiction-judgment-v0.md). `evaluateJudgment` fills `PipelineStatus`. Award desk disposition freeze: [award-desk-freeze.md](./award-desk-freeze.md). |
 | P5 Server decision record | Durable award record behind Award desk and `/workspace/records`, replacing the sessionStorage souvenir. | Not started. Demo record stays as it is. |
 | P6 Immutable audit export | Buyer and donor export of a frozen registry record. `lib/trace/export.ts` is the synthetic precursor. | Not started. |
 | P7 Connectors | SharePoint, ERP, and tender-portal adapters over the same domain services. | Named only. |
@@ -260,7 +260,7 @@ Do not add a second award product beside these modules.
 | Surface | Path | Registry relationship |
 | --- | --- | --- |
 | Award desk scenario and disposition | `lib/award-desk.ts` | `request`, `exception`, and `escalate` map through `dispositionFromAwardDeskDecision` to `request_evidence`, `accept_with_exception`, and `escalate`. The demo still stores `AwardDeskDisposition`. |
-| Award desk UI | `app/demo/award-desk.tsx` | On confirm, calls `freezeGoverningPacks(inForcePacks(...))` and `sanitizeDisposition`, then writes sessionStorage. Unchanged. |
+| Award desk UI | `app/demo/award-desk.tsx` | On confirm, freezes via `freezeAwardDeskDispositionAction`, stores disposition + frozen view in sessionStorage, shows record id/hashes on `/record`. |
 | Prep, disposition, record routes | `app/demo/[awardId]/page.tsx`, `disposition/page.tsx`, `record/page.tsx` | Fictional record. Unchanged. |
 | Rule library | `lib/rule-library.ts` | `inForcePacks`, `toggleOrgDefault`, `freezeGoverningPacks`. `packToggleFromRulePack` reads this shape. |
 | Library UI | `app/workspace/(product)/library/rule-library.tsx` | Live toggles. Unchanged. |
