@@ -61,6 +61,8 @@ export const judgmentResultSchema = z.strictObject({
   pipelineStatus: pipelineStatusSchema,
 })
 
+const scalarExpected = z.union([z.string().trim().min(1).max(4000), z.number().finite(), z.boolean()])
+
 export const judgmentRuleSchema = z.discriminatedUnion('kind', [
   z.strictObject({
     ruleId: idSchema,
@@ -76,6 +78,15 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     fieldKeys: z.tuple([fieldKeySchema, fieldKeySchema]),
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('fields_disagree'),
+    title: shortText.optional(),
+  }),
+  z.strictObject({
+    ruleId: idSchema,
+    kind: z.literal('value_must_equal'),
+    fieldKey: fieldKeySchema,
+    expected: scalarExpected,
+    severity: z.enum(findingSeverities).default('blocker'),
+    code: z.string().trim().min(1).max(80).default('field_value_mismatch'),
     title: shortText.optional(),
   }),
 ])
@@ -224,6 +235,48 @@ function evaluateValuesMustAgree(
   })
 }
 
+function evaluateValueMustEqual(
+  rule: Extract<JudgmentRule, { kind: 'value_must_equal' }>,
+  byKey: Map<string, RegistryField>,
+): Finding | null {
+  const field = byKey.get(rule.fieldKey)
+  if (!field || field.value.state === 'missing') {
+    const evidence = field ? [evidenceFromField(field)] : []
+    return findingSchema.parse({
+      schemaVersion: 'registry-finding-v0',
+      findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+      kind: 'required_missing',
+      severity: rule.severity,
+      code: rule.code,
+      ruleId: rule.ruleId,
+      title: rule.title ?? `Field ${rule.fieldKey} must equal ${JSON.stringify(rule.expected)}`,
+      summary: field
+        ? `Field ${rule.fieldKey} is missing evidence; expected ${JSON.stringify(rule.expected)}.`
+        : `No registry field with key ${rule.fieldKey} exists; expected ${JSON.stringify(rule.expected)}.`,
+      involvedFieldKeys: [rule.fieldKey],
+      involvedFieldIds: field ? [field.fieldId] : [],
+      evidence,
+    })
+  }
+
+  const actual = field.value.value
+  if (actual === rule.expected) return null
+
+  return findingSchema.parse({
+    schemaVersion: 'registry-finding-v0',
+    findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+    kind: 'contradiction',
+    severity: rule.severity,
+    code: rule.code,
+    ruleId: rule.ruleId,
+    title: rule.title ?? `Field ${rule.fieldKey} must equal ${JSON.stringify(rule.expected)}`,
+    summary: `Field ${rule.fieldKey} is ${scalarLabel(field)}; expected ${JSON.stringify(rule.expected)}.`,
+    involvedFieldKeys: [rule.fieldKey],
+    involvedFieldIds: [field.fieldId],
+    evidence: [evidenceFromField(field)],
+  })
+}
+
 function readinessFromFindings(findings: readonly Finding[]): PipelineStatus['readiness'] {
   if (findings.some(finding => finding.severity === 'blocker')) return 'red'
   if (findings.some(finding => finding.severity === 'warning')) return 'amber'
@@ -274,7 +327,9 @@ export function evaluateJudgment(
     const finding =
       rule.kind === 'required_present'
         ? evaluateRequiredPresent(rule, byKey)
-        : evaluateValuesMustAgree(rule, byKey)
+        : rule.kind === 'values_must_agree'
+          ? evaluateValuesMustAgree(rule, byKey)
+          : evaluateValueMustEqual(rule, byKey)
     if (finding) findings.push(finding)
   }
 

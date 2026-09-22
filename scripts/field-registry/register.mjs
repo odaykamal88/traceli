@@ -8,12 +8,20 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const root = fileURLToPath(new URL('../../', import.meta.url))
 const nodeModule = await import('node:module')
 
+function resolveAliasPath(specifier) {
+  if (!specifier.startsWith('@/')) return null
+  const base = resolvePath(root, specifier.slice(2))
+  const asFile = `${base}.ts`
+  if (existsSync(asFile)) return asFile
+  const asIndex = resolvePath(base, 'index.ts')
+  if (existsSync(asIndex)) return asIndex
+  return null
+}
+
 function resolveAlias(specifier, context, nextResolve) {
   if (specifier === 'next/headers') return nextResolve('next/headers.js', context)
-  if (specifier.startsWith('@/')) {
-    const path = resolvePath(root, specifier.slice(2)) + '.ts'
-    if (existsSync(path)) return nextResolve(pathToFileURL(path).href, context)
-  }
+  const resolved = resolveAliasPath(specifier)
+  if (resolved) return nextResolve(pathToFileURL(resolved).href, context)
   return nextResolve(specifier, context)
 }
 

@@ -88,6 +88,7 @@ export { getExtractionProvider, resolveExtractionProviderId } from '@/lib/field-
 export { MockExtractionProvider } from '@/lib/field-registry/extract-mock'
 export { TalonicExtractionProvider } from '@/lib/field-registry/extract-talonic'
 export type { PlaybookEvaluate, PlaybookInput } from '@/lib/field-registry/playbook'
+export { evaluatePlaybook } from '@/lib/field-registry/playbook'
 export {
   SYNTHETIC_SHELTER_RULES,
   JudgmentError,
@@ -111,3 +112,33 @@ export type {
   JudgmentResult,
   JudgmentRule,
 } from '@/lib/field-registry/judgment'
+export {
+  DonorPackError,
+  FCDO_PRIME_FIELD_KEYS,
+  FCDO_PRIME_PACK,
+  FCDO_PRIME_RULES,
+  GLOBAL_FUND_FIELD_KEYS,
+  GLOBAL_FUND_PACK,
+  GLOBAL_FUND_RULES,
+  donorPackFixtures,
+  donorPackIds,
+  evaluateDonorPack,
+  evaluateDonorPacks,
+  fcdoPrimeFailSnapshot,
+  fcdoPrimePassSnapshot,
+  getDonorPack,
+  globalFundFailSnapshot,
+  globalFundPassSnapshot,
+  isDonorPackId,
+  listDonorPacks,
+  packToggleForDonorPack,
+  packToggleForId,
+  pipelineStatusForDonorPacks,
+  rulesForDonorPackIds,
+  rulesForPackToggles,
+} from '@/lib/field-registry/packs'
+export type {
+  DonorPack,
+  DonorPackAudience,
+  DonorPackId,
+} from '@/lib/field-registry/packs'

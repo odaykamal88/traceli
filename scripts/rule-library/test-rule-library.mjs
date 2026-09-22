@@ -21,9 +21,9 @@ import {
 import { isWorkspaceProductPath } from '../../lib/workspace-product.ts'
 import { sanitizeDisposition } from '../../lib/award-desk.ts'
 
-test('Rule library seeds four packs in force and keeps two in the catalog', () => {
+test('Rule library seeds four packs in force and keeps three in the catalog', () => {
   const board = seedRuleLibraryBoard()
-  assert.equal(curatedRuleLibraryPacks.length, 6)
+  assert.equal(curatedRuleLibraryPacks.length, 7)
   assert.deepEqual(ruleLibraryCategories.map(item => item.id), [
     'procurement',
     'donor',
@@ -32,20 +32,23 @@ test('Rule library seeds four packs in force and keeps two in the catalog', () =
     'safeguarding',
   ])
   assert.equal(inForcePacks(board).length, 4)
-  assert.equal(catalogAvailable(board).length, 2)
+  assert.equal(catalogAvailable(board).length, 3)
   assert.ok(inForcePacks(board).every(pack => pack.onBoard && pack.orgDefault))
   assert.ok(board.every(pack => pack.illustrative === pack.curated || pack.source === 'upload'))
   assert.match(board.find(pack => pack.id === 'procurement-manual')?.name || '', /Procurement manual/)
   assert.match(board.find(pack => pack.id === 'echo-donor-conditions')?.name || '', /ECHO/)
   assert.match(board.find(pack => pack.id === 'sanctions-hygiene')?.name || '', /sanctions/i)
   assert.match(board.find(pack => pack.id === 'safeguarding-policy')?.name || '', /Safeguarding/)
+  assert.match(board.find(pack => pack.id === 'global-fund')?.name || '', /Global Fund/)
+  assert.match(board.find(pack => pack.id === 'fcdo-prime')?.name || '', /FCDO/)
 })
 
 test('Add from catalog turns the pack on for tonight', () => {
   const board = seedRuleLibraryBoard()
+  const availableBefore = catalogAvailable(board).length
   const [first] = catalogAvailable(board)
   const next = addCatalogPack(board, first.id)
-  assert.equal(catalogAvailable(next).length, 1)
+  assert.equal(catalogAvailable(next).length, availableBefore - 1)
   const added = next.find(pack => pack.id === first.id)
   assert.equal(added?.onBoard, true)
   assert.equal(added?.orgDefault, true)
