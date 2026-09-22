@@ -7,14 +7,18 @@ import { Lock } from 'lucide-react'
 import {
   agentDraftReason,
   awardDeskDecisions,
+  awardDeskFrozenStorageKey,
   awardDeskScenario,
   awardDeskSlug,
   awardDeskStorageKey,
   decisionCopy,
   defaultAwardDeskDisposition,
   sanitizeDisposition,
+  sanitizeFrozenRecordView,
+  shortHash,
   type AwardDeskDecisionId,
   type AwardDeskDisposition,
+  type AwardDeskFrozenRecordView,
 } from '@/lib/award-desk'
 import {
   categoryLabel,
@@ -27,6 +31,7 @@ import {
   sanitizeStoredBoard,
   seedInForcePacks,
 } from '@/lib/rule-library'
+import { freezeAwardDeskDispositionAction } from './actions'
 import s from './award-desk.module.css'
 
 export type AwardDeskScreen = 'desk' | 'award' | 'disposition' | 'record'
@@ -73,6 +78,24 @@ function writeStored(value: AwardDeskDisposition) {
   sessionStorage.setItem(awardDeskStorageKey, JSON.stringify(value))
 }
 
+function readFrozenStored(): AwardDeskFrozenRecordView | null {
+  try {
+    const raw = sessionStorage.getItem(awardDeskFrozenStorageKey)
+    if (!raw) return null
+    return sanitizeFrozenRecordView(JSON.parse(raw))
+  } catch {
+    return null
+  }
+}
+
+function writeFrozenStored(value: AwardDeskFrozenRecordView) {
+  sessionStorage.setItem(awardDeskFrozenStorageKey, JSON.stringify(value))
+}
+
+function clearFrozenStored() {
+  sessionStorage.removeItem(awardDeskFrozenStorageKey)
+}
+
 function readLiveBoard() {
   try {
     const raw = sessionStorage.getItem(ruleLibraryStorageKey)
@@ -106,6 +129,8 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
     ...defaultAwardDeskDisposition,
     governingPacks: freezeGoverningPacks(seedInForcePacks()),
   })
+  const [frozenView, setFrozenView] = useState<AwardDeskFrozenRecordView | null>(null)
+  const [freezing, setFreezing] = useState(false)
   const [inForce, setInForce] = useState(seedInForcePacks)
   const [recordFrozen, setRecordFrozen] = useState(false)
 
@@ -148,9 +173,11 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
   useEffect(() => {
     if (screen !== 'record') return
     const stored = readStored()
+    const frozen = readFrozenStored()
     if (stored) {
       setRecorded(stored)
-      setRecordFrozen(true)
+      setRecordFrozen(Boolean(frozen))
+      setFrozenView(frozen)
       return
     }
     setRecorded({
@@ -158,6 +185,7 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
       governingPacks: freezeGoverningPacks(inForce),
     })
     setRecordFrozen(false)
+    setFrozenView(null)
   }, [screen, inForce])
 
   useEffect(() => {
@@ -166,20 +194,31 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
     return () => window.clearTimeout(id)
   }, [toast])
 
-  function confirmDisposition() {
+  async function confirmDisposition() {
     setError('')
+    setFreezing(true)
     try {
       const next = sanitizeDisposition({
         decision,
         reason,
         governingPacks: freezeGoverningPacks(inForcePacks(readLiveBoard())),
       })
+      const frozen = await freezeAwardDeskDispositionAction({
+        decision: next.decision,
+        reason: next.reason,
+        governingPacks: next.governingPacks,
+      })
       writeStored(next)
+      writeFrozenStored(frozen)
       setRecorded(next)
+      setFrozenView(frozen)
       setRecordFrozen(true)
       router.push(`${awardHref}/record`)
     } catch (cause) {
+      clearFrozenStored()
       setError(cause instanceof Error ? cause.message : 'The disposition could not be recorded.')
+    } finally {
+      setFreezing(false)
     }
   }
 
@@ -358,7 +397,16 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
                 <p id="reason-help" className={s.demoNote}>Use fictional information only. 20–2,000 characters. Kept in this browser tab.</p>
               </div>
               <div className={s.actions}>
-                <button type="button" className={`${s.btn} ${s.btnPrimary}`} onClick={confirmDisposition}>Confirm disposition</button>
+                <button
+                  type="button"
+                  className={`${s.btn} ${s.btnPrimary}`}
+                  onClick={confirmDisposition}
+                  disabled={freezing}
+                  aria-busy={freezing}
+                  data-testid="confirm-disposition"
+                >
+                  {freezing ? 'Freezing registry…' : 'Confirm disposition'}
+                </button>
                 <Link className={`${s.btn} ${s.btnGhost}`} href={awardHref}>Cancel</Link>
               </div>
             </div>
@@ -423,6 +471,49 @@ export default function AwardDesk({ screen, notice = null, preset }: Props) {
                   ? 'Frozen at disposition. Turning a pack off later does not rewrite this record.'
                   : 'Not frozen yet — record a disposition to lock which packs applied.'}
               </p>
+            </div>
+            <div className={s.recordSection} data-testid="frozen-registry">
+              <h3>Frozen Field Registry record</h3>
+              {frozenView ? (
+                <>
+                  <p className={s.frozenBadge} data-testid="record-frozen-badge">Record frozen · verified</p>
+                  <dl className={s.frozenMeta}>
+                    <div>
+                      <dt>Record id</dt>
+                      <dd data-testid="frozen-record-id">{frozenView.recordId}</dd>
+                    </div>
+                    <div>
+                      <dt>Snapshot hash</dt>
+                      <dd data-testid="frozen-snapshot-hash" title={frozenView.snapshotHash}>
+                        {shortHash(frozenView.snapshotHash)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Packs hash</dt>
+                      <dd data-testid="frozen-packs-hash" title={frozenView.packsHash}>
+                        {shortHash(frozenView.packsHash)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Pipeline</dt>
+                      <dd data-testid="frozen-readiness">
+                        {frozenView.readiness}
+                        {frozenView.findingCount > 0
+                          ? ` · ${frozenView.findingCount} finding${frozenView.findingCount === 1 ? '' : 's'}`
+                          : ''}
+                      </dd>
+                    </div>
+                  </dl>
+                  <p className={s.freezeNote}>
+                    Trace record cites registry fields and pack provenance only — not source file bytes.
+                    Method: {frozenView.hashMethod}.
+                  </p>
+                </>
+              ) : (
+                <p className={s.muted}>
+                  No registry freeze yet. Confirm a disposition to write a frozen snapshot for this award.
+                </p>
+              )}
             </div>
             <div className={s.recordActions}>
               <button type="button" className={`${s.btn} ${s.btnMint}`} onClick={copyLink}>Copy link</button>

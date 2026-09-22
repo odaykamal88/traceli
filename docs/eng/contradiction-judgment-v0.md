@@ -6,7 +6,7 @@ Upstream contracts: [field-registry-v1.md](./field-registry-v1.md), [spine-p0-p1
 
 Contradiction and judgment read **Field Registry fields only**. They never open file bytes, never call a vendor extractor, and never ask a model to decide an award. Donor guideline interpretation stays Trace-owned rule content expressed against registry keys. Extraction remains rented; this loop stays Trace IP.
 
-Award desk UX is unchanged in this slice. Freeze wiring into the disposition UI is a later batch.
+Award desk UX disposition now calls `freezeAwardDeskDisposition` (see [award-desk-freeze.md](./award-desk-freeze.md)). This judgment slice still owns only the evaluator and fixtures.
 
 ## Place in the spine
 
@@ -127,14 +127,14 @@ Built-in rule kinds:
 ## Non-goals (v0)
 
 - No LLM-as-judge over PDFs, annexes, or mail bodies
-- No multi-agent or chat UI; Award desk disposition stays as it is
+- No multi-agent or chat UI
 - No Talonic credentials, network calls, or vendor payload types
-- No freeze wiring into Award desk disposition UI (batch B)
 - No audit export packaging (P6)
 - No homepage / film / demo marketing changes
 - PlaybookEvaluate is implemented thinly as `evaluatePlaybook` over donor pack ids; it still calls `evaluateJudgment` rather than a parallel engine
 
 Donor-specific hard rule packs for Global Fund and FCDO primes are in [donor-packs-v1.md](./donor-packs-v1.md).
+Award desk freeze wiring: [award-desk-freeze.md](./award-desk-freeze.md).
 
 ## Ownership
 
@@ -150,10 +150,11 @@ Donor-specific hard rule packs for Global Fund and FCDO primes are in [donor-pac
 ```sh
 pnpm test:contradiction
 pnpm test:donor-packs
+pnpm test:award-desk-freeze
 pnpm test:field-registry
 pnpm test:extraction
 pnpm test:rule-library
 pnpm test:award-desk
 ```
 
-The contradiction suite covers at least one pass fixture (required fields present and agreeing) and one fail fixture (required missing and/or disagreeing values), and proves a failing judgment's `pipelineStatus` can ride into `freezeAtJudgment` without touching Award desk. Donor pack suites add GF and FCDO-prime pass/fail fixtures on the same evaluator.
+The contradiction suite covers at least one pass fixture (required fields present and agreeing) and one fail fixture (required missing and/or disagreeing values), and proves a failing judgment's `pipelineStatus` can ride into `freezeAtJudgment`. Award desk disposition freeze is covered by `pnpm test:award-desk-freeze`. Donor pack suites add GF and FCDO-prime pass/fail fixtures on the same evaluator.

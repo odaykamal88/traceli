@@ -142,3 +142,16 @@ export type {
   DonorPackAudience,
   DonorPackId,
 } from '@/lib/field-registry/packs'
+export {
+  AWARD_DESK_DEMO_WAIVER,
+  AWARD_DESK_FREEZE_AT,
+  AWARD_DESK_FREEZE_BY,
+  AWARD_DESK_FREEZE_ROLE,
+  awardDeskShelterSnapshot,
+  freezeAwardDeskDisposition,
+  judgeAwardDeskPacks,
+} from '@/lib/field-registry/award-desk-freeze'
+export type {
+  FreezeAwardDeskDispositionInput,
+  FreezeAwardDeskDispositionResult,
+} from '@/lib/field-registry/award-desk-freeze'

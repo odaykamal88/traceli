@@ -81,8 +81,8 @@ export const awardDeskScenario = {
   disclaimer: 'Public demo · Fictional data',
   caveats: [
     'Fictional award, supplier, reviewer and evidence only. No live model, upload or real procurement approval.',
-    'This public desk does not create a server record, authenticated export or audit-ready pack.',
-    'Hashes and method details live on How Trace reasons — not on this path.',
+    'Frozen registry hashes are a browser-session souvenir only — not an authenticated tenant audit export.',
+    'The decision record shows freeze ids and truncated hashes; full method notes live on How Trace reasons.',
   ],
 } as const
 
@@ -100,6 +100,22 @@ export type AwardDeskDisposition = {
   recordedAtLabel: string
   governingPacks: FrozenGoverningPack[]
 }
+
+/** Client-safe summary of a Field Registry freeze. Full record stays server-side / session. */
+export type AwardDeskFrozenRecordView = {
+  recordId: string
+  snapshotHash: string
+  packsHash: string
+  hashMethod: 'sha256:sorted-json-v1'
+  frozenAt: string
+  frozenBy: string
+  readiness: 'unknown' | 'red' | 'amber' | 'green'
+  findingCount: number
+  packIds: string[]
+  dispositionDecision: string
+}
+
+export const awardDeskFrozenStorageKey = ['traceli', 'award-desk', 'frozen', 'v1'].join('.')
 
 export const defaultAwardDeskDisposition: AwardDeskDisposition = {
   decision: 'request',
@@ -144,6 +160,51 @@ export function sanitizeDisposition(input: {
     recordedAtLabel: awardDeskScenario.reviewer.recordedAtLabel,
     governingPacks: freezePacks(input.governingPacks),
   }
+}
+
+const readinessLevels = new Set(['unknown', 'red', 'amber', 'green'])
+
+export function sanitizeFrozenRecordView(input: unknown): AwardDeskFrozenRecordView {
+  if (!input || typeof input !== 'object') throw new Error('Missing frozen registry record.')
+  const body = input as Record<string, unknown>
+  const recordId = String(body.recordId ?? '')
+  const snapshotHash = String(body.snapshotHash ?? '')
+  const packsHash = String(body.packsHash ?? '')
+  const hashMethod = String(body.hashMethod ?? '')
+  const frozenAt = String(body.frozenAt ?? '')
+  const frozenBy = String(body.frozenBy ?? '')
+  const readiness = String(body.readiness ?? '')
+  const dispositionDecision = String(body.dispositionDecision ?? '')
+  const findingCount = Number(body.findingCount)
+  const packIds = Array.isArray(body.packIds) ? body.packIds.map(id => String(id)) : []
+  if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/.test(recordId)) throw new Error('Invalid frozen record id.')
+  if (!/^[a-f0-9]{64}$/.test(snapshotHash) || !/^[a-f0-9]{64}$/.test(packsHash)) {
+    throw new Error('Invalid frozen record hashes.')
+  }
+  if (hashMethod !== 'sha256:sorted-json-v1') throw new Error('Unknown frozen hash method.')
+  if (!frozenAt || !frozenBy) throw new Error('Frozen record is missing actor or time.')
+  if (!readinessLevels.has(readiness)) throw new Error('Unknown pipeline readiness.')
+  if (!Number.isInteger(findingCount) || findingCount < 0 || findingCount > 64) {
+    throw new Error('Invalid finding count.')
+  }
+  if (!dispositionDecision) throw new Error('Frozen disposition is missing.')
+  return {
+    recordId,
+    snapshotHash,
+    packsHash,
+    hashMethod: 'sha256:sorted-json-v1',
+    frozenAt,
+    frozenBy,
+    readiness: readiness as AwardDeskFrozenRecordView['readiness'],
+    findingCount,
+    packIds,
+    dispositionDecision,
+  }
+}
+
+export function shortHash(hash: string) {
+  if (hash.length < 16) return hash
+  return `${hash.slice(0, 8)}…${hash.slice(-6)}`
 }
 
 export function awardDeskHeroCopy() {

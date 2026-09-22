@@ -88,11 +88,13 @@ Do **not** encode as live packs in this slice:
 
 ## Non-goals (this PR)
 
-- Wiring freeze into Award desk UI (batch B)
+- WorkOS login / tenant upload desk
 - Real Talonic credentials / network calls
 - Audit export packaging
 - Homepage / film / GTM surfaces
 - Full GF or FCDO regulation encyclopedias
+
+Award desk freeze wiring (batch B): [award-desk-freeze.md](./award-desk-freeze.md).
 
 ## Tests
 
