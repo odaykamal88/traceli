@@ -7,8 +7,11 @@ const root = fileURLToPath(new URL('../../', import.meta.url))
 export async function resolve(specifier, context, nextResolve) {
   if (specifier === 'next/headers') return nextResolve('next/headers.js', context)
   if (specifier.startsWith('@/')) {
-    const path = resolvePath(root, specifier.slice(2)) + '.ts'
-    if (existsSync(path)) return nextResolve(pathToFileURL(path).href, context)
+    const base = resolvePath(root, specifier.slice(2))
+    const asFile = `${base}.ts`
+    if (existsSync(asFile)) return nextResolve(pathToFileURL(asFile).href, context)
+    const asIndex = resolvePath(base, 'index.ts')
+    if (existsSync(asIndex)) return nextResolve(pathToFileURL(asIndex).href, context)
   }
   return nextResolve(specifier, context)
 }

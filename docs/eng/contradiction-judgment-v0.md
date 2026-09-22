@@ -120,19 +120,21 @@ Built-in rule kinds:
 | --- | --- |
 | `required_present` | No field with that key, or value state is `missing`. |
 | `values_must_agree` | Both keys are `present` (or `negative`) and scalar values differ; or exactly one side is present while the other is missing. |
+| `value_must_equal` | Field missing, or `present`/`negative` scalar differs from the rule's `expected`. Wrong value emits kind `contradiction`; missing emits `required_missing`. |
 
-`SYNTHETIC_SHELTER_RULES` is a fixture pack for `RFP-2026-041`-shaped snapshots. It is not official donor text.
+`SYNTHETIC_SHELTER_RULES` is a fixture pack for `RFP-2026-041`-shaped snapshots. It is not official donor text. Live v1 donor packs (`global-fund`, `fcdo-prime`) live under `lib/field-registry/packs/` and are documented in [donor-packs-v1.md](./donor-packs-v1.md).
 
 ## Non-goals (v0)
 
 - No LLM-as-judge over PDFs, annexes, or mail bodies
 - No multi-agent or chat UI; Award desk disposition stays as it is
 - No Talonic credentials, network calls, or vendor payload types
-- No donor-specific hard rule content packs (schema stays donor-agnostic)
 - No freeze wiring into Award desk disposition UI (batch B)
 - No audit export packaging (P6)
 - No homepage / film / demo marketing changes
-- PlaybookEvaluate (P3) stays a separate type; judgment does not replace pack evaluation
+- PlaybookEvaluate is implemented thinly as `evaluatePlaybook` over donor pack ids; it still calls `evaluateJudgment` rather than a parallel engine
+
+Donor-specific hard rule packs for Global Fund and FCDO primes are in [donor-packs-v1.md](./donor-packs-v1.md).
 
 ## Ownership
 
@@ -147,10 +149,11 @@ Built-in rule kinds:
 
 ```sh
 pnpm test:contradiction
+pnpm test:donor-packs
 pnpm test:field-registry
 pnpm test:extraction
 pnpm test:rule-library
 pnpm test:award-desk
 ```
 
-The contradiction suite covers at least one pass fixture (required fields present and agreeing) and one fail fixture (required missing and/or disagreeing values), and proves a failing judgment's `pipelineStatus` can ride into `freezeAtJudgment` without touching Award desk.
+The contradiction suite covers at least one pass fixture (required fields present and agreeing) and one fail fixture (required missing and/or disagreeing values), and proves a failing judgment's `pipelineStatus` can ride into `freezeAtJudgment` without touching Award desk. Donor pack suites add GF and FCDO-prime pass/fail fixtures on the same evaluator.
