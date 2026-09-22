@@ -15,6 +15,8 @@ Statements use three labels:
 
 The public demo uses fictional procurement data. No customer should upload or send live buyer, supplier, tender, bid, evaluation, personal, or commercially sensitive documents into the current product baseline.
 
+The service spine that later code must follow is [eng/spine-p0-p1-p3.md](./eng/spine-p0-p1-p3.md), with the Field Registry v1 contract in [eng/field-registry-v1.md](./eng/field-registry-v1.md). Those documents name ownership and interfaces. They do not change the implemented controls in this baseline.
+
 ## Executive architecture decision
 
 Traceli is a **modular monolith** through its first paid pilots:

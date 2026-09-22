@@ -4,6 +4,8 @@ Updated: 27 August 2026
 
 For the current deployed-state architecture, technology stack, trust boundaries, and IT security review, see [SOLUTION_ARCHITECTURE.md](./SOLUTION_ARCHITECTURE.md).
 
+The September 2026 engineering spine for Platform Core, Field Registry, and the Rule Library is [eng/spine-p0-p1-p3.md](./eng/spine-p0-p1-p3.md). Field Registry v1, including freeze-at-judgment, is [eng/field-registry-v1.md](./eng/field-registry-v1.md).
+
 ## Executive decision
 
 Traceli should remain a **modular monolith through its first paid pilots**: one Next.js application, one relational source of truth, one secure document boundary, and one shared domain-policy layer used by the UI, integrations, and eventually MCP.
