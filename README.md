@@ -9,6 +9,7 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 - A workspace **Rule library** at `/workspace/library`: switchboard of governing packs the desk may cite. Public `/demo` stays Award desk.
 - How Trace reasons remains at `/method` (the previous interactive sandbox). `/demo/classic` redirects to Award desk; the earlier walkthrough is at `/method/classic`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
+- A signed-in upload desk at `/login` and `/desk`: mock extraction, a Global Fund or FCDO-prime pack, and a frozen record. Public `/demo` stays the scripted walkthrough. Setup is in [the upload desk brief](./docs/eng/workos-upload-desk.md).
 - A non-production Lakebase Postgres control graph with tenant-scoped reads, a restricted application role, and row-level isolation.
 - Source-linked requirements, submissions, clarifications, approvals, and audit chronology using fictional demo data.
 - A SHA-256 event chain that makes an edited or missing audit snapshot visibly detectable, with the first authenticated human determination persisted as a server audit/outbox transaction.
@@ -39,6 +40,7 @@ pnpm db:migrate
 pnpm db:seed
 pnpm test:tenant
 pnpm test:award-desk
+pnpm test:upload-desk
 pnpm test:rule-library
 pnpm build
 pnpm build

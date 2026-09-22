@@ -80,6 +80,8 @@ Allowed names: `.pdf`, `.docx`, `.xlsx`, `.eml`, `.msg`, `.txt`, `.png`, `.jpg`,
 
 The JSON response is an `ExtractionResult`. It is not stored.
 
+The signed-in upload desk (`POST /api/desk`) calls the same `extractParsedUpload` helper and then `fragmentsTowardRegistryDraft`. It does not change the default provider. See [workos-upload-desk.md](./workos-upload-desk.md).
+
 For an offline file on the machine running the app:
 
 ```sh

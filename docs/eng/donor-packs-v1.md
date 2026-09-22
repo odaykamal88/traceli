@@ -88,7 +88,7 @@ Do **not** encode as live packs in this slice:
 
 ## Non-goals (this PR)
 
-- WorkOS login / tenant upload desk
+- WorkOS login / tenant upload desk — see [workos-upload-desk.md](./workos-upload-desk.md)
 - Real Talonic credentials / network calls
 - Audit export packaging
 - Homepage / film / GTM surfaces
