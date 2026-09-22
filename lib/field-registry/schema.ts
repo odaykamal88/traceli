@@ -154,7 +154,10 @@ export const deterministicFlagSchema = z.strictObject({
   passed: z.boolean(),
 })
 
-/** Structure only. No evaluator fills these fields in v1. `unknown` means the loop has not run. */
+/**
+ * Filled by P4 `evaluateJudgment` (or later P3 playbooks). Omitted at freeze
+ * becomes empty flags and readiness `unknown` — the loop has not run.
+ */
 export const pipelineStatusSchema = z.strictObject({
   schemaVersion: z.literal('pipeline-status-v1'),
   deterministicFlags: z.array(deterministicFlagSchema).max(64),
