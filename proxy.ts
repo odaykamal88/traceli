@@ -11,9 +11,18 @@ const workOSConfigured = Boolean(
     process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI,
 )
 
+function isUploadDeskPage(pathname: string) {
+  return pathname === '/desk' || pathname.startsWith('/desk/')
+}
+
+function isUploadDeskApi(pathname: string) {
+  return pathname === '/api/desk' || pathname.startsWith('/api/desk/')
+}
+
 export default async function proxy(request: NextRequest) {
   const isTrace = request.nextUrl.pathname === '/workspace/trace' || request.nextUrl.pathname.startsWith('/api/trace')
-  if (isTrace && localTraceEnabled(process.env) && isLoopbackHost(request.nextUrl.hostname)) {
+  const isDesk = isUploadDeskPage(request.nextUrl.pathname) || isUploadDeskApi(request.nextUrl.pathname)
+  if ((isTrace || isDesk) && localTraceEnabled(process.env) && isLoopbackHost(request.nextUrl.hostname)) {
     return NextResponse.next()
   }
   const isProtectedWorkspace = request.nextUrl.pathname.startsWith('/workspace')
@@ -34,7 +43,7 @@ export default async function proxy(request: NextRequest) {
 
   const { session, headers, authorizationUrl } = await authkit(request)
 
-  if (isProtectedWorkspace && !session.user && authorizationUrl) {
+  if ((isProtectedWorkspace || isUploadDeskPage(request.nextUrl.pathname)) && !session.user && authorizationUrl) {
     return handleAuthkitHeaders(request, headers, { redirect: authorizationUrl })
   }
 

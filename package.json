@@ -25,6 +25,7 @@
     "test:rule-library": "node --experimental-strip-types --test scripts/rule-library/test-rule-library.mjs",
     "test:field-registry": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-field-registry.mjs",
     "test:extraction": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-extraction.mjs",
+    "test:upload-desk": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/desk/test-upload-desk.mjs",
     "test:contradiction": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-contradiction.mjs",
     "test:donor-packs": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-donor-packs.mjs",
     "extract:stub": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/field-registry/extract-stub.mjs",

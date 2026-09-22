@@ -58,7 +58,7 @@ Confirming disposition on `/demo/rfp-2026-041/disposition` freezes and navigates
 
 ## Non-goals
 
-- WorkOS login / tenant upload desk
+- WorkOS login / tenant upload desk — that path is [workos-upload-desk.md](./workos-upload-desk.md). `/demo` stays this public walkthrough.
 - Live Talonic HTTP
 - Audit export packaging (P6)
 - Homepage / film changes

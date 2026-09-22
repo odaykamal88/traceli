@@ -85,10 +85,14 @@ function formText(value: FormDataEntryValue | null, label: string) {
 }
 
 /**
- * Multipart field `file`, optional `awardId`.
- * Organization comes from the server session. A client path is not accepted.
+ * Read a same-origin multipart body and reject fields outside `allowed`.
+ * The upload desk uses a wider allowlist. `/api/extract` stays file + awardId.
  */
-export async function readExtractionUpload(request: Request): Promise<Omit<ExtractionInput, 'organizationId'>> {
+export async function readMultipartForm(
+  request: Request,
+  allowed: ReadonlySet<string>,
+  unexpectedMessage: string,
+): Promise<FormData> {
   const contentType = request.headers.get('content-type')?.toLowerCase() ?? ''
   if (!contentType.startsWith('multipart/form-data')) {
     throw new ExtractionError('invalid_input', 'Upload the file as multipart form data.')
@@ -106,31 +110,61 @@ export async function readExtractionUpload(request: Request): Promise<Omit<Extra
     throw new ExtractionError('invalid_input', 'The upload could not be read.')
   }
   for (const key of form.keys()) {
-    if (!allowedFields.has(key)) throw new ExtractionError('invalid_input', 'Send the file and an optional award id.')
+    if (!allowed.has(key)) throw new ExtractionError('invalid_input', unexpectedMessage)
   }
+  return form
+}
+
+/** File plus optional award id. Organization and path are not accepted from the client. */
+export async function uploadFromMultipartForm(form: FormData): Promise<Omit<ExtractionInput, 'organizationId'>> {
   const file = form.get('file')
   if (!(file instanceof File)) throw new ExtractionError('invalid_input', 'Choose a file to upload.')
   const fileName = extractionFileName(file.name || 'upload')
   const bytes = new Uint8Array(await file.arrayBuffer())
+  return uploadFromFileParts(fileName, bytes, file.type || 'application/octet-stream', form.get('awardId'))
+}
+
+function uploadFromFileParts(
+  fileName: string,
+  bytes: Uint8Array<ArrayBuffer>,
+  mediaType: string,
+  awardEntry: FormDataEntryValue | null,
+): Omit<ExtractionInput, 'organizationId'> {
   if (bytes.byteLength < 1) throw new ExtractionError('invalid_input', 'The file is empty.')
   if (bytes.byteLength > EXTRACTION_BODY_LIMIT) throw new ExtractionError('too_large', 'The file is larger than 8 MB.')
-  const mediaType = resolveExtractionMedia(fileName, file.type || 'application/octet-stream')
-  const awardText = formText(form.get('awardId'), 'award id')
+  const resolvedMedia = resolveExtractionMedia(fileName, mediaType)
+  const awardText = formText(awardEntry, 'award id')
   const awardId = awardText === undefined ? undefined : idSchema.safeParse(awardText)
   if (awardId && !awardId.success) throw new ExtractionError('invalid_input', 'Award id is not a registry id.')
   return {
     fileName,
-    mediaType,
+    mediaType: resolvedMedia,
     bytes,
     ...(awardId?.success ? { awardId: awardId.data } : {}),
   }
 }
 
-export async function extractUploadedFile(request: Request, scope: { organizationId: string }) {
+/**
+ * Multipart field `file`, optional `awardId`.
+ * Organization comes from the server session. A client path is not accepted.
+ */
+export async function readExtractionUpload(request: Request): Promise<Omit<ExtractionInput, 'organizationId'>> {
+  const form = await readMultipartForm(request, allowedFields, 'Send the file and an optional award id.')
+  return uploadFromMultipartForm(form)
+}
+
+export async function extractParsedUpload(
+  upload: Omit<ExtractionInput, 'organizationId'>,
+  scope: { organizationId: string },
+) {
   const organization = idSchema.safeParse(scope.organizationId)
   if (!organization.success) throw new ExtractionError('invalid_input', 'Organization id is not a registry id.')
-  const upload = await readExtractionUpload(request)
   return getExtractionProvider().extract({ ...upload, organizationId: organization.data })
+}
+
+export async function extractUploadedFile(request: Request, scope: { organizationId: string }) {
+  const upload = await readExtractionUpload(request)
+  return extractParsedUpload(upload, scope)
 }
 
 export function extractionHttpError(error: unknown): Response {
