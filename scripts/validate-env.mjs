@@ -83,6 +83,9 @@ const extractionProvider = process.env.TRACE_EXTRACTION_PROVIDER?.trim()
 if (extractionProvider && !['mock', 'talonic'].includes(extractionProvider)) {
   throw new Error('TRACE_EXTRACTION_PROVIDER must be mock or talonic.')
 }
+if (extractionProvider === 'talonic' && !isConfigured('TRACE_TALONIC_API_KEY')) {
+  throw new Error('TRACE_EXTRACTION_PROVIDER=talonic requires TRACE_TALONIC_API_KEY.')
+}
 if (isConfigured('TRACE_TALONIC_BASE_URL')) {
   validateUrl('TRACE_TALONIC_BASE_URL', ['https:'])
 }

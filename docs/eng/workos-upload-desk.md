@@ -7,7 +7,7 @@ Spine: [extraction-adapter.md](./extraction-adapter.md), [field-registry-v1.md](
 
 ## Why
 
-`/demo` stays the public scripted walkthrough. This desk is the signed-in path: one packet, one donor pack, one frozen record. It is not a chatbot and it does not turn Talonic on.
+`/demo` stays the public scripted walkthrough. This desk is the signed-in path: one packet, one donor pack, one frozen record. It is not a chatbot. Talonic runs only when `TRACE_EXTRACTION_PROVIDER=talonic`. The default remains the mock.
 
 ```text
 /login  → AuthKit (existing /auth/callback, return path /desk)
@@ -84,9 +84,9 @@ No new variables. Use the existing WorkOS and Trace contract.
 | `TRACELI_TRACE_MODE` | `workos` |
 | `DATABASE_URL` | Pooled Postgres URL. The desk does not query it. `pnpm validate:env` still requires it whenever Trace mode is `workos`, because `/api/trace` does. |
 | `DATABASE_URL_UNPOOLED` | Direct Postgres URL. Same validation rule. |
-| `TRACE_EXTRACTION_PROVIDER` | Leave unset, or set `mock`. Do not set `talonic` in this release. |
-| `TRACE_TALONIC_API_KEY` | Do not set. |
-| `TRACE_TALONIC_BASE_URL` | Do not set. |
+| `TRACE_EXTRACTION_PROVIDER` | Leave unset, or set `mock`, until the founder flips Production to `talonic` after the live client is merged. The key and base URL may already be set; they are unused while the provider is mock. |
+| `TRACE_TALONIC_API_KEY` | Already set on Production `traceli-new`. Do not copy it into the repo. Unused while the provider is mock. |
+| `TRACE_TALONIC_BASE_URL` | Production value `https://api.talonic.com/v1`. Unused while the provider is mock. |
 
 WorkOS Redirects for each host you sign in from:
 
@@ -127,7 +127,7 @@ pnpm typecheck
 
 ## Non-goals
 
-- Live Talonic HTTP, or setting `TRACE_EXTRACTION_PROVIDER=talonic`
+- Flipping Production `TRACE_EXTRACTION_PROVIDER` to `talonic` in this desk change. The founder does that after the live client is merged. See [extraction-adapter.md](./extraction-adapter.md).
 - A tenant table for frozen upload-desk records
 - Public case studies, homepage, or film changes
 - Rule library workspace productization

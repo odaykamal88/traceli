@@ -33,6 +33,9 @@ export const extractionErrorCodes = [
   'invalid_input',
   'unsupported_media',
   'too_large',
+  'unauthorized',
+  'timeout',
+  'upstream',
 ] as const
 
 export type ExtractionErrorCode = (typeof extractionErrorCodes)[number]

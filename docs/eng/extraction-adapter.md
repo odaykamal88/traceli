@@ -1,6 +1,6 @@
 # Extraction adapter
 
-Status: P2 interface, offline mock, Talonic skeleton. 22 September 2026.
+Status: P2 interface, offline mock, live Talonic HTTP client. 23 September 2026.
 Code: `lib/field-registry/extract.ts` and the `extract-*.ts` modules beside it.
 Registry schema: [field-registry-v1.md](./field-registry-v1.md).
 Ownership: [spine-p0-p1-p3.md](./spine-p0-p1-p3.md).
@@ -14,7 +14,7 @@ A vendor may read a PDF, spreadsheet, or message. Trace keeps the normalized `Fr
 | Rent | Keep |
 | --- | --- |
 | OCR, layout, and mail parsing behind `ExtractionProvider` | `Fragment`, provenance, and `fragmentsTowardRegistryDraft` |
-| A later Talonic call, when credentials exist | Rule packs, playbook input, and `freezeAtJudgment` |
+| The Talonic HTTP call, when `TRACE_EXTRACTION_PROVIDER=talonic` | Rule packs, playbook input, and `freezeAtJudgment` |
 | Hosting for that call | The decision that a field is present, missing, or negative |
 
 Adding a vendor means implementing `extract` and mapping that vendor's JSON into the existing fragment schema. It does not mean a new rule dialect or a new freeze format.
@@ -55,22 +55,51 @@ Unknown keys fail validation. A Talonic block, a raw OCR tree, or `bytes` cannot
 
 | Value | Behavior |
 | --- | --- |
-| unset or `mock` | `MockExtractionProvider`. Deterministic fragments from the file name, media type, and bytes. No network. Fixed clock `2026-09-22T00:00:00.000Z`. |
-| `talonic` | `TalonicExtractionProvider`. Skeleton only. |
+| unset, empty, or `mock` | `MockExtractionProvider`. Deterministic fragments from the file name, media type, and bytes. No network. Fixed clock `2026-09-22T00:00:00.000Z`. This is the safe default. |
+| `talonic` | `TalonicExtractionProvider`. Real HTTPS call. No SDK. |
 
 The mock does not read pixels or spreadsheet cells. It stamps a kind hint so demos and tests have a stable shape. The file body is hashed and dropped.
-
-The Talonic class has no SDK and no HTTP client. It still rejects a file type outside the allowlist, and it does not read the file.
 
 | Environment | Required |
 | --- | --- |
 | `TRACE_EXTRACTION_PROVIDER` | `mock` or `talonic`. Unset means mock. |
-| `TRACE_TALONIC_API_KEY` | Required only when the provider is `talonic`. Not read by the mock. |
-| `TRACE_TALONIC_BASE_URL` | https URL, no userinfo and no query. Required only when the provider is `talonic`. |
+| `TRACE_TALONIC_API_KEY` | Required only when the provider is `talonic`. Not read by the mock. Never log or commit it. |
+| `TRACE_TALONIC_BASE_URL` | https URL, no userinfo and no query. When the provider is `talonic` and this is empty, the client uses `https://api.talonic.com/v1`. |
 
 Do not commit key values. `.env.example` lists the names empty.
 
-Until both Talonic variables are set, `extract` throws `ExtractionError` with code `not_configured`. When they are set, it throws `unimplemented`. Neither path sends the file. A later change should map the vendor response into `fragmentSchema` and leave `lib/field-registry/freeze.ts`, `lib/field-registry/playbook.ts`, and `lib/rule-library.ts` untouched.
+Missing `TRACE_TALONIC_API_KEY` throws `not_configured` and does not read the file or send a request. A non-https base URL, or one with userinfo or a query, throws `invalid_input` and does not send a request. Talonic `401` or `403` throws `unauthorized`. A request that exceeds the 20 second budget, including a document that is still processing, throws `timeout`. Other vendor failures throw `upstream`. `POST /api/extract` and `POST /api/desk` map those to 502, 504, and 501. The JSON error does not include the key.
+
+The client `POST`s the file to `{base}/extract` as multipart, with `include_markdown=true` and `include_provenance=true`, and an `Idempotency-Key` of `trace-` plus the file SHA-256. It does not send a schema, so Talonic auto-discovers fields. Redirects are not followed. Poll and result links must stay on the configured host and under `/v1` (or the base path).
+
+A 200 body is mapped immediately. Each non-empty `data` entry becomes one fragment. `null` and empty strings are skipped, so a missing vendor field stays missing rather than becoming a negative finding. The fragment id is `frag.talonic.{file hash}.{index}`, not the vendor extraction id. Confidence comes from `confidence.fields`, then a flat confidence map, then `confidence.overall`, then `0.5`. `created_at` becomes `extractedAt` when it parses. Kind is inferred from the field key (`waiver`, `capacity`, `annex`, `pricing` / `line_item` / `unit_price`, `email` / `subject` / `message_id`). Other keys stay `text` and `fragmentsTowardRegistryDraft` leaves them unmapped. Provenance `page` / `page_index` and `raw_text` / `source_text` become `sourceRef` and `spans` when present. More than 64 usable fields fails instead of dropping fields.
+
+When `data` has no usable values, `markdown` becomes one fragment. Its kind uses `document.type_detected` when that matches a hint, otherwise the same filename hints as the mock.
+
+A 202, or a 200 that is still `processing`, polls `poll_url` (or `GET {base}/documents/{id}`) until `completed`, then `GET {base}/extractions/{latest_extraction_id}`. The poll budget is the same 20 seconds, not Talonic's five-minute recommendation. A large document can time out inside `/api/extract` and `/api/desk` (`maxDuration` 30). Webhooks are not implemented.
+
+`lib/field-registry/freeze.ts`, `lib/field-registry/playbook.ts`, and `lib/rule-library.ts` stay free of Talonic types.
+
+### Enabling Talonic
+
+Local and CI stay on the mock. Leave `TRACE_EXTRACTION_PROVIDER` unset or set it to `mock`.
+
+```sh
+TRACE_EXTRACTION_PROVIDER=talonic
+TRACE_TALONIC_API_KEY=...
+TRACE_TALONIC_BASE_URL=https://api.talonic.com/v1
+```
+
+Production project `traceli-new` already has the Talonic key and base URL. This change does not edit Vercel env vars. After this pull request is merged, the founder sets Production `TRACE_EXTRACTION_PROVIDER` to `talonic`. Until that flip, Production keeps the mock.
+
+### Assumptions to confirm against the live API
+
+- `include_provenance` is sent because the Talonic MCP/SDK and marketing pages describe it. The POST form reference documents `include_markdown` and does not list `include_provenance`. If the live API rejects that field, stop sending it. Mapping still accepts provenance when the body includes it.
+- No award-packet schema is sent. Public docs say schema is optional. The Node SDK warns that schema-less extraction is unreliable in v0.1. A later change can pin a Trace field schema without a new pipeline.
+- Async completion is `GET /v1/documents/:id` until `completed`, then `GET /v1/extractions/:id`. `GET /v1/documents/:id/extractions` is used only when `latest_extraction_id` is absent. Confirm that list returns either full `data` or a `links.self` to the extraction.
+- Trace still accepts `.xlsx`, `.eml`, and `.msg`. Talonic's POST page lists PDF, PNG, JPG, TIFF, WEBP, DOCX, TXT, and CSV. The other three are forwarded and surface `unsupported_media` when Talonic returns `unsupported_file_type`.
+- The same file hash is reused as `Idempotency-Key` for 24 hours. Confirm a failed call is not cached as the retry result.
+- The quick-extract envelope has no cell coordinate. Spreadsheet fragments use a page source ref, not an invented cell id.
 
 ## Upload
 
@@ -90,7 +119,7 @@ pnpm extract:stub -- --file=./packet.txt
 
 `pnpm extract:stub --file=./packet.txt` works when pnpm forwards the flag. The `--` form is the reliable one.
 
-That command uses the same `getExtractionProvider()` path as the route. It prints fragments and does not call Talonic.
+That command uses the same `getExtractionProvider()` path as the route. With the default mock it prints fragments and does not call Talonic. With `TRACE_EXTRACTION_PROVIDER=talonic` it sends the file.
 
 ## Tests
 
@@ -99,4 +128,4 @@ pnpm test:extraction
 pnpm test:field-registry
 ```
 
-The extraction suite checks stable mock provenance, the default provider, one fragment schema for a mock result and a Talonic-shaped result, the skeleton's `not_configured` and `unimplemented` errors, and that freeze and the Rule library source do not mention Talonic.
+The extraction suite checks stable mock provenance, the default provider, one fragment schema, the Talonic HTTP client with a mocked `fetch` (no live network), auth, timeout, redirect, and async poll behavior, and that freeze and the Rule library source do not mention Talonic.

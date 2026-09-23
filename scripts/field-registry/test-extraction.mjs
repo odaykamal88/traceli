@@ -119,40 +119,281 @@ test('the factory defaults to mock and a provider swap keeps the fragment schema
   assert.throws(() => extractionResultSchema.parse({ ...remote, bytes }), ZodError)
 })
 
-test('the Talonic skeleton never reads a file or the network', async () => {
+test('Talonic refuses a missing key, a bad URL, and an unread missing file', async () => {
   const provider = new TalonicExtractionProvider()
   await assert.rejects(
     provider.extract(input('payload.exe', 'application/octet-stream')),
     error => error instanceof ExtractionError && error.code === 'unsupported_media',
   )
+  let calls = 0
+  const guarded = new TalonicExtractionProvider({
+    fetchImpl: () => {
+      calls += 1
+      throw new Error('network')
+    },
+  })
   const missing = {
     fileName: 'waiver.pdf',
     mediaType: 'application/pdf',
     path: '/tmp/does-not-exist-trace-extract.pdf',
   }
-  await assert.rejects(provider.extract(missing), error => error instanceof ExtractionError && error.code === 'not_configured')
+  await assert.rejects(guarded.extract(missing), error => error instanceof ExtractionError && error.code === 'not_configured')
+  assert.equal(calls, 0)
   process.env.TRACE_TALONIC_API_KEY = 'local-test'
   process.env.TRACE_TALONIC_BASE_URL = 'http://extraction.example.invalid'
-  await assert.rejects(provider.extract(input('notes.txt', 'text/plain')), error => error instanceof ExtractionError && error.code === 'invalid_input')
-  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
-  const originalFetch = globalThis.fetch
-  let calls = 0
-  globalThis.fetch = () => {
-    calls += 1
-    throw new Error('network')
-  }
-  try {
-    await assert.rejects(
-      provider.extract(input('notes.txt', 'text/plain')),
-      error => error instanceof ExtractionError && error.code === 'unimplemented',
-    )
-    assert.equal(calls, 0)
-  } finally {
-    globalThis.fetch = originalFetch
-  }
+  await assert.rejects(
+    guarded.extract(input('notes.txt', 'text/plain')),
+    error => error instanceof ExtractionError && error.code === 'invalid_input',
+  )
+  process.env.TRACE_TALONIC_BASE_URL = 'https://user:secret@extraction.example.invalid/v1'
+  await assert.rejects(
+    guarded.extract(input('notes.txt', 'text/plain')),
+    error => error instanceof ExtractionError && error.code === 'invalid_input',
+  )
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1?token=secret'
+  await assert.rejects(
+    guarded.extract(missing),
+    error => error instanceof ExtractionError && error.code === 'invalid_input',
+  )
+  assert.equal(calls, 0)
   const source = readFileSync(new URL('../../lib/field-registry/extract-talonic.ts', import.meta.url), 'utf8')
-  assert.equal(source.includes('fetch('), false)
+  assert.equal(source.includes('console.'), false)
   assert.equal(source.includes('node:http'), false)
+  assert.equal(source.includes('globalThis.fetch'), true)
+})
+
+function jsonResponse(status, body, headers = {}) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json', ...headers },
+  })
+}
+
+test('Talonic maps a synchronous extract into registry fragments', async () => {
+  const secret = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  delete process.env.TRACE_TALONIC_BASE_URL
+  const calls = []
+  const provider = new TalonicExtractionProvider({
+    now: () => new Date('2026-09-23T00:00:00.000Z'),
+    fetchImpl: async (url, init) => {
+      calls.push({ url: String(url), init })
+      const form = init.body
+      assert.equal(typeof form.get, 'function')
+      assert.equal(form.get('include_markdown'), 'true')
+      assert.equal(form.get('include_provenance'), 'true')
+      assert.equal(form.get('schema'), null)
+      const file = form.get('file')
+      assert.equal(file.name, 'waiver.pdf')
+      assert.deepEqual(new Uint8Array(await file.arrayBuffer()), bytes)
+      return jsonResponse(200, {
+        extraction_id: 'ext-should-not-leak',
+        request_id: 'req_should_not_leak',
+        status: 'complete',
+        created_at: '2026-09-23T12:00:00.000Z',
+        document: { id: 'doc-1', filename: 'waiver.pdf', type_detected: 'waiver', pages: 2 },
+        data: {
+          note: null,
+          amount: 0,
+          waiver_authority: 'Panel chair',
+          line_items: [{ description: 'Spare part', quantity: 2 }],
+        },
+        confidence: {
+          overall: 0.8,
+          fields: { waiver_authority: 0.91, line_items: 0.7 },
+        },
+        provenance: {
+          waiver_authority: { page: 2, raw_text: 'Approved by the panel chair.' },
+        },
+        links: { dashboard: 'https://app.talonic.com/extractions/ext-should-not-leak' },
+      })
+    },
+  })
+  const result = await provider.extract(input('nested/waiver.pdf', 'application/pdf', {
+    awardId: 'rfp-2026-041',
+    organizationId: 'org_trace_demo',
+  }))
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].url, 'https://api.talonic.com/v1/extract')
+  assert.equal(calls[0].init.method, 'POST')
+  assert.equal(calls[0].init.redirect, 'manual')
+  assert.equal(calls[0].init.headers.Authorization, `Bearer ${secret}`)
+  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-${sourceFileHashOf(bytes)}`)
+  assert.equal(result.providerId, 'talonic')
+  assert.equal(result.extractorId, 'extractor.talonic')
+  assert.equal(result.fileName, 'waiver.pdf')
+  assert.equal(result.awardId, 'rfp-2026-041')
+  assert.equal(result.organizationId, 'org_trace_demo')
+  assert.equal(result.fragments.length, 3)
+  assert.deepEqual(result.fragments.map(fragment => fragment.kind), ['text', 'pricing_table', 'waiver'])
+  const waiver = result.fragments[2]
+  assert.equal(waiver.text, 'waiver_authority: Panel chair')
+  assert.equal(waiver.confidence, 0.91)
+  assert.equal(waiver.extractedAt, '2026-09-23T12:00:00.000Z')
+  assert.equal(waiver.sourceRef.kind, 'page')
+  assert.equal(waiver.sourceRef.id, 'page-2')
+  assert.equal(waiver.spans[0].text, 'Approved by the panel chair.')
+  assert.equal(result.fragments[0].text, 'amount: 0')
+  assert.equal(result.fragments[0].confidence, 0.8)
+  const serialized = JSON.stringify(result)
+  assert.equal(serialized.includes(secret), false)
+  assert.equal(serialized.includes('ext-should-not-leak'), false)
+  assert.equal(serialized.includes('synthetic annex body'), false)
+  assert.equal(serialized.includes('"bytes"'), false)
+  const draft = fragmentsTowardRegistryDraft(result.fragments, { awardId: result.awardId })
+  assert.deepEqual(draft.fields.map(field => field.key).sort(), ['pricing.table', 'waiver.noted'])
+  assert.equal(draft.fields.every(field => field.provenance.verificationMethod === 'adapter_extract'), true)
+  assert.equal(draft.unmappedFragmentIds.length, 1)
+})
+
+test('Talonic reports auth failure, timeout, and a refused redirect without the key', async () => {
+  const secret = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  const auth = new TalonicExtractionProvider({
+    fetchImpl: async () => jsonResponse(401, { error: { message: `bad ${secret}` } }),
+  })
+  await assert.rejects(auth.extract(input('notes.txt', 'text/plain')), error => {
+    assert.equal(error instanceof ExtractionError && error.code, 'unauthorized')
+    assert.equal(error.message.includes(secret), false)
+    return true
+  })
+  const refused = extractionHttpError(new ExtractionError(
+    'unauthorized',
+    'Talonic refused the API key. Check TRACE_TALONIC_API_KEY. No fragments were returned.',
+  ))
+  assert.equal(refused.status, 502)
+  const timedOut = new TalonicExtractionProvider({
+    timeoutMs: 30,
+    fetchImpl: (_url, init) => new Promise((_resolve, reject) => {
+      init.signal.addEventListener('abort', () => {
+        const error = new Error('aborted')
+        error.name = 'AbortError'
+        reject(error)
+      })
+    }),
+  })
+  await assert.rejects(timedOut.extract(input('notes.txt', 'text/plain')), error => {
+    return error instanceof ExtractionError && error.code === 'timeout' && !error.message.includes(secret)
+  })
+  assert.equal(extractionHttpError(new ExtractionError('timeout', 'Talonic did not respond in time.')).status, 504)
+  assert.equal(extractionHttpError(new ExtractionError('upstream', 'Talonic could not complete extraction.')).status, 502)
+  let followed = 0
+  const redirect = new TalonicExtractionProvider({
+    fetchImpl: async () => {
+      followed += 1
+      return new Response(null, { status: 302, headers: { location: 'https://evil.example/collect' } })
+    },
+  })
+  await assert.rejects(
+    redirect.extract(input('notes.txt', 'text/plain')),
+    error => error instanceof ExtractionError && error.code === 'upstream',
+  )
+  assert.equal(followed, 1)
+})
+
+test('Talonic polls a 202 on the configured host and then maps the extraction', async () => {
+  const secret = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  const urls = []
+  let polls = 0
+  const provider = new TalonicExtractionProvider({
+    sleep: async () => {},
+    now: () => new Date('2026-09-23T00:00:00.000Z'),
+    fetchImpl: async url => {
+      const href = String(url)
+      urls.push(href)
+      if (href.endsWith('/extract')) {
+        return jsonResponse(202, {
+          status: 'processing',
+          poll_url: 'https://evil.example/v1/documents/doc-1',
+          document: { id: 'doc-1' },
+        })
+      }
+      return jsonResponse(500, {})
+    },
+  })
+  await assert.rejects(
+    provider.extract(input('notes.txt', 'text/plain')),
+    error => error instanceof ExtractionError && error.code === 'upstream' && !error.message.includes(secret),
+  )
+  assert.deepEqual(urls, ['https://extraction.example.invalid/v1/extract'])
+
+  const polled = new TalonicExtractionProvider({
+    sleep: async () => {},
+    now: () => new Date('2026-09-23T00:00:00.000Z'),
+    fetchImpl: async url => {
+      const href = String(url)
+      urls.push(href)
+      if (href.endsWith('/extract')) {
+        return jsonResponse(202, {
+          status: 'processing',
+          poll_url: '/v1/documents/doc-1',
+          document: { id: 'doc-1' },
+        })
+      }
+      if (href.endsWith('/documents/doc-1')) {
+        polls += 1
+        if (polls === 1) return jsonResponse(200, { id: 'doc-1', status: 'processing' })
+        return jsonResponse(200, {
+          id: 'doc-1',
+          status: 'completed',
+          latest_extraction_id: 'ext_1',
+          links: { extractions: '/v1/documents/doc-1/extractions' },
+        })
+      }
+      if (href.endsWith('/extractions/ext_1')) {
+        return jsonResponse(200, {
+          id: 'ext_1',
+          status: 'complete',
+          created_at: '2026-09-23T01:00:00.000Z',
+          data: { capacity_statement: 'Workshop can deliver.' },
+          confidence: { overall: 0.66, fields: { capacity_statement: 0.66 } },
+        })
+      }
+      return jsonResponse(500, { message: secret })
+    },
+  })
+  urls.length = 0
+  const result = await polled.extract(input('capacity.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'))
+  assert.deepEqual(urls, [
+    'https://extraction.example.invalid/v1/extract',
+    'https://extraction.example.invalid/v1/documents/doc-1',
+    'https://extraction.example.invalid/v1/documents/doc-1',
+    'https://extraction.example.invalid/v1/extractions/ext_1',
+  ])
+  assert.equal(result.fragments.length, 1)
+  assert.equal(result.fragments[0].kind, 'capacity_letter')
+  assert.equal(result.fragments[0].text, 'capacity_statement: Workshop can deliver.')
+  assert.equal(result.fragments[0].sourceRef.kind, 'page')
+  assert.equal(JSON.stringify(result).includes(secret), false)
+})
+
+test('Talonic uses markdown when discovery returns no fields', async () => {
+  process.env.TRACE_TALONIC_API_KEY = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  const provider = new TalonicExtractionProvider({
+    fetchImpl: async () => jsonResponse(200, {
+      status: 'complete',
+      document: { type_detected: 'waiver' },
+      data: {},
+      markdown: 'Authority is the panel chair.',
+      confidence: { overall: 0.55 },
+    }),
+  })
+  const result = await provider.extract(input('packet.pdf', 'application/pdf'))
+  assert.equal(result.fragments.length, 1)
+  assert.equal(result.fragments[0].kind, 'waiver')
+  assert.equal(result.fragments[0].text, 'Authority is the panel chair.')
+  assert.equal(result.fragments[0].confidence, 0.55)
+  const unsupported = new TalonicExtractionProvider({
+    fetchImpl: async () => jsonResponse(400, { code: 'unsupported_file_type', message: 'no' }),
+  })
+  await assert.rejects(
+    unsupported.extract(input('prices.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')),
+    error => error instanceof ExtractionError && error.code === 'unsupported_media',
+  )
 })
 
 test('draft mapping fills hinted fields and leaves generic text unmapped', async () => {
