@@ -6,10 +6,11 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 
 - A public award-assurance story at `/` and a 44-second illustrative film.
 - The public Award desk at `/demo`: a fictional award under reconstruction, overnight agent prep, a human disposition and a shareable decision record.
+- Public Case Cards at `/cases`. A card cites a frozen Field Registry record, with the same facts at `/cases/[slug].json`. The first card, Global Fund OIG GF-OIG-25-005, is a labeled fixture awaiting a founder freeze. See [the phase 0 definition of done](./docs/case-card-phase0.md).
 - A workspace **Rule library** at `/workspace/library`: switchboard of governing packs the desk may cite. Public `/demo` stays Award desk.
 - How Trace reasons remains at `/method` (the previous interactive sandbox). `/demo/classic` redirects to Award desk; the earlier walkthrough is at `/method/classic`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
-- A signed-in upload desk at `/login` and `/desk`: extraction, a Global Fund or FCDO-prime pack, and a frozen record. Extraction stays on the offline mock until `TRACE_EXTRACTION_PROVIDER=talonic`. Public `/demo` stays the scripted walkthrough. Setup is in [the upload desk brief](./docs/eng/workos-upload-desk.md) and [the extraction adapter](./docs/eng/extraction-adapter.md).
+- A signed-in upload desk at `/login` and `/desk`: extraction, a Global Fund or FCDO-prime pack, and a frozen record. Accounts are invitation-only. Password reset and invite links return through AuthKit to `/desk`. Extraction stays on the offline mock until `TRACE_EXTRACTION_PROVIDER=talonic`. Public `/demo` stays the scripted walkthrough. Setup is in [the upload desk brief](./docs/eng/workos-upload-desk.md) and [the extraction adapter](./docs/eng/extraction-adapter.md).
 - Global Fund and FCDO-prime packs include Restrictive Measures / integrity due diligence evidence controls. There is no in-desk live OFAC or sanctions-list API: Trace-li checks that screening evidence was recorded and dispositioned.
 - A non-production Lakebase Postgres control graph with tenant-scoped reads, a restricted application role, and row-level isolation.
 - Source-linked requirements, submissions, clarifications, approvals, and audit chronology using fictional demo data.
@@ -43,6 +44,7 @@ pnpm db:migrate
 pnpm db:seed
 pnpm test:tenant
 pnpm test:award-desk
+pnpm test:case-cards
 pnpm test:upload-desk
 pnpm test:rule-library
 pnpm build

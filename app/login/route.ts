@@ -1,23 +1,13 @@
-import { getSignInUrl, withAuth } from '@workos-inc/authkit-nextjs'
-import { redirect } from 'next/navigation'
-
-import { isWorkOSConfigured } from '@/lib/workspace-access'
+import { redirectToDeskSignIn } from '@/lib/auth/desk-auth'
 
 export const dynamic = 'force-dynamic'
 
 /**
- * AuthKit sign-in for the upload desk.
- * The sealed return path is `/desk`. The callback stays `/auth/callback`.
+ * Product sign-in for the upload desk.
+ * Return path is `/desk`. The callback stays `/auth/callback`.
+ * Invitation and password-reset tokens on this URL are handed to AuthKit
+ * even when a session cookie is already present.
  */
-export const GET = async () => {
-  if (!isWorkOSConfigured()) {
-    redirect('/desk?auth=unavailable')
-  }
-
-  const session = await withAuth()
-  if (session.user) {
-    redirect('/desk')
-  }
-
-  redirect(await getSignInUrl({ returnTo: '/desk' }))
+export const GET = async (request: Request) => {
+  await redirectToDeskSignIn(request)
 }

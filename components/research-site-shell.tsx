@@ -69,6 +69,7 @@ export function ResearchSiteShell({ children, readingProgress, traceLi = false }
           </div>
           <div className="flex max-w-xl flex-wrap gap-x-5 gap-y-3 text-xs text-white/55 md:justify-end">
             {navigation.map(({ href, label }) => <Link key={href} href={href} className="hover:text-white">{label}</Link>)}
+            <Link href="/cases" className="hover:text-white">Case cards</Link>
             <Link href="/research/global-fund" className="hover:text-white">Global Fund research</Link>
             <a href={bookingHref} target="_blank" rel="noreferrer" className="hover:text-white">Discuss one procurement file</a>
           </div>

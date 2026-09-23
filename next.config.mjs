@@ -127,6 +127,34 @@ const nextConfig = {
         ],
       },
       {
+        source: '/auth/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/invite',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/sign-up',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/reset-password',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
         source: '/api/desk',
         headers: [
           { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
@@ -158,6 +186,16 @@ const nextConfig = {
         permanent: false,
       },
     ]
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/cases/:slug.json',
+          destination: '/api/cases/:slug',
+        },
+      ],
+    }
   },
 }
 
