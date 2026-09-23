@@ -23,6 +23,10 @@ export default function ResearchIndexPage() {
         <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Traceli Research Desk</p>
         <h1 className="mt-5 font-display text-6xl leading-none tracking-[-0.03em] sm:text-8xl">Before You Sign.</h1>
         <p className="mt-6 max-w-2xl text-xl leading-8 text-[#52696a]">Real cases. Costly lessons. Better-prepared procurement decisions.</p>
+        <p className="mt-6 max-w-2xl text-sm leading-6 text-[#52696a]">
+          <Link href="/research/global-fund" className="font-semibold text-[#1f6f61] underline decoration-[#1f6f61]/30 underline-offset-4">Global Fund OIG research</Link>
+          {' '}— four public files on pre-signature proof.
+        </p>
       </div>
     </header>
     <div className="px-5 py-12 sm:px-8 lg:px-12">
