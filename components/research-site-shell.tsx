@@ -9,7 +9,7 @@ const navigation = [
   { href: '/docs', label: 'Documentation' },
 ] as const
 
-function TraceliMark() {
+function TraceliMark({ traceLi = false }: { traceLi?: boolean }) {
   return (
     <span className="flex items-center gap-3">
       <span className="relative flex size-9 shrink-0 items-center justify-center" aria-hidden="true">
@@ -18,12 +18,14 @@ function TraceliMark() {
         <Waypoints className="relative size-[18px] stroke-[1.75] text-[#fbf5ea] drop-shadow-sm" />
         <span className="absolute right-0.5 top-0.5 size-1.5 rounded-full border border-[#061a33] bg-[#78d8c4] shadow-[0_0_8px_rgba(120,216,196,0.8)]" />
       </span>
-      <span className="font-mono text-[13px] font-semibold uppercase tracking-[0.27em] text-[#fbf5ea]">traceli</span>
+      <span className={traceLi ? 'text-[15px] font-semibold tracking-[-0.04em] text-[#fbf5ea]' : 'font-mono text-[13px] font-semibold uppercase tracking-[0.27em] text-[#fbf5ea]'}>
+        {traceLi ? 'Trace-li' : 'traceli'}
+      </span>
     </span>
   )
 }
 
-export function ResearchSiteShell({ children }: { children: ReactNode }) {
+export function ResearchSiteShell({ children, readingProgress, traceLi = false }: { children: ReactNode; readingProgress?: ReactNode; traceLi?: boolean }) {
   return (
     <div className="min-h-screen bg-[#f7f3eb] text-[#071d39]">
       <a href="#main-content" className="sr-only z-[80] rounded-lg bg-[#fbf5ea] px-4 py-2 text-[#071d39] focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
@@ -32,8 +34,8 @@ export function ResearchSiteShell({ children }: { children: ReactNode }) {
 
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061a33]/95 text-white backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-5 px-5 py-4 sm:px-8 lg:px-12">
-          <Link href="/" aria-label="Traceli home">
-            <TraceliMark />
+          <Link href="/" aria-label={traceLi ? 'Trace-li home' : 'Traceli home'}>
+            <TraceliMark traceLi={traceLi} />
           </Link>
           <nav aria-label="Public navigation" className="flex items-center gap-1 sm:gap-2">
             {navigation.map(({ href, label }) => (
@@ -52,6 +54,7 @@ export function ResearchSiteShell({ children }: { children: ReactNode }) {
             {navigation.map(({ href, label }) => <Link key={href} href={href} className="py-1 hover:text-white">{label}</Link>)}
           </div>
         </nav>
+        {readingProgress}
       </header>
 
       <main id="main-content">{children}</main>
@@ -59,18 +62,20 @@ export function ResearchSiteShell({ children }: { children: ReactNode }) {
       <footer className="border-t border-white/10 bg-[#061a33] px-5 py-10 text-white sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1320px] gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <Link href="/" aria-label="Traceli home">
-              <TraceliMark />
+            <Link href="/" aria-label={traceLi ? 'Trace-li home' : 'Traceli home'}>
+              <TraceliMark traceLi={traceLi} />
             </Link>
             <p className="mt-4 max-w-md text-sm leading-6 text-white/48">Procurement evidence and audit-response support. Start with one completed procurement file, the question it needs to answer, and the date the answer is due.</p>
           </div>
           <div className="flex max-w-xl flex-wrap gap-x-5 gap-y-3 text-xs text-white/55 md:justify-end">
             {navigation.map(({ href, label }) => <Link key={href} href={href} className="hover:text-white">{label}</Link>)}
+            <Link href="/cases" className="hover:text-white">Case cards</Link>
+            <Link href="/research/global-fund" className="hover:text-white">Global Fund research</Link>
             <a href={bookingHref} target="_blank" rel="noreferrer" className="hover:text-white">Discuss one procurement file</a>
           </div>
         </div>
         <div className="mx-auto mt-8 flex max-w-[1320px] flex-col gap-2 border-t border-white/10 pt-6 text-[11px] leading-5 text-white/38 sm:flex-row sm:justify-between">
-          <p>© {new Date().getFullYear()} Traceli.</p>
+          <p>© {new Date().getFullYear()} {traceLi ? 'Trace-li' : 'Traceli'}.</p>
           <p>Public-site contact: <a href="mailto:hello@trace-li.com" className="underline decoration-white/20 underline-offset-4 hover:text-white">hello@trace-li.com</a></p>
         </div>
       </footer>

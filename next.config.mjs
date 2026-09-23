@@ -64,7 +64,10 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
-  outputFileTracingIncludes: { '/hq': ['./docs/hq/**/*.json', './docs/hq/**/*.md'] },
+  outputFileTracingIncludes: {
+    '/hq': ['./docs/hq/**/*.json', './docs/hq/**/*.md'],
+    '/research/global-fund/sources': ['./content/research/global-fund/SOURCES.md'],
+  },
   async headers() {
     return [
       {
