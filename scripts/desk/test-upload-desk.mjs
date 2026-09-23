@@ -6,7 +6,7 @@ import { MockExtractionProvider } from '../../lib/field-registry/extract-mock.ts
 import { verifyFrozenRecord } from '../../lib/field-registry/freeze.ts'
 import { FCDO_PRIME_FIELD_KEYS } from '../../lib/field-registry/packs/fcdo-prime.ts'
 import { GLOBAL_FUND_FIELD_KEYS } from '../../lib/field-registry/packs/global-fund.ts'
-import { deskExtractionFailure } from '../../lib/desk/failure-copy.ts'
+import { deskExtractionFailure, deskWorkingCopy } from '../../lib/desk/failure-copy.ts'
 import { DeskAccessError, freezeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
 import { sanitizeUploadDeskView } from '../../lib/desk/view.ts'
 
@@ -257,6 +257,31 @@ test('the extract route still rejects a donor pack field', async () => {
   assert.equal(response.status, 400)
 })
 
+test('desk working copy stays on one honest status', () => {
+  assert.equal(deskWorkingCopy.button, 'Working…')
+  assert.match(deskWorkingCopy.status, /^Working… Trace-li /)
+  assert.equal(deskWorkingCopy.status.includes('Extracting…'), false)
+  assert.equal(deskWorkingCopy.status.includes('Freezing…'), false)
+})
+
+test('the upload desk file control is a labelled button with a working spinner', () => {
+  const view = readFileSync(new URL('../../app/desk/upload-desk.tsx', import.meta.url), 'utf8')
+  const css = readFileSync(new URL('../../app/desk/desk.module.css', import.meta.url), 'utf8')
+  const route = readFileSync(new URL('../../app/api/desk/route.ts', import.meta.url), 'utf8')
+  assert.match(view, /htmlFor="packet-file"/)
+  assert.match(view, /id="packet-file"/)
+  assert.match(view, /Choose file/)
+  assert.match(view, /deskWorkingCopy/)
+  assert.match(view, /className=\{s\.spinner\}/)
+  assert.match(view, /disabled=\{pending\}/)
+  assert.match(css, /\.fileButton \{/)
+  assert.match(css, /background: var\(--navy\)/)
+  assert.match(css, /color: var\(--ivory\)/)
+  assert.match(css, /prefers-reduced-motion: reduce/)
+  assert.match(route, /export const maxDuration = 180/)
+  assert.equal(route.includes('talonic'), false)
+})
+
 test('desk failure copy shows Talonic detail and drops secrets', () => {
   const secret = 'tlnc_live_key_should_not_render'
   const shaped = deskExtractionFailure({
@@ -294,6 +319,15 @@ test('desk failure copy shows Talonic detail and drops secrets', () => {
   assert.match(poisoned.detail, /HTTP 401/)
   assert.equal(deskExtractionFailure({ ok: true }), null)
   assert.equal(deskExtractionFailure(null), null)
+
+  const waiting = deskExtractionFailure({
+    error: 'Talonic is still processing this document (document 601b2dcd, request req_601b2dcd01). Try again. No fragments were returned.',
+    code: 'timeout',
+    upstream: { requestId: 'req_601b2dcd01' },
+  })
+  assert.match(waiting.summary, /document 601b2dcd/)
+  assert.match(waiting.summary, /Try again/)
+  assert.equal(waiting.detail, 'Request req_601b2dcd01.')
 })
 
 test('desk sources do not log and do not name Talonic', () => {

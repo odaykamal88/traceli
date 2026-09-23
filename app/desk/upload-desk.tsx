@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 
-import { deskExtractionFailure } from '@/lib/desk/failure-copy'
+import { deskExtractionFailure, deskWorkingCopy } from '@/lib/desk/failure-copy'
 import {
   sanitizeUploadDeskView,
   uploadDeskStorageKey,
@@ -84,12 +84,14 @@ function deskNotice(summary: string, detail = ''): DeskNotice {
 }
 
 export default function UploadDesk({ viewer, providerId, packs }: Props) {
+  const formRef = useRef<HTMLFormElement>(null)
   const resultsRef = useRef<HTMLHeadingElement>(null)
   const shouldFocusResult = useRef(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<DeskNotice | null>(null)
   const [result, setResult] = useState<UploadDeskView | null>(null)
   const [restored, setRestored] = useState(false)
+  const [fileLabel, setFileLabel] = useState<string | null>(null)
 
   useEffect(() => {
     const stored = readStored(viewer.organizationId)
@@ -136,6 +138,8 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
   }
 
   function startAnother() {
+    formRef.current?.reset()
+    setFileLabel(null)
     clearStored()
     setResult(null)
     setError(null)
@@ -153,9 +157,9 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
       <p className={s.eyebrow}>Award assurance</p>
       <h1>Upload a packet</h1>
       <p className={s.lede}>
-        Choose a donor pack, upload one file, and Trace will extract it, map registry fields, run the pack, and freeze a record.
+        Choose a donor pack, upload one file, and Trace-li will extract it, map registry fields, run the pack, and freeze a record.
       </p>
-      <form className={s.card} onSubmit={onSubmit} aria-busy={pending}>
+      <form ref={formRef} className={s.card} onSubmit={onSubmit} aria-busy={pending}>
         <p className={s.note}>
           {providerNote}
           {' '}
@@ -168,7 +172,7 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
           <div className={s.packs}>
             {packs.map(pack => (
               <label className={s.pack} key={pack.packId}>
-                <input type="radio" name="packId" value={pack.packId} required />
+                <input type="radio" name="packId" value={pack.packId} required disabled={pending} />
                 <span>
                   <strong>{pack.name}</strong>
                   <span>{pack.blurb} Version {pack.version}.</span>
@@ -177,19 +181,33 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
             ))}
           </div>
         </fieldset>
-        <label className={s.file}>
-          <span>Packet file</span>
-          <input
-            name="file"
-            type="file"
-            required
-            accept=".pdf,.docx,.xlsx,.eml,.msg,.txt,.png,.jpg,.jpeg,application/pdf,text/plain"
-          />
-          <span className={s.help}>PDF, Word, Excel, email, text, or image. Up to 8 MB.</span>
-        </label>
+        <div className={s.file}>
+          <label className={s.fileLegend} htmlFor="packet-file">Packet file</label>
+          <div className={s.fileControl}>
+            <input
+              id="packet-file"
+              className={s.fileInput}
+              name="file"
+              type="file"
+              required
+              disabled={pending}
+              aria-describedby="packet-file-help"
+              accept=".pdf,.docx,.xlsx,.eml,.msg,.txt,.png,.jpg,.jpeg,application/pdf,text/plain"
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                const file = event.currentTarget.files?.[0]
+                setFileLabel(file && file.size > 0 ? file.name : null)
+              }}
+            />
+            <label className={s.fileButton} htmlFor="packet-file">Choose file</label>
+            <span className={s.fileName} data-empty={fileLabel ? undefined : 'true'}>
+              {fileLabel ?? 'No file selected'}
+            </span>
+          </div>
+          <span className={s.help} id="packet-file-help">PDF, Word, Excel, email, text, or image. Up to 8 MB.</span>
+        </div>
         <div className={s.actions}>
           <button className={s.primary} type="submit" disabled={pending}>
-            {pending ? 'Extracting and freezing…' : 'Extract and freeze'}
+            {pending ? deskWorkingCopy.button : 'Extract and freeze'}
           </button>
           {result ? (
             <button className={s.secondary} type="button" onClick={startAnother} disabled={pending}>
@@ -197,8 +215,13 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
             </button>
           ) : null}
         </div>
-        <p className={s.status} aria-live="polite">
-          {pending ? 'Extracting the packet, mapping fields, and freezing the record.' : ''}
+        <p className={s.status} role="status" aria-live="polite">
+          {pending ? (
+            <span className={s.working}>
+              <span className={s.spinner} aria-hidden="true" />
+              <span>{deskWorkingCopy.status}</span>
+            </span>
+          ) : ''}
         </p>
         {error ? (
           <p className={s.alert} role="alert">

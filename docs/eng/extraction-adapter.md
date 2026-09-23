@@ -68,7 +68,7 @@ The mock does not read pixels or spreadsheet cells. It stamps a kind hint so dem
 
 Do not commit key values. `.env.example` lists the names empty.
 
-Missing `TRACE_TALONIC_API_KEY` throws `not_configured` and does not read the file or send a request. A non-https base URL, or one with userinfo or a query, throws `invalid_input` and does not send a request. Talonic `401` or `403` throws `unauthorized`. A request that exceeds the 20 second budget, including a document that is still processing, throws `timeout`. Other vendor failures throw `upstream`. `POST /api/extract` and `POST /api/desk` map those to 502, 504, and 501. The JSON error does not include the key.
+Missing `TRACE_TALONIC_API_KEY` throws `not_configured` and does not read the file or send a request. A non-https base URL, or one with userinfo or a query, throws `invalid_input` and does not send a request. Talonic `401` or `403` throws `unauthorized`. A request that exceeds the poll budget, including a document that is still processing, throws `timeout`. Other vendor failures throw `upstream`. `POST /api/extract` and `POST /api/desk` map those to 502, 504, and 501. The JSON error does not include the key.
 
 The client `POST`s the file to `{base}/extract` as multipart, with `include_markdown=true`, and an `Idempotency-Key` of `trace-v2-` plus the file SHA-256, cut to 64 characters. It does not send `include_provenance` or a schema, so Talonic auto-discovers fields. Provenance is still mapped when the body includes it. Redirects are not followed. Poll and result links must stay on the configured host and under `/v1` (or the base path).
 
@@ -78,7 +78,11 @@ A 200 body is mapped immediately. Each non-empty `data` entry becomes one fragme
 
 When `data` has no usable values, `markdown` becomes one fragment. Its kind uses `document.type_detected` when that matches a hint, otherwise the same filename hints as the mock.
 
-A 202, or a 200 that is still `processing`, polls `poll_url` (or `GET {base}/documents/{id}`) until `completed`, then `GET {base}/extractions/{latest_extraction_id}`. The poll budget is the same 20 seconds, not Talonic's five-minute recommendation. A large document can time out inside `/api/extract` and `/api/desk` (`maxDuration` 30). Webhooks are not implemented.
+A 202, or a 200 that is still `processing`, polls `poll_url` (or `GET {base}/documents/{id}`) until `completed`, then `GET {base}/extractions/{latest_extraction_id}`. The primary poll budget is 150 seconds. If the document is still processing, the client waits at most 8 seconds more and polls once. That extension sits inside a 20 second reserve, so the whole client budget is 170 seconds. It does not poll again after that, and it does not follow Talonic's five-minute recommendation. Redirects stay manual. Poll links stay on the configured host.
+
+A document that is still processing after that budget throws `timeout`. The sentence names the Talonic document id and request id when the response included them, and it tells the operator to try again. The same `upstream` object from a vendor error (`status`, `code`, `message`, `requestId`) is kept when the poll body had them. The API key is scrubbed.
+
+`POST /api/extract` and `POST /api/desk` set `maxDuration` to 180 so the function can return that timeout instead of the platform cutting the invocation off. Fluid Compute's maximum is 300 seconds on Hobby and Pro; 180 stays under that cap and leaves about 10 seconds after the client budget for the desk to freeze. Webhooks are not implemented.
 
 `lib/field-registry/freeze.ts`, `lib/field-registry/playbook.ts`, and `lib/rule-library.ts` stay free of Talonic types.
 
