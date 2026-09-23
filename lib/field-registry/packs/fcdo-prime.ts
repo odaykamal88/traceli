@@ -1,11 +1,20 @@
 import type { JudgmentRule } from '@/lib/field-registry/judgment'
+import {
+  fcdoIddScopeTokens,
+  iddDispositionDecisions,
+  iddHitResults,
+  iddScreenResults,
+  iddSubjectKinds,
+} from '@/lib/field-registry/packs/idd'
 import type { DonorPack } from '@/lib/field-registry/packs/types'
 
 /**
- * FCDO commercial-prime v1 thin pack.
+ * FCDO commercial-prime thin pack.
  * For primes' award desks awarding under FCDO-funded contracts — not a pack
- * sold to FCDO HQ. UK Procurement Act 2023 is out of scope beyond thin
- * supplier-code / competition hygiene. See docs/eng/donor-pack-fcdo-prime-v1.md.
+ * sold to FCDO HQ. UK Procurement Act 2023 is in scope only as debarment or
+ * exclusion eligibility evidence. The sanctions overlay checks attested UK
+ * Sanctions List evidence and connected persons; it does not screen lists.
+ * See docs/eng/donor-pack-fcdo-prime-v1.md.
  */
 export const FCDO_PRIME_FIELD_KEYS = [
   'eligibility.supplier_screened',
@@ -18,6 +27,18 @@ export const FCDO_PRIME_FIELD_KEYS = [
   'award.contract_value_gbp',
   'threshold.method_aligned',
   'delivery_chain.partners_identified',
+  'idd.subject',
+  'idd.subject_kind',
+  'idd.connected_persons',
+  'idd.screen_scope',
+  'idd.screen_date',
+  'idd.list_vintage',
+  'idd.screen_result',
+  'idd.evidence_ref',
+  'idd.debarment_exclusion',
+  'idd.disposition_owner',
+  'idd.disposition_decision',
+  'idd.disposition_rationale',
 ] as const
 
 export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
@@ -105,11 +126,117 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     code: 'fcdo_delivery_chain_unidentified',
     title: 'Delivery-chain partners identified pre-signature',
   },
+  {
+    ruleId: 'fcdo_idd_subject',
+    kind: 'required_present',
+    fieldKey: 'idd.subject',
+    severity: 'blocker',
+    code: 'fcdo_idd_subject_missing',
+    title: 'Sanctions subject organization or individual required before signature',
+  },
+  {
+    ruleId: 'fcdo_idd_subject_kind',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.subject_kind',
+    allowed: [...iddSubjectKinds],
+    severity: 'blocker',
+    code: 'fcdo_idd_subject_kind_invalid',
+    title: 'Sanctions subject must be recorded as an organization or an individual',
+  },
+  {
+    ruleId: 'fcdo_idd_connected_persons',
+    kind: 'required_present',
+    fieldKey: 'idd.connected_persons',
+    severity: 'blocker',
+    code: 'fcdo_idd_connected_persons_missing',
+    title: 'Ownership, control, and connected persons diligence required',
+  },
+  {
+    ruleId: 'fcdo_idd_uk_sanctions_scope',
+    kind: 'text_must_include',
+    fieldKey: 'idd.screen_scope',
+    tokens: [...fcdoIddScopeTokens],
+    severity: 'blocker',
+    code: 'fcdo_idd_uk_sanctions_scope_incomplete',
+    title: 'UK Sanctions List scope must be attested',
+  },
+  {
+    ruleId: 'fcdo_idd_screen_date',
+    kind: 'required_present',
+    fieldKey: 'idd.screen_date',
+    severity: 'blocker',
+    code: 'fcdo_idd_screen_date_missing',
+    title: 'UK sanctions screen date required before signature',
+  },
+  {
+    ruleId: 'fcdo_idd_list_vintage',
+    kind: 'required_present',
+    fieldKey: 'idd.list_vintage',
+    severity: 'warning',
+    code: 'fcdo_idd_list_vintage_missing',
+    title: 'List vintage cited by the UK sanctions evidence',
+  },
+  {
+    ruleId: 'fcdo_idd_screen_result',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.screen_result',
+    allowed: [...iddScreenResults],
+    severity: 'blocker',
+    code: 'fcdo_idd_result_invalid',
+    title: 'Sanctions result must be clear, potential match, confirmed hit, or unresolved',
+  },
+  {
+    ruleId: 'fcdo_idd_evidence_ref',
+    kind: 'required_present',
+    fieldKey: 'idd.evidence_ref',
+    severity: 'blocker',
+    code: 'fcdo_idd_evidence_missing',
+    title: 'Sanctions screening evidence reference required',
+  },
+  {
+    ruleId: 'fcdo_idd_debarment_exclusion',
+    kind: 'required_present',
+    fieldKey: 'idd.debarment_exclusion',
+    severity: 'blocker',
+    code: 'fcdo_idd_debarment_missing',
+    title: 'Procurement Act debarment or exclusion evidence required',
+  },
+  {
+    ruleId: 'fcdo_idd_hit_disposition_decision',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.disposition_decision',
+    allowedValues: [...iddDispositionDecisions],
+    severity: 'blocker',
+    code: 'fcdo_idd_hit_needs_decision',
+    title: 'A non-clear sanctions result needs a select, continue, or terminate decision',
+  },
+  {
+    ruleId: 'fcdo_idd_hit_disposition_owner',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.disposition_owner',
+    severity: 'warning',
+    code: 'fcdo_idd_hit_needs_owner',
+    title: 'Record who owns the sanctions disposition',
+  },
+  {
+    ruleId: 'fcdo_idd_hit_disposition_rationale',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.disposition_rationale',
+    severity: 'warning',
+    code: 'fcdo_idd_hit_needs_rationale',
+    title: 'Record the rationale for the sanctions disposition',
+  },
 ]
 
 export const FCDO_PRIME_PACK: DonorPack = {
   packId: 'fcdo-prime',
-  version: '2026.1',
+  version: '2026.2',
   name: 'FCDO commercial prime award desk v1',
   audience: 'fcdo-commercial-prime',
   category: 'donor',

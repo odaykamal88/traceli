@@ -121,6 +121,9 @@ Built-in rule kinds:
 | `required_present` | No field with that key, or value state is `missing`. |
 | `values_must_agree` | Both keys are `present` (or `negative`) and scalar values differ; or exactly one side is present while the other is missing. |
 | `value_must_equal` | Field missing, or `present`/`negative` scalar differs from the rule's `expected`. Wrong value emits kind `contradiction`; missing emits `required_missing`. |
+| `value_must_be_one_of` | Field missing, or scalar not in `allowed`. Wrong value emits `contradiction`; missing emits `required_missing`. |
+| `text_must_include` | Field missing, or text does not contain every required token as a whole token. Tokens split on characters other than letters, digits, and hyphens (`us-state` stays one token). This is exact attestation, not fuzzy name matching. |
+| `required_when_value_in` | When `whenFieldKey` is present and its scalar is in `whenValues`, `fieldKey` must be present. Optional `allowedValues` rejects any other scalar as `contradiction`. If the trigger is missing or outside `whenValues`, the rule passes. |
 
 `SYNTHETIC_SHELTER_RULES` is a fixture pack for `RFP-2026-041`-shaped snapshots. It is not official donor text. Live v1 donor packs (`global-fund`, `fcdo-prime`) live under `lib/field-registry/packs/` and are documented in [donor-packs-v1.md](./donor-packs-v1.md).
 
