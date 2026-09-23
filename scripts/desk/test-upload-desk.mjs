@@ -6,6 +6,7 @@ import { MockExtractionProvider } from '../../lib/field-registry/extract-mock.ts
 import { verifyFrozenRecord } from '../../lib/field-registry/freeze.ts'
 import { FCDO_PRIME_FIELD_KEYS } from '../../lib/field-registry/packs/fcdo-prime.ts'
 import { GLOBAL_FUND_FIELD_KEYS } from '../../lib/field-registry/packs/global-fund.ts'
+import { deskExtractionFailure } from '../../lib/desk/failure-copy.ts'
 import { DeskAccessError, freezeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
 import { sanitizeUploadDeskView } from '../../lib/desk/view.ts'
 
@@ -254,6 +255,45 @@ test('the extract route still rejects a donor pack field', async () => {
     body: form,
   }))
   assert.equal(response.status, 400)
+})
+
+test('desk failure copy shows Talonic detail and drops secrets', () => {
+  const secret = 'tlnc_live_key_should_not_render'
+  const shaped = deskExtractionFailure({
+    error: 'Talonic returned a gateway error (HTTP 502). No fragments were returned.',
+    code: 'upstream',
+    upstream: {
+      status: 502,
+      code: 'INTERNAL_ERROR',
+      message: `worker failed Bearer ${secret}`,
+      requestId: 'req_0468dcdadafb4488',
+      authorization: `Bearer ${secret}`,
+    },
+  })
+  assert.equal(shaped.summary, 'Talonic returned a gateway error (HTTP 502). No fragments were returned.')
+  assert.equal(
+    shaped.detail,
+    'Talonic said: worker failed Bearer redacted. Code INTERNAL_ERROR. Request req_0468dcdadafb4488.',
+  )
+  assert.equal(`${shaped.summary} ${shaped.detail}`.includes(secret), false)
+  assert.equal(shaped.detail.includes('authorization'), false)
+
+  const poisoned = deskExtractionFailure({
+    error: `Talonic refused the API key. ${secret}`,
+    upstream: {
+      status: 401,
+      code: 'not a code',
+      message: `Authorization: Bearer ${secret}`,
+      requestId: `req_${secret}`,
+    },
+  })
+  assert.equal(poisoned.summary.includes(secret), false)
+  assert.match(poisoned.summary, /redacted/)
+  assert.equal(poisoned.detail.includes('not a code'), false)
+  assert.equal(poisoned.detail.includes(secret), false)
+  assert.match(poisoned.detail, /HTTP 401/)
+  assert.equal(deskExtractionFailure({ ok: true }), null)
+  assert.equal(deskExtractionFailure(null), null)
 })
 
 test('desk sources do not log and do not name Talonic', () => {

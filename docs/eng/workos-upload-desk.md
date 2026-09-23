@@ -71,6 +71,8 @@ The form sends `packId` `global-fund` or `fcdo-prime` plus one file (pdf, docx, 
 
 The JSON response is a view: provider id, file name, file hash, pack, findings, field states, record id, snapshot hash, packs hash. It does not include file bytes or a vendor payload. The browser keeps that view in `sessionStorage` until the next packet. Nothing is written to Postgres. The file is not retained.
 
+When extraction fails, the desk uses the same JSON as `POST /api/extract`: `error`, `code`, and `upstream` (`status`, `code`, `message`, `requestId`) when Talonic returned them. The page shows the `error` sentence and that detail. The API key and Authorization header are not included.
+
 ## Env vars on Vercel
 
 No new variables. Use the existing WorkOS and Trace contract.

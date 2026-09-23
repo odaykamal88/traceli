@@ -181,7 +181,7 @@ test('Talonic maps a synchronous extract into registry fragments', async () => {
       const form = init.body
       assert.equal(typeof form.get, 'function')
       assert.equal(form.get('include_markdown'), 'true')
-      assert.equal(form.get('include_provenance'), 'true')
+      assert.equal(form.get('include_provenance'), null)
       assert.equal(form.get('schema'), null)
       const file = form.get('file')
       assert.equal(file.name, 'waiver.pdf')
@@ -218,7 +218,9 @@ test('Talonic maps a synchronous extract into registry fragments', async () => {
   assert.equal(calls[0].init.method, 'POST')
   assert.equal(calls[0].init.redirect, 'manual')
   assert.equal(calls[0].init.headers.Authorization, `Bearer ${secret}`)
-  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-${sourceFileHashOf(bytes)}`)
+  const idempotencyKey = calls[0].init.headers['Idempotency-Key']
+  assert.equal(idempotencyKey, `trace-v2-${sourceFileHashOf(bytes)}`.slice(0, 64))
+  assert.equal(idempotencyKey.length, 64)
   assert.equal(result.providerId, 'talonic')
   assert.equal(result.extractorId, 'extractor.talonic')
   assert.equal(result.fileName, 'waiver.pdf')
@@ -253,11 +255,18 @@ test('Talonic reports auth failure, timeout, and a refused redirect without the 
   const auth = new TalonicExtractionProvider({
     fetchImpl: async () => jsonResponse(401, { error: { message: `bad ${secret}` } }),
   })
-  await assert.rejects(auth.extract(input('notes.txt', 'text/plain')), error => {
-    assert.equal(error instanceof ExtractionError && error.code, 'unauthorized')
-    assert.equal(error.message.includes(secret), false)
-    return true
-  })
+  let authError
+  try {
+    await auth.extract(input('notes.txt', 'text/plain'))
+  } catch (error) {
+    authError = error
+  }
+  assert.equal(authError instanceof ExtractionError, true)
+  assert.equal(authError.code, 'unauthorized')
+  assert.match(authError.message, /HTTP 401/)
+  assert.equal(authError.message.includes(secret), false)
+  assert.equal(authError.upstream?.message?.includes(secret), false)
+  assert.equal(JSON.stringify(authError.upstream).includes('Authorization'), false)
   const refused = extractionHttpError(new ExtractionError(
     'unauthorized',
     'Talonic refused the API key. Check TRACE_TALONIC_API_KEY. No fragments were returned.',
@@ -394,6 +403,151 @@ test('Talonic uses markdown when discovery returns no fields', async () => {
     unsupported.extract(input('prices.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')),
     error => error instanceof ExtractionError && error.code === 'unsupported_media',
   )
+})
+
+test('Talonic error JSON keeps status, code, and a scrubbed message', async () => {
+  const secret = 'desk-live-key-9f3a'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  const cases = [
+    [500, 'Talonic reported an internal error (HTTP 500).'],
+    [502, 'Talonic returned a gateway error (HTTP 502).'],
+    [503, 'Talonic is unavailable (HTTP 503).'],
+  ]
+  for (const [status, summary] of cases) {
+    const provider = new TalonicExtractionProvider({
+      fetchImpl: async () => jsonResponse(status, {
+        statusCode: status,
+        code: 'INTERNAL_ERROR',
+        message: `worker failed for Bearer ${secret} and Authorization: Bearer ${secret}`,
+        request_id: 'req_0468dcdadafb4488',
+        links: { dashboard: 'https://app.talonic.com/extractions/hidden' },
+      }, { 'x-request-id': 'req_0468dcdadafb4488' }),
+    })
+    let caught
+    try {
+      await provider.extract(input('packet.pdf', 'application/pdf'))
+    } catch (error) {
+      caught = error
+    }
+    assert.equal(caught instanceof ExtractionError, true, String(status))
+    assert.equal(caught.code, 'upstream')
+    assert.match(caught.message, new RegExp(summary.replace(/[()]/g, '\\$&')))
+    const body = await extractionHttpError(caught).json()
+    assert.equal(body.upstream.status, status)
+    assert.equal(body.upstream.code, 'INTERNAL_ERROR')
+    assert.equal(body.upstream.requestId, 'req_0468dcdadafb4488')
+    assert.match(body.upstream.message, /worker failed/)
+    const serialized = JSON.stringify(body)
+    assert.equal(serialized.includes(secret), false, String(status))
+    assert.equal(serialized.includes('Authorization:'), false)
+    assert.equal(serialized.includes('dashboard'), false)
+    assert.equal(body.error.includes(secret), false)
+  }
+
+  const plain = new TalonicExtractionProvider({
+    fetchImpl: async () => new Response('bad gateway', {
+      status: 502,
+      headers: { 'content-type': 'text/plain', 'x-request-id': 'req_plaintext1234' },
+    }),
+  })
+  let plainError
+  try {
+    await plain.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    plainError = error
+  }
+  assert.match(plainError.message, /gateway error \(HTTP 502\)/)
+  assert.equal(plainError.upstream.status, 502)
+  assert.equal(plainError.upstream.requestId, 'req_plaintext1234')
+  assert.equal(plainError.upstream.message, undefined)
+  assert.equal(plainError.message.includes('bad gateway'), false)
+
+  const headerOnly = new TalonicExtractionProvider({
+    fetchImpl: async () => jsonResponse(403, {
+      code: 'INSUFFICIENT_PERMISSIONS',
+      message: 'This action requires scopes: write',
+    }, { 'x-request-id': 'not a request id' }),
+  })
+  let forbidden
+  try {
+    await headerOnly.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    forbidden = error
+  }
+  assert.equal(forbidden.code, 'unauthorized')
+  assert.match(forbidden.message, /HTTP 403/)
+  assert.equal(forbidden.upstream.code, 'INSUFFICIENT_PERMISSIONS')
+  assert.equal(forbidden.upstream.requestId, undefined)
+  assert.equal(forbidden.upstream.message, 'This action requires scopes: write')
+
+  const rejected = new TalonicExtractionProvider({
+    fetchImpl: async () => jsonResponse(400, {
+      code: 'VALIDATION_ERROR',
+      message: 'property include_provenance should not exist',
+      request_id: 'req_abcdef123456',
+    }),
+  })
+  let validation
+  try {
+    await rejected.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    validation = error
+  }
+  assert.match(validation.message, /rejected this file \(HTTP 400\)/)
+  assert.equal(validation.upstream.code, 'VALIDATION_ERROR')
+  assert.equal(validation.upstream.message, 'property include_provenance should not exist')
+
+  const unexpected = new TalonicExtractionProvider({
+    fetchImpl: async () => jsonResponse(200, {
+      status: 'complete',
+      data: { note: 'kept' },
+    }),
+    now: () => {
+      throw new Error(`boom ${secret} Authorization: Bearer ${secret}`)
+    },
+  })
+  let surprise
+  try {
+    await unexpected.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    surprise = error
+  }
+  assert.match(surprise.message, /unexpected error/)
+  assert.equal(surprise.message.includes(secret), false)
+  assert.equal(surprise.message.includes('boom'), false)
+  assert.equal(surprise.upstream, undefined)
+})
+
+test('Talonic reports a failed document without dropping its error detail', async () => {
+  const secret = 'desk-live-key-9f3a'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  const provider = new TalonicExtractionProvider({
+    sleep: async () => {},
+    fetchImpl: async url => {
+      if (String(url).endsWith('/extract')) {
+        return jsonResponse(202, { status: 'processing', poll_url: '/v1/documents/doc-1', document: { id: 'doc-1' } })
+      }
+      return jsonResponse(200, {
+        status: 'failed',
+        code: 'extraction_failed',
+        message: `no text ${secret}`,
+        request_id: 'req_failed123456',
+      })
+    },
+  })
+  let caught
+  try {
+    await provider.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    caught = error
+  }
+  assert.match(caught.message, /could not extract this document/)
+  assert.equal(caught.upstream.code, 'extraction_failed')
+  assert.equal(caught.upstream.requestId, 'req_failed123456')
+  assert.equal(caught.upstream.message.includes(secret), false)
+  assert.match(caught.upstream.message, /no text redacted/)
 })
 
 test('draft mapping fills hinted fields and leaves generic text unmapped', async () => {

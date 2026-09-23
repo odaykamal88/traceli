@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 
+import { deskExtractionFailure } from '@/lib/desk/failure-copy'
 import {
   sanitizeUploadDeskView,
   uploadDeskStorageKey,
@@ -73,11 +74,20 @@ function clearStored() {
   sessionStorage.removeItem(uploadDeskStorageKey)
 }
 
+type DeskNotice = {
+  summary: string
+  detail: string
+}
+
+function deskNotice(summary: string, detail = ''): DeskNotice {
+  return { summary, detail }
+}
+
 export default function UploadDesk({ viewer, providerId, packs }: Props) {
   const resultsRef = useRef<HTMLHeadingElement>(null)
   const shouldFocusResult = useRef(false)
   const [pending, setPending] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<DeskNotice | null>(null)
   const [result, setResult] = useState<UploadDeskView | null>(null)
   const [restored, setRestored] = useState(false)
 
@@ -98,7 +108,7 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
     const form = event.currentTarget
     const data = new FormData(form)
     if (!(data.get('file') instanceof File) || (data.get('file') as File).size < 1) {
-      setError('Choose a file to upload.')
+      setError(deskNotice('Choose a file to upload.'))
       return
     }
     setPending(true)
@@ -107,19 +117,19 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
       const response = await fetch('/api/desk', { method: 'POST', body: data })
       const body = await response.json().catch(() => null) as { error?: string } | UploadDeskView | null
       if (!response.ok) {
-        setError(body && 'error' in body && body.error ? body.error : 'The packet could not be frozen. Try again.')
+        setError(deskExtractionFailure(body) ?? deskNotice('The packet could not be frozen. Try again.'))
         return
       }
       const view = sanitizeUploadDeskView(body)
       if (!view || view.organizationId !== viewer.organizationId) {
-        setError('The freeze came back in an unexpected shape. Nothing was stored.')
+        setError(deskNotice('The freeze came back in an unexpected shape. Nothing was stored.'))
         return
       }
       writeStored(viewer.organizationId, view)
       shouldFocusResult.current = true
       setResult(view)
     } catch {
-      setError('The desk could not be reached. Check your connection and try again.')
+      setError(deskNotice('The desk could not be reached. Check your connection and try again.'))
     } finally {
       setPending(false)
     }
@@ -190,7 +200,12 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
         <p className={s.status} aria-live="polite">
           {pending ? 'Extracting the packet, mapping fields, and freezing the record.' : ''}
         </p>
-        {error ? <p className={s.alert} role="alert">{error}</p> : null}
+        {error ? (
+          <p className={s.alert} role="alert">
+            {error.summary}
+            {error.detail ? <span className={s.alertDetail}>{error.detail}</span> : null}
+          </p>
+        ) : null}
       </form>
 
       {result && readiness ? (

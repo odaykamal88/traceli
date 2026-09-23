@@ -40,13 +40,45 @@ export const extractionErrorCodes = [
 
 export type ExtractionErrorCode = (typeof extractionErrorCodes)[number]
 
+/** Safe Talonic diagnostic. Callers must scrub secrets before constructing. */
+export type ExtractionUpstreamDetail = {
+  status?: number
+  code?: string
+  message?: string
+  requestId?: string
+}
+
+const upstreamCodePattern = /^[A-Za-z0-9_]{1,64}$/
+const upstreamRequestIdPattern = /^req_[A-Za-z0-9]{6,80}$/
+
+function copyUpstream(value: ExtractionUpstreamDetail | undefined): ExtractionUpstreamDetail | undefined {
+  if (!value) return undefined
+  const detail: ExtractionUpstreamDetail = {}
+  if (typeof value.status === 'number' && Number.isInteger(value.status) && value.status >= 100 && value.status <= 599) {
+    detail.status = value.status
+  }
+  if (typeof value.code === 'string' && upstreamCodePattern.test(value.code)) detail.code = value.code
+  if (typeof value.requestId === 'string' && upstreamRequestIdPattern.test(value.requestId)) {
+    detail.requestId = value.requestId
+  }
+  if (typeof value.message === 'string') {
+    const message = value.message.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim()
+    if (message) detail.message = message.length > 180 ? `${message.slice(0, 179)}…` : message
+  }
+  if (detail.status === undefined && !detail.code && !detail.requestId && !detail.message) return undefined
+  return detail
+}
+
 export class ExtractionError extends Error {
   readonly code: ExtractionErrorCode
+  readonly upstream?: ExtractionUpstreamDetail
 
-  constructor(code: ExtractionErrorCode, message: string) {
+  constructor(code: ExtractionErrorCode, message: string, upstream?: ExtractionUpstreamDetail) {
     super(message)
     this.name = 'ExtractionError'
     this.code = code
+    const detail = copyUpstream(upstream)
+    if (detail) this.upstream = detail
   }
 }
 
