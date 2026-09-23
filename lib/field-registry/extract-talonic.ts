@@ -2,6 +2,7 @@ import 'server-only'
 
 import {
   ExtractionError,
+  MAX_EXTRACTION_FRAGMENTS,
   extractionFileName,
   extractionResultSchema,
   loadExtractionBytes,
@@ -26,7 +27,9 @@ import { type FragmentKindHint } from '@/lib/field-registry/schema'
  * The call is `POST {base}/extract` with the file and `include_markdown`.
  * `include_provenance` is not sent: the POST form and the official SDK do
  * not list it. Provenance is still mapped when the body includes it.
- * A synchronous body is mapped into `fragmentSchema`. A 202 is polled on
+ * A synchronous body is mapped into `fragmentSchema`. Non-empty fields above
+ * `MAX_EXTRACTION_FRAGMENTS` are kept by confidence instead of failing the
+ * extract. A 202 is polled on
  * the same host until the document completes, the primary budget ends, or
  * one bounded extension poll still finds it processing. The API key is a
  * header only: it is not logged, not followed onto another host, and not
@@ -548,10 +551,37 @@ function fragmentText(label: string, rendered: string) {
   return text.length <= 16000 ? text : `${text.slice(0, 15999)}…`
 }
 
+function talonicFieldCeilingMessage(fieldCount: number) {
+  const count = Number.isSafeInteger(fieldCount) && fieldCount > 0 ? `${fieldCount} fields` : 'more fields than Trace-li can store'
+  return `Talonic returned ${count}. Trace-li stores at most ${MAX_EXTRACTION_FRAGMENTS} fields from one document.`
+}
+
+/**
+ * Keep the highest-confidence non-empty fields up to the extraction cap.
+ * Equal confidence keeps the earlier field key. The kept set is returned in
+ * that original key order so fragment ids stay stable for a given selection.
+ */
+function keepHighestConfidenceFields<T extends { key: string, confidence: number }>(fields: T[]): T[] {
+  if (fields.length <= MAX_EXTRACTION_FRAGMENTS) return fields
+  return fields
+    .map((field, index) => ({ field, index }))
+    .sort((left, right) => {
+      if (right.field.confidence !== left.field.confidence) {
+        return right.field.confidence - left.field.confidence
+      }
+      if (left.field.key < right.field.key) return -1
+      if (left.field.key > right.field.key) return 1
+      return left.index - right.index
+    })
+    .slice(0, MAX_EXTRACTION_FRAGMENTS)
+    .sort((left, right) => left.index - right.index)
+    .map(entry => entry.field)
+}
+
 function mapTalonicEnvelope(envelope: Record<string, unknown>, loaded: LoadedFile, now: Date): ExtractionResult {
   const extractedAt = extractedAtOf(envelope, now)
   const data = asRecord(envelope.data) ?? {}
-  const fragments = []
+  const discovered = []
   for (const key of Object.keys(data).sort()) {
     const payload = fieldPayload(data[key])
     const rendered = renderValue(payload.value)
@@ -560,22 +590,33 @@ function mapTalonicEnvelope(envelope: Record<string, unknown>, loaded: LoadedFil
     const provenance = payload.entry ?? provenanceEntry(key, envelope)
     const quote = quoteOf(provenance)
     const kind = kindFromText(key) ?? 'text'
-    fragments.push({
-      fragmentId: `frag.talonic.${loaded.sourceFileHash.slice(0, 12)}.${fragments.length}`,
-      sourceFileHash: loaded.sourceFileHash,
-      sourceRef: sourceRefFor(loaded.fileName, loaded.mediaType, pageOf(provenance)),
-      text: fragmentText(label, rendered),
-      extractedAt,
+    discovered.push({
+      key,
+      label,
+      rendered,
       confidence: payload.confidence ?? confidenceFor(key, envelope, 0.5),
-      extractorId: EXTRACTOR_ID,
+      provenance,
+      quote,
       kind,
-      tags: [kind],
-      ...(quote ? { spans: [{ text: quote, label }] } : {}),
     })
   }
-  if (fragments.length > 64) {
-    throw new ExtractionError('upstream', 'Talonic returned more than 64 fields. Narrow the document and try again.')
+  const usableCount = discovered.length
+  const kept = keepHighestConfidenceFields(discovered)
+  if (kept.length > MAX_EXTRACTION_FRAGMENTS) {
+    throw new ExtractionError('upstream', talonicFieldCeilingMessage(usableCount))
   }
+  const fragments = kept.map((field, index) => ({
+    fragmentId: `frag.talonic.${loaded.sourceFileHash.slice(0, 12)}.${index}`,
+    sourceFileHash: loaded.sourceFileHash,
+    sourceRef: sourceRefFor(loaded.fileName, loaded.mediaType, pageOf(field.provenance)),
+    text: fragmentText(field.label, field.rendered),
+    extractedAt,
+    confidence: field.confidence,
+    extractorId: EXTRACTOR_ID,
+    kind: field.kind,
+    tags: [field.kind],
+    ...(field.quote ? { spans: [{ text: field.quote, label: field.label }] } : {}),
+  }))
   if (fragments.length === 0) {
     const markdown = typeof envelope.markdown === 'string' ? envelope.markdown.trim() : ''
     if (!markdown) {
@@ -608,7 +649,12 @@ function mapTalonicEnvelope(envelope: Record<string, unknown>, loaded: LoadedFil
     fragments,
   })
   if (!parsed.success) {
-    throw new ExtractionError('upstream', 'Talonic returned fields that could not be stored as fragments.')
+    throw new ExtractionError(
+      'upstream',
+      usableCount > MAX_EXTRACTION_FRAGMENTS
+        ? talonicFieldCeilingMessage(usableCount)
+        : 'Talonic returned fields that could not be stored as fragments.',
+    )
   }
   return parsed.data
 }

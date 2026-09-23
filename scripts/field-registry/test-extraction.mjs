@@ -10,15 +10,18 @@ import {
   assertDeclaredBodySize,
   EXTRACTION_BYTE_LIMIT,
   ExtractionError,
+  MAX_EXTRACTION_FRAGMENTS,
   extractionResultSchema,
   fragmentsTowardRegistryDraft,
   sourceFileHashOf,
 } from '../../lib/field-registry/extract.ts'
+import { freezeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
 import { MockExtractionProvider } from '../../lib/field-registry/extract-mock.ts'
 import { getExtractionProvider } from '../../lib/field-registry/extract-provider.ts'
 import { TalonicExtractionProvider } from '../../lib/field-registry/extract-talonic.ts'
 import { extractUploadedFile, extractionHttpError } from '../../lib/field-registry/extract-upload.ts'
-import { freezeAtJudgment } from '../../lib/field-registry/freeze.ts'
+import { freezeAtJudgment, verifyFrozenRecord } from '../../lib/field-registry/freeze.ts'
+import { GLOBAL_FUND_FIELD_KEYS } from '../../lib/field-registry/packs/global-fund.ts'
 import { fragmentSchema } from '../../lib/field-registry/schema.ts'
 
 const envKeys = ['TRACE_EXTRACTION_PROVIDER', 'TRACE_TALONIC_API_KEY', 'TRACE_TALONIC_BASE_URL']
@@ -807,6 +810,133 @@ test('the upload route denies an anonymous caller and stamps the server organiza
     if (traceMode === undefined) delete process.env.TRACELI_TRACE_MODE
     else process.env.TRACELI_TRACE_MODE = traceMode
   }
+})
+
+function talonicEnvelope(data, confidence) {
+  return jsonResponse(200, {
+    status: 'complete',
+    created_at: '2026-09-23T12:00:00.000Z',
+    data,
+    ...(confidence ? { confidence } : {}),
+  })
+}
+
+function discoveredClauseFields(count, confidenceFor) {
+  const data = { empty_note: '', null_note: null, blank_note: '   ' }
+  const fields = {}
+  for (let index = 0; index < count; index += 1) {
+    const key = `clause_${String(index).padStart(4, '0')}`
+    data[key] = `Requirement ${index}`
+    if (confidenceFor) fields[key] = confidenceFor(index)
+  }
+  return {
+    data,
+    confidence: { overall: 0.5, fields },
+  }
+}
+
+test('extraction results accept the fragment cap and reject one more', async () => {
+  assert.equal(MAX_EXTRACTION_FRAGMENTS, 256)
+  assert.ok(MAX_EXTRACTION_FRAGMENTS > 64)
+  const mock = await new MockExtractionProvider().extract(input('packet.txt', 'text/plain'))
+  const base = mock.fragments[0]
+  const fragments = Array.from({ length: MAX_EXTRACTION_FRAGMENTS }, (_, index) => ({
+    ...base,
+    fragmentId: `frag.mock.cap.${index}`,
+    text: `clause ${index}`,
+  }))
+  const accepted = extractionResultSchema.parse({ ...mock, fragments })
+  assert.equal(accepted.fragments.length, MAX_EXTRACTION_FRAGMENTS)
+  const draft = fragmentsTowardRegistryDraft(accepted.fragments)
+  assert.equal(draft.unmappedFragmentIds.length, MAX_EXTRACTION_FRAGMENTS)
+  assert.throws(
+    () => extractionResultSchema.parse({
+      ...mock,
+      fragments: [...fragments, { ...base, fragmentId: 'frag.mock.cap.extra', text: 'one more' }],
+    }),
+    ZodError,
+  )
+})
+
+test('Talonic keeps award-packet field counts and truncates only above the cap', async () => {
+  process.env.TRACE_TALONIC_API_KEY = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  const source = readFileSync(new URL('../../lib/field-registry/extract-talonic.ts', import.meta.url), 'utf8')
+  assert.equal(source.includes('Narrow the document'), false)
+  assert.equal(source.includes('more than 64 fields'), false)
+  assert.match(source, /Trace-li stores at most \$\{MAX_EXTRACTION_FRAGMENTS\} fields/)
+
+  async function extractData(count, confidenceFor) {
+    const body = discoveredClauseFields(count, confidenceFor)
+    const provider = new TalonicExtractionProvider({
+      now: () => new Date('2026-09-23T00:00:00.000Z'),
+      fetchImpl: async () => talonicEnvelope(body.data, body.confidence),
+    })
+    return provider.extract(input('tor-ride-transport.pdf', 'application/pdf', {
+      organizationId: 'org_trace_demo',
+    }))
+  }
+
+  const aboveOldCap = await extractData(65)
+  assert.equal(aboveOldCap.fragments.length, 65)
+  assert.equal(aboveOldCap.fragments[0].text, 'clause_0000: Requirement 0')
+  assert.equal(aboveOldCap.fragments[64].text, 'clause_0064: Requirement 64')
+  assert.equal(fragmentsTowardRegistryDraft(aboveOldCap.fragments).unmappedFragmentIds.length, 65)
+
+  const atCap = await extractData(MAX_EXTRACTION_FRAGMENTS)
+  assert.equal(atCap.fragments.length, MAX_EXTRACTION_FRAGMENTS)
+  assert.equal(atCap.fragments.at(-1).text, `clause_${String(MAX_EXTRACTION_FRAGMENTS - 1).padStart(4, '0')}: Requirement ${MAX_EXTRACTION_FRAGMENTS - 1}`)
+
+  const dense = await extractData(MAX_EXTRACTION_FRAGMENTS + 1, index => {
+    if (index === 0) return 0.1
+    if (index === MAX_EXTRACTION_FRAGMENTS) return 0.99
+    return 0.5
+  })
+  assert.equal(dense.fragments.length, MAX_EXTRACTION_FRAGMENTS)
+  assert.equal(dense.fragments.some(fragment => fragment.text.startsWith('clause_0000:')), false)
+  assert.equal(dense.fragments[0].text, 'clause_0001: Requirement 1')
+  assert.equal(dense.fragments.at(-1).confidence, 0.99)
+  assert.equal(
+    dense.fragments.at(-1).text,
+    `clause_${String(MAX_EXTRACTION_FRAGMENTS).padStart(4, '0')}: Requirement ${MAX_EXTRACTION_FRAGMENTS}`,
+  )
+  assert.deepEqual(
+    dense.fragments.map(fragment => fragment.fragmentId),
+    dense.fragments.map((_, index) => `frag.talonic.${dense.sourceFileHash.slice(0, 12)}.${index}`),
+  )
+  const denseDraft = fragmentsTowardRegistryDraft(dense.fragments, { organizationId: 'org_trace_demo' })
+  assert.equal(denseDraft.unmappedFragmentIds.length, MAX_EXTRACTION_FRAGMENTS)
+  assert.equal(denseDraft.fields.length, 0)
+
+  const tied = await extractData(MAX_EXTRACTION_FRAGMENTS + 1)
+  assert.equal(tied.fragments.length, MAX_EXTRACTION_FRAGMENTS)
+  assert.equal(tied.fragments[0].text, 'clause_0000: Requirement 0')
+  assert.equal(tied.fragments.some(fragment => fragment.text.startsWith(`clause_${String(MAX_EXTRACTION_FRAGMENTS).padStart(4, '0')}:`)), false)
+
+  const frozen = freezeUploadedPacket({
+    extraction: aboveOldCap,
+    packId: 'global-fund',
+    organizationId: 'org_trace_demo',
+    actorId: 'user_fixture_reviewer',
+    actorRole: 'Procurement Officer',
+    frozenAt: '2026-09-23T12:00:00.000Z',
+  })
+  assert.equal(verifyFrozenRecord(frozen.record).recordId, frozen.record.recordId)
+  assert.equal(frozen.view.fragmentCount, 65)
+  assert.equal(frozen.view.unmappedFragmentCount, 65)
+  assert.equal(frozen.record.snapshot.fields.length, GLOBAL_FUND_FIELD_KEYS.length)
+
+  const truncatedFreeze = freezeUploadedPacket({
+    extraction: dense,
+    packId: 'global-fund',
+    organizationId: 'org_trace_demo',
+    actorId: 'user_fixture_reviewer',
+    actorRole: 'Procurement Officer',
+    frozenAt: '2026-09-23T12:00:00.000Z',
+  })
+  assert.equal(verifyFrozenRecord(truncatedFreeze.record).recordId, truncatedFreeze.record.recordId)
+  assert.equal(truncatedFreeze.view.fragmentCount, MAX_EXTRACTION_FRAGMENTS)
+  assert.equal(truncatedFreeze.view.unmappedFragmentCount, MAX_EXTRACTION_FRAGMENTS)
 })
 
 test('rules and freeze do not import a Talonic type', () => {

@@ -27,6 +27,21 @@ export const EXTRACTION_BYTE_LIMIT = 8 * 1024 * 1024
 export const EXTRACTION_BODY_LIMIT = EXTRACTION_BYTE_LIMIT + 64 * 1024
 export const MOCK_EXTRACTED_AT = '2026-09-22T00:00:00.000Z'
 
+/**
+ * Most fragments one extraction result may hold.
+ *
+ * Schema-less Talonic discovery maps each non-empty top-level field to one
+ * fragment. A cap of 64 rejected ordinary multi-page terms of reference
+ * before the desk could freeze them.
+ *
+ * 256 matches the draft ceilings below and `awardRegistrySnapshotSchema`'s
+ * field ceiling. Schema-less clauses stay `text` and unmapped, so they do
+ * not fill snapshot field slots; the donor pack's missing keys still fit.
+ * Raising this above 256 without raising those ceilings would accept the
+ * extract and then fail the desk freeze.
+ */
+export const MAX_EXTRACTION_FRAGMENTS = 256
+
 export const extractionErrorCodes = [
   'not_configured',
   'unimplemented',
@@ -135,7 +150,7 @@ export const extractionResultSchema = z.strictObject({
   sourceFileHash: hashSchema,
   awardId: idSchema.optional(),
   organizationId: idSchema.optional(),
-  fragments: z.array(fragmentSchema).min(1).max(64),
+  fragments: z.array(fragmentSchema).min(1).max(MAX_EXTRACTION_FRAGMENTS),
 }).superRefine((result, ctx) => {
   for (const fragment of result.fragments) {
     if (fragment.sourceFileHash !== result.sourceFileHash) {
@@ -176,8 +191,8 @@ export const registryEntityDraftSchema = z.strictObject({
   schemaVersion: z.literal('registry-entity-draft-v1'),
   awardId: idSchema.optional(),
   organizationId: idSchema.optional(),
-  fields: z.array(registryDraftFieldSchema).max(256),
-  unmappedFragmentIds: z.array(idSchema).max(256),
+  fields: z.array(registryDraftFieldSchema).max(MAX_EXTRACTION_FRAGMENTS),
+  unmappedFragmentIds: z.array(idSchema).max(MAX_EXTRACTION_FRAGMENTS),
 }).superRefine((draft, ctx) => {
   const fieldIds = draft.fields.map(field => field.fieldId)
   if (new Set(fieldIds).size !== fieldIds.length) {
