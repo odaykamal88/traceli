@@ -86,10 +86,19 @@ Do **not** encode as live packs in this slice:
 | World Bank | Later. |
 | MoH-first national systems | Not the v1 wedge. |
 
+## Changelog
+
+### 2026.2 — Restrictive Measures / IDD inside the existing packs
+
+`global-fund` and `fcdo-prime` now carry integrity due diligence evidence controls. There is **no in-desk live OFAC API** in this release, and no OpenSanctions or UK Sanctions List client. Trace-li does not screen lists. Controls require evidence that screening occurred and, when the result is not clear, that a person dispositioned it. No new pack id (`ofac` or otherwise).
+
 ## Non-goals (this PR)
 
 - WorkOS login / tenant upload desk — see [workos-upload-desk.md](./workos-upload-desk.md)
 - Real Talonic credentials / network calls
+- Live OFAC, OpenSanctions, UK Sanctions List, or other sanctions-list HTTP clients
+- Fuzzy SDN / name matching or a claim that Trace-li screens lists
+- A standalone `ofac` pack id
 - Audit export packaging
 - Homepage / film / GTM surfaces
 - Full GF or FCDO regulation encyclopedias

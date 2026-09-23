@@ -1,10 +1,21 @@
 import type { JudgmentRule } from '@/lib/field-registry/judgment'
+import {
+  gfIddModalities,
+  gfIddScopeTokens,
+  gfIddScreenTimings,
+  gfIddSubjectRoles,
+  iddDispositionDecisions,
+  iddHitResults,
+  iddScreenResults,
+  iddSubjectKinds,
+} from '@/lib/field-registry/packs/idd'
 import type { DonorPack } from '@/lib/field-registry/packs/types'
 
 /**
- * Global Fund v1 thin pack.
- * Checks are Trace-authored deterministic mappings onto Grant Regulations–
- * aligned concepts. They are not a verbatim regulation encyclopedia.
+ * Global Fund thin pack.
+ * Checks are Trace-li deterministic mappings onto Grant Regulations–aligned
+ * concepts, plus a Restrictive Measures / IDD evidence gate. They are not a
+ * verbatim regulation encyclopedia and they do not screen sanctions lists.
  * See docs/eng/donor-pack-global-fund-v1.md.
  */
 export const GLOBAL_FUND_FIELD_KEYS = [
@@ -19,6 +30,21 @@ export const GLOBAL_FUND_FIELD_KEYS = [
   'sr.selection_documented',
   'sr.capacity_assessed',
   'sr.written_agreement_on_file',
+  'idd.subject',
+  'idd.subject_kind',
+  'idd.subject_role',
+  'idd.affiliated_persons',
+  'idd.screen_scope',
+  'idd.screen_date',
+  'idd.list_vintage',
+  'idd.screen_modality',
+  'idd.screen_result',
+  'idd.screen_timing',
+  'idd.evidence_ref',
+  'idd.disposition_owner',
+  'idd.disposition_decision',
+  'idd.disposition_rationale',
+  'idd.gf_notification',
 ] as const
 
 export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
@@ -114,11 +140,146 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     code: 'gf_sr_agreement_missing',
     title: 'Written sub-recipient agreement required',
   },
+  {
+    ruleId: 'gf_idd_subject',
+    kind: 'required_present',
+    fieldKey: 'idd.subject',
+    severity: 'blocker',
+    code: 'gf_idd_subject_missing',
+    title: 'IDD subject organization or individual required before signature',
+  },
+  {
+    ruleId: 'gf_idd_subject_kind',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.subject_kind',
+    allowed: [...iddSubjectKinds],
+    severity: 'blocker',
+    code: 'gf_idd_subject_kind_invalid',
+    title: 'IDD subject must be recorded as an organization or an individual',
+  },
+  {
+    ruleId: 'gf_idd_subject_role',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.subject_role',
+    allowed: [...gfIddSubjectRoles],
+    severity: 'blocker',
+    code: 'gf_idd_subject_role_invalid',
+    title: 'IDD subject role required (SR, supplier, signatory, or key personnel)',
+  },
+  {
+    ruleId: 'gf_idd_affiliated_persons',
+    kind: 'required_present',
+    fieldKey: 'idd.affiliated_persons',
+    severity: 'blocker',
+    code: 'gf_idd_affiliated_persons_missing',
+    title: 'Affiliated and key persons, with roles, required on the IDD record',
+  },
+  {
+    ruleId: 'gf_idd_screen_scope',
+    kind: 'text_must_include',
+    fieldKey: 'idd.screen_scope',
+    tokens: [...gfIddScopeTokens],
+    severity: 'blocker',
+    code: 'gf_idd_screen_scope_incomplete',
+    title: 'Restrictive Measures scope must attest UN, OFAC, US State, Switzerland, and debarment',
+  },
+  {
+    ruleId: 'gf_idd_screen_date',
+    kind: 'required_present',
+    fieldKey: 'idd.screen_date',
+    severity: 'blocker',
+    code: 'gf_idd_screen_date_missing',
+    title: 'Restrictive Measures screen date required before signature',
+  },
+  {
+    ruleId: 'gf_idd_list_vintage',
+    kind: 'required_present',
+    fieldKey: 'idd.list_vintage',
+    severity: 'blocker',
+    code: 'gf_idd_list_vintage_missing',
+    title: 'List vintage cited by the screening evidence is required',
+  },
+  {
+    ruleId: 'gf_idd_screen_modality',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.screen_modality',
+    allowed: [...gfIddModalities],
+    severity: 'blocker',
+    code: 'gf_idd_modality_invalid',
+    title: 'IDD modality must be in-house, a Global Fund pre-approved vendor, or other',
+  },
+  {
+    ruleId: 'gf_idd_screen_result',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.screen_result',
+    allowed: [...iddScreenResults],
+    severity: 'blocker',
+    code: 'gf_idd_result_invalid',
+    title: 'IDD result must be clear, potential match, confirmed hit, or unresolved',
+  },
+  {
+    ruleId: 'gf_idd_screen_timing',
+    kind: 'value_must_be_one_of',
+    fieldKey: 'idd.screen_timing',
+    allowed: [...gfIddScreenTimings],
+    severity: 'blocker',
+    code: 'gf_idd_screen_timing_invalid',
+    title: 'Screen must be attested before engagement or as the grant-cycle re-run',
+  },
+  {
+    ruleId: 'gf_idd_evidence_ref',
+    kind: 'required_present',
+    fieldKey: 'idd.evidence_ref',
+    severity: 'blocker',
+    code: 'gf_idd_evidence_missing',
+    title: 'Screening evidence reference required before signature',
+  },
+  {
+    ruleId: 'gf_idd_hit_disposition_owner',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.disposition_owner',
+    severity: 'blocker',
+    code: 'gf_idd_hit_needs_owner',
+    title: 'A non-clear Restrictive Measures result needs a disposition owner',
+  },
+  {
+    ruleId: 'gf_idd_hit_disposition_decision',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.disposition_decision',
+    allowedValues: [...iddDispositionDecisions],
+    severity: 'blocker',
+    code: 'gf_idd_hit_needs_decision',
+    title: 'A non-clear result needs a select, continue, or terminate decision',
+  },
+  {
+    ruleId: 'gf_idd_hit_disposition_rationale',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.disposition_rationale',
+    severity: 'blocker',
+    code: 'gf_idd_hit_needs_rationale',
+    title: 'A non-clear Restrictive Measures result needs a disposition rationale',
+  },
+  {
+    ruleId: 'gf_idd_hit_communicable',
+    kind: 'required_when_value_in',
+    whenFieldKey: 'idd.screen_result',
+    whenValues: [...iddHitResults],
+    fieldKey: 'idd.gf_notification',
+    severity: 'blocker',
+    code: 'gf_idd_hit_not_communicable',
+    title: 'Restrictive Measures findings must be communicable to the Global Fund',
+  },
 ]
 
 export const GLOBAL_FUND_PACK: DonorPack = {
   packId: 'global-fund',
-  version: '2026.1',
+  version: '2026.2',
   name: 'Global Fund Grant Regulations v1',
   audience: 'global-fund-pr-sr',
   category: 'donor',
