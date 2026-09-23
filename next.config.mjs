@@ -184,6 +184,16 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/cases/:slug.json',
+          destination: '/api/cases/:slug',
+        },
+      ],
+    }
+  },
 }
 
 export default nextConfig

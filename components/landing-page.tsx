@@ -469,7 +469,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/10 bg-[#061a33] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1320px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <TraceliMark compact />
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/login" className="hover:text-white">Login</Link><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/demo" className="hover:text-white">Award desk</Link><Link href="/method" className="hover:text-white">How Trace reasons</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/login" className="hover:text-white">Login</Link><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/cases" className="hover:text-white">Case cards</Link><Link href="/demo" className="hover:text-white">Award desk</Link><Link href="/method" className="hover:text-white">How Trace reasons</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
         </div>
       </footer>
     </div>

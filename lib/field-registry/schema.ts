@@ -12,7 +12,12 @@ export const hashSchema = z.string().regex(/^[a-f0-9]{64}$/)
 const shortText = z.string().trim().min(1).max(240)
 const rationale = z.string().trim().min(20).max(2000)
 
-export const snapshotClassifications = ['synthetic', 'customer'] as const
+/**
+ * synthetic: fictional desk fixtures.
+ * customer: a tenant packet.
+ * public-source: mapped from a public primary record, not a customer file.
+ */
+export const snapshotClassifications = ['synthetic', 'customer', 'public-source'] as const
 export const entityKinds = ['award', 'supplier', 'requirement', 'criterion', 'evidence', 'finding'] as const
 export const sourceRefKinds = ['page', 'node', 'cell', 'message'] as const
 export const verificationMethods = ['unverified', 'adapter_extract', 'human_confirmed', 'deterministic_check'] as const
