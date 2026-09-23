@@ -70,7 +70,9 @@ Do not commit key values. `.env.example` lists the names empty.
 
 Missing `TRACE_TALONIC_API_KEY` throws `not_configured` and does not read the file or send a request. A non-https base URL, or one with userinfo or a query, throws `invalid_input` and does not send a request. Talonic `401` or `403` throws `unauthorized`. A request that exceeds the 20 second budget, including a document that is still processing, throws `timeout`. Other vendor failures throw `upstream`. `POST /api/extract` and `POST /api/desk` map those to 502, 504, and 501. The JSON error does not include the key.
 
-The client `POST`s the file to `{base}/extract` as multipart, with `include_markdown=true` and `include_provenance=true`, and an `Idempotency-Key` of `trace-` plus the file SHA-256. It does not send a schema, so Talonic auto-discovers fields. Redirects are not followed. Poll and result links must stay on the configured host and under `/v1` (or the base path).
+The client `POST`s the file to `{base}/extract` as multipart, with `include_markdown=true`, and an `Idempotency-Key` of `trace-v2-` plus the file SHA-256, cut to 64 characters. It does not send `include_provenance` or a schema, so Talonic auto-discovers fields. Provenance is still mapped when the body includes it. Redirects are not followed. Poll and result links must stay on the configured host and under `/v1` (or the base path).
+
+A Talonic error keeps a calm sentence on `error` and, when the response supplied them, an `upstream` object with HTTP `status`, Talonic `code`, a short scrubbed `message`, and `requestId`. The API key and the Authorization header are not copied into that JSON. HTTP 500, 502, and 503 each use their own sentence, and that sentence includes the status. The upload desk shows the sentence and the upstream detail to the signed-in operator.
 
 A 200 body is mapped immediately. Each non-empty `data` entry becomes one fragment. `null` and empty strings are skipped, so a missing vendor field stays missing rather than becoming a negative finding. The fragment id is `frag.talonic.{file hash}.{index}`, not the vendor extraction id. Confidence comes from `confidence.fields`, then a flat confidence map, then `confidence.overall`, then `0.5`. `created_at` becomes `extractedAt` when it parses. Kind is inferred from the field key (`waiver`, `capacity`, `annex`, `pricing` / `line_item` / `unit_price`, `email` / `subject` / `message_id`). Other keys stay `text` and `fragmentsTowardRegistryDraft` leaves them unmapped. Provenance `page` / `page_index` and `raw_text` / `source_text` become `sourceRef` and `spans` when present. More than 64 usable fields fails instead of dropping fields.
 
@@ -94,11 +96,11 @@ Production project `traceli-new` already has the Talonic key and base URL. This 
 
 ### Assumptions to confirm against the live API
 
-- `include_provenance` is sent because the Talonic MCP/SDK and marketing pages describe it. The POST form reference documents `include_markdown` and does not list `include_provenance`. If the live API rejects that field, stop sending it. Mapping still accepts provenance when the body includes it.
+- `include_provenance` is not sent. The POST form lists `include_markdown` and the official Node SDK form builder does not append `include_provenance`. Mapping still accepts provenance when the body includes it.
 - No award-packet schema is sent. Public docs say schema is optional. The Node SDK warns that schema-less extraction is unreliable in v0.1. A later change can pin a Trace field schema without a new pipeline.
 - Async completion is `GET /v1/documents/:id` until `completed`, then `GET /v1/extractions/:id`. `GET /v1/documents/:id/extractions` is used only when `latest_extraction_id` is absent. Confirm that list returns either full `data` or a `links.self` to the extraction.
 - Trace still accepts `.xlsx`, `.eml`, and `.msg`. Talonic's POST page lists PDF, PNG, JPG, TIFF, WEBP, DOCX, TXT, and CSV. The other three are forwarded and surface `unsupported_media` when Talonic returns `unsupported_file_type`.
-- The same file hash is reused as `Idempotency-Key` for 24 hours. Confirm a failed call is not cached as the retry result.
+- `Idempotency-Key` is `trace-v2-` plus the file SHA-256, sliced to 64 characters (Talonic's documented maximum). The `v2` prefix avoids replaying a cached call from the earlier key, which was `trace-` plus the full hash (70 characters) and sent `include_provenance`. A failed call can still be cached for 24 hours under the new key. The desk error now includes the Talonic status, code, message, and request id when Talonic returns them.
 - The quick-extract envelope has no cell coordinate. Spreadsheet fragments use a page source ref, not an invented cell id.
 
 ## Upload

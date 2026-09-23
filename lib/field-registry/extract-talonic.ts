@@ -8,9 +8,11 @@ import {
   parseExtractionInput,
   resolveExtractionMedia,
   sourceFileHashOf,
+  type ExtractionErrorCode,
   type ExtractionInput,
   type ExtractionProvider,
   type ExtractionResult,
+  type ExtractionUpstreamDetail,
 } from '@/lib/field-registry/extract'
 import { type FragmentKindHint } from '@/lib/field-registry/schema'
 
@@ -21,11 +23,13 @@ import { type FragmentKindHint } from '@/lib/field-registry/schema'
  * An empty `TRACE_TALONIC_BASE_URL` uses https://api.talonic.com/v1.
  * The base URL must be https, with no userinfo, query, or hash.
  *
- * The call is `POST {base}/extract` with the file. A synchronous body is
- * mapped into `fragmentSchema`. A 202 is polled on the same host until the
- * document completes or the request budget ends. The API key is a header
- * only: it is not logged, not followed onto another host, and not copied
- * onto the fragment result.
+ * The call is `POST {base}/extract` with the file and `include_markdown`.
+ * `include_provenance` is not sent: the POST form and the official SDK do
+ * not list it. Provenance is still mapped when the body includes it.
+ * A synchronous body is mapped into `fragmentSchema`. A 202 is polled on
+ * the same host until the document completes or the request budget ends.
+ * The API key is a header only: it is not logged, not followed onto another
+ * host, and not copied onto the fragment result or the error JSON.
  *
  * Assumptions that still need a live confirmation are listed in
  * docs/eng/extraction-adapter.md.
@@ -68,9 +72,52 @@ type RequestContext = {
   sleep: (ms: number) => Promise<void>
 }
 
+const upstreamCodePattern = /^[A-Za-z0-9_]{1,64}$/
+const upstreamRequestIdPattern = /^req_[A-Za-z0-9]{6,80}$/
+const IDEMPOTENCY_PREFIX = 'trace-v2-'
+
+function redact(value: string, secret: string, limit: number) {
+  let text = secret ? value.split(secret).join('redacted') : value
+  text = text
+    .replace(/bearer\s+[a-z0-9._~+/=-]{8,}/gi, 'Bearer redacted')
+    .replace(/\btlnc_[a-z0-9_-]{8,}\b/gi, 'redacted')
+    .replace(/authorization\s*[:=]\s*\S+/gi, 'Authorization redacted')
+    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  if (text.length > limit) return `${text.slice(0, limit - 1)}…`
+  return text
+}
+
+function redactDetail(detail: ExtractionUpstreamDetail | undefined, secret: string): ExtractionUpstreamDetail | undefined {
+  if (!detail) return undefined
+  const message = detail.message ? redact(detail.message, secret, 180) : ''
+  const code = detail.code && (!secret || !detail.code.includes(secret)) ? detail.code : ''
+  const requestId = detail.requestId && (!secret || !detail.requestId.includes(secret)) ? detail.requestId : ''
+  const next: ExtractionUpstreamDetail = {}
+  if (detail.status !== undefined) next.status = detail.status
+  if (code) next.code = code
+  if (message) next.message = message
+  if (requestId) next.requestId = requestId
+  if (next.status === undefined && !next.code && !next.message && !next.requestId) return undefined
+  return next
+}
+
 function scrub(error: ExtractionError, secret: string) {
-  if (!secret || !error.message.includes(secret)) return error
-  return new ExtractionError(error.code, error.message.split(secret).join('redacted'))
+  const message = redact(error.message, secret, 500)
+  const upstream = redactDetail(error.upstream, secret)
+  const sameUpstream = JSON.stringify(upstream ?? null) === JSON.stringify(error.upstream ?? null)
+  if (message === error.message && sameUpstream) return error
+  return new ExtractionError(error.code, message, upstream)
+}
+
+function upstreamError(
+  code: ExtractionErrorCode,
+  summary: string,
+  detail: ExtractionUpstreamDetail | undefined,
+  secret: string,
+) {
+  return new ExtractionError(code, redact(summary, secret, 500), redactDetail(detail, secret))
 }
 
 function resolveTalonicConfig(env: NodeJS.ProcessEnv): TalonicConfig {
@@ -198,54 +245,153 @@ async function readJsonBody(response: Response): Promise<unknown> {
   }
 }
 
-function safeErrorCode(body: unknown) {
+function safeToken(value: unknown, pattern: RegExp) {
+  if (typeof value !== 'string') return ''
+  const token = value.trim()
+  return pattern.test(token) ? token : ''
+}
+
+function upstreamCode(body: unknown) {
   const record = asRecord(body)
   if (!record) return ''
   const nested = asRecord(record.error)
   const raw = nested?.code ?? record.code ?? record.error_code ?? (typeof record.error === 'string' ? record.error : '')
-  if (typeof raw !== 'string') return ''
-  const token = raw.trim().toLowerCase()
-  return /^[a-z0-9_]{1,64}$/.test(token) ? token : ''
+  return safeToken(raw, upstreamCodePattern)
 }
 
-function statusError(status: number, code: string): ExtractionError {
-  if (status === 401 || status === 403 || code === 'unauthorized') {
-    return new ExtractionError(
-      'unauthorized',
-      'Talonic refused the API key. Check TRACE_TALONIC_API_KEY. No fragments were returned.',
-    )
+function upstreamMessage(body: unknown) {
+  const record = asRecord(body)
+  if (!record) return ''
+  const nested = asRecord(record.error)
+  if (typeof record.message === 'string') return record.message
+  if (typeof nested?.message === 'string') return nested.message
+  return ''
+}
+
+function detailFrom(body: unknown, status: number | undefined, header: string | null): ExtractionUpstreamDetail | undefined {
+  const record = asRecord(body)
+  const requestId = safeToken(
+    (typeof record?.request_id === 'string' ? record.request_id : '') || header || '',
+    upstreamRequestIdPattern,
+  )
+  const code = upstreamCode(body)
+  const message = upstreamMessage(body)
+  const detail: ExtractionUpstreamDetail = {}
+  if (status !== undefined) detail.status = status
+  if (code) detail.code = code
+  if (message) detail.message = message
+  if (requestId) detail.requestId = requestId
+  if (detail.status === undefined && !detail.code && !detail.message && !detail.requestId) return undefined
+  return detail
+}
+
+function classifyStatus(status: number, code: string): { errorCode: ExtractionErrorCode, summary: string } {
+  const http = `HTTP ${status}`
+  const normalized = code.toLowerCase()
+  if (status === 401 || (status !== 403 && (normalized === 'unauthorized' || normalized === 'auth_required'))) {
+    return {
+      errorCode: 'unauthorized',
+      summary: `Talonic refused the API key (${http}). Check TRACE_TALONIC_API_KEY. No fragments were returned.`,
+    }
   }
-  if (status === 413 || code === 'file_too_large') {
-    return new ExtractionError('too_large', 'Talonic rejected the file as too large. No fragments were returned.')
+  if (status === 403 || normalized === 'insufficient_permissions') {
+    return {
+      errorCode: 'unauthorized',
+      summary: `Talonic refused this extraction (${http}). No fragments were returned.`,
+    }
+  }
+  if (status === 413 || normalized === 'file_too_large') {
+    return {
+      errorCode: 'too_large',
+      summary: `Talonic rejected the file as too large (${http}). No fragments were returned.`,
+    }
   }
   if (status === 408 || status === 504) {
-    return new ExtractionError('timeout', 'Talonic did not respond in time. No fragments were returned.')
+    return {
+      errorCode: 'timeout',
+      summary: `Talonic did not respond in time (${http}). No fragments were returned.`,
+    }
   }
-  if (status === 429 || code === 'rate_limited') {
-    return new ExtractionError('upstream', 'Talonic rate limited this extraction. Try again later.')
+  if (status === 429 || normalized === 'rate_limited' || normalized === 'rate_limit_exceeded') {
+    return {
+      errorCode: 'upstream',
+      summary: `Talonic rate limited this extraction (${http}). Try again later.`,
+    }
   }
-  if (code === 'unsupported_file_type') {
-    return new ExtractionError('unsupported_media', 'Talonic does not accept this file type. No fragments were returned.')
+  if (normalized === 'unsupported_file_type') {
+    return {
+      errorCode: 'unsupported_media',
+      summary: `Talonic does not accept this file type (${http}). No fragments were returned.`,
+    }
+  }
+  if (normalized === 'extraction_failed') {
+    return {
+      errorCode: 'upstream',
+      summary: `Talonic finished without usable text (${http}). No fragments were returned.`,
+    }
+  }
+  if (status >= 500) {
+    if (status === 500) {
+      return {
+        errorCode: 'upstream',
+        summary: `Talonic reported an internal error (${http}). No fragments were returned.`,
+      }
+    }
+    if (status === 502) {
+      return {
+        errorCode: 'upstream',
+        summary: `Talonic returned a gateway error (${http}). No fragments were returned.`,
+      }
+    }
+    if (status === 503) {
+      return {
+        errorCode: 'upstream',
+        summary: `Talonic is unavailable (${http}). No fragments were returned.`,
+      }
+    }
+    return {
+      errorCode: 'upstream',
+      summary: `Talonic could not complete extraction (${http}). No fragments were returned.`,
+    }
   }
   if (status >= 400 && status < 500) {
-    return new ExtractionError('upstream', 'Talonic could not read this file. Check the file type and try again.')
+    return {
+      errorCode: 'upstream',
+      summary: `Talonic rejected this file (${http}). Check the file and try again. No fragments were returned.`,
+    }
   }
-  return new ExtractionError('upstream', 'Talonic could not complete extraction. No fragments were returned.')
+  return {
+    errorCode: 'upstream',
+    summary: `Talonic could not complete extraction (${http}). No fragments were returned.`,
+  }
 }
 
-async function failStatus(response: Response): Promise<never> {
-  let code = ''
-  if (response.status === 400 || response.status === 413 || response.status === 422) {
-    try {
-      code = safeErrorCode(await readJsonBody(response))
-    } catch (error) {
-      if (error instanceof ExtractionError && error.message.includes('too large')) throw error
-      code = ''
+async function readErrorDetail(response: Response, secret: string) {
+  const headerId = response.headers.get('x-request-id')
+  try {
+    return redactDetail(detailFrom(await readJsonBody(response), response.status, headerId), secret)
+  } catch (error) {
+    if (error instanceof ExtractionError && error.message.includes('too large')) {
+      throw upstreamError(
+        'upstream',
+        `Talonic returned a response that was too large to read (HTTP ${response.status}).`,
+        { status: response.status },
+        secret,
+      )
     }
-  } else {
-    await response.body?.cancel()
+    const requestId = safeToken(headerId ?? '', upstreamRequestIdPattern)
+    return redactDetail({
+      status: response.status,
+      ...(requestId ? { requestId } : {}),
+    }, secret)
   }
-  throw statusError(response.status, code)
+}
+
+async function failStatus(response: Response, secret: string): Promise<never> {
+  const detail = await readErrorDetail(response, secret)
+  const code = detail?.code?.toLowerCase() ?? ''
+  const classified = classifyStatus(response.status, code)
+  throw upstreamError(classified.errorCode, classified.summary, detail, secret)
 }
 
 function budgetOf(timeoutMs: number | undefined) {
@@ -494,12 +640,12 @@ function summaryLink(body: unknown) {
   return ''
 }
 
-async function readSuccess(response: Response) {
+async function readSuccess(response: Response, ctx: RequestContext) {
   if (response.status >= 300 && response.status < 400) {
     await response.body?.cancel()
     throw new ExtractionError('upstream', 'Talonic redirected the extraction request. It was not followed.')
   }
-  if (response.status !== 200 && response.status !== 201) await failStatus(response)
+  if (response.status !== 200 && response.status !== 201) await failStatus(response, ctx.apiKey)
   const body = await readJsonBody(response)
   const record = asRecord(body)
   if (!record) throw new ExtractionError('upstream', 'Talonic returned a response that could not be read.')
@@ -516,7 +662,7 @@ async function loadCompleted(document: Record<string, unknown>, ctx: RequestCont
       method: 'GET',
       headers: ctx.headers,
       redirect: 'manual',
-    }))
+    }), ctx)
   }
   const links = asRecord(document.links)
   const extractions = typeof links?.extractions === 'string' ? links.extractions : ''
@@ -525,7 +671,7 @@ async function loadCompleted(document: Record<string, unknown>, ctx: RequestCont
     method: 'GET',
     headers: ctx.headers,
     redirect: 'manual',
-  }))
+  }), ctx)
   const selected = selectExtraction(list)
   if (selected) return selected
   const link = summaryLink(list)
@@ -534,7 +680,7 @@ async function loadCompleted(document: Record<string, unknown>, ctx: RequestCont
     method: 'GET',
     headers: ctx.headers,
     redirect: 'manual',
-  }))
+  }), ctx)
 }
 
 async function pollExtraction(start: Record<string, unknown>, ctx: RequestContext) {
@@ -552,10 +698,15 @@ async function pollExtraction(start: Record<string, unknown>, ctx: RequestContex
       method: 'GET',
       headers: ctx.headers,
       redirect: 'manual',
-    }))
+    }), ctx)
     const status = typeof record.status === 'string' ? record.status.toLowerCase() : ''
     if (status === 'error' || status === 'failed') {
-      throw new ExtractionError('upstream', 'Talonic could not extract this document. No fragments were returned.')
+      throw upstreamError(
+        'upstream',
+        'Talonic could not extract this document. No fragments were returned.',
+        detailFrom(record, undefined, null),
+        ctx.apiKey,
+      )
     }
     const data = asRecord(record.data)
     const hasMarkdown = typeof record.markdown === 'string' && record.markdown.trim().length > 0
@@ -580,13 +731,11 @@ async function postExtract(ctx: RequestContext, loaded: LoadedFile) {
   copy.set(loaded.bytes)
   form.append('file', new Blob([copy], { type: loaded.mediaType }), loaded.fileName)
   form.append('include_markdown', 'true')
-  // Documented on the Talonic MCP/SDK surface. The POST form reference documents include_markdown only.
-  form.append('include_provenance', 'true')
   const response = await ctx.request(endpoint(ctx.baseUrl, 'extract'), {
     method: 'POST',
     headers: {
       ...authHeaders(ctx.apiKey),
-      'Idempotency-Key': `trace-${loaded.sourceFileHash}`,
+      'Idempotency-Key': `${IDEMPOTENCY_PREFIX}${loaded.sourceFileHash}`.slice(0, 64),
     },
     body: form,
     redirect: 'manual',
@@ -600,7 +749,7 @@ async function postExtract(ctx: RequestContext, loaded: LoadedFile) {
     if (!record) throw new ExtractionError('upstream', 'Talonic accepted the file but did not return a status link.')
     return pollExtraction(record, ctx)
   }
-  if (response.status !== 200 && response.status !== 201) await failStatus(response)
+  if (response.status !== 200 && response.status !== 201) await failStatus(response, ctx.apiKey)
   const record = asRecord(await readJsonBody(response))
   if (!record) throw new ExtractionError('upstream', 'Talonic returned a response that could not be read.')
   if (needsPoll(record)) return pollExtraction(record, ctx)
@@ -646,7 +795,10 @@ export class TalonicExtractionProvider implements ExtractionProvider {
       return mapTalonicEnvelope(envelope, file, this.options.now?.() ?? new Date())
     } catch (error) {
       if (error instanceof ExtractionError) throw scrub(error, config.apiKey)
-      throw new ExtractionError('upstream', 'Talonic could not complete extraction. No fragments were returned.')
+      throw scrub(new ExtractionError(
+        'upstream',
+        'Talonic could not complete extraction. The client hit an unexpected error. No fragments were returned.',
+      ), config.apiKey)
     }
   }
 }

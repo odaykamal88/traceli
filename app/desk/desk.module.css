@@ -236,6 +236,13 @@
   background: #fff6f3;
   color: #6d2c1f;
 }
+.alertDetail {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
 
 .results {
   margin-top: 28px;

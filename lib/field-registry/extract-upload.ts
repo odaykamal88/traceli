@@ -177,7 +177,11 @@ export function extractionHttpError(error: unknown): Response {
       : error.code === 'unauthorized' || error.code === 'upstream' ? 502
       : error.code === 'not_configured' || error.code === 'unimplemented' ? 501
       : 400
-    return Response.json({ error: error.message, code: error.code }, { status, headers: privateHeaders })
+    return Response.json({
+      error: error.message,
+      code: error.code,
+      ...(error.upstream ? { upstream: error.upstream } : {}),
+    }, { status, headers: privateHeaders })
   }
   if (error instanceof z.ZodError) {
     return Response.json(
