@@ -61,6 +61,8 @@ The freeze actor is the session user id. The snapshot `organizationId` is the se
 
 The form sends `packId` `global-fund` or `fcdo-prime` plus one file (pdf, docx, xlsx, eml, msg, txt, png, jpg, jpeg, at most 8 MB).
 
+The file control is a navy button labelled Choose file, associated with the packet file input. While `POST /api/desk` is in flight the submit control is disabled and the page shows a spinner with Working…. That one request extracts, runs the pack, and freezes. The page does not pretend to know which of those stages is current.
+
 `snapshotFromUpload` does three things:
 
 1. `fragmentsTowardRegistryDraft` maps hinted fragments onto registry fields (`pricing.table`, `capacity.letter`, and the other draft targets). Generic text stays unmapped.

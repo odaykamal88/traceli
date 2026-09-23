@@ -5,8 +5,8 @@ import { extractUploadedFile, extractionHttpError } from '@/lib/field-registry/e
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
-/** The provider budget is 20s. This lets that call finish with its own error. */
-export const maxDuration = 30
+/** Poll budget is 170s, including one 20s extension. 180s lets that call finish with its own error. */
+export const maxDuration = 180
 
 export async function POST(request: Request) {
   try {

@@ -550,6 +550,175 @@ test('Talonic reports a failed document without dropping its error detail', asyn
   assert.match(caught.upstream.message, /no text redacted/)
 })
 
+test('Talonic names the document and request when a long poll is still processing', async () => {
+  const secret = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  let t = 0
+  let polls = 0
+  const seen = []
+  const provider = new TalonicExtractionProvider({
+    clock: () => t,
+    sleep: async ms => { t += ms },
+    fetchImpl: async url => {
+      const href = String(url)
+      seen.push(href)
+      if (href.endsWith('/extract')) {
+        return jsonResponse(202, {
+          status: 'processing',
+          poll_url: '/v1/documents/601b2dcd',
+          document: { id: '601b2dcd' },
+          request_id: 'req_601b2dcd01',
+          message: `still working ${secret}`,
+        }, { 'x-request-id': 'req_601b2dcd01' })
+      }
+      if (href.endsWith('/documents/601b2dcd')) {
+        polls += 1
+        return jsonResponse(200, {
+          id: '601b2dcd',
+          status: 'processing',
+          request_id: 'req_601b2dcd01',
+          message: `still working ${secret}`,
+        })
+      }
+      return jsonResponse(500, { message: secret })
+    },
+  })
+  let caught
+  try {
+    await provider.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    caught = error
+  }
+  assert.equal(caught instanceof ExtractionError, true)
+  assert.equal(caught.code, 'timeout')
+  assert.match(caught.message, /still processing this document \(document 601b2dcd, request req_601b2dcd01\)/)
+  assert.match(caught.message, /Try again/)
+  assert.equal(caught.message.includes(secret), false)
+  assert.equal(caught.upstream.requestId, 'req_601b2dcd01')
+  assert.match(caught.upstream.message, /still working redacted/)
+  assert.equal(polls > 6, true)
+  assert.equal(polls <= 31, true)
+  assert.equal(t >= 150_000, true)
+  assert.equal(t <= 170_000, true)
+  assert.equal(seen.every(href => href.startsWith('https://extraction.example.invalid/')), true)
+  const body = await extractionHttpError(caught).json()
+  assert.equal(body.upstream.requestId, 'req_601b2dcd01')
+  assert.equal(JSON.stringify(body).includes(secret), false)
+  assert.match(body.error, /601b2dcd/)
+})
+
+test('Talonic maps a document that finishes on the one extension poll', async () => {
+  process.env.TRACE_TALONIC_API_KEY = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  let t = 0
+  let polls = 0
+  const provider = new TalonicExtractionProvider({
+    clock: () => t,
+    sleep: async ms => { t += ms },
+    now: () => new Date('2026-09-23T00:00:00.000Z'),
+    fetchImpl: async url => {
+      const href = String(url)
+      if (href.endsWith('/extract')) {
+        return jsonResponse(202, {
+          status: 'processing',
+          poll_url: '/v1/documents/601b2dcd',
+          document: { id: '601b2dcd' },
+        })
+      }
+      if (href.endsWith('/documents/601b2dcd')) {
+        polls += 1
+        if (t < 150_000) return jsonResponse(200, { id: '601b2dcd', status: 'processing' })
+        return jsonResponse(200, {
+          id: '601b2dcd',
+          status: 'completed',
+          created_at: '2026-09-23T01:00:00.000Z',
+          data: { capacity_statement: 'Workshop can deliver.' },
+          confidence: { overall: 0.66, fields: { capacity_statement: 0.66 } },
+        })
+      }
+      return jsonResponse(500, {})
+    },
+  })
+  const result = await provider.extract(input('capacity.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'))
+  assert.equal(result.fragments.length, 1)
+  assert.equal(result.fragments[0].text, 'capacity_statement: Workshop can deliver.')
+  assert.equal(polls > 6, true)
+  assert.equal(t >= 150_000, true)
+  assert.equal(t <= 170_000, true)
+})
+
+test('a short Talonic budget does not add the extension wait', async () => {
+  process.env.TRACE_TALONIC_API_KEY = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  let t = 0
+  let polls = 0
+  const provider = new TalonicExtractionProvider({
+    timeoutMs: 1000,
+    clock: () => t,
+    sleep: async ms => { t += ms },
+    fetchImpl: async url => {
+      if (String(url).endsWith('/extract')) {
+        return jsonResponse(202, {
+          status: 'processing',
+          poll_url: '/v1/documents/601b2dcd',
+          document: { id: '601b2dcd' },
+          request_id: 'req_shortbudget1',
+        })
+      }
+      polls += 1
+      return jsonResponse(200, {
+        id: '601b2dcd',
+        status: 'processing',
+        request_id: 'req_shortbudget1',
+      })
+    },
+  })
+  let caught
+  try {
+    await provider.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    caught = error
+  }
+  assert.equal(caught.code, 'timeout')
+  assert.equal(polls, 1)
+  assert.equal(t, 1000)
+  assert.match(caught.message, /document 601b2dcd/)
+  assert.match(caught.message, /request req_shortbudget1/)
+  assert.match(caught.message, /Try again/)
+})
+
+test('Talonic stops polling when the clock does not advance', async () => {
+  process.env.TRACE_TALONIC_API_KEY = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_BASE_URL = 'https://extraction.example.invalid/v1'
+  let polls = 0
+  const provider = new TalonicExtractionProvider({
+    clock: () => 0,
+    sleep: async () => {},
+    fetchImpl: async url => {
+      if (String(url).endsWith('/extract')) {
+        return jsonResponse(202, {
+          status: 'processing',
+          poll_url: '/v1/documents/601b2dcd',
+          document: { id: '601b2dcd' },
+        })
+      }
+      polls += 1
+      return jsonResponse(200, { id: '601b2dcd', status: 'processing' })
+    },
+  })
+  let caught
+  try {
+    await provider.extract(input('packet.pdf', 'application/pdf'))
+  } catch (error) {
+    caught = error
+  }
+  assert.equal(caught.code, 'timeout')
+  assert.equal(polls, 31)
+  assert.match(caught.message, /document 601b2dcd/)
+  assert.match(caught.message, /Try again/)
+})
+
 test('draft mapping fills hinted fields and leaves generic text unmapped', async () => {
   const provider = new MockExtractionProvider()
   const priced = await provider.extract(input('prices.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', {

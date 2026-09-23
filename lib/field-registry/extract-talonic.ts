@@ -27,9 +27,10 @@ import { type FragmentKindHint } from '@/lib/field-registry/schema'
  * `include_provenance` is not sent: the POST form and the official SDK do
  * not list it. Provenance is still mapped when the body includes it.
  * A synchronous body is mapped into `fragmentSchema`. A 202 is polled on
- * the same host until the document completes or the request budget ends.
- * The API key is a header only: it is not logged, not followed onto another
- * host, and not copied onto the fragment result or the error JSON.
+ * the same host until the document completes, the primary budget ends, or
+ * one bounded extension poll still finds it processing. The API key is a
+ * header only: it is not logged, not followed onto another host, and not
+ * copied onto the fragment result or the error JSON.
  *
  * Assumptions that still need a live confirmation are listed in
  * docs/eng/extraction-adapter.md.
@@ -37,14 +38,21 @@ import { type FragmentKindHint } from '@/lib/field-registry/schema'
 
 const EXTRACTOR_ID = 'extractor.talonic'
 const DEFAULT_TALONIC_BASE_URL = 'https://api.talonic.com/v1'
-const REQUEST_BUDGET_MS = 20_000
+/** Wait while Talonic reports processing, then one extension poll. */
+const PRIMARY_BUDGET_MS = 150_000
+const EXTENSION_MS = 20_000
+const REQUEST_BUDGET_MS = PRIMARY_BUDGET_MS + EXTENSION_MS
+const BACKOFF_CAP_MS = 8_000
 const RESPONSE_BODY_LIMIT = 2 * 1024 * 1024
-const MAX_POLLS = 6
+/** Safety cap. The deadline stops a live poll first. */
+const MAX_POLLS = 30
 
 export type TalonicExtractionOptions = {
   fetchImpl?: typeof fetch
   sleep?: (ms: number) => Promise<void>
   now?: () => Date
+  /** Epoch milliseconds. Defaults to `Date.now`. Tests can freeze or step it. */
+  clock?: () => number
   timeoutMs?: number
   env?: NodeJS.ProcessEnv
 }
@@ -67,6 +75,8 @@ type RequestContext = {
   apiKey: string
   baseUrl: URL
   deadline: number
+  extension: number
+  clock: () => number
   headers: Record<string, string>
   request: (url: URL, init: RequestInit) => Promise<Response>
   sleep: (ms: number) => Promise<void>
@@ -394,9 +404,13 @@ async function failStatus(response: Response, secret: string): Promise<never> {
   throw upstreamError(classified.errorCode, classified.summary, detail, secret)
 }
 
-function budgetOf(timeoutMs: number | undefined) {
-  if (typeof timeoutMs !== 'number' || !Number.isFinite(timeoutMs)) return REQUEST_BUDGET_MS
-  return Math.min(Math.max(timeoutMs, 1), 60_000)
+function resolveBudget(timeoutMs: number | undefined) {
+  if (typeof timeoutMs !== 'number' || !Number.isFinite(timeoutMs)) {
+    return { total: REQUEST_BUDGET_MS, extension: EXTENSION_MS }
+  }
+  const total = Math.min(Math.max(Math.floor(timeoutMs), 1), REQUEST_BUDGET_MS)
+  const extension = total > PRIMARY_BUDGET_MS ? total - PRIMARY_BUDGET_MS : 0
+  return { total, extension }
 }
 
 function kindFromText(value: string): FragmentKindHint | undefined {
@@ -683,39 +697,108 @@ async function loadCompleted(document: Record<string, unknown>, ctx: RequestCont
   }), ctx)
 }
 
-async function pollExtraction(start: Record<string, unknown>, ctx: RequestContext) {
-  const target = pollTarget(start, ctx.baseUrl)
-  let delay = 0
-  for (let attempt = 0; attempt < MAX_POLLS; attempt += 1) {
-    if (ctx.deadline - Date.now() <= 0) {
-      throw new ExtractionError('timeout', 'Talonic is still processing this document. No fragments were returned.')
-    }
-    if (delay > 0) await ctx.sleep(Math.min(delay, ctx.deadline - Date.now()))
-    if (ctx.deadline - Date.now() <= 0) {
-      throw new ExtractionError('timeout', 'Talonic is still processing this document. No fragments were returned.')
-    }
-    const record = await readSuccess(await ctx.request(target, {
-      method: 'GET',
-      headers: ctx.headers,
-      redirect: 'manual',
-    }), ctx)
-    const status = typeof record.status === 'string' ? record.status.toLowerCase() : ''
-    if (status === 'error' || status === 'failed') {
-      throw upstreamError(
-        'upstream',
-        'Talonic could not extract this document. No fragments were returned.',
-        detailFrom(record, undefined, null),
-        ctx.apiKey,
-      )
-    }
-    const data = asRecord(record.data)
-    const hasMarkdown = typeof record.markdown === 'string' && record.markdown.trim().length > 0
-    if (status === 'completed' || status === 'complete' || (data && Object.keys(data).length > 0) || hasMarkdown) {
-      return loadCompleted(record, ctx)
-    }
-    delay = delay === 0 ? 1000 : Math.min(delay * 2, 8000)
+function documentIdOf(record: Record<string, unknown>) {
+  const document = asRecord(record.document)
+  for (const value of [document?.id, record.id, record.document_id]) {
+    if (typeof value === 'string' && isTalonicId(value.trim())) return value.trim()
   }
-  throw new ExtractionError('timeout', 'Talonic is still processing this document. No fragments were returned.')
+  return ''
+}
+
+function stillProcessingError(record: Record<string, unknown>, secret: string, headerId: string | null) {
+  const detail = redactDetail(detailFrom(record, undefined, headerId), secret)
+  const documentId = documentIdOf(record)
+  const safeDocumentId = documentId && (!secret || !documentId.includes(secret)) ? documentId : ''
+  const requestId = detail?.requestId ?? ''
+  const refs = [
+    safeDocumentId ? `document ${safeDocumentId}` : '',
+    requestId ? `request ${requestId}` : '',
+  ].filter(Boolean)
+  const which = refs.length > 0 ? ` (${refs.join(', ')})` : ''
+  return upstreamError(
+    'timeout',
+    `Talonic is still processing this document${which}. Try again. No fragments were returned.`,
+    detail,
+    secret,
+  )
+}
+
+function applyPollRecord(record: Record<string, unknown>, ctx: RequestContext, headerId: string | null) {
+  const status = typeof record.status === 'string' ? record.status.toLowerCase() : ''
+  if (status === 'error' || status === 'failed') {
+    throw upstreamError(
+      'upstream',
+      'Talonic could not extract this document. No fragments were returned.',
+      detailFrom(record, undefined, headerId),
+      ctx.apiKey,
+    )
+  }
+  const data = asRecord(record.data)
+  const hasMarkdown = typeof record.markdown === 'string' && record.markdown.trim().length > 0
+  if (status === 'completed' || status === 'complete' || (data && Object.keys(data).length > 0) || hasMarkdown) {
+    return true
+  }
+  return false
+}
+
+async function pollOnce(target: URL, ctx: RequestContext) {
+  const response = await ctx.request(target, {
+    method: 'GET',
+    headers: ctx.headers,
+    redirect: 'manual',
+  })
+  return {
+    record: await readSuccess(response, ctx),
+    headerId: response.headers.get('x-request-id'),
+  }
+}
+
+async function observePoll(
+  target: URL,
+  ctx: RequestContext,
+  last: Record<string, unknown>,
+  headerId: string | null,
+) {
+  try {
+    return await pollOnce(target, ctx)
+  } catch (error) {
+    if (error instanceof ExtractionError && error.code === 'timeout' && !error.upstream) {
+      throw stillProcessingError(last, ctx.apiKey, headerId)
+    }
+    throw error
+  }
+}
+
+async function pollExtraction(start: Record<string, unknown>, ctx: RequestContext, headerId: string | null = null) {
+  const target = pollTarget(start, ctx.baseUrl)
+  const primaryEnds = ctx.deadline - ctx.extension
+  let delay = 0
+  let last = start
+  let lastHeader = headerId
+  for (let attempt = 0; attempt < MAX_POLLS; attempt += 1) {
+    if (ctx.clock() >= primaryEnds) break
+    if (delay > 0) {
+      const wait = Math.min(delay, primaryEnds - ctx.clock())
+      if (wait > 0) await ctx.sleep(wait)
+    }
+    if (ctx.clock() >= primaryEnds) break
+    const polled = await observePoll(target, ctx, last, lastHeader)
+    last = polled.record
+    lastHeader = polled.headerId
+    if (applyPollRecord(last, ctx, lastHeader)) return loadCompleted(last, ctx)
+    delay = delay === 0 ? 1000 : Math.min(delay * 2, BACKOFF_CAP_MS)
+  }
+  if (ctx.extension > 0 && ctx.clock() < ctx.deadline) {
+    const wait = Math.min(BACKOFF_CAP_MS, ctx.deadline - ctx.clock())
+    if (wait > 0) await ctx.sleep(wait)
+    if (ctx.clock() < ctx.deadline) {
+      const polled = await observePoll(target, ctx, last, lastHeader)
+      last = polled.record
+      lastHeader = polled.headerId
+      if (applyPollRecord(last, ctx, lastHeader)) return loadCompleted(last, ctx)
+    }
+  }
+  throw stillProcessingError(last, ctx.apiKey, lastHeader)
 }
 
 function authHeaders(apiKey: string) {
@@ -745,14 +828,16 @@ async function postExtract(ctx: RequestContext, loaded: LoadedFile) {
     throw new ExtractionError('upstream', 'Talonic redirected the extraction request. It was not followed.')
   }
   if (response.status === 202) {
+    const acceptedHeader = response.headers.get('x-request-id')
     const record = asRecord(await readJsonBody(response))
     if (!record) throw new ExtractionError('upstream', 'Talonic accepted the file but did not return a status link.')
-    return pollExtraction(record, ctx)
+    return pollExtraction(record, ctx, acceptedHeader)
   }
   if (response.status !== 200 && response.status !== 201) await failStatus(response, ctx.apiKey)
+  const acceptedHeader = response.headers.get('x-request-id')
   const record = asRecord(await readJsonBody(response))
   if (!record) throw new ExtractionError('upstream', 'Talonic returned a response that could not be read.')
-  if (needsPoll(record)) return pollExtraction(record, ctx)
+  if (needsPoll(record)) return pollExtraction(record, ctx, acceptedHeader)
   return record
 }
 
@@ -782,14 +867,18 @@ export class TalonicExtractionProvider implements ExtractionProvider {
       }
       const fetchImpl = this.options.fetchImpl ?? globalThis.fetch
       const sleep = this.options.sleep ?? defaultSleep
-      const deadline = Date.now() + budgetOf(this.options.timeoutMs)
+      const clock = this.options.clock ?? Date.now
+      const budget = resolveBudget(this.options.timeoutMs)
+      const deadline = clock() + budget.total
       const ctx: RequestContext = {
         apiKey: config.apiKey,
         baseUrl: config.baseUrl,
         deadline,
+        extension: budget.extension,
+        clock,
         headers: authHeaders(config.apiKey),
         sleep,
-        request: (url, init) => talonicRequest(fetchImpl, url, init, deadline - Date.now()),
+        request: (url, init) => talonicRequest(fetchImpl, url, init, deadline - clock()),
       }
       const envelope = await postExtract(ctx, file)
       return mapTalonicEnvelope(envelope, file, this.options.now?.() ?? new Date())
