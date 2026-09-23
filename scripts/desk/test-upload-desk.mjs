@@ -7,8 +7,17 @@ import { verifyFrozenRecord } from '../../lib/field-registry/freeze.ts'
 import { FCDO_PRIME_FIELD_KEYS } from '../../lib/field-registry/packs/fcdo-prime.ts'
 import { GLOBAL_FUND_FIELD_KEYS } from '../../lib/field-registry/packs/global-fund.ts'
 import { deskExtractionFailure, deskWorkingCopy } from '../../lib/desk/failure-copy.ts'
-import { DeskAccessError, freezeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
+import { DeskAccessError, freezeUploadedPacket, supersedeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
+import {
+  draftDeskReason,
+  draftDeskReasonFromView,
+  sanitizeDeskChoice,
+  sanitizeDeskReason,
+  sanitizeUploadDeskJudgment,
+} from '../../lib/desk/judgment.ts'
 import { sanitizeUploadDeskView } from '../../lib/desk/view.ts'
+import { hashJson } from '../../lib/field-registry/freeze.ts'
+import { evaluateDonorPack, globalFundPassSnapshot } from '../../lib/field-registry/packs/index.ts'
 
 const envKeys = ['TRACELI_TRACE_MODE', 'NODE_ENV', 'VERCEL', 'DATABASE_URL', 'TRACE_EXTRACTION_PROVIDER']
 const savedEnv = Object.fromEntries(envKeys.map(key => [key, process.env[key]]))
@@ -29,6 +38,7 @@ mock.module(new URL('../../lib/workspace-access.ts', import.meta.url).href, {
 })
 
 const { POST } = await import('../../app/api/desk/route.ts')
+const { POST: postJudgment } = await import('../../app/api/desk/disposition/route.ts')
 
 after(() => {
   for (const key of envKeys) {
@@ -100,6 +110,7 @@ test('mock upload maps missing pack fields and freezes a verified record without
   assert.equal(outcome.record.disposition.decision, 'request_evidence')
   assert.equal(outcome.record.pipelineStatus.readiness, 'red')
   assert.equal(outcome.view.record.snapshotHash, outcome.record.snapshotHash)
+  assert.equal(hashJson(outcome.view.snapshot), outcome.record.snapshotHash)
   assert.equal(outcome.view.record.packsHash, outcome.record.packsHash)
   assert.equal(outcome.view.providerId, 'mock')
   assert.equal(outcome.view.unmappedFragmentCount, 1)
@@ -273,7 +284,19 @@ test('the upload desk file control is a labelled button with a working spinner',
   assert.match(view, /Choose file/)
   assert.match(view, /deskWorkingCopy/)
   assert.match(view, /className=\{s\.spinner\}/)
-  assert.match(view, /disabled=\{pending\}/)
+  assert.match(view, /disabled=\{busy\}/)
+  assert.match(view, /const busy = pending \|\| judging/)
+  assert.match(view, /Your judgment/)
+  assert.match(view, /Confirm judgment/)
+  assert.match(view, /Try the fictional walkthrough/)
+  assert.match(view, /Copy record id/)
+  assert.match(view, /Copy snapshot hash/)
+  assert.match(view, /Record frozen · verified/)
+  assert.match(view, /aria-live="polite"/)
+  assert.match(view, /aria-busy=\{judging\}/)
+  assert.equal(view.match(/className=\{s\.rail\}/g)?.length, 1)
+  assert.equal(view.includes('Northstar'), false)
+  assert.equal(view.includes('Download PDF'), false)
   assert.match(css, /\.fileButton \{/)
   assert.match(css, /background: var\(--navy\)/)
   assert.match(css, /color: var\(--ivory\)/)
@@ -330,10 +353,288 @@ test('desk failure copy shows Talonic detail and drops secrets', () => {
   assert.equal(waiting.detail, 'Request req_601b2dcd01.')
 })
 
+function judgmentRequest(body, origin = 'http://127.0.0.1') {
+  return new Request('http://127.0.0.1/api/desk/disposition', {
+    method: 'POST',
+    headers: {
+      host: '127.0.0.1',
+      origin,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+}
+
+test('draft reasons and disposition mapping stay on this packet', () => {
+  const reason = draftDeskReason({
+    packName: 'Global Fund Grant Regulations v1',
+    readiness: 'red',
+    findingCount: 2,
+    findings: [
+      { severity: 'warning', title: 'A later warning' },
+      { severity: 'blocker', title: 'Contractor ability to perform must be affirmed' },
+    ],
+    missingKeys: ['eligibility.contractor_capable', 'sr.capacity_assessed'],
+  })
+  assert.ok(reason.length >= 20 && reason.length <= 2000)
+  assert.match(reason, /readiness is red/)
+  assert.match(reason, /Contractor ability to perform must be affirmed/)
+  assert.match(reason, /eligibility\.contractor_capable/)
+  assert.equal(reason.includes('Northstar'), false)
+  assert.equal(reason.includes('Ethiopia'), false)
+  assert.ok(reason.indexOf('Contractor ability') < reason.indexOf('A later warning'))
+
+  const green = draftDeskReason({
+    packName: 'FCDO commercial prime award desk v1',
+    readiness: 'green',
+    findingCount: 0,
+    findings: [],
+    missingKeys: [],
+  })
+  assert.match(green, /readiness is green/)
+  assert.match(green, /No findings were raised/)
+  assert.match(green, /desk-session exception/)
+  assert.ok(green.length >= 20 && green.length <= 2000)
+
+  const huge = draftDeskReason({
+    packName: 'P'.repeat(80),
+    readiness: 'amber',
+    findingCount: 40,
+    findings: Array.from({ length: 40 }, (_, index) => ({
+      severity: 'blocker',
+      title: `Finding ${index} ${'x'.repeat(180)}`,
+    })),
+    missingKeys: Array.from({ length: 40 }, (_, index) => `field.key_${index}`),
+  })
+  assert.ok(huge.length >= 20 && huge.length <= 2000)
+
+  assert.deepEqual(sanitizeDeskChoice('request'), { choice: 'request', decision: 'request_evidence' })
+  assert.deepEqual(sanitizeDeskChoice('accept_with_exception'), { choice: 'exception', decision: 'accept_with_exception' })
+  assert.deepEqual(sanitizeDeskChoice('escalate'), { choice: 'escalate', decision: 'escalate' })
+  assert.equal(sanitizeDeskChoice('accept_assessment'), null)
+  assert.equal(sanitizeDeskChoice('waiver'), null)
+  assert.equal(sanitizeDeskReason('too short'), null)
+  assert.equal(sanitizeDeskReason(`  ${'a'.repeat(20)}  `), 'a'.repeat(20))
+  assert.equal(sanitizeDeskReason('b'.repeat(2001)), null)
+})
+
+test('a human disposition supersedes the auto freeze without changing the snapshot', () => {
+  const provider = new MockExtractionProvider()
+  return provider.extract({
+    fileName: 'packet.txt',
+    mediaType: 'text/plain',
+    bytes: secretBytes,
+    organizationId: 'org_trace_demo',
+  }).then(async extraction => {
+    const outcome = freezeUploadedPacket({
+      extraction,
+      packId: 'global-fund',
+      organizationId: 'org_trace_demo',
+      actorId: 'user_fixture_reviewer',
+      actorRole: 'Procurement Officer',
+      frozenAt: '2026-09-22T12:00:00.000Z',
+    })
+    const drafted = draftDeskReasonFromView(outcome.view)
+    assert.match(drafted, /eligibility\.contractor_capable/)
+    assert.equal(drafted.includes('Northstar'), false)
+    const reason = 'Request the missing pack fields before sign-off. The assessment freeze stays in place.'
+    const human = supersedeUploadedPacket({
+      view: outcome.view,
+      decision: 'request',
+      reason,
+      organizationId: 'org_trace_demo',
+      actorId: 'user_fixture_reviewer',
+      actorRole: 'Procurement Officer',
+      frozenAt: '2026-09-22T12:30:00.000Z',
+    })
+    assert.equal(human.record.supersedesRecordId, outcome.record.recordId)
+    assert.notEqual(human.record.recordId, outcome.record.recordId)
+    assert.equal(human.record.snapshotHash, outcome.record.snapshotHash)
+    assert.equal(human.record.disposition.decision, 'request_evidence')
+    assert.equal(human.record.disposition.waiverRefs.length, 0)
+    assert.equal(human.record.disposition.rationale, reason)
+    assert.equal(human.judgment.record.supersedesRecordId, outcome.record.recordId)
+    assert.equal(sanitizeUploadDeskJudgment(human.judgment)?.record.recordId, human.record.recordId)
+    assert.equal(JSON.stringify(human.record).includes(secret), false)
+    assert.equal(outcome.record.disposition.decision, 'request_evidence')
+
+    const exception = supersedeUploadedPacket({
+      view: outcome.view,
+      decision: 'exception',
+      reason,
+      organizationId: 'org_trace_demo',
+      actorId: 'user_fixture_reviewer',
+      actorRole: 'Procurement Officer',
+      frozenAt: '2026-09-22T12:40:00.000Z',
+    })
+    assert.equal(exception.record.disposition.decision, 'accept_with_exception')
+    assert.equal(exception.record.disposition.waiverRefs.length, 1)
+    assert.match(exception.record.disposition.waiverRefs[0].waiverId, /^waiver\.desk\./)
+    assert.equal(exception.record.disposition.waiverRefs[0].authorityRef, 'user_fixture_reviewer')
+    assert.equal(exception.judgment.waiver?.waiverId, exception.record.disposition.waiverRefs[0].waiverId)
+
+    const escalated = supersedeUploadedPacket({
+      view: { ...outcome.view, waiver: [{ waiverId: 'waiver.attacker', authorityRef: 'user_fixture_reviewer' }] },
+      decision: 'escalate',
+      reason,
+      organizationId: 'org_trace_demo',
+      actorId: 'user_fixture_reviewer',
+      actorRole: 'Procurement Officer',
+      frozenAt: '2026-09-22T12:50:00.000Z',
+    })
+    assert.equal(escalated.record.disposition.decision, 'escalate')
+    assert.equal(escalated.record.disposition.waiverRefs.length, 0)
+    assert.equal(escalated.judgment.waiver, null)
+
+    assert.throws(
+      () => supersedeUploadedPacket({
+        view: outcome.view,
+        decision: 'accept_assessment',
+        reason,
+        organizationId: 'org_trace_demo',
+        actorId: 'user_fixture_reviewer',
+        actorRole: 'Procurement Officer',
+      }),
+      error => error.name === 'DeskJudgmentError',
+    )
+    assert.throws(
+      () => supersedeUploadedPacket({
+        view: outcome.view,
+        decision: 'request',
+        reason: 'too short',
+        organizationId: 'org_trace_demo',
+        actorId: 'user_fixture_reviewer',
+        actorRole: 'Procurement Officer',
+      }),
+      error => error.name === 'DeskJudgmentError' && /20/.test(error.message),
+    )
+    const tampered = structuredClone(outcome.view)
+    tampered.snapshot.fields[0].value = { state: 'present', value: 'rewritten' }
+    assert.throws(
+      () => supersedeUploadedPacket({
+        view: tampered,
+        decision: 'request',
+        reason,
+        organizationId: 'org_trace_demo',
+        actorId: 'user_fixture_reviewer',
+        actorRole: 'Procurement Officer',
+      }),
+      error => error.name === 'DeskJudgmentError',
+    )
+    assert.throws(
+      () => supersedeUploadedPacket({
+        view: outcome.view,
+        decision: 'request',
+        reason,
+        organizationId: 'org_other',
+        actorId: 'user_fixture_reviewer',
+        actorRole: 'Procurement Officer',
+      }),
+      DeskAccessError,
+    )
+
+    const pass = structuredClone(globalFundPassSnapshot())
+    pass.organizationId = 'org_trace_demo'
+    const sourceFileHash = pass.fields[0].provenance.sourceFileHash
+    const judged = evaluateDonorPack(pass, 'global-fund', { evaluatedAt: '2026-09-22T12:00:00.000Z' })
+    assert.equal(judged.pipelineStatus.readiness, 'green')
+    const greenView = sanitizeUploadDeskView({
+      ...outcome.view,
+      sourceFileHash,
+      awardId: pass.awardId,
+      procurementReference: pass.procurementReference,
+      packName: pass.framework.name,
+      packVersion: pass.framework.version,
+      readiness: judged.pipelineStatus.readiness,
+      findingCount: judged.findings.length,
+      findings: [],
+      fields: pass.fields.map(field => ({
+        fieldId: field.fieldId,
+        key: field.key,
+        state: field.value.state,
+        detail: field.value.state === 'missing' ? field.value.reason : String(field.value.value).slice(0, 160),
+        fromPacket: field.value.state !== 'missing',
+      })),
+      snapshot: pass,
+      record: {
+        ...outcome.view.record,
+        snapshotHash: hashJson(pass),
+        disposition: 'accept_assessment',
+      },
+    })
+    assert.ok(greenView)
+    const greenHuman = supersedeUploadedPacket({
+      view: greenView,
+      decision: 'escalate',
+      reason: 'Escalate this passing pack for a named reviewer before sign-off.',
+      organizationId: 'org_trace_demo',
+      actorId: 'user_fixture_reviewer',
+      actorRole: 'Procurement Officer',
+      frozenAt: '2026-09-22T13:00:00.000Z',
+    })
+    assert.equal(greenHuman.record.pipelineStatus.readiness, 'green')
+    assert.equal(greenHuman.record.disposition.decision, 'escalate')
+    assert.equal(greenHuman.record.disposition.waiverRefs.length, 0)
+    assert.equal(greenHuman.record.snapshotHash, greenView.record.snapshotHash)
+    assert.equal(greenHuman.record.supersedesRecordId, greenView.record.recordId)
+  })
+})
+
+test('the disposition route freezes a superseding record for the signed-in reviewer', async () => {
+  disableTrace()
+  const denied = await postJudgment(judgmentRequest({ decision: 'request', reason: 'x'.repeat(20), view: {} }))
+  assert.equal(denied.status, 403)
+
+  enableLocal()
+  const uploaded = await POST(deskRequest())
+  assert.equal(uploaded.status, 200)
+  const view = sanitizeUploadDeskView(await uploaded.json())
+  assert.ok(view)
+  const reason = 'Request the missing pack fields before anyone signs this award.'
+  const response = await postJudgment(judgmentRequest({ decision: 'request', reason, view }))
+  assert.equal(response.status, 200, await response.clone().text())
+  const judgment = sanitizeUploadDeskJudgment(await response.json())
+  assert.ok(judgment)
+  assert.equal(judgment.decision, 'request_evidence')
+  assert.equal(judgment.choice, 'request')
+  assert.equal(judgment.reason, reason)
+  assert.equal(judgment.waiver, null)
+  assert.equal(judgment.record.supersedesRecordId, view.record.recordId)
+  assert.equal(judgment.record.snapshotHash, view.record.snapshotHash)
+  assert.match(judgment.record.recordId, /\.judgment$/)
+  assert.equal(judgment.record.frozenBy, 'fixture-reviewer')
+  assert.equal(JSON.stringify(judgment).includes(secret), false)
+
+  const exception = await postJudgment(judgmentRequest({
+    decision: 'accept_with_exception',
+    reason,
+    view,
+    waiverId: 'waiver.attacker',
+  }))
+  assert.equal(exception.status, 200)
+  const exceptionBody = sanitizeUploadDeskJudgment(await exception.json())
+  assert.equal(exceptionBody?.decision, 'accept_with_exception')
+  assert.match(exceptionBody?.waiver?.waiverId ?? '', /^waiver\.desk\./)
+  assert.equal(exceptionBody?.waiver?.authorityRef, 'fixture-reviewer')
+
+  const short = await postJudgment(judgmentRequest({ decision: 'escalate', reason: 'no', view }))
+  assert.equal(short.status, 400)
+  const foreign = await postJudgment(judgmentRequest({ decision: 'escalate', reason, view }, 'https://foreign.invalid'))
+  assert.equal(foreign.status, 403)
+  const otherOrg = structuredClone(view)
+  otherOrg.organizationId = 'org_other'
+  otherOrg.snapshot.organizationId = 'org_other'
+  const crossed = await postJudgment(judgmentRequest({ decision: 'escalate', reason, view: otherOrg }))
+  assert.equal(crossed.status, 403)
+})
+
 test('desk sources do not log and do not name Talonic', () => {
   for (const file of [
     'app/api/desk/route.ts',
+    'app/api/desk/disposition/route.ts',
     'lib/desk/freeze-upload.ts',
+    'lib/desk/disposition-body.ts',
+    'lib/desk/judgment.ts',
     'lib/desk/packet.ts',
   ]) {
     const source = readFileSync(new URL(`../../${file}`, import.meta.url), 'utf8')

@@ -25,7 +25,10 @@ POST /api/desk
         └─ freezeAtJudgment → verifyFrozenRecord
         │
         ▼
-results on /desk                    findings + record id + snapshot hash + packs hash
+results on /desk                    readiness, then Your judgment
+        │
+        ▼
+POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordId
 ```
 
 `TRACE_EXTRACTION_PROVIDER` stays unset or `mock`. The mock hashes the file and returns a stub fragment. It does not read the document body. Pack fields the stub does not map stay `missing`. Missing is not a negative finding. Judgment on that snapshot is red, and the freeze records `request_evidence`. That is the honest mock walk: a frozen record with evidence gaps, not a faked pass.
@@ -37,7 +40,8 @@ results on /desk                    findings + record id + snapshot hash + packs
 | `GET /login` | Public | Starts AuthKit sign-in. Return path is `/desk`. If WorkOS is not configured, sends the browser to `/desk?auth=unavailable`. |
 | `GET /auth/callback` | AuthKit | Already present. Honors the sealed return path, otherwise `/workspace`. No new callback. |
 | `GET /desk` | Trace session | Pack choice, file input, and the frozen record. |
-| `POST /api/desk` | Trace session | Multipart upload, judgment, freeze. |
+| `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze. |
+| `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the auto record. |
 | `POST /desk/sign-out` | WorkOS session | Clears the AuthKit session and returns to `/login`. |
 | `GET /demo` | Public | Unchanged scripted Award desk. |
 
@@ -71,7 +75,9 @@ The file control is a navy button labelled Choose file, associated with the pack
 
 `evaluateDonorPack` supplies `pipelineStatus`. `freezeAtJudgment` then `verifyFrozenRecord`. Green readiness would record `accept_assessment`. Any other readiness records `request_evidence`. The mock walk is the second case.
 
-The JSON response is a view: provider id, file name, file hash, pack, findings, field states, record id, snapshot hash, packs hash. It does not include file bytes or a vendor payload. The browser keeps that view in `sessionStorage` until the next packet. Nothing is written to Postgres. The file is not retained.
+The JSON response is a view: provider id, file name, file hash, pack, findings, field states, the registry snapshot, record id, snapshot hash, packs hash. It does not include file bytes or a vendor payload. The browser keeps that view in `sessionStorage` (`traceli.uploadDesk.frozen.v2`) until the next packet. Nothing is written to Postgres. The file is not retained. There is no server cache of the frozen record.
+
+After the assessment freeze, the same page asks for a human disposition: Request evidence, Accept with exception, or Escalate. The reason is drafted from readiness, the top findings, and missing pack fields. Confirm calls `POST /api/desk/disposition`. The server checks the session organization and actor, recomputes the snapshot hash, and writes a new verified freeze with `supersedesRecordId` set to the assessment record. The assessment record is not mutated. Accept with exception adds a desk-session waiver stub (`waiver.desk.<short>`, authority is the signed-in actor). That note is not an organization waiver system. The decision record stays in `sessionStorage` with the assessment. Start another packet clears both.
 
 When extraction fails, the desk uses the same JSON as `POST /api/extract`: `error`, `code`, and `upstream` (`status`, `code`, `message`, `requestId`) when Talonic returned them. The page shows the `error` sentence and that detail. The API key and Authorization header are not included.
 

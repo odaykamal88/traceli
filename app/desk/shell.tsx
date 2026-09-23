@@ -42,7 +42,7 @@ export function DeskUnavailable() {
       <p className={s.eyebrow}>Award assurance</p>
       <h1>Sign-in is not available here</h1>
       <p className={s.lede}>
-        The upload desk needs the same WorkOS Trace session as the rest of Trace.
+        The upload desk needs the same WorkOS sign-in as the rest of Trace-li.
         This environment does not have that session turned on.
       </p>
       <p className={s.lede}>
