@@ -9,22 +9,15 @@ export function ReadingProgressRail() {
   useEffect(() => {
     const track = bar.current
     const indicator = fill.current
-    const article = document.getElementById('article-body')
     if (!track || !indicator) return
 
     let ticking = false
     const update = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
       const winH = window.innerHeight || document.documentElement.clientHeight || 0
-      let start = 0
-      let end = document.documentElement.scrollHeight || document.body.scrollHeight || 0
-      if (article) {
-        const top = article.getBoundingClientRect().top + scrollTop
-        start = top
-        end = top + article.offsetHeight
-      }
-      const readable = Math.max(end - start - winH, 1)
-      const pct = Math.max(0, Math.min(100, ((scrollTop - start) / readable) * 100))
+      const height = document.documentElement.scrollHeight || document.body.scrollHeight || 0
+      const readable = Math.max(height - winH, 1)
+      const pct = Math.max(0, Math.min(100, (scrollTop / readable) * 100))
       indicator.style.width = `${pct.toFixed(2)}%`
       track.setAttribute('aria-valuenow', String(Math.round(pct)))
     }
