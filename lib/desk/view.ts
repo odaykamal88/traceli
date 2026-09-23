@@ -1,9 +1,16 @@
 /**
  * Client-safe view of an upload-desk freeze.
  * No file bytes, no vendor payload, no server-only imports.
+ *
+ * The snapshot is the registry souvenir used to freeze a later human
+ * disposition. The browser keeps it in sessionStorage and sends it back.
+ * The server recomputes the snapshot hash and refuses a mismatch.
+ * Nothing is written to a database.
  */
 
-export const uploadDeskStorageKey = 'traceli.uploadDesk.frozen.v1'
+import { awardRegistrySnapshotSchema, type AwardRegistrySnapshot } from '@/lib/field-registry/schema'
+
+export const uploadDeskStorageKey = 'traceli.uploadDesk.frozen.v2'
 export const uploadDeskPackIds = ['global-fund', 'fcdo-prime'] as const
 
 export type UploadDeskPackId = (typeof uploadDeskPackIds)[number]
@@ -45,6 +52,8 @@ export type UploadDeskView = {
   findingCount: number
   findings: UploadDeskFindingView[]
   fields: UploadDeskFieldView[]
+  /** Registry fields and provenance for this freeze. Not file bytes. */
+  snapshot: AwardRegistrySnapshot
   record: {
     recordId: string
     snapshotHash: string
@@ -142,6 +151,14 @@ export function sanitizeUploadDeskView(value: unknown): UploadDeskView | null {
   if (!packsHash || !hashPattern.test(packsHash) || frozen.hashMethod !== 'sha256:sorted-json-v1') return null
   if (!frozenAt || !frozenBy || !idPattern.test(frozenBy)) return null
   if (!dispositions.has(frozen.disposition as string)) return null
+  const parsedSnapshot = awardRegistrySnapshotSchema.safeParse(view.snapshot)
+  if (!parsedSnapshot.success) return null
+  const snapshot = parsedSnapshot.data
+  if (snapshot.organizationId !== organizationId || snapshot.awardId !== awardId) return null
+  if (snapshot.procurementReference !== procurementReference) return null
+  if (snapshot.framework.frameworkId !== view.packId) return null
+  if (snapshot.framework.name !== packName || snapshot.framework.version !== packVersion) return null
+  if (snapshot.fields.some(field => field.provenance.sourceFileHash !== sourceFileHash)) return null
   return {
     schemaVersion: 'upload-desk-result-v1',
     providerId,
@@ -160,6 +177,7 @@ export function sanitizeUploadDeskView(value: unknown): UploadDeskView | null {
     findingCount: findings.length,
     findings: findings as UploadDeskFindingView[],
     fields: fields as UploadDeskFieldView[],
+    snapshot,
     record: {
       recordId,
       snapshotHash,

@@ -306,6 +306,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .spinner { animation: none; }
+  .verified { animation: none; }
 }
 
 .alert {
@@ -353,14 +354,24 @@
   gap: 12px;
   margin: 0 0 20px;
 }
-.meta label {
+.meta label,
+.meta div {
   display: grid;
   gap: 4px;
+}
+.meta label,
+.meta dt {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--navy-mid);
+}
+.meta dd {
+  margin: 0;
+  font-family: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  overflow-wrap: anywhere;
 }
 .meta input {
   font-family: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
@@ -371,6 +382,89 @@
   background: var(--ivory);
   color: var(--navy);
   width: 100%;
+}
+
+.rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  font-size: 13px;
+}
+.rail li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--navy-mid);
+}
+.railSep { color: var(--navy-line); }
+.rail li[data-state="done"] {
+  color: var(--mint);
+  font-weight: 600;
+}
+.rail li[data-state="current"] {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.judgment {
+  margin-top: 8px;
+  border-top: 4px solid var(--mint);
+}
+.recordCard { margin-top: 8px; }
+.judgment h2,
+.recordCard h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+.choiceSet { margin-bottom: 16px; }
+.reason { display: grid; gap: 8px; margin-bottom: 16px; }
+.textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 12px 14px;
+  border: 1px solid var(--navy-line);
+  border-radius: 8px;
+  background: var(--ivory);
+  color: var(--navy);
+  font: inherit;
+  line-height: 1.45;
+  resize: vertical;
+}
+.statusLine {
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+.verified {
+  display: inline-flex;
+  margin: 0 0 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e5f6f1;
+  color: #0f4f43;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  animation: desk-verify 0.6s ease;
+}
+@keyframes desk-verify {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.detail {
+  margin-top: 20px;
+}
+.detail summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .sectionTitle {

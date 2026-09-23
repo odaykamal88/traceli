@@ -1,6 +1,12 @@
 import 'server-only'
 
-import type { UploadDeskFieldView, UploadDeskView } from '@/lib/desk/view'
+import {
+  DeskJudgmentError,
+  sanitizeDeskChoice,
+  sanitizeDeskReason,
+  type UploadDeskJudgmentView,
+} from '@/lib/desk/judgment'
+import { sanitizeUploadDeskView, type UploadDeskFieldView, type UploadDeskView } from '@/lib/desk/view'
 import {
   ExtractionError,
   extractionResultSchema,
@@ -9,7 +15,9 @@ import {
   type RegistryEntityDraft,
 } from '@/lib/field-registry/extract'
 import {
+  dispositionFromAwardDeskDecision,
   freezeAtJudgment,
+  hashJson,
   verifyFrozenRecord,
   type FrozenDecisionRecord,
 } from '@/lib/field-registry/freeze'
@@ -26,14 +34,15 @@ import {
   actorRoles,
   awardRegistrySnapshotSchema,
   dispositionSchema,
+  waiverRefSchema,
   type ActorRole,
   type AwardRegistrySnapshot,
   type RegistryField,
 } from '@/lib/field-registry/schema'
 
 export class DeskAccessError extends Error {
-  constructor() {
-    super('This session cannot freeze a record.')
+  constructor(message = 'This session cannot freeze a record.') {
+    super(message)
     this.name = 'DeskAccessError'
   }
 }
@@ -253,6 +262,7 @@ export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUp
       summary: finding.summary,
     })),
     fields,
+    snapshot: awardRegistrySnapshotSchema.parse(structuredClone(record.snapshot)),
     record: {
       recordId: record.recordId,
       snapshotHash: record.snapshotHash,
@@ -264,4 +274,112 @@ export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUp
     },
   }
   return { record, view }
+}
+
+export type SupersedeUploadedPacketInput = {
+  view: unknown
+  decision: unknown
+  reason: unknown
+  organizationId: string
+  actorId: string
+  actorRole: string
+  /** Override only in tests. The desk uses the request clock. */
+  frozenAt?: string
+}
+
+export type SupersedeUploadedPacketResult = {
+  record: FrozenDecisionRecord
+  judgment: UploadDeskJudgmentView
+}
+
+const REFUSE_SUPERSEDE = 'This freeze cannot be superseded. Extract the packet again.'
+
+function deskWaiver(actorId: string, sourceFileHash: string, frozenAt: string) {
+  const stamp = frozenAt.replace(/[^A-Za-z0-9]/g, '').slice(-12)
+  return waiverRefSchema.parse({
+    waiverId: `waiver.desk.${sourceFileHash.slice(0, 12)}.${stamp}`,
+    authorityRef: actorId,
+  })
+}
+
+/**
+ * Human disposition → a new verified freeze that supersedes the auto record.
+ * The snapshot is rehydrated from the client souvenir and rejected unless its
+ * hash matches the assessment freeze. The auto record is not mutated.
+ * No file bytes are stored, and the new record is not written to a database.
+ */
+export function supersedeUploadedPacket(input: SupersedeUploadedPacketInput): SupersedeUploadedPacketResult {
+  const view = sanitizeUploadDeskView(input.view)
+  if (!view) throw new DeskJudgmentError(REFUSE_SUPERSEDE)
+  const choice = sanitizeDeskChoice(input.decision)
+  if (!choice) throw new DeskJudgmentError('Choose a disposition.')
+  const reason = sanitizeDeskReason(input.reason)
+  if (!reason) throw new DeskJudgmentError('Enter a reason between 20 and 2,000 characters.')
+  if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/.test(input.actorId)) {
+    throw new DeskAccessError('This session cannot record a judgment on that record.')
+  }
+  if (view.organizationId !== input.organizationId || view.snapshot.organizationId !== input.organizationId) {
+    throw new DeskAccessError('This session cannot record a judgment on that record.')
+  }
+  if (view.record.frozenBy !== input.actorId) {
+    throw new DeskAccessError('This session cannot record a judgment on that record.')
+  }
+  const actorRole = actorRoleOf(input.actorRole)
+  if (hashJson(view.snapshot) !== view.record.snapshotHash) {
+    throw new DeskJudgmentError(REFUSE_SUPERSEDE)
+  }
+  const frozenAt = input.frozenAt ?? new Date().toISOString()
+  const judgment = evaluateDonorPack(view.snapshot, view.packId, { evaluatedAt: frozenAt })
+  const expectedAuto = judgment.pipelineStatus.readiness === 'green' ? 'accept_assessment' : 'request_evidence'
+  if (judgment.pipelineStatus.readiness !== view.readiness || judgment.findings.length !== view.findingCount) {
+    throw new DeskJudgmentError(REFUSE_SUPERSEDE)
+  }
+  if (view.record.disposition !== expectedAuto) throw new DeskJudgmentError(REFUSE_SUPERSEDE)
+  const waiverRefs = choice.decision === 'accept_with_exception'
+    ? [deskWaiver(input.actorId, view.sourceFileHash, frozenAt)]
+    : []
+  const disposition = dispositionFromAwardDeskDecision({
+    decision: choice.choice,
+    actorId: input.actorId,
+    actorRole,
+    timestamp: frozenAt,
+    rationale: reason,
+    waiverRefs,
+  })
+  const stamp = frozenAt.replace(/[^A-Za-z0-9]/g, '')
+  const recordId = `record.desk.${view.packId}.${view.sourceFileHash.slice(0, 12)}.${stamp}.judgment`
+  if (recordId === view.record.recordId) throw new DeskJudgmentError(REFUSE_SUPERSEDE)
+  const record = verifyFrozenRecord(freezeAtJudgment(view.snapshot, {
+    recordId,
+    supersedesRecordId: view.record.recordId,
+    frozenAt,
+    frozenBy: input.actorId,
+    packs: [packToggleForId(view.packId)],
+    disposition,
+    pipelineStatus: judgment.pipelineStatus,
+  }))
+  const judgmentView: UploadDeskJudgmentView = {
+    schemaVersion: 'upload-desk-judgment-v1',
+    choice: choice.choice,
+    decision: choice.decision,
+    reason,
+    waiver: waiverRefs[0]
+      ? { waiverId: waiverRefs[0].waiverId, authorityRef: waiverRefs[0].authorityRef }
+      : null,
+    readiness: record.pipelineStatus.readiness,
+    findingCount: judgment.findings.length,
+    packId: view.packId,
+    packName: record.packsInForce[0]?.name ?? view.packName,
+    packVersion: record.packsInForce[0]?.version ?? view.packVersion,
+    record: {
+      recordId: record.recordId,
+      supersedesRecordId: view.record.recordId,
+      snapshotHash: record.snapshotHash,
+      packsHash: record.packsHash,
+      hashMethod: 'sha256:sorted-json-v1',
+      frozenAt: record.frozenAt,
+      frozenBy: record.frozenBy,
+    },
+  }
+  return { record, judgment: judgmentView }
 }

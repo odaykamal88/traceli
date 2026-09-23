@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Upload desk',
-  description: 'Sign in, upload a packet, run a donor pack, and freeze a Trace record.',
+  description: 'Sign in, upload a packet, run a donor pack, and freeze a Trace-li record.',
   robots: { index: false, follow: false },
 }
 
