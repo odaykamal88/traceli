@@ -162,3 +162,21 @@ export type {
   FreezeAwardDeskDispositionInput,
   FreezeAwardDeskDispositionResult,
 } from '@/lib/field-registry/award-desk-freeze'
+export {
+  caseCardExportSchema,
+  caseCardPackScopes,
+  caseCardPublicationStates,
+  caseCardRecordKinds,
+  patternTicketSchema,
+  patternTicketStatuses,
+  publishCaseCard,
+} from '@/lib/field-registry/case-card'
+export type {
+  CaseCardDraft,
+  CaseCardExport,
+  CaseCardPackScope,
+  CaseCardPublicationState,
+  CaseCardRecordKind,
+  PatternTicket,
+  PatternTicketStatus,
+} from '@/lib/field-registry/case-card'

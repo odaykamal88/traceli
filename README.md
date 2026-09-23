@@ -6,6 +6,7 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 
 - A public award-assurance story at `/` and a 44-second illustrative film.
 - The public Award desk at `/demo`: a fictional award under reconstruction, overnight agent prep, a human disposition and a shareable decision record.
+- Public Case Cards at `/cases`. A card cites a frozen Field Registry record, with the same facts at `/cases/[slug].json`. The first card, Global Fund OIG GF-OIG-25-005, is a labeled fixture awaiting a founder freeze. See [the phase 0 definition of done](./docs/case-card-phase0.md).
 - A workspace **Rule library** at `/workspace/library`: switchboard of governing packs the desk may cite. Public `/demo` stays Award desk.
 - How Trace reasons remains at `/method` (the previous interactive sandbox). `/demo/classic` redirects to Award desk; the earlier walkthrough is at `/method/classic`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
@@ -43,6 +44,7 @@ pnpm db:migrate
 pnpm db:seed
 pnpm test:tenant
 pnpm test:award-desk
+pnpm test:case-cards
 pnpm test:upload-desk
 pnpm test:rule-library
 pnpm build
