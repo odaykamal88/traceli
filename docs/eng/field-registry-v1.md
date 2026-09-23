@@ -149,6 +149,7 @@ P2 now has a provider interface, an offline mock, and a Talonic HTTP client. The
 ## Limits
 
 - 256 fields, 64 packs, 64 flags, 64 anomaly ids, 16 waiver refs.
+- An extraction result holds at most 256 fragments, the same ceiling as a registry draft. Talonic keeps the highest-confidence fields when discovery returns more. See [extraction-adapter.md](./extraction-adapter.md).
 - Field text up to 4,000 characters. Fragment text up to 16,000. Rationale 20 to 2,000.
 - Identifiers match the Trace id pattern: they start with a letter or digit and then allow letters, digits, `.`, `_`, `:`, and `-`, up to 160 characters.
 - Hashes are 64 lowercase hex characters.

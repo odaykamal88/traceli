@@ -69,6 +69,7 @@ export {
 export type { FrozenDecisionRecord } from '@/lib/field-registry/freeze'
 export {
   EXTRACTION_BYTE_LIMIT,
+  MAX_EXTRACTION_FRAGMENTS,
   ExtractionError,
   extractionInputSchema,
   extractionResultSchema,
