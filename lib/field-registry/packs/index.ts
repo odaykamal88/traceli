@@ -2,8 +2,14 @@ import { evaluateJudgment, type JudgmentResult, type JudgmentRule } from '@/lib/
 import { FCDO_PRIME_PACK, FCDO_PRIME_RULES } from '@/lib/field-registry/packs/fcdo-prime'
 import {
   fcdoPrimeFailSnapshot,
+  fcdoPrimeIddHitDispositionedSnapshot,
+  fcdoPrimeIddHitSnapshot,
+  fcdoPrimeIddMissingSnapshot,
   fcdoPrimePassSnapshot,
   globalFundFailSnapshot,
+  globalFundIddHitDispositionedSnapshot,
+  globalFundIddHitSnapshot,
+  globalFundIddMissingSnapshot,
   globalFundPassSnapshot,
 } from '@/lib/field-registry/packs/fixtures'
 import { GLOBAL_FUND_PACK, GLOBAL_FUND_RULES } from '@/lib/field-registry/packs/global-fund'
@@ -18,8 +24,14 @@ import type { AwardRegistrySnapshot, PackToggle, PipelineStatus } from '@/lib/fi
 export { FCDO_PRIME_FIELD_KEYS, FCDO_PRIME_PACK, FCDO_PRIME_RULES } from '@/lib/field-registry/packs/fcdo-prime'
 export {
   fcdoPrimeFailSnapshot,
+  fcdoPrimeIddHitDispositionedSnapshot,
+  fcdoPrimeIddHitSnapshot,
+  fcdoPrimeIddMissingSnapshot,
   fcdoPrimePassSnapshot,
   globalFundFailSnapshot,
+  globalFundIddHitDispositionedSnapshot,
+  globalFundIddHitSnapshot,
+  globalFundIddMissingSnapshot,
   globalFundPassSnapshot,
 } from '@/lib/field-registry/packs/fixtures'
 export { GLOBAL_FUND_FIELD_KEYS, GLOBAL_FUND_PACK, GLOBAL_FUND_RULES } from '@/lib/field-registry/packs/global-fund'

@@ -62,6 +62,8 @@ export const judgmentResultSchema = z.strictObject({
 })
 
 const scalarExpected = z.union([z.string().trim().min(1).max(4000), z.number().finite(), z.boolean()])
+/** Whole attested token. Hyphens stay inside the token; matching is exact, not fuzzy. */
+const attestedToken = z.string().trim().regex(/^[a-z0-9][a-z0-9-]{0,40}$/)
 
 export const judgmentRuleSchema = z.discriminatedUnion('kind', [
   z.strictObject({
@@ -87,6 +89,35 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     expected: scalarExpected,
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('field_value_mismatch'),
+    title: shortText.optional(),
+  }),
+  z.strictObject({
+    ruleId: idSchema,
+    kind: z.literal('value_must_be_one_of'),
+    fieldKey: fieldKeySchema,
+    allowed: z.array(scalarExpected).min(1).max(8),
+    severity: z.enum(findingSeverities).default('blocker'),
+    code: z.string().trim().min(1).max(80).default('field_value_not_allowed'),
+    title: shortText.optional(),
+  }),
+  z.strictObject({
+    ruleId: idSchema,
+    kind: z.literal('text_must_include'),
+    fieldKey: fieldKeySchema,
+    tokens: z.array(attestedToken).min(1).max(8),
+    severity: z.enum(findingSeverities).default('blocker'),
+    code: z.string().trim().min(1).max(80).default('attested_tokens_missing'),
+    title: shortText.optional(),
+  }),
+  z.strictObject({
+    ruleId: idSchema,
+    kind: z.literal('required_when_value_in'),
+    whenFieldKey: fieldKeySchema,
+    whenValues: z.array(scalarExpected).min(1).max(8),
+    fieldKey: fieldKeySchema,
+    allowedValues: z.array(scalarExpected).min(1).max(8).optional(),
+    severity: z.enum(findingSeverities).default('blocker'),
+    code: z.string().trim().min(1).max(80).default('conditional_field_missing'),
     title: shortText.optional(),
   }),
 ])
@@ -235,6 +266,162 @@ function evaluateValuesMustAgree(
   })
 }
 
+function presentScalar(field: RegistryField | undefined): {
+  field: RegistryField
+  value: string | number | boolean
+} | null {
+  if (!field || field.value.state === 'missing') return null
+  return { field, value: field.value.value }
+}
+
+/** Split on anything that is not a letter, digit, or hyphen. `us-state` stays one token. */
+function attestedTokenSet(value: string): Set<string> {
+  return new Set(value.toLowerCase().split(/[^a-z0-9-]+/).filter(token => token.length > 0))
+}
+
+function evaluateValueMustBeOneOf(
+  rule: Extract<JudgmentRule, { kind: 'value_must_be_one_of' }>,
+  byKey: Map<string, RegistryField>,
+): Finding | null {
+  const field = byKey.get(rule.fieldKey)
+  const scalar = presentScalar(field)
+  if (!scalar) {
+    const evidence = field ? [evidenceFromField(field)] : []
+    return findingSchema.parse({
+      schemaVersion: 'registry-finding-v0',
+      findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+      kind: 'required_missing',
+      severity: rule.severity,
+      code: rule.code,
+      ruleId: rule.ruleId,
+      title: rule.title ?? `Field ${rule.fieldKey} must be one of the allowed values`,
+      summary: field
+        ? `Field ${rule.fieldKey} is missing evidence; allowed ${rule.allowed.map(value => JSON.stringify(value)).join(', ')}.`
+        : `No registry field with key ${rule.fieldKey} exists; allowed ${rule.allowed.map(value => JSON.stringify(value)).join(', ')}.`,
+      involvedFieldKeys: [rule.fieldKey],
+      involvedFieldIds: field ? [field.fieldId] : [],
+      evidence,
+    })
+  }
+  if (rule.allowed.some(value => value === scalar.value)) return null
+  return findingSchema.parse({
+    schemaVersion: 'registry-finding-v0',
+    findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+    kind: 'contradiction',
+    severity: rule.severity,
+    code: rule.code,
+    ruleId: rule.ruleId,
+    title: rule.title ?? `Field ${rule.fieldKey} must be one of the allowed values`,
+    summary: `Field ${rule.fieldKey} is ${scalarLabel(scalar.field)}; allowed ${rule.allowed.map(value => JSON.stringify(value)).join(', ')}.`,
+    involvedFieldKeys: [rule.fieldKey],
+    involvedFieldIds: [scalar.field.fieldId],
+    evidence: [evidenceFromField(scalar.field)],
+  })
+}
+
+function evaluateTextMustInclude(
+  rule: Extract<JudgmentRule, { kind: 'text_must_include' }>,
+  byKey: Map<string, RegistryField>,
+): Finding | null {
+  const field = byKey.get(rule.fieldKey)
+  const scalar = presentScalar(field)
+  if (!scalar) {
+    const evidence = field ? [evidenceFromField(field)] : []
+    return findingSchema.parse({
+      schemaVersion: 'registry-finding-v0',
+      findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+      kind: 'required_missing',
+      severity: rule.severity,
+      code: rule.code,
+      ruleId: rule.ruleId,
+      title: rule.title ?? `Field ${rule.fieldKey} must attest required tokens`,
+      summary: field
+        ? `Field ${rule.fieldKey} is missing evidence; required tokens: ${rule.tokens.join(', ')}.`
+        : `No registry field with key ${rule.fieldKey} exists; required tokens: ${rule.tokens.join(', ')}.`,
+      involvedFieldKeys: [rule.fieldKey],
+      involvedFieldIds: field ? [field.fieldId] : [],
+      evidence,
+    })
+  }
+  if (typeof scalar.value !== 'string') {
+    return findingSchema.parse({
+      schemaVersion: 'registry-finding-v0',
+      findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+      kind: 'contradiction',
+      severity: rule.severity,
+      code: rule.code,
+      ruleId: rule.ruleId,
+      title: rule.title ?? `Field ${rule.fieldKey} must attest required tokens`,
+      summary: `Field ${rule.fieldKey} is ${scalarLabel(scalar.field)}; token attestation requires text.`,
+      involvedFieldKeys: [rule.fieldKey],
+      involvedFieldIds: [scalar.field.fieldId],
+      evidence: [evidenceFromField(scalar.field)],
+    })
+  }
+  const have = attestedTokenSet(scalar.value)
+  const missing = rule.tokens.filter(token => !have.has(token))
+  if (missing.length === 0) return null
+  return findingSchema.parse({
+    schemaVersion: 'registry-finding-v0',
+    findingId: findingIdFor(rule.ruleId, [rule.fieldKey]),
+    kind: 'contradiction',
+    severity: rule.severity,
+    code: rule.code,
+    ruleId: rule.ruleId,
+    title: rule.title ?? `Field ${rule.fieldKey} must attest required tokens`,
+    summary: `Field ${rule.fieldKey} does not attest: ${missing.join(', ')}. Tokens match exactly after splitting on punctuation; this is not a name search.`,
+    involvedFieldKeys: [rule.fieldKey],
+    involvedFieldIds: [scalar.field.fieldId],
+    evidence: [evidenceFromField(scalar.field)],
+  })
+}
+
+function evaluateRequiredWhenValueIn(
+  rule: Extract<JudgmentRule, { kind: 'required_when_value_in' }>,
+  byKey: Map<string, RegistryField>,
+): Finding | null {
+  const triggerField = byKey.get(rule.whenFieldKey)
+  const trigger = presentScalar(triggerField)
+  if (!trigger) return null
+  if (!rule.whenValues.some(value => value === trigger.value)) return null
+
+  const field = byKey.get(rule.fieldKey)
+  const scalar = presentScalar(field)
+  const involvedFields = [trigger.field, field].filter((item): item is RegistryField => Boolean(item))
+  const involvedKeys = [rule.whenFieldKey, rule.fieldKey]
+  if (!scalar) {
+    return findingSchema.parse({
+      schemaVersion: 'registry-finding-v0',
+      findingId: findingIdFor(rule.ruleId, involvedKeys),
+      kind: 'required_missing',
+      severity: rule.severity,
+      code: rule.code,
+      ruleId: rule.ruleId,
+      title: rule.title ?? `Field ${rule.fieldKey} is required for this result`,
+      summary: `Field ${rule.fieldKey} is required because ${rule.whenFieldKey} is ${JSON.stringify(trigger.value)}.`,
+      involvedFieldKeys: involvedKeys,
+      involvedFieldIds: involvedFields.map(item => item.fieldId),
+      evidence: involvedFields.map(evidenceFromField),
+    })
+  }
+  if (rule.allowedValues && !rule.allowedValues.some(value => value === scalar.value)) {
+    return findingSchema.parse({
+      schemaVersion: 'registry-finding-v0',
+      findingId: findingIdFor(rule.ruleId, involvedKeys),
+      kind: 'contradiction',
+      severity: rule.severity,
+      code: rule.code,
+      ruleId: rule.ruleId,
+      title: rule.title ?? `Field ${rule.fieldKey} is not an allowed decision`,
+      summary: `Field ${rule.fieldKey} is ${scalarLabel(scalar.field)}; allowed ${rule.allowedValues.map(value => JSON.stringify(value)).join(', ')} when ${rule.whenFieldKey} is ${JSON.stringify(trigger.value)}.`,
+      involvedFieldKeys: involvedKeys,
+      involvedFieldIds: involvedFields.map(item => item.fieldId),
+      evidence: involvedFields.map(evidenceFromField),
+    })
+  }
+  return null
+}
+
 function evaluateValueMustEqual(
   rule: Extract<JudgmentRule, { kind: 'value_must_equal' }>,
   byKey: Map<string, RegistryField>,
@@ -305,6 +492,23 @@ function pipelineStatusFrom(
   })
 }
 
+function evaluateRule(rule: JudgmentRule, byKey: Map<string, RegistryField>): Finding | null {
+  switch (rule.kind) {
+    case 'required_present':
+      return evaluateRequiredPresent(rule, byKey)
+    case 'values_must_agree':
+      return evaluateValuesMustAgree(rule, byKey)
+    case 'value_must_equal':
+      return evaluateValueMustEqual(rule, byKey)
+    case 'value_must_be_one_of':
+      return evaluateValueMustBeOneOf(rule, byKey)
+    case 'text_must_include':
+      return evaluateTextMustInclude(rule, byKey)
+    case 'required_when_value_in':
+      return evaluateRequiredWhenValueIn(rule, byKey)
+  }
+}
+
 /**
  * Run deterministic judgment rules over a registry snapshot.
  * Pure: no I/O, no extraction, no model calls.
@@ -324,12 +528,7 @@ export function evaluateJudgment(
   const findings: Finding[] = []
 
   for (const rule of parsedRules) {
-    const finding =
-      rule.kind === 'required_present'
-        ? evaluateRequiredPresent(rule, byKey)
-        : rule.kind === 'values_must_agree'
-          ? evaluateValuesMustAgree(rule, byKey)
-          : evaluateValueMustEqual(rule, byKey)
+    const finding = evaluateRule(rule, byKey)
     if (finding) findings.push(finding)
   }
 

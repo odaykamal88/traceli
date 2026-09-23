@@ -10,6 +10,7 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 - How Trace reasons remains at `/method` (the previous interactive sandbox). `/demo/classic` redirects to Award desk; the earlier walkthrough is at `/method/classic`.
 - A protected workspace boundary at `/workspace` using WorkOS AuthKit.
 - A signed-in upload desk at `/login` and `/desk`: mock extraction, a Global Fund or FCDO-prime pack, and a frozen record. Public `/demo` stays the scripted walkthrough. Setup is in [the upload desk brief](./docs/eng/workos-upload-desk.md).
+- Global Fund and FCDO-prime packs include Restrictive Measures / integrity due diligence evidence controls. There is no in-desk live OFAC or sanctions-list API: Trace-li checks that screening evidence was recorded and dispositioned.
 - A non-production Lakebase Postgres control graph with tenant-scoped reads, a restricted application role, and row-level isolation.
 - Source-linked requirements, submissions, clarifications, approvals, and audit chronology using fictional demo data.
 - A SHA-256 event chain that makes an edited or missing audit snapshot visibly detectable, with the first authenticated human determination persisted as a server audit/outbox transaction.
