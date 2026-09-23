@@ -140,7 +140,7 @@ A new judgment after someone turns a pack off is a new record. The previous reco
 
 ## Extraction adapter
 
-P2 now has a provider interface, an offline mock, and a Talonic skeleton. The contract, environment variables, and the buy-versus-build line are in [extraction-adapter.md](./extraction-adapter.md).
+P2 now has a provider interface, an offline mock, and a Talonic HTTP client. The contract, environment variables, and the buy-versus-build line are in [extraction-adapter.md](./extraction-adapter.md). Unset provider stays mock.
 
 `ExtractionProvider.extract` returns `ExtractionResult`: a file hash plus `Fragment` values. The fragment schema is still the registry's. A fragment has an id, `sourceFileHash`, `sourceRef`, text, `extractedAt`, `confidence`, and `extractorId`. Optional `kind`, `tags`, and `spans` are closed hints for later alignment (`pricing_table`, `waiver`, `email_header`, and the other names in `fragmentKindHints`). The schema rejects unknown keys, including `bytes` and any vendor payload.
 

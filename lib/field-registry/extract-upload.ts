@@ -173,6 +173,8 @@ export function extractionHttpError(error: unknown): Response {
   }
   if (error instanceof ExtractionError) {
     const status = error.code === 'too_large' ? 413
+      : error.code === 'timeout' ? 504
+      : error.code === 'unauthorized' || error.code === 'upstream' ? 502
       : error.code === 'not_configured' || error.code === 'unimplemented' ? 501
       : 400
     return Response.json({ error: error.message, code: error.code }, { status, headers: privateHeaders })

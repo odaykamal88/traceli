@@ -212,7 +212,7 @@ Role authorization stays in domain commands such as `recordFindingDetermination`
 
 | Project | Boundary | In this pull request |
 | --- | --- | --- |
-| P2 Ingestion adapter | `extract(input) -> ExtractionResult` of `Fragment` values. Talonic sits behind `ExtractionProvider`. | [extraction-adapter.md](./extraction-adapter.md). Mock provider and `POST /api/extract`. No Talonic SDK. |
+| P2 Ingestion adapter | `extract(input) -> ExtractionResult` of `Fragment` values. Talonic sits behind `ExtractionProvider`. | [extraction-adapter.md](./extraction-adapter.md). Mock provider by default. Talonic HTTP client when `TRACE_EXTRACTION_PROVIDER=talonic`. No Talonic SDK. |
 | P4 Contradiction and judgment loop | Reads registry fields, emits deterministic flags and semantic anomaly ids, then waits for a human disposition. | v0 scaffold: [contradiction-judgment-v0.md](./contradiction-judgment-v0.md). `evaluateJudgment` fills `PipelineStatus`. Award desk disposition freeze: [award-desk-freeze.md](./award-desk-freeze.md). |
 | P5 Server decision record | Durable award record behind Award desk and `/workspace/records`, replacing the sessionStorage souvenir. | Not started. Demo record stays as it is. |
 | P6 Immutable audit export | Buyer and donor export of a frozen registry record. `lib/trace/export.ts` is the synthetic precursor. | Not started. |
