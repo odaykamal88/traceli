@@ -37,7 +37,10 @@ POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordI
 
 | Path | Who | What |
 | --- | --- | --- |
-| `GET /login` | Public | Starts AuthKit sign-in. Return path is `/desk`. If WorkOS is not configured, sends the browser to `/desk?auth=unavailable`. |
+| `GET /login` | Public | Product sign-in. Return path is `/desk`. A signed-in visitor goes straight to the desk. An `invitation_token` or `password_reset_token` on this URL always continues into AuthKit. If WorkOS is not configured, sends the browser to `/desk?auth=unavailable`. |
+| `GET /auth/login` | AuthKit | Initiate login URL. Always starts AuthKit sign-in and returns to `/desk`. Password-reset and invitation emails that begin on AuthKit finish here. |
+| `GET /invite` and `GET /sign-up` | Invite email | User invitation URL. A single valid `invitation_token` starts AuthKit sign-in for that invite and returns to `/desk`. Any other visit shows the invitation-only page. Public self-serve signup is closed. |
+| `GET /reset-password` | Reset email | Password reset URL. A single `token` (or `password_reset_token`) is handed to AuthKit as `password_reset_token`, then the user returns to `/desk`. Without a token, the page asks for the email link. |
 | `GET /auth/callback` | AuthKit | Already present. Honors the sealed return path, otherwise `/workspace`. No new callback. |
 | `GET /desk` | Trace session | Pack choice, file input, and the frozen record. |
 | `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze. |
@@ -98,15 +101,33 @@ No new variables. Use the existing WorkOS and Trace contract.
 | `TRACE_TALONIC_API_KEY` | Already set on Production `traceli-new`. Do not copy it into the repo. Unused while the provider is mock. |
 | `TRACE_TALONIC_BASE_URL` | Production value `https://api.talonic.com/v1`. Unused while the provider is mock. |
 
-WorkOS Redirects for each host you sign in from:
+Signup stays closed. Trace-li does not offer a public registration form. AuthKit sign-up in the dashboard Authentication section stays off. A valid invitation still opens registration for that email, including when signup is disabled. After acceptance, the desk still requires a verified email, one active organization membership, and a Trace role. An invitation alone does not grant the desk.
 
-| Setting | Value |
-| --- | --- |
-| Redirect URI | `https://<host>/auth/callback` (local: `http://localhost:3000/auth/callback`). Must equal `NEXT_PUBLIC_WORKOS_REDIRECT_URI`. |
-| Sign-in start | The app uses `/login`. AuthKit hosts the password screen. |
-| Sign-out return | `https://<host>/login`. The desk sends that absolute URL. If the dashboard allowlist rejects it, add it. |
+WorkOS hosts the password and invitation screens. This app only starts those flows and receives the callback. No new environment variable. The callback path is still `/auth/callback`.
 
-Preview deployments need their own redirect URI and matching `NEXT_PUBLIC_WORKOS_REDIRECT_URI`. There is no new callback path.
+### Dashboard Redirects the founder confirms
+
+Application: **Traceli Pilot**, for the environment whose API key is on Production `traceli-new`. One Initiate login URL, one User invitation URL, and one Password reset URL per environment. Redirect URIs and sign-out returns are lists. Do not change Production `NEXT_PUBLIC_WORKOS_REDIRECT_URI`; confirm it already equals the www callback below.
+
+| Dashboard field | Production (`www.trace-li.com`) | Local (Staging environment, if used) |
+| --- | --- | --- |
+| Redirect URI | `https://www.trace-li.com/auth/callback` | `http://localhost:3000/auth/callback` |
+| Redirect URI, apex alias | `https://trace-li.com/auth/callback` | — |
+| Initiate login URL | `https://www.trace-li.com/auth/login` | `http://localhost:3000/auth/login` |
+| Sign-out redirect | `https://www.trace-li.com/login` | `http://localhost:3000/login` |
+| Sign-out redirect, apex alias | `https://trace-li.com/login` | — |
+| User invitation URL | `https://www.trace-li.com/invite` | `http://localhost:3000/invite` |
+| Password reset URL | `https://www.trace-li.com/reset-password` | `http://localhost:3000/reset-password` |
+
+Authentication section, same environment: **Sign up** off.
+
+`/sign-up` is not a public signup URL. If the dashboard has a separate sign-up URL field, set it to `https://www.trace-li.com/sign-up` (local: `http://localhost:3000/sign-up`). Without an invitation token that page explains that accounts are by invitation.
+
+The product Login link remains `/login`. It is not the Initiate login URL, because a signed-in visitor is sent to the desk. AuthKit must be able to land on `/auth/login` and start a fresh sign-in.
+
+Preview deployments need their own redirect URI, matching `NEXT_PUBLIC_WORKOS_REDIRECT_URI`, plus their own initiate, invitation, reset, and sign-out URLs if that preview sends mail. There is no wildcard and no new callback path.
+
+HQ keeps `/hq/sign-in` for its bound organization. The application Initiate login URL returns to `/desk`, not `/hq`.
 
 The signed-in user needs an organization and one of the Trace role slugs above. `org-hq-owner` is not a Trace role. Email verification has to be complete. Impersonation is denied.
 
@@ -125,6 +146,7 @@ Open `http://127.0.0.1:3000/desk`. The database URL only has to be a loopback Po
 
 ```sh
 pnpm test:upload-desk
+pnpm test:authkit
 pnpm test:extraction
 pnpm test:award-desk
 pnpm test:award-desk-freeze

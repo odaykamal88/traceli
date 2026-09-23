@@ -1,12 +1,12 @@
-import { getSignUpUrl } from '@workos-inc/authkit-nextjs'
-import { redirect } from 'next/navigation'
+import { redirectToInvitation } from '@/lib/auth/desk-auth'
 
-import { isWorkOSConfigured } from '@/lib/workspace-access'
+export const dynamic = 'force-dynamic'
 
-export const GET = async () => {
-  if (!isWorkOSConfigured()) {
-    redirect('/demo?auth=unavailable')
-  }
-
-  redirect(await getSignUpUrl())
+/**
+ * Public self-serve signup is closed.
+ * An invitation_token is accepted here so a dashboard sign-up URL can point at this path.
+ * Anything else explains that Trace-li accounts are by invitation.
+ */
+export const GET = async (request: Request) => {
+  await redirectToInvitation(request)
 }

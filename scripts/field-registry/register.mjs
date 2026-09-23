@@ -20,6 +20,7 @@ function resolveAliasPath(specifier) {
 
 function resolveAlias(specifier, context, nextResolve) {
   if (specifier === 'next/headers') return nextResolve('next/headers.js', context)
+  if (specifier === 'next/navigation') return nextResolve('next/navigation.js', context)
   const resolved = resolveAliasPath(specifier)
   if (resolved) return nextResolve(pathToFileURL(resolved).href, context)
   return nextResolve(specifier, context)
