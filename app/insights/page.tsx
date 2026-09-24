@@ -26,6 +26,11 @@ export default function ResearchIndexPage() {
         <p className="mt-6 max-w-2xl text-sm leading-6 text-[#52696a]">
           <Link href="/research/global-fund" className="font-semibold text-[#1f6f61] underline decoration-[#1f6f61]/30 underline-offset-4">Global Fund OIG research</Link>
           {' '}— four public files on pre-signature proof.
+          {' '}
+          <Link href="/research/unfpa" className="font-semibold text-[#1f6f61] underline decoration-[#1f6f61]/30 underline-offset-4">UNFPA OAIS research</Link>
+          {' '}and{' '}
+          <Link href="/research/ocha-cbpf" className="font-semibold text-[#1f6f61] underline decoration-[#1f6f61]/30 underline-offset-4">OCHA CBPF research</Link>
+          {' '}— public oversight files on the workplan and the reserve allocation.
         </p>
       </div>
     </header>
