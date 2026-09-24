@@ -18,3 +18,22 @@ export const gfIddScopeAttestation = 'un ofac us-state switzerland debarment ine
 
 export const fcdoIddScopeTokens = ['uk-sanctions'] as const
 export const fcdoIddScopeAttestation = 'uk-sanctions'
+
+/** UN and UNGM tokens. Prose such as "United Nations" does not match `un`. */
+export const unfpaIddScopeTokens = ['un', 'ungm'] as const
+export const unfpaIddScopeAttestation = 'un ungm'
+
+/** Annex 7 designated-entity declaration. Not a Secretariat sanctions list. */
+export const ochaIddScopeTokens = ['designated-entity'] as const
+export const ochaIddScopeAttestation = 'designated-entity'
+
+export const ochaAnnex7Tokens = [
+  'accurate-info',
+  'compliance',
+  'coi',
+  'designated-entity',
+  'legal-process',
+  'disability',
+  'psea',
+] as const
+export const ochaAnnex7Attestation = ochaAnnex7Tokens.join(' ')

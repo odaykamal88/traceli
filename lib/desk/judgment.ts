@@ -4,7 +4,13 @@
  * Award desk scenario data, and does not accept file bytes.
  */
 
-import type { UploadDeskPackId, UploadDeskReadiness, UploadDeskSeverity, UploadDeskView } from '@/lib/desk/view'
+import {
+  uploadDeskPackIds,
+  type UploadDeskPackId,
+  type UploadDeskReadiness,
+  type UploadDeskSeverity,
+  type UploadDeskView,
+} from '@/lib/desk/view'
 
 export class DeskJudgmentError extends Error {
   constructor(message: string) {
@@ -87,7 +93,7 @@ export type UploadDeskJudgmentView = {
 const hashPattern = /^[a-f0-9]{64}$/
 const idPattern = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/
 const readinessLevels = new Set<UploadDeskReadiness>(['unknown', 'red', 'amber', 'green'])
-const packIds = new Set<UploadDeskPackId>(['global-fund', 'fcdo-prime'])
+const packIds = new Set<UploadDeskPackId>(uploadDeskPackIds)
 
 function text(value: unknown, max: number) {
   return typeof value === 'string' && value.trim().length > 0 && value.length <= max ? value : null

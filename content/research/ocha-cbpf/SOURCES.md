@@ -34,7 +34,7 @@ Landing page for 2025/098: https://oios.un.org/en/audit-management-and-oversight
 | Pattern matrix and value-chain map are synthesis | Chart captions — labelled synthesis |
 | Wireframes are illustrative Global Fund-shaped desk UI, not a live OCHA desk run and not the CBPF control set | Captions in the note |
 | Ethiopia is vintage 2017 | Labelled in the case section |
-| Cross-links to the Global Fund note and case cards | `/research/global-fund`, `/cases` |
+| Cross-links to the Global Fund note and fixture case cards | `/research/global-fund`, `/cases/oios-2025-098-cbpf-reserve`, `/cases/oios-2020-005-iraq-forensic` |
 
 ### CBPF oversight — OIOS 2025/098
 

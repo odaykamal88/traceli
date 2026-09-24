@@ -26,9 +26,15 @@ import {
   FCDO_PRIME_PACK,
   GLOBAL_FUND_FIELD_KEYS,
   GLOBAL_FUND_PACK,
+  OCHA_CBPF_FIELD_KEYS,
+  OCHA_CBPF_PACK,
+  UNFPA_FIELD_KEYS,
+  UNFPA_PACK,
+  donorPackIds,
   evaluateDonorPack,
   isDonorPackId,
   packToggleForId,
+  type DonorPackId,
 } from '@/lib/field-registry/packs'
 import {
   actorRoles,
@@ -52,7 +58,56 @@ const MISSING_REASON = 'Not extracted from this packet.'
 const fieldKeysByPack = {
   'global-fund': GLOBAL_FUND_FIELD_KEYS,
   'fcdo-prime': FCDO_PRIME_FIELD_KEYS,
+  unfpa: UNFPA_FIELD_KEYS,
+  'ocha-cbpf': OCHA_CBPF_FIELD_KEYS,
 } as const
+
+const packContexts: Record<DonorPackId, {
+  pack: { name: string, version: string }
+  donor: { donorId: string, name: string }
+  framework: { frameworkId: DonorPackId, name: string, version: string }
+}> = {
+  'global-fund': {
+    pack: GLOBAL_FUND_PACK,
+    donor: { donorId: 'donor_global_fund', name: 'The Global Fund' },
+    framework: {
+      frameworkId: 'global-fund',
+      name: GLOBAL_FUND_PACK.name,
+      version: GLOBAL_FUND_PACK.version,
+    },
+  },
+  'fcdo-prime': {
+    pack: FCDO_PRIME_PACK,
+    donor: { donorId: 'donor_fcdo', name: 'FCDO (via commercial prime)' },
+    framework: {
+      frameworkId: 'fcdo-prime',
+      name: FCDO_PRIME_PACK.name,
+      version: FCDO_PRIME_PACK.version,
+    },
+  },
+  unfpa: {
+    pack: UNFPA_PACK,
+    donor: { donorId: 'donor_unfpa', name: 'UNFPA' },
+    framework: {
+      frameworkId: 'unfpa',
+      name: UNFPA_PACK.name,
+      version: UNFPA_PACK.version,
+    },
+  },
+  'ocha-cbpf': {
+    pack: OCHA_CBPF_PACK,
+    donor: { donorId: 'donor_ocha_cbpf', name: 'OCHA CBPF' },
+    framework: {
+      frameworkId: 'ocha-cbpf',
+      name: OCHA_CBPF_PACK.name,
+      version: OCHA_CBPF_PACK.version,
+    },
+  },
+}
+
+function unknownPackMessage() {
+  return `Choose a donor pack: ${donorPackIds.join(', ')}.`
+}
 
 export type FreezeUploadedPacketInput = {
   extraction: ExtractionResult
@@ -73,29 +128,6 @@ export type FreezeUploadedPacketResult = {
 function actorRoleOf(role: string): ActorRole {
   if (!actorRoles.includes(role as ActorRole)) throw new DeskAccessError()
   return role as ActorRole
-}
-
-function packContext(packId: 'global-fund' | 'fcdo-prime') {
-  if (packId === 'global-fund') {
-    return {
-      pack: GLOBAL_FUND_PACK,
-      donor: { donorId: 'donor_global_fund', name: 'The Global Fund' },
-      framework: {
-        frameworkId: 'global-fund',
-        name: GLOBAL_FUND_PACK.name,
-        version: GLOBAL_FUND_PACK.version,
-      },
-    }
-  }
-  return {
-    pack: FCDO_PRIME_PACK,
-    donor: { donorId: 'donor_fcdo', name: 'FCDO (via commercial prime)' },
-    framework: {
-      frameworkId: 'fcdo-prime',
-      name: FCDO_PRIME_PACK.name,
-      version: FCDO_PRIME_PACK.version,
-    },
-  }
 }
 
 function registryFieldFromDraft(field: RegistryEntityDraft['fields'][number]): RegistryField {
@@ -133,7 +165,7 @@ function missingField(key: string, extraction: ExtractionResult): RegistryField 
  */
 export function snapshotFromUpload(
   extraction: ExtractionResult,
-  packId: 'global-fund' | 'fcdo-prime',
+  packId: DonorPackId,
   scope: {
     organizationId: string
     awardId: string
@@ -156,7 +188,7 @@ export function snapshotFromUpload(
     else fields.push(missingField(key, extraction))
   }
   fields.push(...draftFields.filter(field => !packKeySet.has(field.key)))
-  const context = packContext(packId)
+  const context = packContexts[packId]
   const snapshot = awardRegistrySnapshotSchema.parse({
     schemaVersion: 'award-registry-snapshot-v1',
     registryVersion: 1,
@@ -194,13 +226,13 @@ function rationaleFor(packName: string, readiness: string, findingCount: number)
 export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUploadedPacketResult {
   const extraction = extractionResultSchema.parse(input.extraction)
   if (!isDonorPackId(input.packId)) {
-    throw new ExtractionError('invalid_input', 'Choose a donor pack: global-fund or fcdo-prime.')
+    throw new ExtractionError('invalid_input', unknownPackMessage())
   }
   if (extraction.organizationId && extraction.organizationId !== input.organizationId) {
     throw new DeskAccessError()
   }
   const actorRole = actorRoleOf(input.actorRole)
-  const context = packContext(input.packId)
+  const context = packContexts[input.packId]
   const frozenAt = input.frozenAt ?? new Date().toISOString()
   const awardId = extraction.awardId ?? `award.${extraction.sourceFileHash.slice(0, 16)}`
   const procurementReference = input.procurementReference

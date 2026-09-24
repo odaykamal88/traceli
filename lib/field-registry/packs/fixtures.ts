@@ -1,6 +1,13 @@
 import type { AwardRegistrySnapshot, RegistryField } from '@/lib/field-registry/schema'
 import { fcdoIddScopeAttestation, gfIddScopeAttestation } from '@/lib/field-registry/packs/idd'
 
+export {
+  ochaCbpfFailSnapshot,
+  ochaCbpfPassSnapshot,
+  unfpaFailSnapshot,
+  unfpaPassSnapshot,
+} from '@/lib/field-registry/packs/fixtures-un'
+
 const hash = 'ab'.repeat(32)
 const extractedAt = '2026-09-21T18:00:00.000Z'
 const asOf = '2026-09-22T12:00:00.000Z'

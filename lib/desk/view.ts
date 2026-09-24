@@ -8,12 +8,13 @@
  * Nothing is written to a database.
  */
 
+import { donorPackIds, type DonorPackId } from '@/lib/field-registry/packs/types'
 import { awardRegistrySnapshotSchema, type AwardRegistrySnapshot } from '@/lib/field-registry/schema'
 
 export const uploadDeskStorageKey = 'traceli.uploadDesk.frozen.v2'
-export const uploadDeskPackIds = ['global-fund', 'fcdo-prime'] as const
+export const uploadDeskPackIds = donorPackIds
 
-export type UploadDeskPackId = (typeof uploadDeskPackIds)[number]
+export type UploadDeskPackId = DonorPackId
 export type UploadDeskFieldState = 'present' | 'missing' | 'negative'
 export type UploadDeskSeverity = 'info' | 'warning' | 'blocker'
 export type UploadDeskReadiness = 'unknown' | 'red' | 'amber' | 'green'

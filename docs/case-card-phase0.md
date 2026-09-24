@@ -70,6 +70,10 @@ Set `frozenRecord` on the draft in `lib/case-cards/gf-oig-25-005.ts` to a record
 
 `confidence` on a fixture field is not a fraud probability. On GF-OIG-25-005 it is `1` because the value is a direct statement from the public report, and `verificationMethod` stays `unverified` until the founder check.
 
+## Later public fixtures
+
+UNFPA and OCHA cards use the same fixture contract and the same drop-in. Their packs, ticket ids, and the founder-freeze promotion steps are in [case-factory-unfpa-ocha.md](./case-factory-unfpa-ocha.md). Those cards also leave `snapshotHash` and `packsHash` null until a real desk freeze is checked in.
+
 ## Tests
 
 ```sh

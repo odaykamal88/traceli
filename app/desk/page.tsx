@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 
 import { resolveExtractionProviderId } from '@/lib/field-registry/extract-provider'
-import { listDonorPacks } from '@/lib/field-registry/packs'
+import { listDonorPacks, type DonorPackId } from '@/lib/field-registry/packs'
 import { requireTraceViewer, TraceAccessError } from '@/lib/trace/access'
 import { isLoopbackHost, localTraceEnabled } from '@/lib/trace/access-policy'
 import { isWorkOSConfigured } from '@/lib/workspace-access'
@@ -18,9 +18,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-const blurbs: Record<DeskPackOption['packId'], string> = {
+const blurbs: Record<DonorPackId, string> = {
   'global-fund': 'PR and sub-recipient award checks.',
   'fcdo-prime': 'Commercial prime checks for FCDO-funded awards.',
+  unfpa: 'UNFPA / OAIS-shaped IP and procurement checks. Public-control synthesis, not a live UNFPA desk run.',
+  'ocha-cbpf': 'CBPF Global Guidelines–shaped reserve and scorecard checks. Not a live OCHA desk run.',
 }
 
 async function localDeskOpen() {

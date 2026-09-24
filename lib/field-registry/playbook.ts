@@ -4,7 +4,7 @@ import type { AwardRegistrySnapshot, PackToggle, PipelineStatus } from '@/lib/fi
 /**
  * P3 playbook runtime boundary.
  * `evaluate` reads registry fields and pack toggles. It has no file-byte parameter.
- * Donor packs (`global-fund` | `fcdo-prime`) resolve to JudgmentRule[] and run through
+ * Donor packs (`global-fund` | `fcdo-prime` | `unfpa` | `ocha-cbpf`) resolve to JudgmentRule[] and run through
  * evaluateJudgment — same Finding / JudgmentResult / freeze path as P4.
  */
 export type PlaybookInput = {

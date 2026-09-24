@@ -20,6 +20,8 @@ import {
   isDonorPackId,
   judgmentPassed,
   listDonorPacks,
+  ochaCbpfPassSnapshot,
+  unfpaPassSnapshot,
   packToggleForId,
   packToggleFromRulePack,
 } from '../../lib/field-registry/index.ts'
@@ -29,14 +31,22 @@ const frozenAt = '2026-09-22T12:30:00.000Z'
 const frozenBy = 'user_leila'
 const rationale = 'Hold signature until competition documentation and threshold alignment are corrected on the registry.'
 
-test('pack registry exposes global-fund and fcdo-prime only', () => {
-  assert.deepEqual([...donorPackIds], ['global-fund', 'fcdo-prime'])
-  assert.equal(listDonorPacks().length, 2)
+test('pack registry exposes the selectable donor packs', () => {
+  assert.deepEqual([...donorPackIds], ['global-fund', 'fcdo-prime', 'unfpa', 'ocha-cbpf'])
+  assert.equal(listDonorPacks().length, 4)
   assert.equal(getDonorPack('global-fund').audience, 'global-fund-pr-sr')
   assert.equal(getDonorPack('global-fund').version, '2026.2')
   assert.equal(getDonorPack('fcdo-prime').audience, 'fcdo-commercial-prime')
   assert.equal(getDonorPack('fcdo-prime').version, '2026.2')
+  assert.equal(getDonorPack('unfpa').audience, 'unfpa-oais-shaped')
+  assert.equal(getDonorPack('unfpa').version, '2026.1')
+  assert.equal(getDonorPack('ocha-cbpf').audience, 'ocha-cbpf-guidelines-shaped')
+  assert.equal(getDonorPack('ocha-cbpf').version, '2026.1')
+  assert.match(getDonorPack('unfpa').name, /UNFPA/)
+  assert.match(getDonorPack('ocha-cbpf').name, /CBPF/)
   assert.equal(isDonorPackId('global-fund'), true)
+  assert.equal(isDonorPackId('unfpa'), true)
+  assert.equal(isDonorPackId('ocha-cbpf'), true)
   assert.equal(isDonorPackId('ofac'), false)
   assert.equal(isDonorPackId('usaid'), false)
   assert.throws(() => getDonorPack('usaid'), DonorPackError)
@@ -50,6 +60,9 @@ test('pack registry exposes global-fund and fcdo-prime only', () => {
   assert.ok(gfIdd.some(rule => rule.ruleId === 'gf_idd_screen_scope'))
   assert.ok(fcdoIdd.some(rule => rule.ruleId === 'fcdo_idd_uk_sanctions_scope'))
   assert.equal(fcdoIdd.filter(rule => rule.severity === 'blocker').length < gfIdd.filter(rule => rule.severity === 'blocker').length, true)
+  for (const pack of listDonorPacks()) {
+    assert.ok(pack.rules.length <= 64, pack.packId)
+  }
   assert.ok(gfRules.length + fcdoRules.length <= 64)
 })
 
@@ -71,7 +84,13 @@ for (const packId of donorPackIds) {
     assert.equal(judgmentPassed(judgment), false)
     assert.equal(judgment.pipelineStatus.readiness, 'red')
     assert.ok(judgment.findings.length >= 3)
-    assert.ok(judgment.findings.every(finding => finding.code.startsWith(packId === 'global-fund' ? 'gf_' : 'fcdo_')))
+    const codePrefix = {
+      'global-fund': 'gf_',
+      'fcdo-prime': 'fcdo_',
+      unfpa: 'unfpa_',
+      'ocha-cbpf': 'ocha_',
+    }
+    assert.ok(judgment.findings.every(finding => finding.code.startsWith(codePrefix[packId])))
     assert.ok(judgment.findings.every(finding => finding.evidence.every(pointer => !('bytes' in pointer))))
 
     const playbookStatus = evaluatePlaybook({
@@ -256,4 +275,44 @@ test('fcdo-prime sanctions overlay: missing evidence, hit, and dispositioned hit
   assert.equal(frozen.record.pipelineStatus.readiness, 'red')
   assert.equal(frozen.record.packsInForce[0].packId, 'fcdo-prime')
   assert.ok(frozen.judgment.findings.some(finding => finding.code === 'fcdo_idd_hit_needs_decision'))
+})
+
+test('unfpa and ocha restrictive-measures gates match tokens, and a hit needs a decision', () => {
+  const unfpaProse = unfpaPassSnapshot()
+  unfpaProse.awardId = 'unfpa-ip-2026-013-prose'
+  unfpaProse.fields = unfpaProse.fields.map(field => field.key === 'idd.screen_scope'
+    ? { ...field, value: { state: 'present', value: 'United Nations and UNGM ineligibility' } }
+    : field)
+  const unfpaProseResult = evaluateDonorPack(unfpaProse, 'unfpa')
+  const unfpaScope = unfpaProseResult.findings.find(finding => finding.code === 'unfpa_idd_screen_scope_incomplete')
+  assert.ok(unfpaScope)
+  assert.match(unfpaScope.summary, /un/)
+  assert.equal(unfpaScope.summary.includes('ungm'), false)
+
+  const unfpaHit = unfpaPassSnapshot()
+  unfpaHit.awardId = 'unfpa-ip-2026-013-hit'
+  unfpaHit.fields = unfpaHit.fields.map(field => field.key === 'idd.screen_result'
+    ? { ...field, value: { state: 'present', value: 'confirmed_hit' } }
+    : field)
+  const unfpaHitResult = evaluateDonorPack(unfpaHit, 'unfpa')
+  assert.equal(unfpaHitResult.pipelineStatus.readiness, 'red')
+  assert.equal(codes(unfpaHitResult).has('unfpa_idd_hit_needs_decision'), true)
+
+  const ochaProse = ochaCbpfPassSnapshot()
+  ochaProse.awardId = 'ocha-cbpf-2026-058-prose'
+  ochaProse.fields = ochaProse.fields.map(field => field.key === 'idd.screen_scope'
+    ? { ...field, value: { state: 'present', value: 'designated entity declaration' } }
+    : field)
+  const ochaProseResult = evaluateDonorPack(ochaProse, 'ocha-cbpf')
+  const ochaScope = ochaProseResult.findings.find(finding => finding.code === 'ocha_idd_scope_incomplete')
+  assert.ok(ochaScope)
+  assert.match(ochaScope.summary, /designated-entity/)
+
+  const invented = ochaCbpfPassSnapshot()
+  invented.awardId = 'ocha-cbpf-2026-058-list'
+  invented.fields = invented.fields.map(field => field.key === 'misconduct.secretariat_sanctions_regime'
+    ? { ...field, value: { state: 'present', value: 'in-force' } }
+    : field)
+  const inventedResult = evaluateDonorPack(invented, 'ocha-cbpf')
+  assert.equal(codes(inventedResult).has('ocha_secretariat_list_invented'), true)
 })

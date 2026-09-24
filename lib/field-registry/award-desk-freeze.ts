@@ -155,7 +155,7 @@ function packTogglesFromGoverning(packs: readonly FrozenGoverningPack[]): PackTo
 
 /**
  * Run judgment for the packs in force at disposition.
- * Known donor pack ids (`global-fund` | `fcdo-prime`) use evaluateDonorPacks.
+ * Known donor pack ids (`global-fund` | `fcdo-prime` | `unfpa` | `ocha-cbpf`) use evaluateDonorPacks.
  * Otherwise the synthetic shelter rules cover the RFP-2026-041 demo snapshot.
  */
 export function judgeAwardDeskPacks(

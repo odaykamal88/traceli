@@ -49,6 +49,12 @@ Hardcoding these packs makes the loop runnable without a marketing site or an LL
 | --- | --- | --- |
 | `global-fund` | GF PR / high-capacity SR award desks | `packs/global-fund.ts` |
 | `fcdo-prime` | Commercial primes awarding under FCDO | `packs/fcdo-prime.ts` |
+| `unfpa` | UNFPA / OAIS-shaped public-control synthesis | `packs/unfpa.ts` |
+| `ocha-cbpf` | CBPF Global Guidelines–shaped public-control synthesis | `packs/ocha-cbpf.ts` |
+
+`unfpa` and `ocha-cbpf` are thin v0 packs for the case factory. They are not a claim that a UN office runs a Trace-li desk. See [case-factory-unfpa-ocha.md](../case-factory-unfpa-ocha.md).
+
+Judgment accepts at most 64 rules per evaluation. Select one donor pack on a freeze. The upload desk already sends a single `packId`.
 
 API:
 
@@ -79,7 +85,7 @@ Do **not** encode as live packs in this slice:
 | Parked | Why |
 | --- | --- |
 | USAID | Not a live v1 pack; keep illustrative ECHO-style fixture only if needed for demo. |
-| UN agencies | Out of v1 buyer set. |
+| UN agencies as a buyer pack | Thin `unfpa` and `ocha-cbpf` packs exist as public-control synthesis. They are not a UN engagement and not a full manual. |
 | EU / PRAG | Not a pack source for v1. |
 | KOICA | Parked. |
 | GIZ (as pack source) | Parked — may appear later as a buyer context, not this PR. |

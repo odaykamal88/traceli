@@ -2,7 +2,7 @@ import 'server-only'
 
 import { ExtractionError } from '@/lib/field-registry/extract'
 import { readMultipartForm, uploadFromMultipartForm } from '@/lib/field-registry/extract-upload'
-import { isDonorPackId, type DonorPackId } from '@/lib/field-registry/packs'
+import { donorPackIds, isDonorPackId, type DonorPackId } from '@/lib/field-registry/packs'
 
 const deskFields = new Set(['file', 'awardId', 'packId', 'procurementReference'])
 
@@ -39,7 +39,7 @@ export async function readDeskPacket(request: Request): Promise<DeskPacket> {
   }
   const packText = textField(form.get('packId'), 'Donor pack')
   if (!packText || !isDonorPackId(packText)) {
-    throw new ExtractionError('invalid_input', 'Choose a donor pack: global-fund or fcdo-prime.')
+    throw new ExtractionError('invalid_input', `Choose a donor pack: ${donorPackIds.join(', ')}.`)
   }
   const procurementReference = textField(form.get('procurementReference'), 'Procurement reference')
   if (procurementReference && (procurementReference.length > 80 || /[\u0000-\u001f]/.test(procurementReference))) {
