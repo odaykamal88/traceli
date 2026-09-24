@@ -83,7 +83,7 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
           <section className="mt-14" aria-labelledby="registry-heading">
             <h2 id="registry-heading" className="font-display text-3xl tracking-[-0.03em]">Registry snapshot</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#617078]">
-              Classification {snapshot.classification}. Reference {snapshot.procurementReference}. Donor {snapshot.donor.name}. Each value is present, missing, or negative. Verification on this fixture is unverified until a founder freeze.
+              Classification {snapshot.classification}. Reference {snapshot.procurementReference}. Donor {snapshot.donor.name}. Each value is present, missing, or negative. {awaiting ? 'Verification on this fixture is unverified until a founder freeze.' : 'This snapshot is the one inside the founder desk freeze.'}
             </p>
             <ul className="mt-6 divide-y divide-[#d8d5cc] overflow-hidden rounded-2xl border border-[#d8d5cc] bg-white">
               {snapshot.fields.map(field => (

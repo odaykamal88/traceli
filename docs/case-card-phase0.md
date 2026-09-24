@@ -1,6 +1,6 @@
 # Case Card Phase 0 — publishable public case
 
-Status: rails and Global Fund case #1 scaffold. 23 September 2026.
+Status: rails in place. Global Fund case #1 publishes founder Freeze #1 (24 September 2026). Other cards remain fixtures.
 Code: `lib/field-registry/case-card.ts`, `lib/case-cards/`, `app/cases/`, `app/api/cases/[slug]/route.ts`.
 Upstream: [award-desk-freeze.md](./eng/award-desk-freeze.md), [field-registry-v1.md](./eng/field-registry-v1.md), [donor-pack-global-fund-v1.md](./eng/donor-pack-global-fund-v1.md).
 
@@ -27,7 +27,7 @@ Export: `/cases/gf-oig-25-005.json`.
 
 This is the Global Fund Office of the Inspector General audit *Global Fund Grants to the Togolese Republic*, 4 June 2025. Finding 4.4 is the procurement-file slice: incomplete non-health files, competition exceptions that were not consistently documented, and contract extensions without a recorded authorizing authority. The OIG rated the Principal Recipient’s procurement and financial controls **Partially Effective**.
 
-The card is a **fixture awaiting founder freeze**. `frozenRecord` is `null`. Do not treat the page as a citeable freeze.
+The card publishes founder Freeze #1, a thin rehearsal: 0 pack fields mapped from the packet, readiness red, 22 findings, disposition evidence requested. `publicationState` is `published`. The OIG narrative is still the public finding. The freeze does not say Trace-li prevented it. A stronger finding-slice packet can re-freeze later.
 
 Public PDF: <https://www.theglobalfund.org/media/gbqltprg/oig_gf-oig-25-005_report_en.pdf>
 Retrieved: 23 September 2026.
@@ -35,7 +35,7 @@ PDF sha256: `fb54a35e9d7a71cbbe893d0fa2108113283ade43d2b99bb81a6f471fa68a12a8`
 
 That digest is the source file. It is stored on field provenance as `sourceFileHash` and on `primarySourceFile.sha256`. It is not `snapshotHash` or `packsHash`.
 
-The snapshot classification is `public-source` (added beside `synthetic` and `customer`). The fixture records only finding 4.4 plus the objective rating and sample size. It does not run the full Global Fund pack, and it does not invent integrity-due-diligence results the audit did not publish. `packScope` is `finding-slice`. The pack name and version are the in-repo Global Fund pack, shown for shape and **not** stamped in force.
+`gfOig25005FixtureSnapshot()` remains the public-source reading of finding 4.4 (objective rating and sample size included). It does not invent integrity-due-diligence results the audit did not publish. The published export drops that fixture and shows the synthetic rehearsal snapshot inside the verified frozen record. `packScope` stays `finding-slice`. The Global Fund pack `2026.2` is stamped in force on the freeze.
 
 Pattern tickets on the card:
 
@@ -68,7 +68,7 @@ Set `frozenRecord` on the draft in `lib/case-cards/gf-oig-25-005.ts` to a record
 | `redaction` | public vs withheld | same |
 | `narrative` / `findings` | the wording the page shows | same |
 
-`confidence` on a fixture field is not a fraud probability. On GF-OIG-25-005 it is `1` because the value is a direct statement from the public report, and `verificationMethod` stays `unverified` until the founder check.
+`confidence` on a fixture field is not a fraud probability. On the public-source helper for GF-OIG-25-005 it is `1` because the value is a direct statement from the public report, and `verificationMethod` stays `unverified`. The published freeze uses the rehearsal snapshot (`adapter_extract`, confidence `0` on unmapped fields).
 
 ## Later public fixtures
 

@@ -2,6 +2,7 @@ import type { CaseCardDraft } from '@/lib/field-registry/case-card'
 import { GLOBAL_FUND_PACK } from '@/lib/field-registry/packs/global-fund'
 import type { AwardRegistrySnapshot, RegistryField } from '@/lib/field-registry/schema'
 
+import { gfOig25005FrozenRecord } from '@/lib/case-cards/gf-oig-25-005-freeze'
 import { patternTicketsFor } from '@/lib/case-cards/pattern-tickets'
 
 /** SHA-256 of the public PDF retrieved 23 September 2026. Not a freeze hash. */
@@ -135,13 +136,13 @@ export function gfOig25005FixtureSnapshot(): AwardRegistrySnapshot {
   }
 }
 
-/** Case #1 scaffold. `frozenRecord` stays null until a founder-confirmed freeze is dropped in. */
+/** Case #1. Published from founder Freeze #1 (thin rehearsal, evidence requested). */
 export function gfOig25005Draft(): CaseCardDraft {
   return {
     slug: 'gf-oig-25-005',
     title: 'Procurement oversight on Global Fund grants in Togo',
     lede:
-      'OIG audit GF-OIG-25-005 rated procurement and financial controls in Togo Partially Effective. This fixture maps finding 4.4 onto the Field Registry. It is not a frozen desk record.',
+      'OIG audit GF-OIG-25-005 rated procurement and financial controls in Togo Partially Effective. This card publishes the founder desk freeze of a thin rehearsal packet for finding 4.4: evidence requested, readiness red, 22 findings, and no pack fields mapped from the file.',
     caseId: 'case:gf-oig-25-005',
     packScope: 'finding-slice',
     findings: [
@@ -171,7 +172,7 @@ export function gfOig25005Draft(): CaseCardDraft {
       officialRecord:
         'On 4 June 2025 the Global Fund Office of the Inspector General published audit GF-OIG-25-005, Global Fund Grants to the Togolese Republic. The Principal Recipient is the Office of the Prime Minister of the Togolese Republic. For the objective covering the PR’s internal controls over procurement and financial management, the OIG rating is Partially Effective. The audit period is Grant Cycle 6 (January 2021–December 2023), with design aspects of Grant Cycle 7.',
       whatWasMissing:
-        'Finding 4.4 says oversight of non-health procurement did not catch delays, incomplete files, or undocumented exceptions. The OIG reviewed 30 contracts, 64% of non-health procurement value from 2021 to 2023. This card maps that finding onto Field Registry keys. It is not a reconstruction of one named tender, and it does not rate health-product purchases made through the pooled mechanism.',
+        'Finding 4.4 says oversight of non-health procurement did not catch delays, incomplete files, or undocumented exceptions. The OIG reviewed 30 contracts, 64% of non-health procurement value from 2021 to 2023. The published freeze is a thin rehearsal of that finding on the Global Fund pack: no pack field was mapped from the packet. It is not a reconstruction of one named tender, and it does not rate health-product purchases made through the pooled mechanism.',
       whatFollowed:
         'Agreed Management Action 3 asks the Global Fund Secretariat to work with the Principal Recipient to assess the Program Management Unit procurement team and develop an improvement plan. The owner is the Head of Grants Management Division. The due date is 30 June 2026. This card does not report whether that action has been completed.',
       assuranceQuestion:
@@ -210,12 +211,12 @@ export function gfOig25005Draft(): CaseCardDraft {
         'Individual staff names',
         'Procurement file bytes, bid prices, and evaluation sheets',
         'Any customer upload or live desk packet',
-        'Freeze hashes — no founder-confirmed freeze exists for this card',
+        'Freeze hashes — published from the founder desk freeze. Customer upload bytes stay withheld.',
       ],
     },
     claimBoundary:
       'Trace-li cites the Global Fund Office of the Inspector General. This card is a pre-signature missing-evidence surface. It does not say Trace-li prevents fraud, does not certify the Principal Recipient, and does not imply that the Global Fund is a customer or endorser.',
     fixtureSnapshot: gfOig25005FixtureSnapshot(),
-    frozenRecord: null,
+    frozenRecord: gfOig25005FrozenRecord(),
   }
 }
