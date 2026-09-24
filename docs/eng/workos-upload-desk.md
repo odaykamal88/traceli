@@ -56,15 +56,15 @@ Proxy treats `/desk` and `/hub` like the workspace when WorkOS is configured: no
 
 ## Knowledge hub
 
-`/hub` is the signed-in library, separate from any one tender. The four live packs are seeded and read-only. The page calls them Trace-li public-control synthesis, not official UN, Global Fund, FCDO, or OCHA manuals.
+`/hub` is the signed-in start of one tender. The lede states the outcome first: choose a Trace-li seeded pack, add manuals only if they need to be on the record, name one tender, and freeze a citeable golden thread. The path reads Knowledge hub → New tender → Award desk → Golden thread. The four live packs are seeded and read-only. The page calls them Trace-li public-control synthesis, not official UN, Global Fund, FCDO, or OCHA manuals. One pack drives the freeze.
 
-An organisation can add a manual using the same file types as the desk, at most 8 MB, up to 12 files. The browser store `traceli.knowledgeHub.v1` keeps the label, file name, size, media type, and SHA-256, scoped to the session `organizationId`. It does not keep the bytes. Nothing is written to Postgres, and nothing is compiled into `JudgmentRule`s. A manual from another organisation is dropped on read.
+Organisation manuals are optional and visually quieter than the seeded packs. The empty state says a seeded pack alone is enough. An organisation can add a manual using the same file types as the desk, at most 8 MB, up to 12 files. The browser store `traceli.knowledgeHub.v1` keeps the label, file name, size, media type, and SHA-256, scoped to the session `organizationId`. It does not keep the bytes. Nothing is written to Postgres, and nothing is compiled into `JudgmentRule`s. A manual from another organisation is dropped on read. After a manual is added, the page still says the upload is not compiled into pack rules.
 
-`/hub/tender` saves an engagement in that store. One primary seeded pack is required. Manuals are optional conditions in play. Continue opens `/desk?pack=<id>&engagement=<id>`. The desk preselects that pack and sends the tender name as `procurementReference`. `evaluateDonorPack` still runs that one pack only. Attached manuals stay visible on the desk and on the decision record, labelled as not evaluated.
+`/hub/tender` is one piece of work. It saves an engagement in that store. One primary seeded pack is required. Manuals are optional conditions in play, and their absence is not a blocker. Continue opens `/desk?pack=<id>&engagement=<id>`. The desk shows the tender name and pack as the continuation of that path, preselects that pack, and sends the tender name as `procurementReference`. `evaluateDonorPack` still runs that one pack only. Attached manuals stay visible on the desk and on the decision record as conditions in play, not evaluated.
 
-After disposition, the decision record has one golden-thread line: the Field Registry freeze is the citeable record. Humans dispose; Trace-li freezes the proof.
+After disposition, the decision record leads with the golden thread: the citeable pre-signature freeze for this tender. Humans dispose; Trace-li freezes the proof.
 
-Login still returns to `/desk`. The desk shell links to the hub.
+Login still returns to `/desk`. A cold desk visit shows one line, “New here? Start in the Knowledge hub.” It does not redirect. The desk shell links to the hub.
 
 ## Auth
 

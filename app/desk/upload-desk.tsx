@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent, type RefObject } from 'react'
 
+import { HubPath } from '@/app/hub/path'
+
 import { deskExtractionFailure, deskWorkingCopy } from '@/lib/desk/failure-copy'
 import {
   deskJudgmentChoices,
@@ -310,26 +312,32 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         <h1>Award desk</h1>
         <p className={s.lede}>
           {judgment
-            ? 'The decision record is frozen in this browser. Copy the registry ids, or start another packet when you are done.'
+            ? 'The golden thread is frozen in this browser. Copy the registry ids, or start another packet when you are done.'
             : result
-              ? 'Trace-li froze this packet. Review the prep, then record your judgment. The file itself is not stored.'
+              ? 'Trace-li froze this packet. Review the prep, then record your judgment to finish the golden thread. The file itself is not stored.'
               : tender
-                ? 'This tender is on the desk. Upload the award packet. Trace-li runs the seeded pack below and freezes an assessment for your judgment.'
-                : 'Choose a donor pack and one file. Trace-li extracts it, checks the pack, and freezes an assessment for your judgment.'}
+                ? `Upload the packet for ${tender.name}. Trace-li runs ${selectedPack?.name ?? 'the seeded pack'} and freezes a citeable golden thread for your judgment.`
+                : 'Upload a packet against a seeded pack and freeze a citeable golden thread. Humans dispose; Trace-li freezes the proof.'}
         </p>
+        {tender ? <HubPath current={judgment ? 'freeze' : 'desk'} /> : null}
+        {restored && !tender ? (
+          <p className={s.cue} data-testid="desk-cold-cue">
+            New here? <Link href="/hub">Start in the Knowledge hub</Link>.
+          </p>
+        ) : null}
       </header>
       {tender ? (
         <aside className={s.banner} data-testid="tender-context">
-          <p className={s.eyebrow}>Tender</p>
+          <p className={s.eyebrow}>This tender</p>
           <h2>{tender.name}</h2>
           <p>
-            Primary pack for this freeze: {selectedPack?.name ?? tender.primaryPackId}. Trace-li runs that seeded pack only.
+            Pack in play: {selectedPack?.name ?? tender.primaryPackId}. One Trace-li pack drives judgment on this award.
           </p>
           {tender.uploads.length === 0 ? (
-            <p>No organisation manuals are attached. Only the seeded pack is evaluated.</p>
+            <p>No manuals attached. The seeded pack alone is enough.</p>
           ) : (
             <>
-              <p>Conditions in play. These files are not evaluated as pack rules:</p>
+              <p>Conditions in play · not evaluated</p>
               <ul className={s.plainList}>
                 {tender.uploads.map(upload => <li key={upload.id}>{upload.label}</li>)}
               </ul>
@@ -441,7 +449,9 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
       {!result ? (
         <p className={s.empty}>
           {restored
-            ? <>No frozen record yet. Choose a pack and upload a file, or <Link href="/hub">open the Knowledge hub</Link> to name a tender first.</>
+            ? tender
+              ? 'No frozen record yet. Upload the packet to freeze the golden thread for this tender.'
+              : 'No frozen record yet.'
             : 'Loading the last record from this browser…'}
         </p>
       ) : null}
@@ -523,6 +533,9 @@ function AwardResult({
                   <span className={s.bar} aria-hidden="true" />
                   {recordedChoice?.status ?? 'Judgment recorded'}
                 </div>
+                <p className={s.freezeNote} data-testid="golden-thread">
+                  Golden thread. This is the citeable pre-signature freeze for this tender. Humans dispose; Trace-li freezes the proof.
+                </p>
               </div>
               <div className={s.recordSection}>
                 <h3>Packet</h3>
@@ -571,9 +584,9 @@ function AwardResult({
               </div>
               {tender ? (
                 <div className={s.recordSection} data-testid="conditions-in-play">
-                  <h3>Conditions in play</h3>
+                  <h3>Conditions in play · not evaluated</h3>
                   {tender.uploads.length === 0 ? (
-                    <p>No organisation manuals were attached. Only the seeded pack was evaluated.</p>
+                    <p>No manuals were attached. The seeded pack alone was evaluated.</p>
                   ) : (
                     <>
                       <p>These files were attached to the tender. Trace-li did not evaluate them as pack rules.</p>
@@ -587,9 +600,6 @@ function AwardResult({
               <div className={s.recordSection} data-testid="frozen-registry">
                 <h3>Frozen registry record</h3>
                 <p className={s.frozenBadge} data-testid="record-frozen-badge">Record frozen · verified</p>
-                <p className={s.freezeNote} data-testid="golden-thread">
-                  Golden thread: this Field Registry freeze is the citeable record of the pack and your disposition. Humans dispose; Trace-li freezes the proof.
-                </p>
                 <dl className={s.frozenMeta}>
                   <div>
                     <dt>Record id</dt>

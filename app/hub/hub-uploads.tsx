@@ -89,41 +89,43 @@ export default function HubUploads({ organizationId }: { organizationId: string 
   }
 
   return (
-    <section className={s.section} aria-labelledby="org-manuals">
-      <h2 id="org-manuals">Organisation manuals</h2>
-      <p className={s.help}>
-        Procurement manuals, donor guidelines, and SOPs. Trace-li keeps the label in this browser for your organisation. {hubUploadNote}
-      </p>
+    <section className={`${s.section} ${s.sectionQuiet}`} aria-labelledby="org-manuals">
+      <h2 id="org-manuals">Your manuals (optional)</h2>
       {!ready ? <p className={s.empty}>Loading manuals…</p> : null}
       {ready && uploads.length === 0 ? (
         <p className={s.empty} data-testid="hub-upload-empty">
-          No organisation manuals yet. You can still start a tender with a seeded pack.
+          You can start a tender with a seeded pack alone. Add a procurement manual or donor guideline when you want it listed as a condition in play. Uploads are not compiled into pack rules yet.
         </p>
       ) : null}
       {uploads.length > 0 ? (
-        <ul className={s.uploadList} data-testid="hub-upload-list">
-          {uploads.map(upload => (
-            <li key={upload.id} className={s.uploadItem}>
-              <div>
-                <p className={s.tag}>Not a pack rule yet</p>
-                <strong>{upload.label}</strong>
-                <p className={s.help}>
-                  {upload.fileName} · {shortContentHash(upload.contentHash)}
-                  {' · '}file bytes are not stored
-                </p>
-              </div>
-              <button className={s.secondary} type="button" onClick={() => remove(upload.id)}>
-                Remove <span className={s.visuallyHidden}>{upload.label}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <>
+          <p className={s.help} data-testid="hub-upload-honesty">{hubUploadNote}</p>
+          <ul className={s.uploadList} data-testid="hub-upload-list">
+            {uploads.map(upload => (
+              <li key={upload.id} className={s.uploadItem}>
+                <div>
+                  <p className={s.tag}>Not a pack rule yet</p>
+                  <strong>{upload.label}</strong>
+                  <p className={s.help}>
+                    {upload.fileName} · {shortContentHash(upload.contentHash)}
+                    {' · '}file bytes are not stored
+                  </p>
+                </div>
+                <button className={s.secondary} type="button" onClick={() => remove(upload.id)}>
+                  Remove <span className={s.visuallyHidden}>{upload.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
       ) : null}
       {ready && uploads.length >= HUB_UPLOAD_CAP ? (
         <p className={s.help}>This hub holds {HUB_UPLOAD_CAP} manuals. Remove one to add another.</p>
       ) : null}
       {ready && uploads.length < HUB_UPLOAD_CAP ? (
-        <form className={`${s.card} ${s.uploadForm}`} onSubmit={onSubmit} aria-busy={pending}>
+        <details className={s.quietDetails}>
+          <summary>Add a manual</summary>
+          <form className={`${s.card} ${s.quietCard} ${s.uploadForm}`} onSubmit={onSubmit} aria-busy={pending}>
           <div className={s.file}>
             <label className={s.fileLegend} htmlFor="hub-manual">Manual or guideline</label>
             <div className={s.fileControl}>
@@ -155,11 +157,12 @@ export default function HubUploads({ organizationId }: { organizationId: string 
           </div>
           {error ? <p className={s.alert} role="alert">{error}</p> : null}
           <div className={s.actions}>
-            <button className={s.primary} type="submit" disabled={pending}>
-              {pending ? 'Adding…' : 'Add to hub'}
+            <button className={s.secondary} type="submit" disabled={pending}>
+              {pending ? 'Adding…' : 'Add manual'}
             </button>
           </div>
-        </form>
+          </form>
+        </details>
       ) : null}
     </section>
   )
