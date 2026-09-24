@@ -1,6 +1,6 @@
 # Case Card Phase 0 — publishable public case
 
-Status: rails in place. Global Fund case #1 publishes founder Freeze #1 (24 September 2026). Other cards remain fixtures.
+Status: rails in place. Global Fund case #1 publishes founder Freeze #1 and OIOS 2025/098 publishes founder Freeze #2 (24 September 2026). UNFPA cards and OIOS 2020/005 remain fixtures.
 Code: `lib/field-registry/case-card.ts`, `lib/case-cards/`, `app/cases/`, `app/api/cases/[slug]/route.ts`.
 Upstream: [award-desk-freeze.md](./eng/award-desk-freeze.md), [field-registry-v1.md](./eng/field-registry-v1.md), [donor-pack-global-fund-v1.md](./eng/donor-pack-global-fund-v1.md).
 
@@ -51,6 +51,16 @@ Store: `lib/case-cards/pattern-tickets.ts`. Schema: `pattern-ticket-v1`. Status 
 
 Set `frozenRecord` on the draft in `lib/case-cards/gf-oig-25-005.ts` to a record already accepted by `verifyFrozenRecord`. `publishCaseCard` then switches the export to `recordKind: frozen`, copies the verified hashes, and drops the fixture snapshot so the page does not show two records. Re-check redaction and the founder gate before calling the result published. The HTML and JSON both read that export.
 
+## OIOS 2025/098 — CBPF reserve
+
+Slug: `oios-2025-098-cbpf-reserve`.
+Route: `/cases/oios-2025-098-cbpf-reserve`.
+Export: `/cases/oios-2025-098-cbpf-reserve.json`.
+
+The card publishes founder Freeze #2, a thin rehearsal: 0 pack fields mapped from the packet, readiness red, 20 findings, disposition evidence requested. `publicationState` is `published`. Talonic left `allocation.modality` and `misconduct.secretariat_sanctions_regime` missing. The freeze does not invent them as present. The OIOS narrative is still the public finding. The freeze does not say Trace-li prevented an allocation.
+
+`oios2025098FixtureSnapshot()` remains the public-source reading of the reserve slice. The published export drops that fixture and shows the synthetic rehearsal snapshot inside the verified frozen record. `packScope` stays `finding-slice`. The OCHA CBPF pack `2026.1` is stamped in force on the freeze.
+
 ## Export shape (`case-card-export-v1`)
 
 | Field | Fixture | Published freeze |
@@ -72,7 +82,7 @@ Set `frozenRecord` on the draft in `lib/case-cards/gf-oig-25-005.ts` to a record
 
 ## Later public fixtures
 
-UNFPA and OCHA cards use the same fixture contract and the same drop-in. Their packs, ticket ids, and the founder-freeze promotion steps are in [case-factory-unfpa-ocha.md](./case-factory-unfpa-ocha.md). Those cards also leave `snapshotHash` and `packsHash` null until a real desk freeze is checked in.
+UNFPA cards and OIOS 2020/005 use the same fixture contract and the same drop-in. Their packs, ticket ids, and the founder-freeze promotion steps are in [case-factory-unfpa-ocha.md](./case-factory-unfpa-ocha.md). Those cards leave `snapshotHash` and `packsHash` null until a real desk freeze is checked in.
 
 ## Tests
 

@@ -2,6 +2,7 @@ import type { CaseCardDraft } from '@/lib/field-registry/case-card'
 import { OCHA_CBPF_PACK } from '@/lib/field-registry/packs/ocha-cbpf'
 import type { AwardRegistrySnapshot } from '@/lib/field-registry/schema'
 
+import { oios2025098FrozenRecord } from '@/lib/case-cards/oios-2025-098-cbpf-reserve-freeze'
 import { patternTicketsFor } from '@/lib/case-cards/pattern-tickets'
 import { sourceField } from '@/lib/case-cards/public-source-field'
 
@@ -103,13 +104,13 @@ export function oios2025098FixtureSnapshot(): AwardRegistrySnapshot {
   }
 }
 
-/** Fixture. `frozenRecord` stays null until a founder-confirmed freeze is dropped in. */
+/** Published from founder Freeze #2 (thin rehearsal, 0 pack fields mapped, evidence requested). */
 export function oios2025098Draft(): CaseCardDraft {
   return {
     slug: SLUG,
     title: 'CBPF reserve pre-selection and scorecards, OIOS 2025/098',
     lede:
-      'OIOS 2025/098 found reserve pre-selection justifications and project scorecards missing from the CBPF file. This fixture maps those gaps onto the OCHA CBPF pack. It is not a frozen desk record.',
+      'OIOS 2025/098 found reserve pre-selection justifications and project scorecards missing from the CBPF file. This card publishes the founder desk freeze of a thin rehearsal packet: evidence requested, readiness red, 20 findings, and no pack fields mapped from the file.',
     caseId: 'case:oios-2025-098-cbpf-reserve',
     packScope: 'finding-slice',
     findings: [
@@ -139,13 +140,13 @@ export function oios2025098Draft(): CaseCardDraft {
       officialRecord:
         'On 30 December 2025 OIOS published the audit of management and oversight of country-based pooled funds, report 2025/098, assignment AN2024-590-02. The audit period is 1 January 2023 to 31 December 2024. OIOS’s overall opinion is that management and oversight mechanisms were effective, and that they needed strengthening in transparency of partner selection and in the completeness of selection and pre-selection documents.',
       whatWasMissing:
-        'This slice is the reserve pre-selection justification, the scorecard or alternative selection document, and the OneGMS selection record those documents would occupy. The overall “effective” opinion stays in view. A missing document is not a finding that the project was wrongly chosen.',
+        'This slice is the reserve pre-selection justification, the scorecard or alternative selection document, and the OneGMS selection record those documents would occupy. The published freeze is a thin rehearsal of that slice on the OCHA CBPF pack: no pack field was mapped from the packet. The overall “effective” opinion stays in view. A missing document is not a finding that the project was wrongly chosen.',
       whatFollowed:
         'Recommendations 2 and 3 were accepted. OCHA said it would keep monitoring reserve pre-selection and would introduce OneGMS features for allocation strategies and for scorecards before recommendation. This card does not report those features as implemented.',
       assuranceQuestion:
         'Before a reserve allocation is signed, can a reviewer open the pre-selection justification, the scorecard or alternative selection document, and the OneGMS selection record?',
       whereTraceLiFits:
-        'The CBPF pack checks those fields, and it requires the Secretariat partner-sanctions regime to be recorded as none. This card is a fixture awaiting a founder freeze. Nothing here says Trace-li would have prevented an allocation. These funds are not Trace-li clients.',
+        'The CBPF pack checks those fields, and it requires the Secretariat partner-sanctions regime to be recorded as none. The published freeze left every pack field unmapped, including modality and that regime. Nothing here says Trace-li would have prevented an allocation. These funds are not Trace-li clients.',
     },
     patternTicketIds: [...TICKET_IDS],
     patternTickets: patternTicketsFor(TICKET_IDS),
@@ -176,12 +177,12 @@ export function oios2025098Draft(): CaseCardDraft {
         'Partner names — the cited paragraphs do not name them, and this card does not add any',
         'Allocation file bytes and scorecard sheets',
         'Any customer upload or live desk packet',
-        'Freeze hashes — no founder-confirmed freeze exists for this card',
+        'Freeze hashes — published from the founder desk freeze. Customer upload bytes stay withheld.',
       ],
     },
     claimBoundary:
       'Trace-li cites OIOS. This card is a pre-signature missing-evidence surface. It does not say Trace-li prevents fraud, does not certify a country-based pooled fund, and does not imply that OCHA is a customer or endorser. An audit is not a criminal verdict. An accepted recommendation is not an implemented control.',
     fixtureSnapshot: oios2025098FixtureSnapshot(),
-    frozenRecord: null,
+    frozenRecord: oios2025098FrozenRecord(),
   }
 }

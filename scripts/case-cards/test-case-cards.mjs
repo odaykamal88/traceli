@@ -11,7 +11,14 @@ import {
 } from '../../lib/case-cards/gf-oig-25-005-freeze.ts'
 import { GF_OIG_25_005_PDF_SHA256, gfOig25005Draft, gfOig25005FixtureSnapshot } from '../../lib/case-cards/gf-oig-25-005.ts'
 import { OIOS_2020_005_PDF_SHA256 } from '../../lib/case-cards/oios-2020-005-iraq-forensic.ts'
-import { OIOS_2025_098_PDF_SHA256 } from '../../lib/case-cards/oios-2025-098-cbpf-reserve.ts'
+import {
+  OIOS_2025_098_ACTOR_ROLE,
+  OIOS_2025_098_PACKS_HASH,
+  OIOS_2025_098_RECORD_ID,
+  OIOS_2025_098_SNAPSHOT_HASH,
+  OIOS_2025_098_SUPERSEDES_RECORD_ID,
+} from '../../lib/case-cards/oios-2025-098-cbpf-reserve-freeze.ts'
+import { OIOS_2025_098_PDF_SHA256, oios2025098Draft, oios2025098FixtureSnapshot } from '../../lib/case-cards/oios-2025-098-cbpf-reserve.ts'
 import { listPatternTickets } from '../../lib/case-cards/pattern-tickets.ts'
 import { UNFPA_ANNEX4_PDF_SHA256 } from '../../lib/case-cards/unfpa-annex4-13-esa-ip.ts'
 import { UNFPA_SUDAN_PDF_SHA256 } from '../../lib/case-cards/unfpa-ia-2025-29-sudan.ts'
@@ -31,6 +38,7 @@ import {
 } from '../../lib/field-registry/index.ts'
 
 const card = getCaseCard('gf-oig-25-005')
+const ochaCard = getCaseCard('oios-2025-098-cbpf-reserve')
 
 test('the public Togo card publishes the founder Freeze #1', () => {
   assert.ok(card)
@@ -84,6 +92,67 @@ test('the public Togo card publishes the founder Freeze #1', () => {
   assert.equal(fixture.framework.version, GLOBAL_FUND_PACK.version)
   for (const field of fixture.fields) {
     assert.equal(field.provenance.sourceFileHash, GF_OIG_25_005_PDF_SHA256)
+    assert.equal(field.provenance.verificationMethod, 'unverified')
+  }
+})
+
+test('the public OIOS 2025/098 card publishes founder Freeze #2', () => {
+  assert.ok(ochaCard)
+  const draft = oios2025098Draft()
+  const published = publishCaseCard(draft)
+  const record = verifyFrozenRecord(published.frozenRecord)
+  const judged = evaluateDonorPack(record.snapshot, 'ocha-cbpf', { evaluatedAt: record.frozenAt })
+  assert.equal(published.product, 'Trace-li')
+  assert.equal(ochaCard.product, 'Trace-li')
+  assert.equal(published.recordKind, 'frozen')
+  assert.equal(published.publicationState, 'published')
+  assert.equal(ochaCard.publicationState, 'published')
+  assert.equal(published.fixtureSnapshot, null)
+  assert.equal(ochaCard.fixtureSnapshot, null)
+  assert.equal(published.packsStamped, true)
+  assert.equal(published.hashMethod, 'sha256:sorted-json-v1')
+  assert.equal(published.snapshotHash, OIOS_2025_098_SNAPSHOT_HASH)
+  assert.equal(published.packsHash, OIOS_2025_098_PACKS_HASH)
+  assert.equal(record.snapshotHash, OIOS_2025_098_SNAPSHOT_HASH)
+  assert.equal(record.packsHash, OIOS_2025_098_PACKS_HASH)
+  assert.equal(record.recordId, OIOS_2025_098_RECORD_ID)
+  assert.equal(record.supersedesRecordId, OIOS_2025_098_SUPERSEDES_RECORD_ID)
+  assert.equal(published.frozenRecordId, record.recordId)
+  assert.equal(ochaCard.snapshotHash, record.snapshotHash)
+  assert.equal(ochaCard.packsHash, record.packsHash)
+  assert.equal(record.pipelineStatus.readiness, 'red')
+  assert.equal(published.readiness, 'red')
+  assert.equal(judged.pipelineStatus.readiness, 'red')
+  assert.equal(judged.findings.length, 20)
+  assert.equal(record.disposition.decision, 'request_evidence')
+  assert.equal(record.disposition.actorRole, OIOS_2025_098_ACTOR_ROLE)
+  assert.equal(record.disposition.waiverRefs.length, 0)
+  assert.equal(record.frozenAt, '2026-09-24T17:27:04.560Z')
+  assert.equal(record.frozenBy, 'user_01M2MDYWCDDT13QGCTJHHSYD1C')
+  assert.equal(record.packsInForce[0].packId, 'ocha-cbpf')
+  assert.equal(record.packsInForce[0].version, OCHA_CBPF_PACK.version)
+  assert.equal(record.snapshot.fields.length, 24)
+  assert.equal(record.snapshot.fields.every(field => field.value.state === 'missing'), true)
+  assert.equal(record.snapshot.classification, 'synthetic')
+  const modality = record.snapshot.fields.find(field => field.key === 'allocation.modality')
+  const sanctions = record.snapshot.fields.find(field => field.key === 'misconduct.secretariat_sanctions_regime')
+  assert.equal(modality.value.state, 'missing')
+  assert.equal(modality.value.reason, 'Not extracted from this packet.')
+  assert.equal(sanctions.value.state, 'missing')
+  assert.equal(sanctions.value.reason, 'Not extracted from this packet.')
+  assert.equal(ochaCard.primarySourceFile.sha256, OIOS_2025_098_PDF_SHA256)
+  assert.notEqual(ochaCard.primarySourceFile.sha256, ochaCard.snapshotHash)
+  assert.match(ochaCard.claimBoundary, /prevents fraud/)
+  assert.match(ochaCard.statusLabel, /Published frozen record/)
+  assert.match(ochaCard.redaction.withheld.join('\n'), /founder desk freeze/)
+  const fixture = oios2025098FixtureSnapshot()
+  assert.equal(draft.fixtureSnapshot.classification, 'public-source')
+  assert.equal(fixture.classification, 'public-source')
+  assert.equal(fixture.framework.frameworkId, 'ocha-cbpf')
+  assert.equal(fixture.framework.version, OCHA_CBPF_PACK.version)
+  assert.equal(fixture.fields.find(field => field.key === 'allocation.modality').value.state, 'present')
+  for (const field of fixture.fields) {
+    assert.equal(field.provenance.sourceFileHash, OIOS_2025_098_PDF_SHA256)
     assert.equal(field.provenance.verificationMethod, 'unverified')
   }
 })
@@ -152,7 +221,6 @@ const publicFixtures = [
   ['unfpa-annex4-13-esa-ip', 'unfpa', UNFPA_PACK.version, UNFPA_ANNEX4_PDF_SHA256],
   ['unfpa-annex4-21-arab-vendor', 'unfpa', UNFPA_PACK.version, UNFPA_ANNEX4_PDF_SHA256],
   ['unfpa-ia-2025-29-sudan', 'unfpa', UNFPA_PACK.version, UNFPA_SUDAN_PDF_SHA256],
-  ['oios-2025-098-cbpf-reserve', 'ocha-cbpf', OCHA_CBPF_PACK.version, OIOS_2025_098_PDF_SHA256],
   ['oios-2020-005-iraq-forensic', 'ocha-cbpf', OCHA_CBPF_PACK.version, OIOS_2020_005_PDF_SHA256],
 ]
 
