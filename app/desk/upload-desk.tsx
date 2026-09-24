@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent, type RefObject } from 'react'
 
 import { deskExtractionFailure, deskWorkingCopy } from '@/lib/desk/failure-copy'
 import {
@@ -14,10 +14,10 @@ import {
   type UploadDeskChoiceId,
   type UploadDeskJudgmentView,
 } from '@/lib/desk/judgment'
+import { deskAwardStoryFromView, formatDeskInstant, type DeskAwardStory } from '@/lib/desk/story'
 import {
   sanitizeUploadDeskView,
   uploadDeskStorageKey,
-  type UploadDeskReadiness,
   type UploadDeskView,
 } from '@/lib/desk/view'
 
@@ -39,29 +39,6 @@ type Props = {
   }
   providerId: string
   packs: DeskPackOption[]
-}
-
-const readinessCopy: Record<UploadDeskReadiness, { label: string, className: string, next: string }> = {
-  red: {
-    label: 'Red · evidence gaps',
-    className: s.readinessRed,
-    next: 'Evidence gaps are still open. Record your judgment below.',
-  },
-  amber: {
-    label: 'Amber · warnings',
-    className: s.readinessAmber,
-    next: 'Warnings are still open. Record your judgment below.',
-  },
-  green: {
-    label: 'Green · pack checks passed',
-    className: s.readinessGreen,
-    next: 'Pack checks passed. You can still request evidence, accept with a desk-session exception, or escalate. This is not a certification.',
-  },
-  unknown: {
-    label: 'Unknown · not judged',
-    className: s.readinessUnknown,
-    next: 'Readiness did not come back with a colour. Record your judgment before sign-off.',
-  },
 }
 
 type StoredDesk = {
@@ -128,6 +105,13 @@ function deskNotice(summary: string, detail = ''): DeskNotice {
 
 function plural(count: number, singular: string, pluralLabel: string) {
   return `${count} ${count === 1 ? singular : pluralLabel}`
+}
+
+function emphasize(text: string, emphasis: string | null) {
+  if (!emphasis) return text
+  const index = text.indexOf(emphasis)
+  if (index < 0) return text
+  return <>{text.slice(0, index)}<strong>{emphasis}</strong>{text.slice(index + emphasis.length)}</>
 }
 
 export default function UploadDesk({ viewer, providerId, packs }: Props) {
@@ -286,36 +270,58 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
     }
   }
 
-  const readiness = result ? readinessCopy[result.readiness] : null
-  const mapped = result?.fields.filter(field => field.fromPacket) ?? []
-  const missing = result?.fields.filter(field => !field.fromPacket) ?? []
+  const story = result ? deskAwardStoryFromView(result, viewer.name) : null
   const providerNote = providerId === 'mock'
     ? 'Extraction is the offline mock. It hashes the file and does not read the document body.'
-    : `Extraction provider is ${providerId}. This desk still refuses to store file bytes or vendor payloads.`
+    : `Extraction provider is ${providerId}. Trace-li still refuses to store file bytes or vendor payloads.`
+  const sessionNote = viewer.mode === 'demo'
+    ? 'This is the local fixture session.'
+    : 'You are signed in. The file is not kept after this request.'
   const reasonLength = reason.trim().length
   const busy = pending || judging
-  const steps = [
-    { id: 'extract', label: 'Extract', state: 'done' as const },
-    { id: 'judge', label: 'Judge', state: 'done' as const },
-    { id: 'freeze', label: 'Freeze', state: 'done' as const },
-    { id: 'yours', label: 'Your judgment', state: judgment ? 'done' as const : 'current' as const },
-  ]
+  const recordedChoice = judgment ? deskJudgmentChoices.find(item => item.id === judgment.choice) : undefined
 
   return (
-    <>
-      <p className={s.eyebrow}>Award assurance</p>
-      <h1>Upload a packet</h1>
-      <p className={s.lede}>
-        Choose a donor pack and upload one file. Trace-li extracts it, runs the pack, and freezes an assessment. Then record your judgment.
-      </p>
-      <form ref={formRef} className={s.card} onSubmit={onSubmit} aria-busy={pending}>
-        <p className={s.note}>
-          {providerNote}
-          {' '}
-          {viewer.mode === 'demo'
-            ? 'This is the local fixture session.'
-            : 'You are signed in. The file is not kept after this request.'}
+    <div className={s.page} data-has-result={result ? 'true' : undefined}>
+      <header className={s.intro}>
+        <h1>Award desk</h1>
+        <p className={s.lede}>
+          {judgment
+            ? 'The decision record is frozen in this browser. Copy the registry ids, or start another packet when you are done.'
+            : result
+              ? 'Trace-li froze this packet. Review the prep, then record your judgment. The file itself is not stored.'
+              : 'Choose a donor pack and one file. Trace-li extracts it, checks the pack, and freezes an assessment for your judgment.'}
         </p>
+      </header>
+      {result && story ? (
+        <AwardResult
+          result={result}
+          story={story}
+          judgment={judgment}
+          recordedChoice={recordedChoice}
+          judging={judging}
+          announce={announce}
+          judgmentError={judgmentError}
+          choice={choice}
+          reason={reason}
+          reasonId={reasonId}
+          reasonLength={reasonLength}
+          reviewerName={viewer.name}
+          judgmentHeadingRef={judgmentHeadingRef}
+          recordHeadingRef={recordHeadingRef}
+          onChoice={next => {
+            setChoice(next)
+            setJudgmentError(null)
+          }}
+          onReason={setReason}
+          onConfirm={confirmJudgment}
+          onCopy={copyValue}
+        />
+      ) : null}
+      <form ref={formRef} className={`${s.card} ${s.startCard}`} onSubmit={onSubmit} aria-busy={pending}>
+        {result ? (
+          <p className={`${s.help} ${s.leadIn}`}>Choose another pack and file to replace this record, or clear it.</p>
+        ) : null}
         <fieldset>
           <legend>Donor pack</legend>
           <div className={s.packs}>
@@ -364,154 +370,311 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
             </button>
           ) : null}
         </div>
-        <p className={s.status} role="status" aria-live="polite">
-          {pending ? (
-            <span className={s.working}>
-              <span className={s.spinner} aria-hidden="true" />
-              <span>{deskWorkingCopy.status}</span>
-            </span>
-          ) : ''}
-        </p>
+        <p className={s.status} role="status" aria-live="polite">{pending ? (
+          <span className={s.working}>
+            <span className={s.spinner} aria-hidden="true" />
+            <span>{deskWorkingCopy.status}</span>
+          </span>
+        ) : null}</p>
         {error ? (
           <p className={s.alert} role="alert">
             {error.summary}
             {error.detail ? <span className={s.alertDetail}>{error.detail}</span> : null}
           </p>
         ) : null}
+        <p className={`${s.help} ${s.providerNote}`}>{providerNote} {sessionNote}</p>
       </form>
+      {!result ? (
+        <p className={s.empty}>
+          {restored
+            ? 'No frozen record yet. Choose a pack and upload a file.'
+            : 'Loading the last record from this browser…'}
+        </p>
+      ) : null}
+      <p className={s.footer}>
+        <Link href="/demo">Try the fictional walkthrough</Link>
+      </p>
+    </div>
+  )
+}
 
-      {result && readiness ? (
-        <section className={s.results} aria-labelledby={judgment ? 'decision-record-title' : 'judgment-title'}>
-          <ol className={s.rail} aria-label="Progress" data-testid="progress-rail">
-            {steps.map((step, index) => (
-              <li key={step.id} data-state={step.state} aria-current={step.state === 'current' ? 'step' : undefined}>
-                {index > 0 ? <span className={s.railSep} aria-hidden="true">→</span> : null}
-                <span>{step.label}</span>
-              </li>
-            ))}
-          </ol>
-          <p className={`${s.readiness} ${readiness.className}`}>{readiness.label}</p>
-          <p>{readiness.next}</p>
-          <p className={s.help}>
-            {result.packName}. {plural(result.findingCount, 'finding', 'findings')}. {plural(missing.length, 'pack field', 'pack fields')} still missing.
-            {' '}Assessment record {result.record.recordId}. Snapshot {shortHash(result.record.snapshotHash)}.
-          </p>
-          <p className={s.status} role="status" aria-live="polite">
-            {judging ? 'Freezing your judgment…' : announce}
-          </p>
-
+function AwardResult({
+  result,
+  story,
+  judgment,
+  recordedChoice,
+  judging,
+  announce,
+  judgmentError,
+  choice,
+  reason,
+  reasonId,
+  reasonLength,
+  reviewerName,
+  judgmentHeadingRef,
+  recordHeadingRef,
+  onChoice,
+  onReason,
+  onConfirm,
+  onCopy,
+}: {
+  result: UploadDeskView
+  story: DeskAwardStory
+  judgment: UploadDeskJudgmentView | null
+  recordedChoice: (typeof deskJudgmentChoices)[number] | undefined
+  judging: boolean
+  announce: string
+  judgmentError: string | null
+  choice: UploadDeskChoiceId | ''
+  reason: string
+  reasonId: string
+  reasonLength: number
+  reviewerName: string
+  judgmentHeadingRef: RefObject<HTMLHeadingElement | null>
+  recordHeadingRef: RefObject<HTMLHeadingElement | null>
+  onChoice: (choice: UploadDeskChoiceId) => void
+  onReason: (reason: string) => void
+  onConfirm: () => void
+  onCopy: (value: string, label: string) => void
+}) {
+  const mapped = result.fields.filter(field => field.fromPacket)
+  const missing = result.fields.filter(field => !field.fromPacket)
+  return (
+    <section className={s.results} aria-labelledby={judgment ? 'decision-record-title' : 'judgment-title'}>
+      <p className={s.live} role="status" aria-live="polite">{judging ? 'Freezing your judgment…' : announce}</p>
+      <div className={s.awardLayout}>
+        <aside className={s.metaPanel}>
+          <p className={s.eyebrow}>Packet</p>
+          <dl>
+            <div className={s.metaBlock}><dt>File</dt><dd>{result.fileName}</dd></div>
+            <div className={s.metaBlock}><dt>Pack</dt><dd>{result.packName}</dd></div>
+            <div className={s.metaBlock}><dt>Version</dt><dd>{result.packVersion}</dd></div>
+            <div className={s.metaBlock}><dt>Reference</dt><dd>{result.procurementReference}</dd></div>
+            <div className={s.metaBlock}><dt>Reviewer</dt><dd>{reviewerName}</dd></div>
+          </dl>
+        </aside>
+        <div>
           {judgment ? (
-            <div className={`${s.card} ${s.recordCard}`} data-testid="decision-record">
-              <h2 id="decision-record-title" ref={recordHeadingRef} tabIndex={-1}>Decision record</h2>
-              <p className={s.verified} data-testid="record-frozen-badge">Record frozen · verified</p>
-              <p className={s.statusLine}>{deskJudgmentChoices.find(item => item.id === judgment.choice)?.status}</p>
-              <h3 className={s.sectionTitle}>Reason</h3>
-              <p data-testid="recorded-reason">{judgment.reason}</p>
-              <p>
-                {judgment.packName}. Version {judgment.packVersion}. Readiness {judgment.readiness}. {plural(judgment.findingCount, 'finding', 'findings')}.
-              </p>
-              {judgment.waiver ? (
-                <p className={s.note}>
-                  Desk-session exception note {judgment.waiver.waiverId}. Authority is this signed-in reviewer. This is not a formal organization waiver.
+            <div className={s.record} data-testid="decision-record">
+              <div className={s.recordHeader}>
+                <p className={s.eyebrow}>Decision record</p>
+                <h2 id="decision-record-title" ref={recordHeadingRef} tabIndex={-1}>
+                  Decision record · {result.procurementReference}
+                </h2>
+                <div className={s.recordStatus}>
+                  <span className={s.bar} aria-hidden="true" />
+                  {recordedChoice?.status ?? 'Judgment recorded'}
+                </div>
+              </div>
+              <div className={s.recordSection}>
+                <h3>Packet</h3>
+                <p><strong>{result.fileName}</strong></p>
+                <p className={s.muted}>{result.packName} · version {result.packVersion}</p>
+              </div>
+              <div className={s.recordSection}>
+                <h3>Evidence state</h3>
+                {story.evidenceLines.map(line => <p key={line}>{line}</p>)}
+              </div>
+              <div className={s.recordSection}>
+                <h3>Packet prep summary</h3>
+                <p>{story.prepSummary}</p>
+                <p className={s.who}>Packet prep · {formatDeskInstant(result.record.frozenAt)}</p>
+              </div>
+              <div className={s.recordSection}>
+                <h3>Human disposition</h3>
+                <p><strong>{recordedChoice?.label ?? 'Judgment recorded'}</strong></p>
+                <p data-testid="recorded-reason">{judgment.reason}</p>
+                {judgment.waiver ? (
+                  <p>
+                    Desk-session exception note {judgment.waiver.waiverId}. Authority is this signed-in reviewer. This is not a formal organization waiver.
+                  </p>
+                ) : null}
+                <p className={s.who}>{reviewerName} · {formatDeskInstant(judgment.record.frozenAt)}</p>
+              </div>
+              <div className={s.recordSection}>
+                <h3>Pack at disposition</h3>
+                <table className={s.packTable}>
+                  <thead>
+                    <tr>
+                      <th>Pack</th>
+                      <th>Version</th>
+                      <th>Readiness</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{judgment.packName}</td>
+                      <td>{judgment.packVersion}</td>
+                      <td>{judgment.readiness}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p className={s.freezeNote}>Frozen at disposition. Starting another packet does not rewrite this record.</p>
+              </div>
+              <div className={s.recordSection} data-testid="frozen-registry">
+                <h3>Frozen registry record</h3>
+                <p className={s.frozenBadge} data-testid="record-frozen-badge">Record frozen · verified</p>
+                <dl className={s.frozenMeta}>
+                  <div>
+                    <dt>Record id</dt>
+                    <dd data-testid="frozen-record-id">{judgment.record.recordId}</dd>
+                  </div>
+                  <div>
+                    <dt>Snapshot hash</dt>
+                    <dd title={judgment.record.snapshotHash} data-testid="frozen-snapshot-hash">
+                      {shortHash(judgment.record.snapshotHash)}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Packs hash</dt>
+                    <dd title={judgment.record.packsHash}>{shortHash(judgment.record.packsHash)}</dd>
+                  </div>
+                  <div>
+                    <dt>Pipeline</dt>
+                    <dd>{judgment.readiness} · {plural(judgment.findingCount, 'finding', 'findings')}</dd>
+                  </div>
+                  <div>
+                    <dt>Supersedes</dt>
+                    <dd>{judgment.record.supersedesRecordId}</dd>
+                  </div>
+                </dl>
+                <p className={s.freezeNote}>
+                  Trace-li cites registry fields and pack provenance only — not source file bytes. Method: {judgment.record.hashMethod}.
                 </p>
-              ) : null}
-              <dl className={s.meta}>
-                <div>
-                  <dt>Record id</dt>
-                  <dd data-testid="frozen-record-id">{judgment.record.recordId}</dd>
-                </div>
-                <div>
-                  <dt>Snapshot hash</dt>
-                  <dd title={judgment.record.snapshotHash} data-testid="frozen-snapshot-hash">
-                    {shortHash(judgment.record.snapshotHash)}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Packs hash</dt>
-                  <dd title={judgment.record.packsHash}>{shortHash(judgment.record.packsHash)}</dd>
-                </div>
-              </dl>
-              <p className={s.help}>Supersedes {judgment.record.supersedesRecordId}.</p>
-              <div className={s.actions}>
-                <button className={s.secondary} type="button" onClick={() => copyValue(judgment.record.recordId, 'Record id')}>
+              </div>
+              <div className={s.recordActions}>
+                <button className={s.mint} type="button" onClick={() => onCopy(judgment.record.recordId, 'Record id')}>
                   Copy record id
                 </button>
-                <button className={s.secondary} type="button" onClick={() => copyValue(judgment.record.snapshotHash, 'Snapshot hash')}>
+                <button className={s.secondary} type="button" onClick={() => onCopy(judgment.record.snapshotHash, 'Snapshot hash')}>
                   Copy snapshot hash
                 </button>
               </div>
             </div>
           ) : (
-            <div className={`${s.card} ${s.judgment}`} data-testid="judgment-form">
-              <h2 id="judgment-title" ref={judgmentHeadingRef} tabIndex={-1}>Your judgment</h2>
-              <p>Your judgment writes a new Trace-li record that supersedes the assessment freeze. The assessment itself stays as it was.</p>
-              {judgmentError ? <p className={s.alert} role="alert">{judgmentError}</p> : null}
-              <fieldset className={s.choiceSet} disabled={judging}>
-                <legend id="decision-label">Decision</legend>
-                <div className={s.packs} role="radiogroup" aria-labelledby="decision-label" aria-describedby={choice === 'exception' ? 'exception-note' : undefined}>
-                  {deskJudgmentChoices.map(option => (
-                    <label className={s.pack} key={option.id}>
-                      <input
-                        type="radio"
-                        name="disposition"
-                        value={option.id}
-                        checked={choice === option.id}
-                        disabled={judging}
-                        onChange={() => {
-                          setChoice(option.id)
-                          setJudgmentError(null)
-                        }}
-                      />
-                      <span>
-                        <strong>{option.label}</strong>
-                        <span>{option.hint}</span>
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-              {choice === 'exception' ? (
-                <p className={s.note} id="exception-note">
-                  Accepting with an exception adds a desk-session exception note on the new record. It is not a formal organization waiver.
+            <>
+              <div
+                className={`${s.statusPill} ${story.pill.tone === 'ready' ? s.statusReady : ''}`}
+                data-testid="prep-status"
+              >
+                <span className={s.dotLive} aria-hidden="true" />
+                {story.pill.label}
+              </div>
+              <div className={s.sectionHead}>
+                <h2 id="packet-prep-title">Packet prep</h2>
+                <span className={s.sub}>{story.frozenLabel}</span>
+              </div>
+              <ol className={s.timeline} data-testid="packet-timeline">
+                {story.steps.map(step => (
+                  <li key={step.id}>
+                    <span className={s.node} aria-hidden="true" />
+                    <div className={s.phase}>{step.phase}</div>
+                    <div className={s.work}>
+                      {emphasize(step.work, step.emphasis)}
+                      {step.gap ? <> <span className={s.tagGap}>gap</span></> : null}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className={s.prepLine}>
+                <span className={s.prepMark} aria-hidden="true" />
+                <p className={s.prepTitle}>
+                  {story.packTitle} <span className={s.prepVersion}>version {story.packVersion}</span>
                 </p>
-              ) : null}
-              <div className={s.reason}>
-                <label className={s.fileLegend} htmlFor={reasonId}>Reason</label>
-                <textarea
-                  id={reasonId}
-                  className={s.textarea}
-                  value={reason}
-                  onChange={event => setReason(event.target.value)}
-                  minLength={20}
-                  maxLength={2000}
-                  spellCheck
-                  disabled={judging}
-                  aria-invalid={reasonLength > 0 && (reasonLength < 20 || reasonLength > 2000)}
-                  aria-describedby="reason-help reason-count"
-                />
-                <p className={s.help} id="reason-help">Edit the draft. 20–2,000 characters. Kept in this browser until you start another packet.</p>
-                <p className={s.help} id="reason-count">{reasonLength} / 2,000</p>
               </div>
-              <div className={s.actions}>
-                <button
-                  className={s.primary}
-                  type="button"
-                  onClick={confirmJudgment}
-                  disabled={judging}
-                  aria-busy={judging}
-                  data-testid="confirm-judgment"
-                >
-                  {judging ? 'Freezing judgment…' : 'Confirm judgment'}
-                </button>
+              <div className={s.splitPanels} data-testid="split-panels">
+                <div className={`${s.panel} ${s.panelShow}`}>
+                  <div className={s.panelTitle}>What the file can show</div>
+                  <ul>
+                    {story.canShow.map(item => <li key={item}>{item}</li>)}
+                  </ul>
+                </div>
+                <div className={`${s.panel} ${s.panelNeed}`}>
+                  <div className={s.panelTitle}>What still needs you</div>
+                  <ul>
+                    {story.stillNeeds.map(line => (
+                      line.kind === 'or'
+                        ? <li key="or" className={s.or}>— or —</li>
+                        : <li key={line.text}>{line.text}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
+              <div className={`${s.card} ${s.formCard}`} data-testid="judgment-form">
+                <p className={s.eyebrow}>{result.procurementReference}</p>
+                <h2 id="judgment-title" ref={judgmentHeadingRef} tabIndex={-1}>Record disposition</h2>
+                <p className={s.lead}>
+                  Your judgment becomes the decision record. It writes a new Trace-li freeze that supersedes the assessment. The draft is a starting point — edit it freely.
+                </p>
+                {judgmentError ? <p className={s.alert} role="alert">{judgmentError}</p> : null}
+                <fieldset className={s.field} disabled={judging}>
+                  <legend className={s.fieldLabel} id="decision-label">Decision</legend>
+                  <div
+                    className={s.radioGroup}
+                    role="radiogroup"
+                    aria-labelledby="decision-label"
+                    aria-describedby={choice === 'exception' ? 'exception-note' : undefined}
+                  >
+                    {deskJudgmentChoices.map(option => (
+                      <label key={option.id} className={`${s.radioOption} ${choice === option.id ? s.radioSelected : ''}`}>
+                        <input
+                          type="radio"
+                          name="disposition"
+                          value={option.id}
+                          checked={choice === option.id}
+                          disabled={judging}
+                          onChange={() => onChoice(option.id)}
+                        />
+                        <span>
+                          <span className={s.optLabel}>{option.label}</span>
+                          <span className={s.optHint}>{option.hint}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+                {choice === 'exception' ? (
+                  <p className={`${s.help} ${s.exceptionNote}`} id="exception-note">
+                    Accepting with an exception adds a desk-session exception note on the new record. It is not a formal organization waiver.
+                  </p>
+                ) : null}
+                <div className={`${s.field} ${s.reason}`}>
+                  <label className={s.fieldLabel} htmlFor={reasonId}>Reason</label>
+                  <textarea
+                    id={reasonId}
+                    className={s.textarea}
+                    value={reason}
+                    onChange={event => onReason(event.target.value)}
+                    minLength={20}
+                    maxLength={2000}
+                    spellCheck
+                    disabled={judging}
+                    aria-invalid={reasonLength > 0 && (reasonLength < 20 || reasonLength > 2000)}
+                    aria-describedby="reason-help reason-count"
+                  />
+                  <p className={s.help} id="reason-help">Edit the draft. 20–2,000 characters. Kept in this browser until you start another packet.</p>
+                  <p className={s.help} id="reason-count">{reasonLength} / 2,000</p>
+                </div>
+                <div className={`${s.actions} ${s.formActions}`}>
+                  <button
+                    className={s.primary}
+                    type="button"
+                    onClick={onConfirm}
+                    disabled={judging}
+                    aria-busy={judging}
+                    data-testid="confirm-judgment"
+                  >
+                    {judging ? 'Freezing judgment…' : 'Confirm judgment'}
+                  </button>
+                </div>
+              </div>
+            </>
           )}
-
           <details className={s.detail}>
             <summary>Findings and pack fields</summary>
             <h3 className={s.sectionTitle}>Findings ({result.findingCount})</h3>
             {result.findings.length === 0 ? (
-              <p>No findings. The pack checks passed on the registry fields.</p>
+              <p>No findings on this freeze.</p>
             ) : (
               <ul className={s.findings}>
                 {result.findings.map(finding => (
@@ -565,15 +728,8 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
               This view stays in this browser until you start another packet. The file is not stored.
             </p>
           </details>
-        </section>
-      ) : restored ? (
-        <p className={s.footer}>No frozen record yet. Choose a pack and upload a file.</p>
-      ) : (
-        <p className={s.footer}>Loading the last record from this browser…</p>
-      )}
-      <p className={s.footer}>
-        <Link href="/demo">Try the fictional walkthrough</Link>
-      </p>
-    </>
+        </div>
+      </div>
+    </section>
   )
 }

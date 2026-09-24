@@ -13,7 +13,7 @@ import UploadDesk, { type DeskPackOption } from './upload-desk'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Upload desk',
+  title: 'Award desk',
   description: 'Sign in, upload a packet, run a donor pack, and freeze a Trace-li record.',
   robots: { index: false, follow: false },
 }

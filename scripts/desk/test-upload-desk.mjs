@@ -7,6 +7,7 @@ import { verifyFrozenRecord } from '../../lib/field-registry/freeze.ts'
 import { FCDO_PRIME_FIELD_KEYS } from '../../lib/field-registry/packs/fcdo-prime.ts'
 import { GLOBAL_FUND_FIELD_KEYS } from '../../lib/field-registry/packs/global-fund.ts'
 import { deskExtractionFailure, deskWorkingCopy } from '../../lib/desk/failure-copy.ts'
+import { deskAwardStory, formatDeskInstant } from '../../lib/desk/story.ts'
 import { DeskAccessError, freezeUploadedPacket, supersedeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
 import {
   draftDeskReason,
@@ -286,17 +287,28 @@ test('the upload desk file control is a labelled button with a working spinner',
   assert.match(view, /className=\{s\.spinner\}/)
   assert.match(view, /disabled=\{busy\}/)
   assert.match(view, /const busy = pending \|\| judging/)
-  assert.match(view, /Your judgment/)
+  assert.match(view, /Record disposition/)
   assert.match(view, /Confirm judgment/)
+  assert.match(view, /Packet prep/)
+  assert.match(view, /What the file can show/)
+  assert.match(view, /What still needs you/)
+  assert.match(view, /data-testid="packet-timeline"/)
+  assert.match(view, /data-testid="split-panels"/)
   assert.match(view, /Try the fictional walkthrough/)
+  assert.match(view, /Start another packet/)
   assert.match(view, /Copy record id/)
   assert.match(view, /Copy snapshot hash/)
   assert.match(view, /Record frozen · verified/)
   assert.match(view, /aria-live="polite"/)
   assert.match(view, /aria-busy=\{judging\}/)
-  assert.equal(view.match(/className=\{s\.rail\}/g)?.length, 1)
+  assert.equal(view.includes('className={s.rail}'), false)
+  assert.equal(view.includes('progress-rail'), false)
   assert.equal(view.includes('Northstar'), false)
+  assert.equal(view.includes('Ethiopia'), false)
   assert.equal(view.includes('Download PDF'), false)
+  assert.match(css, /--max:\s*1100px/)
+  assert.match(css, /--ivory:\s*#fbf5ea/)
+  assert.match(css, /focus-visible/)
   assert.match(css, /\.fileButton \{/)
   assert.match(css, /background: var\(--navy\)/)
   assert.match(css, /color: var\(--ivory\)/)
@@ -364,6 +376,98 @@ function judgmentRequest(body, origin = 'http://127.0.0.1') {
     body: JSON.stringify(body),
   })
 }
+
+test('packet prep copy stays on this freeze and does not invent a case', () => {
+  assert.equal(formatDeskInstant('2026-09-22T12:00:00.000Z'), '22 Sep 2026, 12:00 UTC')
+  assert.equal(formatDeskInstant('not-a-date'), 'not-a-date')
+
+  const red = deskAwardStory({
+    fileName: 'bid.pdf',
+    packName: 'FCDO commercial prime',
+    packVersion: '2026.2',
+    readiness: 'red',
+    findingCount: 2,
+    findings: [
+      { severity: 'warning', title: 'A later warning' },
+      { severity: 'blocker', title: 'Contractor ability must be affirmed.' },
+    ],
+    fields: [
+      { key: 'eligibility.contractor_capable', fromPacket: false, state: 'missing' },
+      { key: 'sr.capacity_assessed', fromPacket: false, state: 'missing' },
+      { key: 'award.contract_value_usd', fromPacket: true, state: 'present' },
+      { key: 'integrity.coi_disclosed', fromPacket: true, state: 'negative' },
+    ],
+    fragmentCount: 3,
+    unmappedFragmentCount: 1,
+    frozenAt: '2026-09-22T12:00:00.000Z',
+    reviewerName: '  Ada   Lovelace  ',
+  })
+  assert.equal(red.prepTitle, 'Packet prep')
+  assert.equal(red.pill.tone, 'attention')
+  assert.match(red.pill.label, /Human decision required/)
+  assert.match(red.pill.label, /red readiness/)
+  assert.match(red.frozenLabel, /22 Sep 2026, 12:00 UTC/)
+  assert.equal(red.steps.some(step => step.gap), true)
+  const gap = red.steps.find(step => step.gap)
+  assert.match(gap.work, /2 pack fields still missing/)
+  assert.match(gap.work, /Contractor ability must be affirmed/)
+  assert.equal(gap.work.includes('A later warning'), false)
+  assert.match(red.steps[0].work, /stayed unmapped/)
+  assert.match(red.steps.at(-1).work, /Ada Lovelace/)
+  assert.ok(red.canShow.some(line => line.includes('integrity.coi_disclosed (negative)')))
+  assert.ok(red.canShow.some(line => line.includes('award.contract_value_usd')))
+  assert.equal(red.canShow.some(line => line.includes('eligibility.contractor_capable')), false)
+  assert.ok(red.stillNeeds.some(line => line.kind === 'item' && line.text.includes('eligibility.contractor_capable')))
+  assert.ok(red.stillNeeds.some(line => line.kind === 'or'))
+  assert.match(red.evidenceLines.join('\n'), /Missing means the packet did not yield the field/)
+  assert.match(red.prepSummary, /Ada Lovelace/)
+  assert.equal(JSON.stringify(red).includes('Northstar'), false)
+  assert.equal(JSON.stringify(red).includes('Ethiopia'), false)
+  assert.equal(JSON.stringify(red).includes('overnight'), false)
+
+  const green = deskAwardStory({
+    fileName: 'packet.txt',
+    packName: 'Global Fund Grant Regulations',
+    packVersion: '2026.2',
+    readiness: 'green',
+    findingCount: 1,
+    findings: [{ severity: 'info', title: 'Noted for the file' }],
+    fields: [{ key: 'eligibility.contractor_capable', fromPacket: true, state: 'present' }],
+    fragmentCount: 1,
+    unmappedFragmentCount: 0,
+    frozenAt: '2026-09-22T12:00:00.000Z',
+    reviewerName: 'Local fixture reviewer',
+  })
+  assert.equal(green.pill.tone, 'ready')
+  assert.match(green.pill.label, /judgment open/)
+  assert.equal(green.steps.some(step => step.gap), false)
+  assert.equal(green.stillNeeds.some(line => line.kind === 'or'), false)
+  assert.match(green.stillNeeds[0].text, /not a certification/)
+  assert.match(green.prepSummary, /1 finding/)
+
+  const many = deskAwardStory({
+    fileName: 'packet.txt',
+    packName: 'Pack',
+    packVersion: '1',
+    readiness: 'amber',
+    findingCount: 6,
+    findings: Array.from({ length: 6 }, (_, index) => ({ severity: 'warning', title: `Warning ${index}` })),
+    fields: Array.from({ length: 9 }, (_, index) => ({ key: `field.key_${index}`, fromPacket: false, state: 'missing' })),
+    fragmentCount: 0,
+    unmappedFragmentCount: 0,
+    frozenAt: '2026-09-22T12:00:00.000Z',
+    reviewerName: '   ',
+  })
+  assert.match(many.pill.label, /amber readiness/)
+  assert.equal(many.stillNeeds.filter(line => line.kind === 'item' && line.text.startsWith('Missing ·')).length, 5)
+  assert.ok(many.stillNeeds.some(line => line.kind === 'item' && line.text === '4 more pack fields still missing'))
+  assert.equal(many.stillNeeds.filter(line => line.kind === 'item' && line.text.startsWith('Warning ·')).length, 3)
+  assert.match(many.steps.at(-1).work, /the reviewer/)
+
+  const storySource = readFileSync(new URL('../../lib/desk/story.ts', import.meta.url), 'utf8')
+  assert.equal(storySource.includes('award-desk'), false)
+  assert.equal(storySource.includes('Northstar'), false)
+})
 
 test('draft reasons and disposition mapping stay on this packet', () => {
   const reason = draftDeskReason({
