@@ -40,7 +40,16 @@ export const metadata: Metadata = {
 export default function OchaCbpfResearchPage() {
   return (
     <ResearchSiteShell readingProgress={<ReadingProgressRail />} traceLi>
-      <style dangerouslySetInnerHTML={{ __html: articleCss }} />
+      <style dangerouslySetInnerHTML={{ __html: `${articleCss}
+.gf-article .bignums { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.gf-article .bignum { min-width: 0; }
+.gf-article .bignum .num { overflow-wrap: anywhere; }
+@media (max-width: 720px) {
+  .gf-article .bignums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .gf-article .bignums { grid-template-columns: 1fr; }
+}` }} />
       <article className={`gf-article ${articleSans.variable}`} dangerouslySetInnerHTML={{ __html: articleBodyHtml }} />
     </ResearchSiteShell>
   )

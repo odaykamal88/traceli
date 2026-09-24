@@ -31,8 +31,8 @@ export const articleBodyHtml = `<div class="topbar">
 
     <div id="article-body" class="main">
       <div class="bignums">
-        <div class="bignum"><div class="num" style="font-size:1.35rem">US$1,441,593</div><div class="cap">East &amp; Southern Africa IP. OAIS: 49% of the 2025 loss total. Recovery ongoing</div></div>
-        <div class="bignum"><div class="num" style="font-size:1.25rem">US$140,177.43</div><div class="cap">Arab States vendor. Undisclosed ties with competing vendors. VRC review ongoing</div></div>
+        <div class="bignum"><div class="num">US$1,441,593</div><div class="cap">East &amp; Southern Africa IP. OAIS: 49% of the 2025 loss total. Recovery ongoing</div></div>
+        <div class="bignum"><div class="num">US$140,177.43</div><div class="cap">Arab States vendor. Undisclosed ties with competing vendors. VRC review ongoing</div></div>
         <div class="bignum"><div class="num">4 of 4</div><div class="cap">Sudan RFQs in the sample had no evaluation criteria on the solicitation</div></div>
         <div class="bignum"><div class="num">21 offices</div><div class="cap">2025 audits: IP management weaknesses, including non-competitive NGO selection</div></div>
       </div>
