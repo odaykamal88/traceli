@@ -37,17 +37,20 @@ POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordI
 
 | Path | Who | What |
 | --- | --- | --- |
-| `GET /login` | Public | Product sign-in. Return path is `/desk`. A signed-in visitor goes straight to the desk. An `invitation_token` or `password_reset_token` on this URL always continues into AuthKit. If WorkOS is not configured, sends the browser to `/desk?auth=unavailable`. |
+| `GET /login` | Public | Product sign-in. Return path is `/desk`. A signed-in visitor goes straight to the desk, unless the URL is exactly `?switch=1` or it carries an invitation or password-reset token. `switch=1` signs out first, then starts AuthKit with an account choice. Tokens always continue into AuthKit and are not dropped for `switch`. If WorkOS is not configured, sends the browser to `/desk?auth=unavailable`. |
 | `GET /auth/login` | AuthKit | Initiate login URL. Always starts AuthKit sign-in and returns to `/desk`. Password-reset and invitation emails that begin on AuthKit finish here. |
 | `GET /invite` and `GET /sign-up` | Invite email | User invitation URL. A single valid `invitation_token` starts AuthKit sign-in for that invite and returns to `/desk`. Any other visit shows the invitation-only page. Public self-serve signup is closed. |
 | `GET /reset-password` | Reset email | Password reset URL. A single `token` (or `password_reset_token`) is handed to AuthKit as `password_reset_token`, then the user returns to `/desk`. Without a token, the page asks for the email link. |
 | `GET /auth/callback` | AuthKit | Already present. Honors the sealed return path, otherwise `/workspace`. No new callback. |
+| `GET /auth/switch` | Public | Account switch. Always starts AuthKit for `/desk` with `prompt: 'consent'`. A signed-in visitor is signed out first and is not sent to the desk. |
+| `GET /auth/signed-out` | Public | Calm page after sign-out. Sign in and the public walkthrough are links. This page does not start AuthKit. |
 | `GET /hub` | Trace session | Knowledge hub. Seeded packs, plus organisation manual labels kept in this browser. |
 | `GET /hub/tender` | Trace session | Name a tender, choose one seeded pack, attach manuals, continue to `/desk`. |
 | `GET /desk` | Trace session | Pack choice, file input, and the frozen record. `?pack=` preselects a seeded pack. `?engagement=` shows the tender. |
 | `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze. |
 | `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the auto record. |
-| `POST /desk/sign-out` | WorkOS session | Clears the AuthKit session and returns to `/login`. |
+| `POST /desk/sign-out` | WorkOS session | Clears the AuthKit session and returns to `/auth/signed-out`. |
+| `POST /desk/switch-account` | WorkOS session | Clears the AuthKit session and returns to `/auth/switch`, which starts a different sign-in. |
 | `GET /demo` | Public | Unchanged scripted Award desk. |
 
 `/api/extract` still accepts only `file` and optional `awardId`. The desk allowlist adds `packId` and optional `procurementReference`. A client `organizationId` is rejected.
@@ -128,8 +131,10 @@ Application: **Traceli Pilot**, for the environment whose API key is on Producti
 | Redirect URI | `https://www.trace-li.com/auth/callback` | `http://localhost:3000/auth/callback` |
 | Redirect URI, apex alias | `https://trace-li.com/auth/callback` | — |
 | Initiate login URL | `https://www.trace-li.com/auth/login` | `http://localhost:3000/auth/login` |
-| Sign-out redirect | `https://www.trace-li.com/login` | `http://localhost:3000/login` |
-| Sign-out redirect, apex alias | `https://trace-li.com/login` | — |
+| Sign-out redirect (signed-out page) | `https://www.trace-li.com/auth/signed-out` | `http://localhost:3000/auth/signed-out` |
+| Sign-out redirect, apex alias | `https://trace-li.com/auth/signed-out` | — |
+| Sign-out redirect (account switch) | `https://www.trace-li.com/auth/switch` | `http://localhost:3000/auth/switch` |
+| Sign-out redirect, apex alias | `https://trace-li.com/auth/switch` | — |
 | User invitation URL | `https://www.trace-li.com/invite` | `http://localhost:3000/invite` |
 | Password reset URL | `https://www.trace-li.com/reset-password` | `http://localhost:3000/reset-password` |
 
@@ -139,7 +144,9 @@ Authentication section, same environment: **Sign up** off.
 
 The product Login link remains `/login`. It is not the Initiate login URL, because a signed-in visitor is sent to the desk. AuthKit must be able to land on `/auth/login` and start a fresh sign-in.
 
-Preview deployments need their own redirect URI, matching `NEXT_PUBLIC_WORKOS_REDIRECT_URI`, plus their own initiate, invitation, reset, and sign-out URLs if that preview sends mail. There is no wildcard and no new callback path.
+Sign-out no longer returns to `/login`. That path starts AuthKit as soon as the session cookie is gone, so a denied visitor was sent back through the same account. Add both Sign-out redirects above. `/login` can stay in the list, but it is not the return URL the app sends.
+
+Preview deployments need their own redirect URI, matching `NEXT_PUBLIC_WORKOS_REDIRECT_URI`, plus their own initiate, invitation, reset, and sign-out URLs if that preview sends mail. The sign-out URLs are `https://<preview-host>/auth/signed-out` and `https://<preview-host>/auth/switch`. There is no wildcard and no new callback path.
 
 HQ keeps `/hq/sign-in` for its bound organization. The application Initiate login URL returns to `/desk`, not `/hq`.
 

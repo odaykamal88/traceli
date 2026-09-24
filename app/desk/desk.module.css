@@ -117,6 +117,7 @@
 }
 
 .signOut { margin: 0; }
+.recovery { margin-top: 20px; }
 .signOut button,
 .linkButton {
   display: inline-flex;
