@@ -70,10 +70,36 @@ export function DeskAccessRequired() {
       <p className={s.lede}>
         Sign in with an active procurement, panel, auditor, or workspace admin role.
         The account needs a verified email and one organization membership.
+        Sign out leaves this account on a signed-out page. Try another sign-in clears it, then lets you choose a different account.
       </p>
-      <p>
-        <Link className={s.linkButton} href="/login">Try another sign-in</Link>
-      </p>
+      <form className={`${s.signOut} ${s.recovery}`} action="/desk/switch-account" method="post">
+        <button className={s.linkButton} type="submit">Try another sign-in</button>
+      </form>
     </DeskShell>
+  )
+}
+
+export function DeskSignedOut() {
+  return (
+    <div className={s.shell}>
+      <a className={s.skip} href="#desk-main">Skip to signed-out note</a>
+      <header className={s.topbar}>
+        <Link className={s.wordmark} href="/">Trace-li</Link>
+        <div className={s.topbarMeta}>
+          <span>Signed out</span>
+        </div>
+      </header>
+      <main className={s.main} id="desk-main">
+        <p className={s.eyebrow}>Trace-li</p>
+        <h1>You are signed out</h1>
+        <p className={s.lede}>
+          This browser is no longer signed in. Sign in when you want to open the award desk, or use the public walkthrough. The walkthrough uses a fictional packet and does not ask you to sign in.
+        </p>
+        <p className={`${s.actions} ${s.recovery}`}>
+          <Link className={s.primary} href="/login">Sign in</Link>
+          <Link className={s.secondary} href="/demo">Open the public walkthrough</Link>
+        </p>
+      </main>
+    </div>
   )
 }
