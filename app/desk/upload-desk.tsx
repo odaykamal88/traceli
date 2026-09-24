@@ -313,7 +313,9 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
             ? 'The decision record is frozen in this browser. Copy the registry ids, or start another packet when you are done.'
             : result
               ? 'Trace-li froze this packet. Review the prep, then record your judgment. The file itself is not stored.'
-              : 'Choose a donor pack and one file. Trace-li extracts it, checks the pack, and freezes an assessment for your judgment.'}
+              : tender
+                ? 'This tender is on the desk. Upload the award packet. Trace-li runs the seeded pack below and freezes an assessment for your judgment.'
+                : 'Choose a donor pack and one file. Trace-li extracts it, checks the pack, and freezes an assessment for your judgment.'}
         </p>
       </header>
       {tender ? (
