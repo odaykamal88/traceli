@@ -2,7 +2,14 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import { getCaseCard, listCaseCards } from '../../lib/case-cards/catalog.ts'
-import { GF_OIG_25_005_PDF_SHA256, gfOig25005Draft } from '../../lib/case-cards/gf-oig-25-005.ts'
+import {
+  GF_OIG_25_005_ACTOR_ROLE,
+  GF_OIG_25_005_PACKS_HASH,
+  GF_OIG_25_005_RECORD_ID,
+  GF_OIG_25_005_SNAPSHOT_HASH,
+  GF_OIG_25_005_SUPERSEDES_RECORD_ID,
+} from '../../lib/case-cards/gf-oig-25-005-freeze.ts'
+import { GF_OIG_25_005_PDF_SHA256, gfOig25005Draft, gfOig25005FixtureSnapshot } from '../../lib/case-cards/gf-oig-25-005.ts'
 import { OIOS_2020_005_PDF_SHA256 } from '../../lib/case-cards/oios-2020-005-iraq-forensic.ts'
 import { OIOS_2025_098_PDF_SHA256 } from '../../lib/case-cards/oios-2025-098-cbpf-reserve.ts'
 import { listPatternTickets } from '../../lib/case-cards/pattern-tickets.ts'
@@ -15,39 +22,70 @@ import {
   OCHA_CBPF_PACK,
   UNFPA_PACK,
   dispositionFromAwardDeskDecision,
+  evaluateDonorPack,
   freezeAtJudgment,
   getDonorPack,
   packToggleForDonorPack,
   publishCaseCard,
+  verifyFrozenRecord,
 } from '../../lib/field-registry/index.ts'
 
 const card = getCaseCard('gf-oig-25-005')
 
-test('the public Togo card is a labeled fixture with no freeze hashes', () => {
+test('the public Togo card publishes the founder Freeze #1', () => {
   assert.ok(card)
   assert.equal(listCaseCards().length, 6)
+  const draft = gfOig25005Draft()
+  const published = publishCaseCard(draft)
+  const record = verifyFrozenRecord(published.frozenRecord)
+  const judged = evaluateDonorPack(record.snapshot, 'global-fund', { evaluatedAt: record.frozenAt })
+  assert.equal(published.product, 'Trace-li')
   assert.equal(card.product, 'Trace-li')
   assert.equal(card.schemaVersion, 'case-card-export-v1')
-  assert.equal(card.recordKind, 'fixture')
-  assert.equal(card.publicationState, 'awaiting_founder_freeze')
-  assert.equal(card.frozenRecord, null)
-  assert.equal(card.frozenRecordId, null)
-  assert.equal(card.snapshotHash, null)
-  assert.equal(card.packsHash, null)
-  assert.equal(card.hashMethod, null)
-  assert.equal(card.readiness, null)
-  assert.equal(card.packsStamped, false)
-  assert.equal(card.fixtureSnapshot.classification, 'public-source')
-  assert.equal(card.fixtureSnapshot.framework.frameworkId, 'global-fund')
-  assert.equal(card.fixtureSnapshot.framework.version, GLOBAL_FUND_PACK.version)
+  assert.equal(published.recordKind, 'frozen')
+  assert.equal(published.publicationState, 'published')
+  assert.equal(card.publicationState, 'published')
+  assert.equal(published.fixtureSnapshot, null)
+  assert.equal(card.fixtureSnapshot, null)
+  assert.equal(published.packsStamped, true)
+  assert.equal(published.hashMethod, 'sha256:sorted-json-v1')
+  assert.equal(published.snapshotHash, GF_OIG_25_005_SNAPSHOT_HASH)
+  assert.equal(published.packsHash, GF_OIG_25_005_PACKS_HASH)
+  assert.equal(record.snapshotHash, GF_OIG_25_005_SNAPSHOT_HASH)
+  assert.equal(record.packsHash, GF_OIG_25_005_PACKS_HASH)
+  assert.equal(record.recordId, GF_OIG_25_005_RECORD_ID)
+  assert.equal(record.supersedesRecordId, GF_OIG_25_005_SUPERSEDES_RECORD_ID)
+  assert.equal(published.frozenRecordId, record.recordId)
+  assert.equal(card.snapshotHash, record.snapshotHash)
+  assert.equal(card.packsHash, record.packsHash)
+  assert.equal(record.pipelineStatus.readiness, 'red')
+  assert.equal(published.readiness, 'red')
+  assert.equal(judged.pipelineStatus.readiness, 'red')
+  assert.equal(judged.findings.length, 22)
+  assert.equal(record.disposition.decision, 'request_evidence')
+  assert.equal(record.disposition.actorRole, GF_OIG_25_005_ACTOR_ROLE)
+  assert.equal(record.disposition.waiverRefs.length, 0)
+  assert.equal(record.frozenAt, '2026-09-24T13:06:59.035Z')
+  assert.equal(record.frozenBy, 'user_01M2MDYWCDDT13QGCTJHHSYD1C')
+  assert.equal(record.packsInForce[0].packId, 'global-fund')
+  assert.equal(record.packsInForce[0].version, GLOBAL_FUND_PACK.version)
+  assert.equal(record.snapshot.fields.length, 26)
+  assert.equal(record.snapshot.fields.every(field => field.value.state === 'missing'), true)
   assert.equal(card.primarySourceFile.sha256, GF_OIG_25_005_PDF_SHA256)
   assert.equal(card.primarySourceFile.sha256.length, 64)
-  for (const field of card.fixtureSnapshot.fields) {
+  assert.notEqual(card.primarySourceFile.sha256, card.snapshotHash)
+  assert.match(card.claimBoundary, /prevents fraud/)
+  assert.match(card.statusLabel, /Published frozen record/)
+  assert.match(card.redaction.withheld.join('\n'), /founder desk freeze/)
+  const fixture = gfOig25005FixtureSnapshot()
+  assert.equal(draft.fixtureSnapshot.classification, 'public-source')
+  assert.equal(fixture.classification, 'public-source')
+  assert.equal(fixture.framework.frameworkId, 'global-fund')
+  assert.equal(fixture.framework.version, GLOBAL_FUND_PACK.version)
+  for (const field of fixture.fields) {
     assert.equal(field.provenance.sourceFileHash, GF_OIG_25_005_PDF_SHA256)
     assert.equal(field.provenance.verificationMethod, 'unverified')
   }
-  assert.match(card.claimBoundary, /prevents fraud/)
-  assert.match(card.statusLabel, /awaiting founder freeze/)
 })
 
 test('pattern ticket ids are stable and only cite rules that exist', () => {
@@ -69,12 +107,14 @@ test('pattern ticket ids are stable and only cite rules that exist', () => {
   }
 })
 
-test('an unknown slug is absent and the catalog freeze slot stays empty', () => {
+test('an unknown slug is absent and the Togo draft carries the founder freeze', () => {
   assert.equal(getCaseCard('not-a-case'), undefined)
-  assert.equal(gfOig25005Draft().frozenRecord, null)
+  const record = verifyFrozenRecord(gfOig25005Draft().frozenRecord)
+  assert.equal(record.snapshotHash, GF_OIG_25_005_SNAPSHOT_HASH)
+  assert.equal(record.packsHash, GF_OIG_25_005_PACKS_HASH)
 })
 
-test('a verified freeze can drop in without changing the public fixture', () => {
+test('a second freeze of the public-source fixture does not replace the founder record', () => {
   const frozenAt = '2026-09-23T12:00:00.000Z'
   const frozenBy = 'user_founder'
   const record = freezeAtJudgment(gfOig25005Draft().fixtureSnapshot, {
@@ -100,7 +140,8 @@ test('a verified freeze can drop in without changing the public fixture', () => 
   assert.equal(published.fixtureSnapshot, null)
   assert.equal(published.frozenRecordId, record.recordId)
   assert.equal(published.readiness, record.pipelineStatus.readiness)
-  assert.equal(getCaseCard('gf-oig-25-005').snapshotHash, null)
+  assert.equal(getCaseCard('gf-oig-25-005').snapshotHash, GF_OIG_25_005_SNAPSHOT_HASH)
+  assert.notEqual(published.snapshotHash, GF_OIG_25_005_SNAPSHOT_HASH)
 
   const tampered = structuredClone(record)
   tampered.snapshot.procurementReference = 'CHANGED'
