@@ -67,7 +67,7 @@ export const articleBodyHtml = `<div class="topbar">
         <strong>OIOS 2017/014</strong> (OCHA Ethiopia and the Ethiopia Humanitarian Fund, 17 March 2017, vintage).
         A companion note on Global Fund files is <a href="/research/global-fund">The award was signed. The proof was not ready.</a>
         The UNFPA note is <a href="/research/unfpa">The workplan was signed. The competition file was not.</a>
-        Fixture case cards, awaiting a founder freeze, are <a href="/cases/oios-2025-098-cbpf-reserve">OIOS 2025/098</a> and <a href="/cases/oios-2020-005-iraq-forensic">OIOS 2020/005</a>. The index is <a href="/cases">/cases</a>.
+        The published case card for <a href="/cases/oios-2025-098-cbpf-reserve">OIOS 2025/098</a> is founder Freeze #2, a thin rehearsal with no pack fields mapped from the packet. <a href="/cases/oios-2020-005-iraq-forensic">OIOS 2020/005</a> remains a fixture awaiting a founder freeze. The index is <a href="/cases">/cases</a>.
       </p>
 
       <h2 id="pattern"><span class="secnum">03</span> The pattern across three audits</h2>
@@ -311,7 +311,7 @@ export const articleBodyHtml = `<div class="topbar">
             <a href="https://oios.un.org/file/6554/download?token=yRcDeSi3" target="_blank" rel="noreferrer">PDF link (404 on direct download, 24 Sep 2026)</a></li>
           <li>OCHA, <em>CBPF Global Guidelines</em> (updated December 2022) and Annexes 4, 7, 8 and 9.
             <a href="https://www.unocha.org/publications/report/world/country-based-pooled-funds-global-guidelines" target="_blank" rel="noreferrer">Guidelines page</a></li>
-          <li>Companion notes: <a href="/research/global-fund">Global Fund</a>, <a href="/research/unfpa">UNFPA</a>. Fixture case cards: <a href="/cases/oios-2025-098-cbpf-reserve">OIOS 2025/098</a>, <a href="/cases/oios-2020-005-iraq-forensic">OIOS 2020/005</a>.</li>
+          <li>Companion notes: <a href="/research/global-fund">Global Fund</a>, <a href="/research/unfpa">UNFPA</a>. Published case card: <a href="/cases/oios-2025-098-cbpf-reserve">OIOS 2025/098</a>. Fixture case card: <a href="/cases/oios-2020-005-iraq-forensic">OIOS 2020/005</a>.</li>
         </ol>
         <p>© Trace-li Research Desk · OCHA CBPF research · 24 Sep 2026 Africa/Cairo.</p>
       </div>
