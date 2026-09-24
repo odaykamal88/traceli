@@ -71,6 +71,8 @@ export function ResearchSiteShell({ children, readingProgress, traceLi = false }
             {navigation.map(({ href, label }) => <Link key={href} href={href} className="hover:text-white">{label}</Link>)}
             <Link href="/cases" className="hover:text-white">Case cards</Link>
             <Link href="/research/global-fund" className="hover:text-white">Global Fund research</Link>
+            <Link href="/research/unfpa" className="hover:text-white">UNFPA research</Link>
+            <Link href="/research/ocha-cbpf" className="hover:text-white">OCHA research</Link>
             <a href={bookingHref} target="_blank" rel="noreferrer" className="hover:text-white">Discuss one procurement file</a>
           </div>
         </div>
