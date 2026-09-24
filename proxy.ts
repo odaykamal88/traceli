@@ -15,13 +15,21 @@ function isUploadDeskPage(pathname: string) {
   return pathname === '/desk' || pathname.startsWith('/desk/')
 }
 
+function isKnowledgeHubPage(pathname: string) {
+  return pathname === '/hub' || pathname.startsWith('/hub/')
+}
+
+function isSignedInAppPage(pathname: string) {
+  return isUploadDeskPage(pathname) || isKnowledgeHubPage(pathname)
+}
+
 function isUploadDeskApi(pathname: string) {
   return pathname === '/api/desk' || pathname.startsWith('/api/desk/')
 }
 
 export default async function proxy(request: NextRequest) {
   const isTrace = request.nextUrl.pathname === '/workspace/trace' || request.nextUrl.pathname.startsWith('/api/trace')
-  const isDesk = isUploadDeskPage(request.nextUrl.pathname) || isUploadDeskApi(request.nextUrl.pathname)
+  const isDesk = isSignedInAppPage(request.nextUrl.pathname) || isUploadDeskApi(request.nextUrl.pathname)
   if ((isTrace || isDesk) && localTraceEnabled(process.env) && isLoopbackHost(request.nextUrl.hostname)) {
     return NextResponse.next()
   }
@@ -43,7 +51,7 @@ export default async function proxy(request: NextRequest) {
 
   const { session, headers, authorizationUrl } = await authkit(request)
 
-  if ((isProtectedWorkspace || isUploadDeskPage(request.nextUrl.pathname)) && !session.user && authorizationUrl) {
+  if ((isProtectedWorkspace || isSignedInAppPage(request.nextUrl.pathname)) && !session.user && authorizationUrl) {
     return handleAuthkitHeaders(request, headers, { redirect: authorizationUrl })
   }
 

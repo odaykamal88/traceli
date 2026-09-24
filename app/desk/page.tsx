@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 
+import { openSignedInDesk } from '@/lib/desk/gate'
 import { resolveExtractionProviderId } from '@/lib/field-registry/extract-provider'
-import { listDonorPacks, type DonorPackId } from '@/lib/field-registry/packs'
-import { requireTraceViewer, TraceAccessError } from '@/lib/trace/access'
-import { isLoopbackHost, localTraceEnabled } from '@/lib/trace/access-policy'
-import { isWorkOSConfigured } from '@/lib/workspace-access'
+import { listDonorPacks } from '@/lib/field-registry/packs'
+import { hubEngagementParam, hubPackParam, hubSeedSources } from '@/lib/hub/library'
 
 import { DeskAccessRequired, DeskShell, DeskUnavailable } from './shell'
 import UploadDesk, { type DeskPackOption } from './upload-desk'
@@ -18,59 +16,42 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-const blurbs: Record<DonorPackId, string> = {
-  'global-fund': 'PR and sub-recipient award checks.',
-  'fcdo-prime': 'Commercial prime checks for FCDO-funded awards.',
-  unfpa: 'UNFPA / OAIS-shaped IP and procurement checks. Public-control synthesis, not a live UNFPA desk run.',
-  'ocha-cbpf': 'CBPF Global Guidelines–shaped reserve and scorecard checks. Not a live OCHA desk run.',
-}
+export default async function DeskPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pack?: string | string[], engagement?: string | string[] }>
+}) {
+  const gate = await openSignedInDesk()
+  if (gate.status === 'unavailable') return <DeskUnavailable />
+  if (gate.status === 'denied') return <DeskAccessRequired />
 
-async function localDeskOpen() {
-  if (!localTraceEnabled(process.env)) return false
-  const host = (await headers()).get('host') || ''
+  let providerId = 'mock'
   try {
-    return isLoopbackHost(new URL(`http://${host}`).hostname)
+    providerId = resolveExtractionProviderId()
   } catch {
-    return false
-  }
-}
-
-export default async function DeskPage() {
-  const local = await localDeskOpen()
-  if (!local && (process.env.TRACELI_TRACE_MODE !== 'workos' || !isWorkOSConfigured())) {
     return <DeskUnavailable />
   }
-
-  try {
-    const viewer = await requireTraceViewer()
-    let providerId = 'mock'
-    try {
-      providerId = resolveExtractionProviderId()
-    } catch {
-      return <DeskUnavailable />
-    }
-    const packs: DeskPackOption[] = listDonorPacks().map(pack => ({
-      packId: pack.packId,
-      name: pack.name,
-      version: pack.version,
-      blurb: blurbs[pack.packId],
-    }))
-    return (
-      <DeskShell viewer={{ name: viewer.name, role: viewer.role }} showSignOut={viewer.mode === 'workos'}>
-        <UploadDesk
-          viewer={{
-            name: viewer.name,
-            role: viewer.role,
-            organizationId: viewer.organizationId,
-            mode: viewer.mode,
-          }}
-          providerId={providerId}
-          packs={packs}
-        />
-      </DeskShell>
-    )
-  } catch (error) {
-    if (error instanceof TraceAccessError) return <DeskAccessRequired />
-    throw error
-  }
+  const query = await searchParams
+  const packs: DeskPackOption[] = listDonorPacks().map(pack => ({
+    packId: pack.packId,
+    name: pack.name,
+    version: pack.version,
+    blurb: hubSeedSources[pack.packId].blurb,
+  }))
+  return (
+    <DeskShell viewer={{ name: gate.viewer.name, role: gate.viewer.role }} showSignOut={gate.viewer.mode === 'workos'} current="desk">
+      <UploadDesk
+        viewer={{
+          name: gate.viewer.name,
+          role: gate.viewer.role,
+          organizationId: gate.viewer.organizationId,
+          mode: gate.viewer.mode,
+        }}
+        providerId={providerId}
+        packs={packs}
+        initialPackId={hubPackParam(query.pack)}
+        engagementId={hubEngagementParam(query.engagement)}
+      />
+    </DeskShell>
+  )
 }

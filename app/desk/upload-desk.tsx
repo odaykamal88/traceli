@@ -21,6 +21,7 @@ import {
   type UploadDeskPackId,
   type UploadDeskView,
 } from '@/lib/desk/view'
+import { deskTenderContext, readHubLibrary, type DeskTenderContext } from '@/lib/hub/library'
 
 import s from './desk.module.css'
 
@@ -40,12 +41,15 @@ type Props = {
   }
   providerId: string
   packs: DeskPackOption[]
+  initialPackId?: UploadDeskPackId | null
+  engagementId?: string | null
 }
 
 type StoredDesk = {
   view: UploadDeskView
   judgment: UploadDeskJudgmentView | null
   draft: { choice: UploadDeskChoiceId | '', reason: string } | null
+  engagementId: string | null
 }
 
 function sanitizeDraft(value: unknown): StoredDesk['draft'] {
@@ -62,15 +66,22 @@ function readStored(organizationId: string): StoredDesk | null {
   try {
     const raw = sessionStorage.getItem(uploadDeskStorageKey)
     if (!raw) return null
-    const parsed = JSON.parse(raw) as { organizationId?: string, view?: unknown, judgment?: unknown, draft?: unknown }
+    const parsed = JSON.parse(raw) as {
+      organizationId?: string
+      view?: unknown
+      judgment?: unknown
+      draft?: unknown
+      engagementId?: unknown
+    }
     if (parsed.organizationId !== organizationId) return null
     const view = sanitizeUploadDeskView(parsed.view)
     if (!view) return null
     const draft = sanitizeDraft(parsed.draft)
-    if (parsed.judgment == null) return { view, judgment: null, draft }
+    const engagementId = typeof parsed.engagementId === 'string' ? parsed.engagementId : null
+    if (parsed.judgment == null) return { view, judgment: null, draft, engagementId }
     const judgment = sanitizeUploadDeskJudgment(parsed.judgment)
-    if (!judgment || !judgmentMatchesView(view, judgment)) return { view, judgment: null, draft }
-    return { view, judgment, draft: null }
+    if (!judgment || !judgmentMatchesView(view, judgment)) return { view, judgment: null, draft, engagementId }
+    return { view, judgment, draft: null, engagementId }
   } catch {
     return null
   }
@@ -87,8 +98,9 @@ function writeStored(
   view: UploadDeskView,
   judgment: UploadDeskJudgmentView | null,
   draft: StoredDesk['draft'] = null,
+  engagementId: string | null = null,
 ) {
-  sessionStorage.setItem(uploadDeskStorageKey, JSON.stringify({ organizationId, view, judgment, draft }))
+  sessionStorage.setItem(uploadDeskStorageKey, JSON.stringify({ organizationId, view, judgment, draft, engagementId }))
 }
 
 function clearStored() {
@@ -115,7 +127,7 @@ function emphasize(text: string, emphasis: string | null) {
   return <>{text.slice(0, index)}<strong>{emphasis}</strong>{text.slice(index + emphasis.length)}</>
 }
 
-export default function UploadDesk({ viewer, providerId, packs }: Props) {
+export default function UploadDesk({ viewer, providerId, packs, initialPackId = null, engagementId = null }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
   const judgmentHeadingRef = useRef<HTMLHeadingElement>(null)
   const recordHeadingRef = useRef<HTMLHeadingElement>(null)
@@ -132,10 +144,18 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
   const [choice, setChoice] = useState<UploadDeskChoiceId | ''>('')
   const [reason, setReason] = useState('')
   const [announce, setAnnounce] = useState('')
+  const [packId, setPackId] = useState<UploadDeskPackId | ''>(initialPackId ?? '')
+  const [tender, setTender] = useState<DeskTenderContext | null>(null)
 
   useEffect(() => {
+    const context = engagementId ? deskTenderContext(readHubLibrary(viewer.organizationId), engagementId) : null
+    if (context) {
+      setTender(context)
+      setPackId(context.primaryPackId)
+    }
     const stored = readStored(viewer.organizationId)
-    if (stored) {
+    const sameTender = !engagementId || stored?.engagementId === engagementId
+    if (stored && sameTender) {
       setResult(stored.view)
       setJudgment(stored.judgment)
       if (!stored.judgment) {
@@ -148,12 +168,12 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
       }
     }
     setRestored(true)
-  }, [viewer.organizationId])
+  }, [viewer.organizationId, engagementId])
 
   useEffect(() => {
     if (!restored || !result || judgment) return
-    writeStored(viewer.organizationId, result, null, { choice, reason })
-  }, [restored, result, judgment, choice, reason, viewer.organizationId])
+    writeStored(viewer.organizationId, result, null, { choice, reason }, tender?.id ?? null)
+  }, [restored, result, judgment, choice, reason, viewer.organizationId, tender])
 
   useEffect(() => {
     const target = focusTarget.current
@@ -193,7 +213,7 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
         setError(deskNotice('The freeze came back in an unexpected shape. Nothing was stored.'))
         return
       }
-      writeStored(viewer.organizationId, view, null)
+      writeStored(viewer.organizationId, view, null, null, tender?.id ?? null)
       focusTarget.current = 'judgment'
       primeDraft(view)
       setJudgment(null)
@@ -216,6 +236,7 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
     setError(null)
     setJudgmentError(null)
     setAnnounce('')
+    setPackId(tender?.primaryPackId ?? initialPackId ?? '')
   }
 
   async function confirmJudgment() {
@@ -251,7 +272,7 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
         setJudgmentError('The judgment came back in an unexpected shape. The assessment freeze is unchanged.')
         return
       }
-      writeStored(viewer.organizationId, result, recorded)
+      writeStored(viewer.organizationId, result, recorded, null, tender?.id ?? null)
       focusTarget.current = 'record'
       setAnnounce('Record frozen · verified')
       setJudgment(recorded)
@@ -272,6 +293,7 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
   }
 
   const story = result ? deskAwardStoryFromView(result, viewer.name) : null
+  const selectedPack = packs.find(pack => pack.packId === packId)
   const providerNote = providerId === 'mock'
     ? 'Extraction is the offline mock. It hashes the file and does not read the document body.'
     : `Extraction provider is ${providerId}. Trace-li still refuses to store file bytes or vendor payloads.`
@@ -291,9 +313,30 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
             ? 'The decision record is frozen in this browser. Copy the registry ids, or start another packet when you are done.'
             : result
               ? 'Trace-li froze this packet. Review the prep, then record your judgment. The file itself is not stored.'
-              : 'Choose a donor pack and one file. Trace-li extracts it, checks the pack, and freezes an assessment for your judgment.'}
+              : tender
+                ? 'This tender is on the desk. Upload the award packet. Trace-li runs the seeded pack below and freezes an assessment for your judgment.'
+                : 'Choose a donor pack and one file. Trace-li extracts it, checks the pack, and freezes an assessment for your judgment.'}
         </p>
       </header>
+      {tender ? (
+        <aside className={s.banner} data-testid="tender-context">
+          <p className={s.eyebrow}>Tender</p>
+          <h2>{tender.name}</h2>
+          <p>
+            Primary pack for this freeze: {selectedPack?.name ?? tender.primaryPackId}. Trace-li runs that seeded pack only.
+          </p>
+          {tender.uploads.length === 0 ? (
+            <p>No organisation manuals are attached. Only the seeded pack is evaluated.</p>
+          ) : (
+            <>
+              <p>Conditions in play. These files are not evaluated as pack rules:</p>
+              <ul className={s.plainList}>
+                {tender.uploads.map(upload => <li key={upload.id}>{upload.label}</li>)}
+              </ul>
+            </>
+          )}
+        </aside>
+      ) : null}
       {result && story ? (
         <AwardResult
           result={result}
@@ -317,18 +360,28 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
           onReason={setReason}
           onConfirm={confirmJudgment}
           onCopy={copyValue}
+          tender={tender}
         />
       ) : null}
       <form ref={formRef} className={`${s.card} ${s.startCard}`} onSubmit={onSubmit} aria-busy={pending}>
         {result ? (
           <p className={`${s.help} ${s.leadIn}`}>Choose another pack and file to replace this record, or clear it.</p>
         ) : null}
+        {tender ? <input type="hidden" name="procurementReference" value={tender.name} /> : null}
         <fieldset>
           <legend>Donor pack</legend>
           <div className={s.packs}>
             {packs.map(pack => (
-              <label className={s.pack} key={pack.packId}>
-                <input type="radio" name="packId" value={pack.packId} required disabled={busy} />
+              <label className={s.pack} key={pack.packId} data-testid={`pack-${pack.packId}`}>
+                <input
+                  type="radio"
+                  name="packId"
+                  value={pack.packId}
+                  required
+                  disabled={busy}
+                  checked={packId === pack.packId}
+                  onChange={() => setPackId(pack.packId)}
+                />
                 <span>
                   <strong>{pack.name}</strong>
                   <span>{pack.blurb} Version {pack.version}.</span>
@@ -388,11 +441,13 @@ export default function UploadDesk({ viewer, providerId, packs }: Props) {
       {!result ? (
         <p className={s.empty}>
           {restored
-            ? 'No frozen record yet. Choose a pack and upload a file.'
+            ? <>No frozen record yet. Choose a pack and upload a file, or <Link href="/hub">open the Knowledge hub</Link> to name a tender first.</>
             : 'Loading the last record from this browser…'}
         </p>
       ) : null}
       <p className={s.footer}>
+        <Link href="/hub">Knowledge hub</Link>
+        <span aria-hidden="true"> · </span>
         <Link href="/demo">Try the fictional walkthrough</Link>
       </p>
     </div>
@@ -418,6 +473,7 @@ function AwardResult({
   onReason,
   onConfirm,
   onCopy,
+  tender,
 }: {
   result: UploadDeskView
   story: DeskAwardStory
@@ -437,6 +493,7 @@ function AwardResult({
   onReason: (reason: string) => void
   onConfirm: () => void
   onCopy: (value: string, label: string) => void
+  tender: DeskTenderContext | null
 }) {
   const mapped = result.fields.filter(field => field.fromPacket)
   const missing = result.fields.filter(field => !field.fromPacket)
@@ -512,9 +569,27 @@ function AwardResult({
                 </table>
                 <p className={s.freezeNote}>Frozen at disposition. Starting another packet does not rewrite this record.</p>
               </div>
+              {tender ? (
+                <div className={s.recordSection} data-testid="conditions-in-play">
+                  <h3>Conditions in play</h3>
+                  {tender.uploads.length === 0 ? (
+                    <p>No organisation manuals were attached. Only the seeded pack was evaluated.</p>
+                  ) : (
+                    <>
+                      <p>These files were attached to the tender. Trace-li did not evaluate them as pack rules.</p>
+                      <ul className={s.plainList}>
+                        {tender.uploads.map(upload => <li key={upload.id}>{upload.label}</li>)}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              ) : null}
               <div className={s.recordSection} data-testid="frozen-registry">
                 <h3>Frozen registry record</h3>
                 <p className={s.frozenBadge} data-testid="record-frozen-badge">Record frozen · verified</p>
+                <p className={s.freezeNote} data-testid="golden-thread">
+                  Golden thread: this Field Registry freeze is the citeable record of the pack and your disposition. Humans dispose; Trace-li freezes the proof.
+                </p>
                 <dl className={s.frozenMeta}>
                   <div>
                     <dt>Record id</dt>
