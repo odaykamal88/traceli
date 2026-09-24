@@ -71,7 +71,7 @@ export const articleBodyHtml = `<div class="topbar">
       </p>
       <p>
         A companion note on Global Fund OIG files is <a href="/research/global-fund">The award was signed. The proof was not ready.</a>
-        Public case cards sit at <a href="/cases">/cases</a>.
+        Fixture case cards, awaiting a founder freeze, are <a href="/cases/unfpa-annex4-13-esa-ip">Annex 4 entry 13</a>, <a href="/cases/unfpa-annex4-21-arab-vendor">Annex 4 entry 21</a>, and <a href="/cases/unfpa-ia-2025-29-sudan">IA/2025-29</a>. The index is <a href="/cases">/cases</a>.
       </p>
 
       <h2 id="pattern"><span class="secnum">03</span> The pattern across three files</h2>
@@ -309,7 +309,7 @@ export const articleBodyHtml = `<div class="topbar">
             <a href="https://www.unfpa.org/sites/default/files/board-documents/Annex%204%20-%20Summary%20of%20investigation%20report%20and%20closure%20reports%20issued%20in%202025%20-%201Apr26.pdf" target="_blank" rel="noreferrer">PDF</a></li>
           <li>OAIS, <em>Audit of the UNFPA Country Office in the Republic of the Sudan</em>, IA/2025-29, 24 December 2025 — ¶3, ¶5–6, ¶33–34, ¶37–38, ¶51–52, ¶55–56, ¶61–62, ¶78–83; Recommendations 5 and 9.
             <a href="https://www.unfpa.org/sites/default/files/audit-reports/2025-12-24_Audit_of_the_UNFPA_CO_in_Sudan_-__FINAL.pdf" target="_blank" rel="noreferrer">PDF</a></li>
-          <li>Companion note: <a href="/research/global-fund">Global Fund OIG research</a>. Case cards: <a href="/cases">/cases</a>.</li>
+          <li>Companion note: <a href="/research/global-fund">Global Fund OIG research</a>. Fixture case cards: <a href="/cases/unfpa-annex4-13-esa-ip">Annex 4 entry 13</a>, <a href="/cases/unfpa-annex4-21-arab-vendor">entry 21</a>, <a href="/cases/unfpa-ia-2025-29-sudan">IA/2025-29</a>.</li>
         </ol>
         <p>© Trace-li Research Desk · UNFPA research · 24 Sep 2026 Africa/Cairo.</p>
       </div>

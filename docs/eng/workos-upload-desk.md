@@ -21,7 +21,7 @@ POST /api/desk
         ├─ extractParsedUpload      same provider entry as POST /api/extract
         ├─ fragmentsTowardRegistryDraft
         ├─ pack keys not in the draft → missing evidence
-        ├─ evaluateDonorPack        global-fund | fcdo-prime
+        ├─ evaluateDonorPack        global-fund | fcdo-prime | unfpa | ocha-cbpf
         └─ freezeAtJudgment → verifyFrozenRecord
         │
         ▼
@@ -66,7 +66,7 @@ The freeze actor is the session user id. The snapshot `organizationId` is the se
 
 ## Pack select and freeze
 
-The form sends `packId` `global-fund` or `fcdo-prime` plus one file (pdf, docx, xlsx, eml, msg, txt, png, jpg, jpeg, at most 8 MB).
+The form sends one `packId` (`global-fund`, `fcdo-prime`, `unfpa`, or `ocha-cbpf`) plus one file (pdf, docx, xlsx, eml, msg, txt, png, jpg, jpeg, at most 8 MB).
 
 The file control is a navy button labelled Choose file, associated with the packet file input. While `POST /api/desk` is in flight the submit control is disabled and the page shows a spinner with Working…. That one request extracts, runs the pack, and freezes. The page does not pretend to know which of those stages is current.
 

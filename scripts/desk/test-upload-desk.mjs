@@ -234,6 +234,20 @@ test('the desk route denies an anonymous caller and freezes one mock upload', as
       'missing',
     )
 
+    for (const packId of ['unfpa', 'ocha-cbpf']) {
+      const response = await POST(deskRequest({ packId, fileName: `${packId}.txt` }))
+      assert.equal(response.status, 200, await response.clone().text())
+      const selected = sanitizeUploadDeskView(await response.json())
+      assert.equal(selected?.packId, packId)
+      assert.equal(selected?.readiness, 'red')
+      assert.match(selected?.record.snapshotHash ?? '', /^[a-f0-9]{64}$/)
+      assert.equal(selected?.record.disposition, 'request_evidence')
+    }
+    const unfpaView = sanitizeUploadDeskView(await (await POST(deskRequest({ packId: 'unfpa', fileName: 'unfpa-fields.txt' }))).json())
+    assert.equal(unfpaView?.fields.find(field => field.key === 'procurement.rfq_criteria_and_scores')?.state, 'missing')
+    const ochaView = sanitizeUploadDeskView(await (await POST(deskRequest({ packId: 'ocha-cbpf', fileName: 'ocha-fields.txt' }))).json())
+    assert.equal(ochaView?.fields.find(field => field.key === 'allocation.preselection_justification')?.state, 'missing')
+
     const sheet = await POST(deskRequest({
       fileName: 'prices.xlsx',
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

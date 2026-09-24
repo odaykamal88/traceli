@@ -5,13 +5,15 @@ import type { PackToggle } from '@/lib/field-registry/schema'
  * Trace-owned donor / prime rule packs.
  * Rules run through evaluateJudgment against Field Registry keys only.
  */
-export const donorPackIds = ['global-fund', 'fcdo-prime'] as const
+export const donorPackIds = ['global-fund', 'fcdo-prime', 'unfpa', 'ocha-cbpf'] as const
 
 export type DonorPackId = (typeof donorPackIds)[number]
 
 export type DonorPackAudience =
   | 'global-fund-pr-sr'
   | 'fcdo-commercial-prime'
+  | 'unfpa-oais-shaped'
+  | 'ocha-cbpf-guidelines-shaped'
 
 export type DonorPack = {
   /** Stable id used as PackToggle.packId and Rule library catalog id. */

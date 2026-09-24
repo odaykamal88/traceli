@@ -18,13 +18,14 @@ import { deskAwardStoryFromView, formatDeskInstant, type DeskAwardStory } from '
 import {
   sanitizeUploadDeskView,
   uploadDeskStorageKey,
+  type UploadDeskPackId,
   type UploadDeskView,
 } from '@/lib/desk/view'
 
 import s from './desk.module.css'
 
 export type DeskPackOption = {
-  packId: 'global-fund' | 'fcdo-prime'
+  packId: UploadDeskPackId
   name: string
   version: string
   blurb: string

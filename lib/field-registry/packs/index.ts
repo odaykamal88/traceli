@@ -11,8 +11,14 @@ import {
   globalFundIddHitSnapshot,
   globalFundIddMissingSnapshot,
   globalFundPassSnapshot,
+  ochaCbpfFailSnapshot,
+  ochaCbpfPassSnapshot,
+  unfpaFailSnapshot,
+  unfpaPassSnapshot,
 } from '@/lib/field-registry/packs/fixtures'
 import { GLOBAL_FUND_PACK, GLOBAL_FUND_RULES } from '@/lib/field-registry/packs/global-fund'
+import { OCHA_CBPF_PACK, OCHA_CBPF_RULES } from '@/lib/field-registry/packs/ocha-cbpf'
+import { UNFPA_PACK, UNFPA_RULES } from '@/lib/field-registry/packs/unfpa'
 import {
   donorPackIds,
   packToggleForDonorPack,
@@ -35,6 +41,14 @@ export {
   globalFundPassSnapshot,
 } from '@/lib/field-registry/packs/fixtures'
 export { GLOBAL_FUND_FIELD_KEYS, GLOBAL_FUND_PACK, GLOBAL_FUND_RULES } from '@/lib/field-registry/packs/global-fund'
+export { OCHA_CBPF_FIELD_KEYS, OCHA_CBPF_PACK, OCHA_CBPF_RULES } from '@/lib/field-registry/packs/ocha-cbpf'
+export { UNFPA_FIELD_KEYS, UNFPA_PACK, UNFPA_RULES } from '@/lib/field-registry/packs/unfpa'
+export {
+  ochaCbpfFailSnapshot,
+  ochaCbpfPassSnapshot,
+  unfpaFailSnapshot,
+  unfpaPassSnapshot,
+} from '@/lib/field-registry/packs/fixtures'
 export {
   donorPackIds,
   packToggleForDonorPack,
@@ -46,6 +60,8 @@ export {
 const packsById: Record<DonorPackId, DonorPack> = {
   'global-fund': GLOBAL_FUND_PACK,
   'fcdo-prime': FCDO_PRIME_PACK,
+  unfpa: UNFPA_PACK,
+  'ocha-cbpf': OCHA_CBPF_PACK,
 }
 
 export class DonorPackError extends Error {
@@ -131,6 +147,18 @@ export const donorPackFixtures = {
     fail: fcdoPrimeFailSnapshot,
     rules: FCDO_PRIME_RULES,
     pack: FCDO_PRIME_PACK,
+  },
+  unfpa: {
+    pass: unfpaPassSnapshot,
+    fail: unfpaFailSnapshot,
+    rules: UNFPA_RULES,
+    pack: UNFPA_PACK,
+  },
+  'ocha-cbpf': {
+    pass: ochaCbpfPassSnapshot,
+    fail: ochaCbpfFailSnapshot,
+    rules: OCHA_CBPF_RULES,
+    pack: OCHA_CBPF_PACK,
   },
 } as const
 

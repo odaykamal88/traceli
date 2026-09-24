@@ -21,9 +21,9 @@ import {
 import { isWorkspaceProductPath } from '../../lib/workspace-product.ts'
 import { sanitizeDisposition } from '../../lib/award-desk.ts'
 
-test('Rule library seeds four packs in force and keeps three in the catalog', () => {
+test('Rule library seeds four packs in force and keeps five in the catalog', () => {
   const board = seedRuleLibraryBoard()
-  assert.equal(curatedRuleLibraryPacks.length, 7)
+  assert.equal(curatedRuleLibraryPacks.length, 9)
   assert.deepEqual(ruleLibraryCategories.map(item => item.id), [
     'procurement',
     'donor',
@@ -32,7 +32,7 @@ test('Rule library seeds four packs in force and keeps three in the catalog', ()
     'safeguarding',
   ])
   assert.equal(inForcePacks(board).length, 4)
-  assert.equal(catalogAvailable(board).length, 3)
+  assert.equal(catalogAvailable(board).length, 5)
   assert.ok(inForcePacks(board).every(pack => pack.onBoard && pack.orgDefault))
   assert.ok(board.every(pack => pack.illustrative === pack.curated || pack.source === 'upload'))
   assert.match(board.find(pack => pack.id === 'procurement-manual')?.name || '', /Procurement manual/)
@@ -41,6 +41,10 @@ test('Rule library seeds four packs in force and keeps three in the catalog', ()
   assert.match(board.find(pack => pack.id === 'safeguarding-policy')?.name || '', /Safeguarding/)
   assert.match(board.find(pack => pack.id === 'global-fund')?.name || '', /Global Fund/)
   assert.match(board.find(pack => pack.id === 'fcdo-prime')?.name || '', /FCDO/)
+  assert.match(board.find(pack => pack.id === 'unfpa')?.name || '', /UNFPA/)
+  assert.match(board.find(pack => pack.id === 'ocha-cbpf')?.name || '', /CBPF/)
+  assert.equal(board.find(pack => pack.id === 'unfpa')?.onBoard, false)
+  assert.equal(board.find(pack => pack.id === 'ocha-cbpf')?.onBoard, false)
 })
 
 test('Add from catalog turns the pack on for tonight', () => {
