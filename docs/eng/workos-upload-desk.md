@@ -42,7 +42,9 @@ POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordI
 | `GET /invite` and `GET /sign-up` | Invite email | User invitation URL. A single valid `invitation_token` starts AuthKit sign-in for that invite and returns to `/desk`. Any other visit shows the invitation-only page. Public self-serve signup is closed. |
 | `GET /reset-password` | Reset email | Password reset URL. A single `token` (or `password_reset_token`) is handed to AuthKit as `password_reset_token`, then the user returns to `/desk`. Without a token, the page asks for the email link. |
 | `GET /auth/callback` | AuthKit | Already present. Honors the sealed return path, otherwise `/workspace`. No new callback. |
-| `GET /desk` | Trace session | Pack choice, file input, and the frozen record. |
+| `GET /hub` | Trace session | Knowledge hub. Seeded packs, plus organisation manual labels kept in this browser. |
+| `GET /hub/tender` | Trace session | Name a tender, choose one seeded pack, attach manuals, continue to `/desk`. |
+| `GET /desk` | Trace session | Pack choice, file input, and the frozen record. `?pack=` preselects a seeded pack. `?engagement=` shows the tender. |
 | `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze. |
 | `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the auto record. |
 | `POST /desk/sign-out` | WorkOS session | Clears the AuthKit session and returns to `/login`. |
@@ -50,7 +52,19 @@ POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordI
 
 `/api/extract` still accepts only `file` and optional `awardId`. The desk allowlist adds `packId` and optional `procurementReference`. A client `organizationId` is rejected.
 
-Proxy treats `/desk` like the workspace when WorkOS is configured: no session redirects to AuthKit. `/api/desk` is not redirected; `requireTraceViewer` returns 403. Local Trace on a loopback host skips AuthKit for `/desk` and `/api/desk`, the same way `/workspace/trace` does.
+Proxy treats `/desk` and `/hub` like the workspace when WorkOS is configured: no session redirects to AuthKit. `/api/desk` is not redirected; `requireTraceViewer` returns 403. Local Trace on a loopback host skips AuthKit for `/desk`, `/hub`, and `/api/desk`, the same way `/workspace/trace` does.
+
+## Knowledge hub
+
+`/hub` is the signed-in library, separate from any one tender. The four live packs are seeded and read-only. The page calls them Trace-li public-control synthesis, not official UN, Global Fund, FCDO, or OCHA manuals.
+
+An organisation can add a manual using the same file types as the desk, at most 8 MB, up to 12 files. The browser store `traceli.knowledgeHub.v1` keeps the label, file name, size, media type, and SHA-256, scoped to the session `organizationId`. It does not keep the bytes. Nothing is written to Postgres, and nothing is compiled into `JudgmentRule`s. A manual from another organisation is dropped on read.
+
+`/hub/tender` saves an engagement in that store. One primary seeded pack is required. Manuals are optional conditions in play. Continue opens `/desk?pack=<id>&engagement=<id>`. The desk preselects that pack and sends the tender name as `procurementReference`. `evaluateDonorPack` still runs that one pack only. Attached manuals stay visible on the desk and on the decision record, labelled as not evaluated.
+
+After disposition, the decision record has one golden-thread line: the Field Registry freeze is the citeable record. Humans dispose; Trace-li freezes the proof.
+
+Login still returns to `/desk`. The desk shell links to the hub.
 
 ## Auth
 
@@ -146,6 +160,7 @@ Open `http://127.0.0.1:3000/desk`. The database URL only has to be a loopback Po
 
 ```sh
 pnpm test:upload-desk
+pnpm test:hub
 pnpm test:authkit
 pnpm test:extraction
 pnpm test:award-desk

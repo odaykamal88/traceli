@@ -7,18 +7,26 @@ export function DeskShell({
   children,
   viewer,
   showSignOut,
+  current,
 }: {
   children: ReactNode
   viewer?: { name: string, role: string }
   showSignOut?: boolean
+  current?: 'hub' | 'desk'
 }) {
   return (
     <div className={s.shell}>
-      <a className={s.skip} href="#desk-main">Skip to award desk</a>
+      <a className={s.skip} href="#desk-main">{current === 'hub' ? 'Skip to knowledge hub' : 'Skip to award desk'}</a>
       <header className={s.topbar}>
-        <Link className={s.wordmark} href="/desk">Traceli</Link>
+        <div className={s.topbarLeft}>
+          <Link className={s.wordmark} href="/desk">Traceli</Link>
+          <nav className={s.nav} aria-label="Award assurance">
+            <Link href="/hub" aria-current={current === 'hub' ? 'page' : undefined}>Knowledge hub</Link>
+            <Link href="/desk" aria-current={current === 'desk' ? 'page' : undefined}>Award desk</Link>
+          </nav>
+        </div>
         <div className={s.topbarMeta}>
-          <span>Award desk</span>
+          <span>{current === 'hub' ? 'Knowledge hub' : 'Award desk'}</span>
           <span className={s.dot} aria-hidden="true" />
           {viewer ? <span>{viewer.name} · {viewer.role}</span> : <span>Sign-in required</span>}
           {showSignOut ? (
