@@ -6,10 +6,10 @@ const steps = [
   { id: 'hub', label: 'Knowledge hub', href: '/hub' },
   { id: 'tender', label: 'New tender', href: '/hub/tender' },
   { id: 'desk', label: 'Award desk', href: '/desk' },
-  { id: 'freeze', label: 'Freeze' },
+  { id: 'freeze', label: 'Golden thread' },
 ] as const
 
-export function HubPath({ current }: { current: 'hub' | 'tender' | 'desk' }) {
+export function HubPath({ current }: { current: 'hub' | 'tender' | 'desk' | 'freeze' }) {
   return (
     <ol className={s.path} aria-label="Path">
       {steps.map(step => {

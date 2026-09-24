@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'New tender',
-  description: 'Name a tender, choose a seeded Trace-li pack, and attach organisation manuals.',
+  description: 'Name one award, pick the Trace-li pack that will drive judgment, and continue to the award desk.',
   robots: { index: false, follow: false },
 }
 
@@ -38,10 +38,10 @@ export default async function NewTenderPage() {
     >
       <div className={s.page}>
         <header className={s.intro}>
-          <p className={s.eyebrow}>Engagement</p>
+          <p className={s.eyebrow}>One piece of work</p>
           <h1>New tender</h1>
           <p className={s.lede}>
-            Name the piece of work, choose the seeded pack that drives the freeze, and attach any manuals as conditions in play.
+            Name the award you are about to assure. Pick the one Trace-li pack that will drive judgment. Attach hub manuals only as conditions in play.
           </p>
           <HubPath current="tender" />
         </header>

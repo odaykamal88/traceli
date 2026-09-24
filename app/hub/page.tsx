@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Knowledge hub',
-  description: 'Seeded Trace-li control sources and organisation manuals for a tender.',
+  description: 'Choose a Trace-li seeded pack, name one tender, and freeze a citeable golden thread.',
   robots: { index: false, follow: false },
 }
 
@@ -39,10 +39,10 @@ export default async function HubPage() {
     >
       <div className={s.page}>
         <header className={s.intro}>
-          <p className={s.eyebrow}>Control sources</p>
+          <p className={s.eyebrow}>Before the award</p>
           <h1>Knowledge hub</h1>
           <p className={s.lede}>
-            A library of control sources, separate from any one tender. Pick a seeded pack, attach your manuals if you have them, then freeze the award on the desk. Humans dispose; Trace-li freezes the proof.
+            Before you open a packet, choose the control source that will judge it. Start from a Trace-li seeded pack. Add your own manuals only if you need them on the record. Then name one tender and freeze a citeable golden thread.
           </p>
           <HubPath current="hub" />
         </header>
@@ -50,8 +50,8 @@ export default async function HubPage() {
           <Link className={s.primary} href="/hub/tender">Start a tender</Link>
         </p>
         <section className={s.section} aria-labelledby="seeded-sources">
-          <h2 id="seeded-sources">Seeded packs</h2>
-          <p className={s.help}>{hubSynthesisNote} One seeded pack drives a freeze.</p>
+          <h2 id="seeded-sources">Start from a Trace-li pack</h2>
+          <p className={s.help}>{hubSynthesisNote} One pack drives the freeze.</p>
           <div className={s.sourceGrid} data-testid="hub-seeds">
             {seeds.map(seed => (
               <article key={seed.packId} className={s.sourceCard}>

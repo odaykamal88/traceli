@@ -862,11 +862,20 @@
 .path a:hover { text-decoration: underline; }
 
 .section { margin-top: 36px; }
+.sectionQuiet {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--navy-line);
+}
 .section h2 {
   margin: 0 0 8px;
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
+}
+.sectionQuiet h2 {
+  font-size: 16px;
+  font-weight: 500;
 }
 .section .empty { margin-top: 12px; }
 
@@ -942,6 +951,28 @@
 }
 .uploadItem .secondary { flex-shrink: 0; }
 .uploadForm { margin-top: 8px; }
+.quietCard {
+  box-shadow: none;
+  background: transparent;
+}
+.quietDetails { margin-top: 16px; }
+.quietDetails summary {
+  width: fit-content;
+  min-height: 44px;
+  padding: 10px 0;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.quietDetails summary:hover { text-decoration: underline; }
+.quietDetails .uploadForm { margin-top: 12px; }
+.cue {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--navy-mid);
+}
+.cue a { color: var(--navy); }
 
 .named { margin-bottom: 20px; }
 .textInput {

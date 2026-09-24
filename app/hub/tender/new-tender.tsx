@@ -93,8 +93,8 @@ export default function NewTender({
         <p className={s.help}>This name is the procurement reference on the freeze.</p>
       </div>
       <fieldset>
-        <legend>Primary seeded pack</legend>
-        <p className={s.help}>One pack drives the award-desk freeze. Trace-li runs that pack only.</p>
+        <legend>Trace-li pack</legend>
+        <p className={s.help}>One pack drives judgment. Trace-li runs that pack only.</p>
         <div className={s.packs}>
           {seeds.map(seed => (
             <label className={s.pack} key={seed.packId}>
@@ -118,12 +118,12 @@ export default function NewTender({
         </div>
       </fieldset>
       <fieldset>
-        <legend>Organisation manuals</legend>
-        <p className={s.help}>Attach these as conditions in play. They are not evaluated as pack rules.</p>
+        <legend>Hub manuals (optional)</legend>
+        <p className={s.help}>Optional. Attach these only as conditions in play. They are not evaluated as pack rules.</p>
         {!ready ? <p className={s.help}>Loading manuals…</p> : null}
         {ready && uploads.length === 0 ? (
           <p className={s.help} data-testid="tender-no-uploads">
-            No manuals on the hub yet. Continue with the seeded pack, or add a guideline on the Knowledge hub first.
+            No manuals yet. A seeded pack alone is enough.
           </p>
         ) : null}
         {uploads.length > 0 ? (
