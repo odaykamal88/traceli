@@ -50,6 +50,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_eligibility_not_screened',
     title: 'Supplier eligibility / reputation screen required',
+    ask: 'Supplier eligibility and reputation screen',
   },
   {
     ruleId: 'fcdo_integrity_coi_declared',
@@ -59,6 +60,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_coi_not_declared',
     title: 'Conflict of interest declaration required',
+    ask: 'Conflict of interest declaration',
   },
   {
     ruleId: 'fcdo_integrity_business_appointment',
@@ -67,6 +69,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'fcdo_business_appointment_unchecked',
     title: 'Business Appointment Rules check for ex-Crown staff',
+    ask: 'Business Appointment Rules check for ex-Crown staff',
   },
   {
     ruleId: 'fcdo_procurement_fair_open_or_direct',
@@ -76,6 +79,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_competition_not_satisfied',
     title: 'Fair open competition or documented direct award',
+    ask: 'Fair open competition, or the documented direct award',
   },
   {
     ruleId: 'fcdo_procurement_competition_docs',
@@ -84,6 +88,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_competition_docs_missing',
     title: 'Competition or direct-award documentation required',
+    ask: 'Competition or direct-award documentation',
   },
   {
     ruleId: 'fcdo_documentation_evaluation_notes',
@@ -92,6 +97,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_evaluation_notes_missing',
     title: 'Evaluation notes must be on the award file',
+    ask: 'Evaluation notes on the award file',
   },
   {
     ruleId: 'fcdo_documentation_compliance_declaration',
@@ -100,6 +106,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_compliance_declaration_missing',
     title: 'Supply Partner Code compliance declaration on file',
+    ask: 'Supply Partner Code compliance declaration',
   },
   {
     ruleId: 'fcdo_award_contract_value',
@@ -108,6 +115,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_contract_value_missing',
     title: 'Contract value (GBP) must be on the registry',
+    ask: 'Contract value (GBP)',
   },
   {
     ruleId: 'fcdo_threshold_method_aligned',
@@ -117,6 +125,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_threshold_method_misaligned',
     title: 'Procurement method must align with value threshold',
+    ask: 'Procurement method for the value threshold',
   },
   {
     ruleId: 'fcdo_delivery_chain_partners',
@@ -125,6 +134,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'fcdo_delivery_chain_unidentified',
     title: 'Delivery-chain partners identified pre-signature',
+    ask: 'Delivery-chain partners identified before signature',
   },
   {
     ruleId: 'fcdo_idd_subject',
@@ -133,6 +143,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_subject_missing',
     title: 'Sanctions subject organization or individual required before signature',
+    ask: 'Sanctions subject, organization or individual',
   },
   {
     ruleId: 'fcdo_idd_subject_kind',
@@ -142,6 +153,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_subject_kind_invalid',
     title: 'Sanctions subject must be recorded as an organization or an individual',
+    ask: 'Whether the sanctions subject is an organization or an individual',
   },
   {
     ruleId: 'fcdo_idd_connected_persons',
@@ -150,6 +162,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_connected_persons_missing',
     title: 'Ownership, control, and connected persons diligence required',
+    ask: 'Ownership, control, and connected persons diligence',
   },
   {
     ruleId: 'fcdo_idd_uk_sanctions_scope',
@@ -159,6 +172,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_uk_sanctions_scope_incomplete',
     title: 'UK Sanctions List scope must be attested',
+    ask: 'UK Sanctions List scope',
   },
   {
     ruleId: 'fcdo_idd_screen_date',
@@ -167,6 +181,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_screen_date_missing',
     title: 'UK sanctions screen date required before signature',
+    ask: 'UK sanctions screen date',
   },
   {
     ruleId: 'fcdo_idd_list_vintage',
@@ -175,6 +190,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'fcdo_idd_list_vintage_missing',
     title: 'List vintage cited by the UK sanctions evidence',
+    ask: 'List vintage cited by the UK sanctions evidence',
   },
   {
     ruleId: 'fcdo_idd_screen_result',
@@ -184,6 +200,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_result_invalid',
     title: 'Sanctions result must be clear, potential match, confirmed hit, or unresolved',
+    ask: 'Sanctions result (clear, potential match, confirmed hit, or unresolved)',
   },
   {
     ruleId: 'fcdo_idd_evidence_ref',
@@ -192,6 +209,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_evidence_missing',
     title: 'Sanctions screening evidence reference required',
+    ask: 'Sanctions screening evidence reference',
   },
   {
     ruleId: 'fcdo_idd_debarment_exclusion',
@@ -200,6 +218,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_debarment_missing',
     title: 'Procurement Act debarment or exclusion evidence required',
+    ask: 'Procurement Act debarment or exclusion evidence',
   },
   {
     ruleId: 'fcdo_idd_hit_disposition_decision',
@@ -211,6 +230,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'fcdo_idd_hit_needs_decision',
     title: 'A non-clear sanctions result needs a select, continue, or terminate decision',
+    ask: 'Select, continue, or terminate decision for a non-clear sanctions result',
   },
   {
     ruleId: 'fcdo_idd_hit_disposition_owner',
@@ -221,6 +241,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'fcdo_idd_hit_needs_owner',
     title: 'Record who owns the sanctions disposition',
+    ask: 'Owner of the sanctions disposition',
   },
   {
     ruleId: 'fcdo_idd_hit_disposition_rationale',
@@ -231,6 +252,7 @@ export const FCDO_PRIME_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'fcdo_idd_hit_needs_rationale',
     title: 'Record the rationale for the sanctions disposition',
+    ask: 'Rationale for the sanctions disposition',
   },
 ]
 

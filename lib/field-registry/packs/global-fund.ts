@@ -56,6 +56,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_eligibility_not_met',
     title: 'Contractor ability to perform must be affirmed',
+    ask: 'Affirmation that the contractor can perform',
   },
   {
     ruleId: 'gf_integrity_coi_disclosed',
@@ -65,6 +66,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_coi_not_disclosed',
     title: 'Conflict of interest disclosure required',
+    ask: 'Conflict of interest disclosure',
   },
   {
     ruleId: 'gf_procurement_competitive_or_exempt',
@@ -74,6 +76,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_competition_not_satisfied',
     title: 'Award must be competitive or an established exemption',
+    ask: 'Proof the award was competitive, or the exemption used',
   },
   {
     ruleId: 'gf_procurement_competition_docs',
@@ -82,6 +85,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_competition_docs_missing',
     title: 'Competition or sole-source exemption documentation required',
+    ask: 'Competition or sole-source exemption documentation',
   },
   {
     ruleId: 'gf_procurement_solicitation_notified',
@@ -90,6 +94,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'gf_solicitation_notice_missing',
     title: 'Bid solicitation notice to prospective bidders',
+    ask: 'Bid solicitation notice to prospective bidders',
   },
   {
     ruleId: 'gf_documentation_award_rationale',
@@ -98,6 +103,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_award_rationale_missing',
     title: 'Award rationale documentation required',
+    ask: 'Award rationale documentation',
   },
   {
     ruleId: 'gf_award_contract_value',
@@ -106,6 +112,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_contract_value_missing',
     title: 'Contract value must be on the registry',
+    ask: 'Contract value',
   },
   {
     ruleId: 'gf_threshold_method_aligned',
@@ -115,6 +122,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_threshold_method_misaligned',
     title: 'Procurement method must align with value threshold',
+    ask: 'Procurement method for the value threshold',
   },
   {
     ruleId: 'gf_sr_selection_documented',
@@ -123,6 +131,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_sr_selection_missing',
     title: 'Sub-recipient selection process documented',
+    ask: 'Sub-recipient selection process',
   },
   {
     ruleId: 'gf_sr_capacity_assessed',
@@ -131,6 +140,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_sr_capacity_missing',
     title: 'Sub-recipient capacity assessment on file',
+    ask: 'Sub-recipient capacity assessment',
   },
   {
     ruleId: 'gf_sr_written_agreement',
@@ -139,6 +149,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_sr_agreement_missing',
     title: 'Written sub-recipient agreement required',
+    ask: 'Written sub-recipient agreement',
   },
   {
     ruleId: 'gf_idd_subject',
@@ -147,6 +158,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_subject_missing',
     title: 'IDD subject organization or individual required before signature',
+    ask: 'IDD subject, organization or individual',
   },
   {
     ruleId: 'gf_idd_subject_kind',
@@ -156,6 +168,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_subject_kind_invalid',
     title: 'IDD subject must be recorded as an organization or an individual',
+    ask: 'Whether the IDD subject is an organization or an individual',
   },
   {
     ruleId: 'gf_idd_subject_role',
@@ -165,6 +178,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_subject_role_invalid',
     title: 'IDD subject role required (SR, supplier, signatory, or key personnel)',
+    ask: 'IDD subject role (SR, supplier, signatory, or key personnel)',
   },
   {
     ruleId: 'gf_idd_affiliated_persons',
@@ -173,6 +187,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_affiliated_persons_missing',
     title: 'Affiliated and key persons, with roles, required on the IDD record',
+    ask: 'Affiliated and key persons, with roles',
   },
   {
     ruleId: 'gf_idd_screen_scope',
@@ -182,6 +197,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_screen_scope_incomplete',
     title: 'Restrictive Measures scope must attest UN, OFAC, US State, Switzerland, and debarment',
+    ask: 'Restrictive Measures scope covering UN, OFAC, US State, Switzerland, and debarment',
   },
   {
     ruleId: 'gf_idd_screen_date',
@@ -190,6 +206,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_screen_date_missing',
     title: 'Restrictive Measures screen date required before signature',
+    ask: 'Restrictive Measures screen date',
   },
   {
     ruleId: 'gf_idd_list_vintage',
@@ -198,6 +215,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_list_vintage_missing',
     title: 'List vintage cited by the screening evidence is required',
+    ask: 'List vintage cited by the screening evidence',
   },
   {
     ruleId: 'gf_idd_screen_modality',
@@ -207,6 +225,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_modality_invalid',
     title: 'IDD modality must be in-house, a Global Fund pre-approved vendor, or other',
+    ask: 'IDD modality (in-house, a Global Fund pre-approved vendor, or other)',
   },
   {
     ruleId: 'gf_idd_screen_result',
@@ -216,6 +235,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_result_invalid',
     title: 'IDD result must be clear, potential match, confirmed hit, or unresolved',
+    ask: 'IDD result (clear, potential match, confirmed hit, or unresolved)',
   },
   {
     ruleId: 'gf_idd_screen_timing',
@@ -225,6 +245,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_screen_timing_invalid',
     title: 'Screen must be attested before engagement or as the grant-cycle re-run',
+    ask: 'Screen before engagement, or the grant-cycle re-run',
   },
   {
     ruleId: 'gf_idd_evidence_ref',
@@ -233,6 +254,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_evidence_missing',
     title: 'Screening evidence reference required before signature',
+    ask: 'Screening evidence reference',
   },
   {
     ruleId: 'gf_idd_hit_disposition_owner',
@@ -243,6 +265,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_hit_needs_owner',
     title: 'A non-clear Restrictive Measures result needs a disposition owner',
+    ask: 'Disposition owner for a non-clear Restrictive Measures result',
   },
   {
     ruleId: 'gf_idd_hit_disposition_decision',
@@ -254,6 +277,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_hit_needs_decision',
     title: 'A non-clear result needs a select, continue, or terminate decision',
+    ask: 'Select, continue, or terminate decision for a non-clear result',
   },
   {
     ruleId: 'gf_idd_hit_disposition_rationale',
@@ -264,6 +288,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_hit_needs_rationale',
     title: 'A non-clear Restrictive Measures result needs a disposition rationale',
+    ask: 'Disposition rationale for a non-clear Restrictive Measures result',
   },
   {
     ruleId: 'gf_idd_hit_communicable',
@@ -274,6 +299,7 @@ export const GLOBAL_FUND_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'gf_idd_hit_not_communicable',
     title: 'Restrictive Measures findings must be communicable to the Global Fund',
+    ask: 'A way to send Restrictive Measures findings to the Global Fund',
   },
 ]
 
