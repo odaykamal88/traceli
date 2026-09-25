@@ -142,10 +142,10 @@ test('mock upload maps missing pack fields and freezes a verified record without
     actorRole: 'Procurement Officer',
     frozenAt: '2026-09-22T12:00:00.000Z',
   })
-  const pricing = sheet.view.fields.find(field => field.key === 'pricing.table')
-  assert.equal(pricing?.state, 'present')
-  assert.equal(pricing?.fromPacket, true)
-  assert.equal(sheet.view.unmappedFragmentCount, 0)
+  assert.equal(sheet.view.fields.some(field => field.key === 'pricing.table'), false)
+  assert.equal(sheet.record.snapshot.fields.every(field => FCDO_PRIME_FIELD_KEYS.includes(field.key)), true)
+  assert.equal(sheet.view.fragmentCount, 1)
+  assert.equal(sheet.view.unmappedFragmentCount, 1)
   for (const key of FCDO_PRIME_FIELD_KEYS) {
     const field = sheet.record.snapshot.fields.find(item => item.key === key)
     assert.equal(field?.value.state, 'missing', key)
@@ -253,7 +253,8 @@ test('the desk route denies an anonymous caller and freezes one mock upload', as
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     }))
     const sheetView = sanitizeUploadDeskView(await sheet.json())
-    assert.equal(sheetView?.fields.find(field => field.key === 'pricing.table')?.fromPacket, true)
+    assert.equal(sheetView?.fields.some(field => field.key === 'pricing.table'), false)
+    assert.equal(sheetView?.unmappedFragmentCount, 1)
     assert.equal(sheet.status, 200)
 
     const unknown = await POST(deskRequest({ packId: 'usaid' }))
