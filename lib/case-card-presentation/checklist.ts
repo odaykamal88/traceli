@@ -26,7 +26,7 @@ export const fieldLabelMap: Record<string, string> = {
 
 export const checklistGroups = [
   { id: 'present', title: 'On file', hint: 'Quoted from the file.' },
-  { id: 'missing', title: 'Missing', hint: 'Not in the file. Missing stays missing.' },
+  { id: 'missing', title: 'Missing', hint: 'These items were not found in the file.' },
   { id: 'stated-absent', title: 'Stated absent in the file', hint: 'The file says this is absent.' },
   { id: 'negative', title: 'Marked negative', hint: 'The file supports an adverse answer.' },
 ] as const
@@ -56,6 +56,12 @@ export function checklistGroupId(field: Pick<RegistryField, 'value'>): Checklist
     return 'stated-absent'
   }
   return 'missing'
+}
+
+/** The Missing group states the gap once. Other groups keep the page or quote on the row. */
+export function checklistRowDetail(groupId: ChecklistGroupId, quote: string): string | null {
+  if (groupId === 'missing') return null
+  return quote
 }
 
 export function checklistQuote(field: Pick<RegistryField, 'value'>): string {

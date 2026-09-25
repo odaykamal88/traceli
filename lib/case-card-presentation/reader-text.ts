@@ -32,3 +32,11 @@ export function firstSentence(text: string): string {
 export function containsFieldKey(text: string): boolean {
   return FIELD_KEY.test(text)
 }
+
+const MISSING_EVIDENCE_SURFACE = 'This card is a pre-signature missing-evidence surface.'
+const MISSING_EVIDENCE_READER = 'This card shows what evidence was missing before the award was signed.'
+
+/** Presentation only. Stored claim boundaries and the JSON export keep the original sentence. */
+export function readerBoundary(text: string): string {
+  return text.replaceAll(MISSING_EVIDENCE_SURFACE, MISSING_EVIDENCE_READER)
+}

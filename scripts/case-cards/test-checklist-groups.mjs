@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { checklistGroupId, checklistPreview, fieldTitle, groupChecklistFields, CHECKLIST_PREVIEW_LIMIT } from '../../lib/case-card-presentation/checklist.ts'
+import { checklistGroupId, checklistPreview, checklistRowDetail, fieldTitle, groupChecklistFields, CHECKLIST_PREVIEW_LIMIT } from '../../lib/case-card-presentation/checklist.ts'
 import { glossary, splitGlossary, takeGlossaryTerms } from '../../lib/case-card-presentation/glossary.ts'
-import { firstSentence, readerFacingText } from '../../lib/case-card-presentation/reader-text.ts'
+import { firstSentence, readerBoundary, readerFacingText } from '../../lib/case-card-presentation/reader-text.ts'
 import { getCaseCard } from '../../lib/case-cards/catalog.ts'
 
 function field(key, value) {
@@ -145,4 +145,20 @@ test('the card lead is the first stored sentence, and the checklist shows the fi
   assert.equal(preview.shown.length, 3)
   assert.equal(preview.hiddenCount, missing.rows.length - 3)
   assert.deepEqual(preview.shown.map(row => row.key), missing.rows.slice(0, 3).map(row => row.key))
+  assert.equal(missing.hint, 'These items were not found in the file.')
+  assert.equal(checklistRowDetail('missing', missing.rows[0].quote), null)
+  assert.equal(checklistRowDetail('present', 'Plan line 14'), 'Plan line 14')
+  assert.equal(checklistRowDetail('stated-absent', 'Stated absent in this packet: no receiving report.'), 'Stated absent in this packet: no receiving report.')
+  assert.equal(checklistRowDetail('negative', 'No'), 'No')
+  assert.match(card.claimBoundary, /pre-signature missing-evidence surface/)
+  const boundary = readerBoundary(card.claimBoundary)
+  assert.match(boundary, /This card shows what evidence was missing before the award was signed\./)
+  assert.equal(boundary.includes('pre-signature missing-evidence surface'), false)
+  assert.match(boundary, /does not say Trace-li prevents fraud/)
+  assert.match(boundary, /customer or endorser/)
+  const sudan = getCaseCard('unfpa-ia-2025-29-sudan')
+  assert.ok(sudan)
+  assert.match(sudan.claimBoundary, /pre-signature missing-evidence surface/)
+  assert.match(readerBoundary(sudan.claimBoundary), /before the award was signed/)
+  assert.match(readerBoundary(sudan.claimBoundary), /does not imply that UNFPA is a customer or endorser/)
 })

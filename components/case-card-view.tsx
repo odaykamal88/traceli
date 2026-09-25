@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 import { ChecklistPreview } from '@/components/checklist-preview'
 import { GlossaryText } from '@/components/glossary-text'
-import { groupChecklistFields } from '@/lib/case-card-presentation/checklist'
+import { checklistRowDetail, groupChecklistFields } from '@/lib/case-card-presentation/checklist'
 import type { GlossaryId } from '@/lib/case-card-presentation/glossary'
-import { firstSentence, readerFacingText } from '@/lib/case-card-presentation/reader-text'
+import { firstSentence, readerBoundary, readerFacingText } from '@/lib/case-card-presentation/reader-text'
 import type { CaseCardExport } from '@/lib/field-registry/case-card'
 import type { RegistryField } from '@/lib/field-registry/schema'
 
@@ -77,9 +77,11 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
                         <p className="text-base font-semibold leading-6 text-[#071d39]">
                           <Reader text={row.title} seen={seen} />
                         </p>
-                        <p className="mt-2 text-sm leading-6 text-[#24343a]">
-                          <Reader text={row.quote} seen={seen} />
-                        </p>
+                        {checklistRowDetail(group.id, row.quote) ? (
+                          <p className="mt-2 text-sm leading-6 text-[#24343a]">
+                            <Reader text={row.quote} seen={seen} />
+                          </p>
+                        ) : null}
                       </li>
                     ))}
                   </ChecklistPreview>
@@ -92,12 +94,7 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
         <section className="mt-10" aria-labelledby="boundary-heading">
           <h2 id="boundary-heading" className="text-sm font-semibold text-[#145246]">Boundary</h2>
           <p className="mt-2 text-base leading-7 text-[#52696a]">
-            <GlossaryText text={card.claimBoundary} seen={seen} />
-          </p>
-          <p className="mt-4 text-sm leading-6">
-            <Link href={jsonHref} className="font-semibold text-[#1f6f61] underline decoration-[#b7ddd4] underline-offset-4 hover:text-[#145246]">
-              JSON export
-            </Link>
+            <GlossaryText text={readerBoundary(card.claimBoundary)} seen={seen} />
           </p>
         </section>
 
@@ -110,6 +107,11 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
               {card.snapshotHash && card.packsHash
                 ? 'The snapshot hash and the packs hash let a reader recompute this record and confirm it has not changed.'
                 : 'Hashes are not issued on this fixture. When a freeze exists, the snapshot hash and the packs hash let a reader recompute the record and confirm it has not changed.'}
+            </p>
+            <p className="text-sm leading-6">
+              <Link href={jsonHref} className="font-semibold text-[#1f6f61] underline decoration-[#b7ddd4] underline-offset-4 hover:text-[#145246]">
+                JSON export
+              </Link>
             </p>
 
             <section aria-labelledby="record-summary-heading">
