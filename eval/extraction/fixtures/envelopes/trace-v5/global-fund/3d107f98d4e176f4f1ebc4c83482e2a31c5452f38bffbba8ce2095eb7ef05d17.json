@@ -1,0 +1,16 @@
+{
+  "pipelineVersion": "trace-v5",
+  "packId": "global-fund",
+  "sha256": "3d107f98d4e176f4f1ebc4c83482e2a31c5452f38bffbba8ce2095eb7ef05d17",
+  "file": "gf-short-synthetic.pdf",
+  "source": "fixture",
+  "envelope": {
+    "status": "complete",
+    "created_at": "2026-09-25T00:00:00.000Z",
+    "markdown": "Page 1\nSynthetic rehearsal. Trace-li extraction fixture. Not a Global Fund award file.\nThe contractor is able to perform the health-product distribution described in this solicitation.\nNo conflict of interest disclosure on file.\nA competitive award or an established exemption is on file for this purchase.\nThe solicitation was advertised on the national procurement portal on 2 February 2026.\nThe evaluation panel recorded the award rationale in the bid report dated 12 March 2026.\nThe contract value is USD 184000.\n\nPage 2\nRestrictive-measures result: clear.\nA signed sub-recipient agreement is attached as Annex B.\nThe sub-recipient capacity assessment was not completed before signature.\nThis fixture does not state the remaining Global Fund pack controls.",
+    "data": {},
+    "confidence": {
+      "overall": 0.5
+    }
+  }
+}

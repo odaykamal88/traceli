@@ -15,6 +15,7 @@ import { STATED_ABSENT_PREFIX } from '../../lib/field-registry/pack-align.ts'
 import { fieldKeysForDonorPack } from '../../lib/field-registry/pack-schema.ts'
 import { getDonorPack, isDonorPackId } from '../../lib/field-registry/packs/index.ts'
 
+import { localTextEnvelope, localTextMarkdown } from './local-text.mjs'
 import { buildReport } from './report.mjs'
 import { accumulate, emptyMetrics, scorePair } from './score.mjs'
 
@@ -28,8 +29,14 @@ export const pipelineVersion = TALONIC_PACK_PIPELINE_VERSION
 
 /** Same sentence as `missingField` in the desk snapshot. An unread key uses this reason. */
 const UNREAD_REASON = 'Not extracted from this packet.'
-const SHEET_KEYS = ['file', 'packId', 'packVersion', 'sha256', 'pages', 'fields', 'split']
-const FIELD_KEYS = ['state', 'statedAbsent', 'value', 'page', 'quote', 'note']
+const SHEET_KEYS = [
+  'file', 'packId', 'packVersion', 'sha256', 'pages', 'fields', 'split',
+  'packName', 'title', 'classification', 'quoteVerification', 'traps',
+]
+const FIELD_KEYS = [
+  'state', 'statedAbsent', 'value', 'page', 'quote', 'note',
+  'trap', 'rule', 'expectedRegistryValue',
+]
 const STATES = new Set(['present', 'missing', 'negative'])
 const EVAL_ORGANIZATION = 'org_eval_extraction'
 const REPLAY_KEY = 'tlnc_eval_cache_replay'
@@ -148,6 +155,18 @@ export function validateAnswerSheet(sheet, pdfName, sha256, packKeys) {
       throw new EvalInputError(`${pdfName} ${key} quote must be a string or null.`)
     }
     if (typeof entry.note !== 'string') throw new EvalInputError(`${pdfName} ${key} note must be a string.`)
+    if (entry.trap !== undefined && typeof entry.trap !== 'string') {
+      throw new EvalInputError(`${pdfName} ${key} trap must be a string.`)
+    }
+    if (entry.rule !== undefined && !isObject(entry.rule)) {
+      throw new EvalInputError(`${pdfName} ${key} rule must be an object.`)
+    }
+    if (entry.expectedRegistryValue !== undefined && !isObject(entry.expectedRegistryValue)) {
+      throw new EvalInputError(`${pdfName} ${key} expectedRegistryValue must be an object.`)
+    }
+  }
+  if (sheet.traps !== undefined && !Array.isArray(sheet.traps)) {
+    throw new EvalInputError(`${pdfName} traps must be an array.`)
   }
   return { file, packId, packVersion, sha256: hash, pages: sheet.pages, split: sheet.split ?? 'train', fields: sheet.fields }
 }
@@ -294,6 +313,24 @@ function bumpConfusion(confusion, packId, row) {
   confusion.set(id, entry)
 }
 
+async function readAnswerSheet(dir, name) {
+  const stem = basename(name, '.pdf')
+  const candidates = [join(dir, `${stem}.json`), join(dir, 'answers', `${stem}.json`)]
+  let lastMissing = candidates[0]
+  for (const sheetPath of candidates) {
+    try {
+      return JSON.parse(await readFile(sheetPath, 'utf8'))
+    } catch (error) {
+      if (error && error.code === 'ENOENT') {
+        lastMissing = sheetPath
+        continue
+      }
+      throw new EvalInputError(`${name} answer sheet is not valid JSON.`)
+    }
+  }
+  throw new EvalInputError(`${name} has no answer sheet at ${lastMissing}.`)
+}
+
 export async function loadCorpus(dir) {
   const entries = await readdir(dir, { withFileTypes: true })
   const pdfs = entries
@@ -303,14 +340,7 @@ export async function loadCorpus(dir) {
   if (pdfs.length === 0) throw new EvalInputError(`No PDF files in ${dir}.`)
   const packets = []
   for (const name of pdfs) {
-    const sheetPath = join(dir, `${basename(name, '.pdf')}.json`)
-    let sheetJson
-    try {
-      sheetJson = JSON.parse(await readFile(sheetPath, 'utf8'))
-    } catch (error) {
-      if (error && error.code === 'ENOENT') throw new EvalInputError(`${name} has no answer sheet at ${sheetPath}.`)
-      throw new EvalInputError(`${name} answer sheet is not valid JSON.`)
-    }
+    const sheetJson = await readAnswerSheet(dir, name)
     const bytes = new Uint8Array(await readFile(join(dir, name)))
     if (bytes.byteLength < 5 || Buffer.from(bytes.subarray(0, 5)).toString('latin1') !== '%PDF-') {
       throw new EvalInputError(`${name} is not a PDF.`)
@@ -327,7 +357,9 @@ export async function loadCorpus(dir) {
 export async function runCorpus(options) {
   const dir = resolve(options.dir ?? defaultPacketsDir)
   const mode = options.mode ?? 'cached'
-  if (mode !== 'cached' && mode !== 'live') throw new EvalInputError('Mode must be cached or live.')
+  if (mode !== 'cached' && mode !== 'live' && mode !== 'local-text') {
+    throw new EvalInputError('Mode must be cached, live, or local-text.')
+  }
   const cacheDir = resolve(options.cacheDir ?? defaultCacheDir)
   const envelopeDir = resolve(options.envelopeDir ?? defaultEnvelopeDir)
   const env = options.env ?? process.env
@@ -345,7 +377,11 @@ export async function runCorpus(options) {
     const expected = { packId: packet.sheet.packId, sha256: packet.sha256 }
     let envelope = null
     let responseSource = 'live'
-    if (mode === 'cached') {
+    if (mode === 'local-text') {
+      const markdown = await localTextMarkdown(packet.bytes, packet.sheet.pages)
+      envelope = localTextEnvelope(markdown)
+      responseSource = 'local-text'
+    } else if (mode === 'cached') {
       const cached = await readEnvelope(cacheFile(cacheDir, packet.sheet.packId, packet.sha256), expected)
       const seeded = cached ?? await readEnvelope(
         cacheFile(envelopeDir, packet.sheet.packId, packet.sha256),

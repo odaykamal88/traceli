@@ -1,0 +1,152 @@
+[
+  {
+    "file": "gf-01-mwi-sr-selection.pdf",
+    "answers": "answers/gf-01-mwi-sr-selection.json",
+    "packId": "global-fund",
+    "packVersion": "2026.2",
+    "pages": 18,
+    "sha256": "a328e41d1141aae10537d34d409c056a1eb6aa4a29acf46315b33178116942f8",
+    "counts": {
+      "present": 15,
+      "missing_silent": 7,
+      "missing_stated_absent": 3,
+      "negative": 1,
+      "statedAbsent_total": 4
+    }
+  },
+  {
+    "file": "gf-02-moz-lab-reagents-tender.pdf",
+    "answers": "answers/gf-02-moz-lab-reagents-tender.json",
+    "packId": "global-fund",
+    "packVersion": "2026.2",
+    "pages": 25,
+    "sha256": "b919c781d16225394436d1d93469a135e2dd2c896801feb9bd6f4946c23cd581",
+    "counts": {
+      "present": 15,
+      "missing_silent": 7,
+      "missing_stated_absent": 3,
+      "negative": 1,
+      "statedAbsent_total": 3
+    }
+  },
+  {
+    "file": "gf-03-cmr-single-source-fleet.pdf",
+    "answers": "answers/gf-03-cmr-single-source-fleet.json",
+    "packId": "global-fund",
+    "packVersion": "2026.2",
+    "pages": 14,
+    "sha256": "d14dca0105e8b529451d4b330a3389c7fe54535170a32fd065fa15d19055f807",
+    "counts": {
+      "present": 15,
+      "missing_silent": 5,
+      "missing_stated_absent": 3,
+      "negative": 3,
+      "statedAbsent_total": 4
+    }
+  },
+  {
+    "file": "gf-04-npl-sr-continuation.pdf",
+    "answers": "answers/gf-04-npl-sr-continuation.json",
+    "packId": "global-fund",
+    "packVersion": "2026.2",
+    "pages": 32,
+    "sha256": "f5efb7d984f06f759281f7ecbe5e7326fb7f80788a3c7387d19b07d0111835cf",
+    "counts": {
+      "present": 14,
+      "missing_silent": 7,
+      "missing_stated_absent": 4,
+      "negative": 1,
+      "statedAbsent_total": 4
+    }
+  },
+  {
+    "file": "ocha-01-som-standard-allocation.pdf",
+    "answers": "answers/ocha-01-som-standard-allocation.json",
+    "packId": "ocha-cbpf",
+    "packVersion": "2026.1",
+    "pages": 16,
+    "sha256": "cd27b96da8214d3042130ae6fbcd978c0bb615d810d234ed29f0f8d0284a8054",
+    "counts": {
+      "present": 14,
+      "missing_silent": 6,
+      "missing_stated_absent": 4,
+      "negative": 0,
+      "statedAbsent_total": 4
+    }
+  },
+  {
+    "file": "ocha-02-nga-reserve-allocation.pdf",
+    "answers": "answers/ocha-02-nga-reserve-allocation.json",
+    "packId": "ocha-cbpf",
+    "packVersion": "2026.1",
+    "pages": 23,
+    "sha256": "5aa3de419420e6dc9c68ee1a66556a4fcf534f84d708053f74d0773ad5b5cc63",
+    "counts": {
+      "present": 14,
+      "missing_silent": 6,
+      "missing_stated_absent": 3,
+      "negative": 1,
+      "statedAbsent_total": 4
+    }
+  },
+  {
+    "file": "ocha-03-afg-consortium-standard.pdf",
+    "answers": "answers/ocha-03-afg-consortium-standard.json",
+    "packId": "ocha-cbpf",
+    "packVersion": "2026.1",
+    "pages": 30,
+    "sha256": "4b28755c829f8f3959296819a54e5965f7039833b69ae325272a67fcb337ad1d",
+    "counts": {
+      "present": 14,
+      "missing_silent": 6,
+      "missing_stated_absent": 3,
+      "negative": 1,
+      "statedAbsent_total": 3
+    }
+  },
+  {
+    "file": "unfpa-01-uga-ip-workplan.pdf",
+    "answers": "answers/unfpa-01-uga-ip-workplan.json",
+    "packId": "unfpa",
+    "packVersion": "2026.1",
+    "pages": 20,
+    "sha256": "3ea1fa35a31e6faba84f048fd3d8e56b164f3dab9c4c25d9a373096aa4eaac57",
+    "counts": {
+      "present": 15,
+      "missing_silent": 8,
+      "missing_stated_absent": 3,
+      "negative": 1,
+      "statedAbsent_total": 4
+    }
+  },
+  {
+    "file": "unfpa-02-bgd-dignity-kits-rfq.pdf",
+    "answers": "answers/unfpa-02-bgd-dignity-kits-rfq.json",
+    "packId": "unfpa",
+    "packVersion": "2026.1",
+    "pages": 13,
+    "sha256": "65ca9f2e31fc5badde0733f880602d7f471ddfbbe64e9f8d4edb53b812c6fef7",
+    "counts": {
+      "present": 13,
+      "missing_silent": 8,
+      "missing_stated_absent": 5,
+      "negative": 1,
+      "statedAbsent_total": 5
+    }
+  },
+  {
+    "file": "unfpa-03-jor-ngo-noncompetitive.pdf",
+    "answers": "answers/unfpa-03-jor-ngo-noncompetitive.json",
+    "packId": "unfpa",
+    "packVersion": "2026.1",
+    "pages": 27,
+    "sha256": "24e00615ad7caf92690e5af01c08557e35b358e4a7b2f0e92573bdd9f3ee45de",
+    "counts": {
+      "present": 15,
+      "missing_silent": 7,
+      "missing_stated_absent": 3,
+      "negative": 2,
+      "statedAbsent_total": 5
+    }
+  }
+]

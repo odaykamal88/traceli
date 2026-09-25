@@ -2,6 +2,7 @@
  * Score pack extraction against answer sheets.
  *
  * Cached mode replays a stored Talonic body through the desk client.
+ * Local-text mode replays poppler page text through that same client and does not call Talonic.
  * Live mode calls Talonic and writes that body into the gitignored cache.
  */
 
@@ -26,10 +27,11 @@ const { values } = parseArgs({
 
 function help() {
   return [
-    'Usage: pnpm eval:extraction -- [--dir path] [--mode cached|live] [--out path] [--holdout a.pdf,b.pdf] [--cache path]',
+    'Usage: pnpm eval:extraction -- [--dir path] [--mode cached|local-text|live] [--out path] [--holdout a.pdf,b.pdf] [--cache path]',
     '',
     'Default directory: eval/extraction/fixtures/packets',
     'Default mode: cached. Cached mode never calls Talonic.',
+    'Local-text mode reads each PDF with pdftotext and replays that text. It never calls Talonic.',
     'Live mode reads TRACE_TALONIC_API_KEY and TRACE_TALONIC_BASE_URL the same way as the desk.',
     'Hold out files to report a test split separately from the rest.',
   ].join('\n')

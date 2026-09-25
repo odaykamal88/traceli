@@ -12,6 +12,7 @@ const RATE_ROWS = [
   ['statedAbsentDetection', 'Stated-absent detection', 'stated absences the desk recorded'],
   ['valueMatch', 'Value match', 'normalised value, where the answer sheet gives one'],
   ['pageMatch', 'Page match', 'page, where the answer sheet gives one'],
+  ['quoteMatch', 'Quote match', 'whitespace-collapsed quote, where the answer sheet gives one'],
 ]
 
 function percent(rate) {
@@ -35,6 +36,7 @@ function metricLine(metrics, key) {
   }
   if (key === 'valueMatch') return fraction(metrics.valueMatched, metrics.valueGiven, 'no values given')
   if (key === 'pageMatch') return fraction(metrics.pageMatched, metrics.pageGiven, 'no pages given')
+  if (key === 'quoteMatch') return fraction(metrics.quoteMatched, metrics.quoteGiven, 'no quotes given')
   return ''
 }
 
@@ -121,7 +123,7 @@ export function renderMarkdown(report) {
     '',
     'False-missing is the share of keys that are truly present and that the desk reported missing. That is the rate to drive down. False-present is the share of keys that are not present and that the desk reported present.',
     '',
-    'A stated absence is detected when the desk stores a missing reason beginning with `Stated absent in this packet:`, or stores `negative` / `false` for a boolean control the packet says is absent. Value match ignores case and collapses whitespace. Page match counts only keys whose answer sheet names a page.',
+    'A stated absence is detected when the desk stores a missing reason beginning with `Stated absent in this packet:`, or stores `negative` / `false` for a boolean control the packet says is absent. Value match ignores case and collapses whitespace. Page match counts only keys whose answer sheet names a page. Quote match collapses whitespace runs to one space and compares the answer-sheet sentence with the desk quote; it does not fold case.',
     '',
     '## Overall',
     '',

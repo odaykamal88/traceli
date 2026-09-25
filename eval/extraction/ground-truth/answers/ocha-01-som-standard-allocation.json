@@ -1,0 +1,441 @@
+{
+  "file": "ocha-01-som-standard-allocation.pdf",
+  "packId": "ocha-cbpf",
+  "packVersion": "2026.1",
+  "packName": "OCHA CBPF Global Guidelines-shaped award desk v0",
+  "sha256": "cd27b96da8214d3042130ae6fbcd978c0bb615d810d234ed29f0f8d0284a8054",
+  "pages": 16,
+  "title": "Standard allocation project file: emergency WASH in Lower Jubba riverine villages",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "conflict-resolved-later",
+      "key": "partner.capacity_assessment",
+      "description": "Cover memo and section 3 opening: capacity assessment pending; next paragraph records completion 2 March 2026, medium risk."
+    },
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "grant.consortium_controls",
+      "description": "Section 5 quotes the fund requirement for sub-partner pass-through controls; none described."
+    },
+    {
+      "kind": "template-placeholder-date",
+      "key": "idd.evidence_ref",
+      "description": "Section 7 shows \"HFU-DD-______ dated __/__/2026\" (template placeholder with date mask); no evidence reference."
+    }
+  ],
+  "fields": {
+    "partner.due_diligence_passed": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 3,
+      "quote": "JRRO passed the due diligence stage on 14 May 2025 and is registered as an eligible partner of the fund.",
+      "note": "Due diligence passed.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Partner due diligence must be recorded as passed",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "partner.capacity_assessment": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Capacity assessment completed 2 March 2026; risk level medium",
+      "page": 3,
+      "quote": "The capacity assessment was completed on 2 March 2026 and places JRRO at a medium risk level, with a funding ceiling of US$ 800,000 per project.",
+      "note": "Cover memo says pending; section 3 records completion (present).",
+      "rule": {
+        "kind": "required_present",
+        "title": "Partner capacity assessment required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Capacity assessment completed 2 March 2026; risk level medium"
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "partner.annex7_declarations": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "accurate-info compliance coi designated-entity legal-process disability psea",
+      "page": 3,
+      "quote": "The signed Annex 7 declarations of JRRO cover accurate information, compliance with the guidelines, conflict of interest, designated entities, legal process, disability inclusion and PSEA.",
+      "note": "All seven declarations in prose. The rule text_must_include expects canonical tokens (accurate-info, coi, designated-entity, legal-process, ...); prose would fail a literal token matcher.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Annex 7 declarations required, including conflict of interest and designated entity",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "accurate-info compliance coi designated-entity legal-process disability psea"
+      }
+    },
+    "allocation.modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "standard",
+      "page": 3,
+      "quote": "This project is funded through a standard allocation, launched on 10 February 2026 with an envelope of US$ 18 million.",
+      "note": "Modality standard.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Allocation modality must be standard or reserve",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "standard"
+      }
+    },
+    "allocation.preselection_justification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable to a standard allocation and not mentioned.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "Reserve pre-selection needs a written justification for each invited partner",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "allocation.strategy_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "SA1 allocation strategy paper approved by the HC on 3 February 2026 (Annex A)",
+      "page": 3,
+      "quote": "The allocation strategy paper, approved by the Humanitarian Coordinator on 3 February 2026 after consultation with the Advisory Board, is at Annex A.",
+      "note": "Strategy filed.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Allocation strategy filed, including reserve pre-selection criteria",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "SA1 allocation strategy paper approved by the HC on 3 February 2026 (Annex A)"
+      }
+    },
+    "selection.scorecard_or_alternative": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Scorecard total 78/100 for project 0213",
+      "page": 3,
+      "quote": "The WASH cluster review committee completed the standard scorecard for each proposal, and project 0213 scored 78 out of 100.",
+      "note": "Scorecard.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Scorecard or alternative selection document required before recommendation",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Scorecard total 78/100 for project 0213"
+      }
+    },
+    "selection.committee_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Strategic review committee 12 March 2026 recommended 0213 for funding",
+      "page": 3,
+      "quote": "The strategic review committee met on 12 March 2026 and recommended project 0213 for funding at the requested amount.",
+      "note": "Committee decision.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Review-committee decision recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Strategic review committee 12 March 2026 recommended 0213 for funding"
+      }
+    },
+    "selection.recommendation_differs": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": false,
+      "page": 3,
+      "quote": "The recommendation of the committee follows the scorecard ranking, and no project was recommended out of rank order.",
+      "note": "Recommendation does not differ from scores. Key has no rule of its own; value false is a legitimate present value, not negative.",
+      "rule": {
+        "kind": "no_own_rule",
+        "title": "(no rule of its own; trigger for selection.mismatch_note when true)",
+        "severity": "n/a"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": false
+      }
+    },
+    "selection.mismatch_note": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable (no mismatch) and not mentioned.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A score and recommendation mismatch needs a disposition note",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "grant.agreement_complete": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "The grant agreement has not been issued; it will be generated in OneGMS once the technical review is cleared.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Grant agreement completeness recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The grant agreement has not been issued; it will be generated in OneGMS once the technical review is cleared."
+      }
+    },
+    "grant.budget_template": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "The budget above is in the partner's own format; the budget on the standard fund template has not yet been submitted and will be requested during technical review.",
+      "note": "Stated not on standard template.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Budget template on the grant file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The budget above is in the partner's own format; the budget on the standard fund template has not yet been submitted and will be requested during technical review."
+      }
+    },
+    "grant.consortium_controls": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "A sub-implementing CBO is named and the fund requirement for pass-through controls is quoted, but no controls are described.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Consortium or sub-grant pass-through controls named",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "misconduct.annex8_path": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No reference to Annex 8 or to suggested measures for non-compliance.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annex 8 non-compliance path recorded (suggested measures, not a fraud regime)",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "misconduct.annex9_notification": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Partner must notify the HFU within 48 hours of becoming aware of suspected fraud (Annex 9)",
+      "page": 4,
+      "quote": "Under Annex 9 of the guidelines, JRRO must inform the HFU within 48 hours of becoming aware of any allegation or suspicion of fraud, corruption or diversion affecting the project.",
+      "note": "Annex 9 path with 48-hour duty.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annex 9 fraud notification path recorded, including the 48-hour partner duty",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Partner must notify the HFU within 48 hours of becoming aware of suspected fraud (Annex 9)"
+      }
+    },
+    "misconduct.oios_notification_path": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "The project file does not name the channel for reporting to OIOS.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OIOS notification pathway named",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The project file does not name the channel for reporting to OIOS."
+      }
+    },
+    "misconduct.secretariat_sanctions_regime": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "none",
+      "page": 4,
+      "quote": "No Secretariat-wide partner-sanctions regime applies to the fund, and the file records it as none.",
+      "note": "Recorded as none.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Secretariat partner-sanctions regime must be recorded as none",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "none"
+      }
+    },
+    "onegms.project_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Under technical review",
+      "page": 4,
+      "quote": "Status of the project in OneGMS on 20 March 2026: under technical review.",
+      "note": "Project status.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OneGMS project status required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Under technical review"
+      }
+    },
+    "onegms.selection_record": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 3,
+      "quote": "The selection decision of the review committee was not recorded in OneGMS before the project was recommended for funding.",
+      "note": "Stated not recorded.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OneGMS selection record required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The selection decision of the review committee was not recorded in OneGMS before the project was recommended for funding."
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Juba Riverine Relief Organisation",
+      "page": 4,
+      "quote": "Juba Riverine Relief Organisation (JRRO) and its board",
+      "note": "Subject.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Designated-entity subject required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Juba Riverine Relief Organisation"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "designated-entity",
+      "page": 4,
+      "quote": "designated-entity (Annex 7 declaration, section 4)",
+      "note": "Canonical token.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Annex 7 designated-entity scope must be attested",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "designated-entity"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "clear",
+      "page": 4,
+      "quote": "Clear",
+      "note": "clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Designated-entity result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "clear"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The screening reference cell is an unfilled template placeholder (\"HFU-DD-______ dated __/__/2026\"); no reference exists.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Designated-entity evidence reference required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "template-placeholder-date"
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated; result clear.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear designated-entity result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    }
+  }
+}

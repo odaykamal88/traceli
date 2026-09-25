@@ -1,0 +1,469 @@
+{
+  "file": "gf-01-mwi-sr-selection.pdf",
+  "packId": "global-fund",
+  "packVersion": "2026.2",
+  "packName": "Global Fund Grant Regulations v1",
+  "sha256": "a328e41d1141aae10537d34d409c056a1eb6aa4a29acf46315b33178116942f8",
+  "pages": 18,
+  "title": "Sub-recipient selection file: community case management, Mbalame and Chitsanzo districts",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "sr.capacity_assessed",
+      "description": "Manual section 5.2 (capacity assessment required before signature) is quoted in the policy section; no capacity assessment of MCHN is on file."
+    },
+    {
+      "kind": "conflict-resolved-later",
+      "key": "award.contract_value_usd",
+      "description": "Cover memo gives US$ 1,248,600; Annex E corrects it to US$ 1,284,600 (true value)."
+    }
+  ],
+  "fields": {
+    "eligibility.contractor_capable": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 5,
+      "quote": "On the evidence of its last two audited statements and its current iCCM portfolio, the committee is satisfied that MCHN has the ability to implement the module at the proposed scale.",
+      "note": "Affirmation of ability to perform.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Contractor ability to perform must be affirmed",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "integrity.coi_disclosed": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 5,
+      "quote": "The external member from the District Health Office did not sign the conflict-of-interest declaration, and the file does not record why the declaration was not obtained.",
+      "note": "One of five committee members has no signed declaration; disclosure incomplete, so the control is adverse (negative false), in line with pack-align treatment of an explicit absence on a boolean control.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Conflict of interest disclosure required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "procurement.competitive_or_exempt": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "Selection was competitive: an open call for expressions of interest was issued to civil society organisations registered in Malawi, and seven applications were received by the closing date.",
+      "note": "Open call, seven applicants.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Award must be competitive or an established exemption",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "procurement.competition_or_exemption_documented": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Call CHP/SR/2026/01, applicant register, opening minutes and evaluation report (Annex C)",
+      "page": 4,
+      "quote": "The call text, the register of applications, the opening minutes and the full evaluation report are filed at Annex C of this file.",
+      "note": "Competition record on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Competition or sole-source exemption documentation required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Call CHP/SR/2026/01, applicant register, opening minutes and evaluation report (Annex C)"
+      }
+    },
+    "procurement.solicitation_notified": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Call published 12 January 2026 in two national newspapers and on the CHP website; closing 9 February 2026",
+      "page": 4,
+      "quote": "The call was published on 12 January 2026 in two national newspapers and on the CHP website, with a closing date of 9 February 2026.",
+      "note": "Publication channels and dates of the solicitation notice.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Bid solicitation notice to prospective bidders",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Call published 12 January 2026 in two national newspapers and on the CHP website; closing 9 February 2026"
+      }
+    },
+    "documentation.award_rationale_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Recommendation rationale: highest score, only applicant covering all 38 catchment areas with existing volunteer network",
+      "page": 5,
+      "quote": "The committee recommends MCHN because it obtained the highest score and is the only applicant with an existing volunteer network in all 38 catchment areas, which reduces start-up time by an estimated four months.",
+      "note": "Award rationale stated in the evaluation report.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Award rationale documentation required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Recommendation rationale: highest score, only applicant covering all 38 catchment areas with existing volunteer network"
+      }
+    },
+    "award.contract_value_usd": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": 1284600,
+      "page": 11,
+      "quote": "Correction: the ceiling of US$ 1,248,600 shown in the cover memorandum is a transposition error, and the agreed SR budget ceiling is US$ 1,284,600.",
+      "note": "Conflicting figures: cover memo says US$ 1,248,600; resolved late in Annex E to US$ 1,284,600.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Contract value must be on the registry",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": 1284600
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "threshold.method_aligned": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The file describes the open call but never ties the method to a value threshold.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Procurement method must align with value threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "sr.selection_documented": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Two-stage evaluation by five-member committee, 17-18 March 2026; consensus scores; MCHN ranked first",
+      "page": 4,
+      "quote": "The selection committee of five members evaluated the six compliant applications on 17 and 18 March 2026 and ranked MCHN first with a consensus score of 93 out of 100.",
+      "note": "Selection process (committee, dates, ranking) documented.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Sub-recipient selection process documented",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Two-stage evaluation by five-member committee, 17-18 March 2026; consensus scores; MCHN ranked first"
+      }
+    },
+    "sr.capacity_assessed": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Section 2 quotes manual section 5.2 requiring a capacity assessment before signature, but no assessment, date or rating for MCHN appears anywhere in the file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Sub-recipient capacity assessment on file",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "sr.written_agreement_on_file": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 6,
+      "quote": "The sub-recipient agreement has not yet been signed; the unsigned draft at Annex F is submitted for clearance together with this memorandum.",
+      "note": "Only an unsigned draft exists; stated as not signed.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Written sub-recipient agreement required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The sub-recipient agreement has not yet been signed; the unsigned draft at Annex F is submitted for clearance together with this memorandum."
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Mbalame Community Health Network",
+      "page": 6,
+      "quote": "Mbalame Community Health Network (MCHN), NGO Board registration No. 0412",
+      "note": "Subject organisation.",
+      "rule": {
+        "kind": "required_present",
+        "title": "IDD subject organization or individual required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Mbalame Community Health Network"
+      }
+    },
+    "idd.subject_kind": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "organization",
+      "page": 6,
+      "quote": "Organisation (registered non-governmental organisation)",
+      "note": "Prose \"Organisation\" maps to token organization.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD subject must be recorded as an organization or an individual",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "organization"
+      }
+    },
+    "idd.subject_role": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "sr",
+      "page": 6,
+      "quote": "Proposed sub-recipient for the CCM module",
+      "note": "Role token sr.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD subject role required (SR, supplier, signatory, or key personnel)",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "sr"
+      }
+    },
+    "idd.affiliated_persons": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 6,
+      "quote": "Board members and key staff of MCHN were not screened individually at this stage; the record covers the organisation only.",
+      "note": "Explicitly stated that affiliated/key persons were not screened.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Affiliated and key persons, with roles, required on the IDD record",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: Board members and key staff of MCHN were not screened individually at this stage; the record covers the organisation only."
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "un ofac us-state switzerland debarment ineligibility",
+      "page": 6,
+      "quote": "Lists covered: the UN Security Council consolidated list, the OFAC Specially Designated Nationals list, US State Department designations, the Swiss SECO sanctions list, and the World Bank and Global Fund debarment and ineligibility lists.",
+      "note": "Full scope stated in prose. The pack rule is text_must_include over canonical tokens (un, ofac, us-state, switzerland, debarment, ineligibility); prose such as \"UN Security Council\" or \"Swiss SECO\" does not literally contain us-state/switzerland tokens, so a literal token matcher would fail although the scope is complete.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Restrictive Measures scope must attest UN, OFAC, US State, Switzerland, and debarment",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "un ofac us-state switzerland debarment ineligibility"
+      }
+    },
+    "idd.screen_date": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026-03-24",
+      "page": 6,
+      "quote": "The screen was completed on 24 March 2026 and reviewed by the Head of Programmes on 25 March 2026.",
+      "note": "Screen date.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive Measures screen date required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026-03-24"
+      }
+    },
+    "idd.list_vintage": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No list version or download date is cited anywhere in the file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "List vintage cited by the screening evidence is required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.screen_modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "in_house",
+      "page": 6,
+      "quote": "The screen was run in-house by the CHP Compliance Officer using the compliance screening workbook maintained by the PR.",
+      "note": "In-house modality.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD modality must be in-house, a Global Fund pre-approved vendor, or other",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "in_house"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "clear",
+      "page": 6,
+      "quote": "Result: no match was found on any of the lists screened, and the subject is recorded as clear.",
+      "note": "Clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "clear"
+      }
+    },
+    "idd.screen_timing": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Timing (before engagement / grant-cycle re-run) is not attested; only the screen date is given.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Screen must be attested before engagement or as the grant-cycle re-run",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "CHP-IDD-2026-014",
+      "page": 6,
+      "quote": "Screening record CHP-IDD-2026-014 with list printouts",
+      "note": "Evidence reference.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Screening evidence reference required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "CHP-IDD-2026-014"
+      }
+    },
+    "idd.disposition_owner": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated; conditional on a non-clear result, which did not occur.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear Restrictive Measures result needs a disposition owner",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 6,
+      "quote": "Because the result was clear, no disposition decision was taken or recorded.",
+      "note": "Conditional key (required only for non-clear results). Explicitly stated as not recorded; rule would not fire because result is clear.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: Because the result was clear, no disposition decision was taken or recorded."
+      }
+    },
+    "idd.disposition_rationale": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated; conditional on a non-clear result.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear Restrictive Measures result needs a disposition rationale",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.gf_notification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No statement about communicating IDD results to the Global Fund.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "Restrictive Measures findings must be communicable to the Global Fund",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    }
+  }
+}

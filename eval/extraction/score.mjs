@@ -27,6 +27,19 @@ export function valuesMatch(gold, predicted) {
   return Object.is(normalizeComparable(gold), normalizeComparable(predicted))
 }
 
+/** Ground-truth quotes match pdftotext after whitespace runs collapse to one space. */
+export function collapseWhitespace(value) {
+  return String(value).normalize('NFKC').replace(/\s+/g, ' ').trim()
+}
+
+export function quotesMatch(gold, predicted) {
+  if (typeof gold !== 'string' || typeof predicted !== 'string') return false
+  const left = collapseWhitespace(gold)
+  const right = collapseWhitespace(predicted)
+  if (!left || !right) return false
+  return left === right
+}
+
 export function emptyMetrics() {
   return {
     keys: 0,
@@ -45,6 +58,8 @@ export function emptyMetrics() {
     valueMatched: 0,
     pageGiven: 0,
     pageMatched: 0,
+    quoteGiven: 0,
+    quoteMatched: 0,
     keysRead: 0,
   }
 }
@@ -63,6 +78,8 @@ export function scorePair(gold, predicted) {
     && valuesMatch(gold.value, predicted.value)
   const pageCompared = Number.isInteger(gold.page)
   const pageMatch = pageCompared && predicted.page === gold.page
+  const quoteCompared = typeof gold.quote === 'string' && collapseWhitespace(gold.quote).length > 0
+  const quoteMatch = quoteCompared && quotesMatch(gold.quote, predicted.quote)
   return {
     stateMatch,
     falseMissing,
@@ -74,6 +91,8 @@ export function scorePair(gold, predicted) {
     valueMatch,
     pageCompared,
     pageMatch,
+    quoteCompared,
+    quoteMatch,
   }
 }
 
@@ -104,6 +123,10 @@ export function accumulate(metrics, gold, predicted, scored) {
     metrics.pageGiven += 1
     if (scored.pageMatch) metrics.pageMatched += 1
   }
+  if (scored.quoteCompared) {
+    metrics.quoteGiven += 1
+    if (scored.quoteMatch) metrics.quoteMatched += 1
+  }
   if (predicted.read) metrics.keysRead += 1
 }
 
@@ -123,6 +146,7 @@ export function finishMetrics(metrics) {
     statedAbsentFalseRate: ratio(metrics.falseStatedAbsent, metrics.notStatedAbsent),
     valueMatch: ratio(metrics.valueMatched, metrics.valueGiven),
     pageMatch: ratio(metrics.pageMatched, metrics.pageGiven),
+    quoteMatch: ratio(metrics.quoteMatched, metrics.quoteGiven),
     keysReadRate: ratio(metrics.keysRead, metrics.keys),
   }
 }
