@@ -28,7 +28,7 @@ DRC IA/2024-24 was screened and **not used** as the named country-office case. S
 | Finished-work pre-signature frame; humans dispose; Trace-li freezes proof | Trace-li Research Desk framing — labelled as such |
 | Pattern matrix and value-chain map are synthesis | Chart captions — labelled synthesis |
 | Wireframes are illustrative Global Fund-shaped desk UI, not a live UNFPA desk run and not the UNFPA control set | Captions in the note |
-| Cross-links to the Global Fund note and fixture case cards | `/research/global-fund`, `/cases/unfpa-annex4-13-esa-ip`, `/cases/unfpa-annex4-21-arab-vendor`, `/cases/unfpa-ia-2025-29-sudan` |
+| Cross-links to the Global Fund note, the published IA/2025-29 case card, and the Annex 4 fixture case cards | `/research/global-fund`, `/cases/unfpa-ia-2025-29-sudan`, `/cases/unfpa-annex4-13-esa-ip`, `/cases/unfpa-annex4-21-arab-vendor` |
 
 ### Annual report — DP/FPA/2026/6
 
