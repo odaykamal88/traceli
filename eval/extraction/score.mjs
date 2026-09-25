@@ -70,7 +70,12 @@ export function scorePair(gold, predicted) {
   const falsePresent = predicted.state === 'present' && gold.state !== 'present'
   const presentFound = gold.state === 'present' && predicted.state === 'present'
   const statedAbsentDetected = gold.statedAbsent === true && predicted.statedAbsent === true
-  const falseStatedAbsent = gold.statedAbsent !== true && predicted.statedAbsent === true
+  // A negative the sheet marks statedAbsent false is an adverse fact, not a
+  // claim that the packet said the control was absent. The desk stores both
+  // cases as negative, so that flag must not become a false stated-absence.
+  const falseStatedAbsent = predicted.statedAbsent === true
+    && gold.statedAbsent !== true
+    && gold.state !== 'negative'
   const valueCompared = gold.value !== null && gold.value !== undefined
   const valueMatch = valueCompared
     && predicted.value !== null

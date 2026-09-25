@@ -38,6 +38,17 @@ test('normalised values match case, whitespace, and numeric strings', () => {
   assert.equal(valuesMatch('reserve', 'standard'), false)
   assert.equal(quotesMatch('line one\nline  two', 'line one line two'), true)
   assert.equal(quotesMatch('Clear', 'clear'), false)
+  const adverse = scorePair(
+    { state: 'negative', statedAbsent: false, value: 'after_engagement', page: 5 },
+    { state: 'negative', statedAbsent: true, value: 'after_engagement', page: 5, read: true },
+  )
+  assert.equal(adverse.stateMatch, true)
+  assert.equal(adverse.falseStatedAbsent, false)
+  const inventedAbsence = scorePair(
+    { state: 'missing', statedAbsent: false, value: null, page: null },
+    { state: 'negative', statedAbsent: true, value: false, page: 1, read: true },
+  )
+  assert.equal(inventedAbsence.falseStatedAbsent, true)
   const missed = scorePair(
     { state: 'present', statedAbsent: false, value: 'reserve', page: 1 },
     { state: 'missing', statedAbsent: false, value: null, page: null, read: false },
@@ -54,8 +65,8 @@ test('normalised values match case, whitespace, and numeric strings', () => {
 })
 
 test('fixture packets score the desk pipeline without calling Talonic', async () => {
-  assert.equal(pipelineVersion, 'trace-v5')
-  assert.equal(TALONIC_PACK_PIPELINE_VERSION, 'trace-v5')
+  assert.equal(pipelineVersion, 'trace-v4')
+  assert.equal(TALONIC_PACK_PIPELINE_VERSION, 'trace-v4')
   const cacheDir = await mkdtemp(join(tmpdir(), 'traceli-eval-cache-'))
   const original = globalThis.fetch
   let networkCalls = 0
@@ -66,24 +77,24 @@ test('fixture packets score the desk pipeline without calling Talonic', async ()
   try {
     const report = await runCorpus({ dir: defaultPacketsDir, mode: 'cached', cacheDir })
     assert.equal(networkCalls, 0)
-    assert.equal(report.pipelineVersion, 'trace-v5')
+    assert.equal(report.pipelineVersion, 'trace-v4')
     assert.equal(report.mode, 'cached')
     assert.equal(report.files.length, 3)
     assert.equal(report.splits, null)
     assert.equal(report.overall.keys, 77)
-    assert.equal(report.overall.stateCorrect, 69)
+    assert.equal(report.overall.stateCorrect, 68)
     assert.equal(report.overall.present, 12)
-    assert.equal(report.overall.presentFound, 4)
-    assert.equal(report.overall.falseMissing, 8)
+    assert.equal(report.overall.presentFound, 3)
+    assert.equal(report.overall.falseMissing, 9)
     assert.equal(report.overall.falsePresent, 0)
     assert.equal(report.overall.statedAbsent, 7)
     assert.equal(report.overall.statedAbsentDetected, 5)
     assert.equal(report.overall.falseStatedAbsent, 0)
-    assert.equal(report.overall.valueMatched, 6)
+    assert.equal(report.overall.valueMatched, 5)
     assert.equal(report.overall.valueGiven, 14)
-    assert.equal(report.overall.pageMatched, 9)
+    assert.equal(report.overall.pageMatched, 8)
     assert.equal(report.overall.pageGiven, 19)
-    assert.equal(report.overall.keysRead, 9)
+    assert.equal(report.overall.keysRead, 8)
 
     const unfpa = metricsOf(report, 'unfpa-ia-2025-29-sudan-rehearsal.pdf')
     assert.equal(unfpa.packId, 'unfpa')
@@ -113,19 +124,18 @@ test('fixture packets score the desk pipeline without calling Talonic', async ()
 
     const ocha = metricsOf(report, 'ocha-short-synthetic.pdf')
     assert.equal(ocha.metrics.keys, 24)
-    assert.equal(ocha.metrics.keysRead, 1)
-    assert.equal(ocha.metrics.falseMissing, 4)
+    assert.equal(ocha.metrics.keysRead, 0)
+    assert.equal(ocha.metrics.falseMissing, 5)
     assert.equal(ocha.metrics.present, 5)
     assert.equal(ocha.metrics.falsePresent, 0)
     const modality = ocha.keys.find(key => key.key === 'allocation.modality')
     assert.equal(modality.gold.value, 'reserve')
-    assert.equal(modality.predicted.state, 'present')
-    assert.equal(modality.predicted.value, 'reserve')
-    assert.equal(modality.falseMissing, false)
+    assert.equal(modality.predicted.state, 'missing')
+    assert.equal(modality.falseMissing, true)
 
     const markdown = renderMarkdown(report)
-    assert.match(markdown, /False-missing rate \| 66\.7% \(8\/12\)/)
-    assert.match(markdown, /Keys read from the packet \| 1\/24/)
+    assert.match(markdown, /False-missing rate \| 75\.0% \(9\/12\)/)
+    assert.match(markdown, /Keys read from the packet \| 0\/24/)
     assert.match(markdown, /ocha-cbpf \| `allocation.modality`/)
     assert.equal(report.confusion.length, 77)
   } finally {
@@ -160,8 +170,8 @@ test('holdout files are reported as their own split', async () => {
     holdout: ['ocha-short-synthetic.pdf'],
   })
   assert.deepEqual(report.splits.test.files, ['ocha-short-synthetic.pdf'])
-  assert.equal(report.splits.test.metrics.falseMissing, 4)
-  assert.equal(report.splits.test.metrics.keysRead, 1)
+  assert.equal(report.splits.test.metrics.falseMissing, 5)
+  assert.equal(report.splits.test.metrics.keysRead, 0)
   assert.equal(report.splits.train.metrics.falseMissing, 4)
   assert.equal(report.splits.train.files.length, 2)
   const markdown = renderMarkdown(report)

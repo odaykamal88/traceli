@@ -123,7 +123,7 @@ export function renderMarkdown(report) {
     '',
     'False-missing is the share of keys that are truly present and that the desk reported missing. That is the rate to drive down. False-present is the share of keys that are not present and that the desk reported present.',
     '',
-    'A stated absence is detected when the desk stores a missing reason beginning with `Stated absent in this packet:`, or stores `negative` / `false` for a boolean control the packet says is absent. Value match ignores case and collapses whitespace. Page match counts only keys whose answer sheet names a page. Quote match collapses whitespace runs to one space and compares the answer-sheet sentence with the desk quote; it does not fold case.',
+    'A stated absence is detected when the answer sheet sets `statedAbsent` and the desk stores a missing reason beginning with `Stated absent in this packet:`, or stores `negative` for that same key. A negative whose answer sheet sets `statedAbsent` to false is an adverse fact. It is not counted as a false stated-absence. Value match ignores case and collapses whitespace. Page match counts only keys whose answer sheet names a page. Quote match collapses whitespace runs to one space and compares the answer-sheet sentence with the desk quote; it does not fold case.',
     '',
     '## Overall',
     '',

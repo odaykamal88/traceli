@@ -60,7 +60,7 @@ Reported per file, per pack, and overall. When any file is in the test split, th
 | Recall on present | Truly present keys the desk also reported present. |
 | False-missing rate | Truly present keys the desk reported missing. This is the rate to drive down. |
 | False-present rate | Keys that are not present and the desk reported present. Do not raise this to cut false-missing. |
-| Stated-absent detection | Answer sheet `statedAbsent: true`, and the desk stored `Stated absent in this packet:` or `negative` / `false`. |
+| Stated-absent detection | Answer sheet `statedAbsent: true`, and the desk stored `Stated absent in this packet:` or `negative`. A negative with `statedAbsent: false` is not a false stated-absence. |
 | Value match | Normalised equality where the sheet gives a value. Case is folded, whitespace is collapsed, and a numeric string matches a number. |
 | Page match | Desk page equals the sheet page, only where the sheet gives a page. |
 | Quote match | Desk quote equals the sheet quote after whitespace runs collapse to one space. Case is kept. Compared only where the sheet gives a quote. |
@@ -74,9 +74,9 @@ A present key predicted `negative` counts against state accuracy and recall. It 
 
 The cache key is the pipeline version, the pack id, and the file SHA-256:
 
-`eval/extraction/.cache/trace-v5/{packId}/{sha256}.json`
+`eval/extraction/.cache/trace-v4/{packId}/{sha256}.json`
 
-The version is `TALONIC_PACK_PIPELINE_VERSION` in `lib/field-registry/extract-talonic.ts` (`trace-v5`). It is the same generation as the desk idempotency key `trace-v5-{packId}-{sha}`. Bump that version when the Talonic request or the mapping of its body changes, so an old cached run is not reused. Then re-run live, or the cached scorer will refuse the old files. `trace-v5` is the later-sentence alignment. `trace-v4` was quote cleaning and pack-only snapshots.
+The version is `TALONIC_PACK_PIPELINE_VERSION` in `lib/field-registry/extract-talonic.ts` (`trace-v4`). It is the same generation as the desk idempotency key `trace-v4-{packId}-{sha}`. Bump that version when the Talonic request or the mapping of its body changes, so an old cached run is not reused. Then re-run live, or the cached scorer will refuse the old files.
 
 The cached body is the completed Talonic JSON (markdown and `data`), not the mapped fragments. Replay sends that body back through `TalonicExtractionProvider`, so mapping changes are scored without another Talonic call. The cache is gitignored.
 
@@ -102,7 +102,7 @@ A later cached run uses those stored bodies. Delete `eval/extraction/.cache` to 
 - `unfpa-ia-2025-29-sudan-rehearsal.pdf` is the rehearsal packet already in `fixtures/desk/`. The sheet labels the four controls that packet states, and marks the other 23 UNFPA keys unread.
 - `gf-short-synthetic.pdf` and `ocha-short-synthetic.pdf` are hand-made. The Global Fund and OCHA rehearsal PDFs are not in the repo (only their published freeze snapshots are). These two stand in so the harness runs end to end. Their prose includes controls the current phrase list does not read, so the baseline false-missing rate is above zero.
 
-`fixtures/envelopes/trace-v5/` holds a Talonic-shaped body per file. The `trace-v4/` copies are the previous generation and are not read while the pipeline version is `trace-v5`. The markdown is the packet text. `data` on the UNFPA and OCHA fixtures includes a value the packet does not support, so a change that trusts `data` over the markdown shows up in the score. These envelopes are not live Talonic responses.
+`fixtures/envelopes/trace-v4/` holds a Talonic-shaped body per file. The markdown is the packet text. `data` on the UNFPA and OCHA fixtures includes a value the packet does not support, so a change that trusts `data` over the markdown shows up in the score. These envelopes are not live Talonic responses.
 
 ## Holdout
 
@@ -117,7 +117,7 @@ pnpm eval:extraction -- --mode local-text \
   --holdout gf-04-npl-sr-continuation.pdf,unfpa-03-jor-ngo-noncompetitive.pdf,ocha-03-afg-consortium-standard.pdf
 ```
 
-Use the train split to change prompts, schemas, or mapping. Report both splits. Bump `TALONIC_PACK_PIPELINE_VERSION` if the Talonic request or the mapped output changes. The checked-in ground-truth numbers are local-text replay through the desk client. They are not live Talonic scores. `reports/ground-truth-baseline/` is the `trace-v4` run before the phrase change. `reports/ground-truth/` is the `trace-v5` run. `reports/ground-truth-comparison.md` puts both splits, both packs, and the answer-sheet tensions in one place.
+The checked-in ground-truth numbers are local-text replay through the desk pipeline on `main` (`trace-v4`). They are not live Talonic scores. `reports/ground-truth/` is that run. `reports/ground-truth-comparison.md` is the before-only table, labelled by mode, plus a note on what would generalise to the held-out files. The desk phrase list is unchanged from `main`.
 
 `pnpm test:extraction-eval` checks the scorer, the fixture baseline, cache replay, and that live mode does not call the network when the key is missing.
 

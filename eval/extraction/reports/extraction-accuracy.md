@@ -1,24 +1,24 @@
 # Trace-li extraction accuracy
 
-Pipeline `trace-v5`. Mode `cached`. 3 files.
+Pipeline `trace-v4`. Mode `cached`. 3 files.
 
 False-missing is the share of keys that are truly present and that the desk reported missing. That is the rate to drive down. False-present is the share of keys that are not present and that the desk reported present.
 
-A stated absence is detected when the desk stores a missing reason beginning with `Stated absent in this packet:`, or stores `negative` / `false` for a boolean control the packet says is absent. Value match ignores case and collapses whitespace. Page match counts only keys whose answer sheet names a page. Quote match collapses whitespace runs to one space and compares the answer-sheet sentence with the desk quote; it does not fold case.
+A stated absence is detected when the answer sheet sets `statedAbsent` and the desk stores a missing reason beginning with `Stated absent in this packet:`, or stores `negative` for that same key. A negative whose answer sheet sets `statedAbsent` to false is an adverse fact. It is not counted as a false stated-absence. Value match ignores case and collapses whitespace. Page match counts only keys whose answer sheet names a page. Quote match collapses whitespace runs to one space and compares the answer-sheet sentence with the desk quote; it does not fold case.
 
 ## Overall
 
 | Metric | Result |
 | --- | --- |
-| State accuracy | 89.6% (69/77) |
-| Recall on present | 33.3% (4/12) |
-| False-missing rate | 66.7% (8/12) |
+| State accuracy | 88.3% (68/77) |
+| Recall on present | 25.0% (3/12) |
+| False-missing rate | 75.0% (9/12) |
 | False-present rate | 0.0% (0/65) |
 | Stated-absent detection | 71.4% (5/7) |
-| Value match | 42.9% (6/14) |
-| Page match | 47.4% (9/19) |
-| Quote match | 42.1% (8/19) |
-| Keys read from the packet | 9/77 |
+| Value match | 35.7% (5/14) |
+| Page match | 42.1% (8/19) |
+| Quote match | 36.8% (7/19) |
+| Keys read from the packet | 8/77 |
 
 ## By pack
 
@@ -40,15 +40,15 @@ A stated absence is detected when the desk stores a missing reason beginning wit
 
 | Metric | Result |
 | --- | --- |
-| State accuracy | 83.3% (20/24) |
-| Recall on present | 20.0% (1/5) |
-| False-missing rate | 80.0% (4/5) |
+| State accuracy | 79.2% (19/24) |
+| Recall on present | 0.0% (0/5) |
+| False-missing rate | 100.0% (5/5) |
 | False-present rate | 0.0% (0/19) |
 | Stated-absent detection | 0.0% (0/1) |
-| Value match | 20.0% (1/5) |
-| Page match | 16.7% (1/6) |
-| Quote match | 16.7% (1/6) |
-| Keys read from the packet | 1/24 |
+| Value match | 0.0% (0/5) |
+| Page match | 0.0% (0/6) |
+| Quote match | 0.0% (0/6) |
+| Keys read from the packet | 0/24 |
 
 ### unfpa
 
@@ -96,19 +96,20 @@ Pack `ocha-cbpf` 2026.1. 2 pages. Split `train`. Response `fixture`. SHA-256 `e1
 
 | Metric | Result |
 | --- | --- |
-| State accuracy | 83.3% (20/24) |
-| Recall on present | 20.0% (1/5) |
-| False-missing rate | 80.0% (4/5) |
+| State accuracy | 79.2% (19/24) |
+| Recall on present | 0.0% (0/5) |
+| False-missing rate | 100.0% (5/5) |
 | False-present rate | 0.0% (0/19) |
 | Stated-absent detection | 0.0% (0/1) |
-| Value match | 20.0% (1/5) |
-| Page match | 16.7% (1/6) |
-| Quote match | 16.7% (1/6) |
-| Keys read from the packet | 1/24 |
+| Value match | 0.0% (0/5) |
+| Page match | 0.0% (0/6) |
+| Quote match | 0.0% (0/6) |
+| Keys read from the packet | 0/24 |
 
 | Key | Answer | Desk | False missing | False present | Stated absent (answer / desk) | Answer value | Desk value |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `partner.due_diligence_passed` | present | missing | yes |  | no / no | true | null |
+| `allocation.modality` | present | missing | yes |  | no / no | reserve | null |
 | `allocation.strategy_on_file` | present | missing | yes |  | no / no | The humanitarian country team filed the allocation strategy with the reserve cr… | null |
 | `selection.scorecard_or_alternative` | missing | missing |  |  | yes / no | null | null |
 | `selection.committee_decision` | present | missing | yes |  | no / no | The review committee recommended Partner C on 4 April 2026 after reading the pr… | null |
@@ -142,6 +143,7 @@ Each row is one pack key across the files in this run. Readings are answer state
 | global-fund | `documentation.award_rationale_on_file` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
 | global-fund | `procurement.solicitation_notified` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
 | global-fund | `sr.written_agreement_on_file` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
+| ocha-cbpf | `allocation.modality` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
 | ocha-cbpf | `allocation.strategy_on_file` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
 | ocha-cbpf | `onegms.project_status` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
 | ocha-cbpf | `partner.due_diligence_passed` | 1 | 0/1 | 1 | 0 | present->missing × 1 |
@@ -168,7 +170,6 @@ Each row is one pack key across the files in this run. Readings are answer state
 | global-fund | `sr.capacity_assessed` | 1 | 1/1 | 0 | 0 | missing->missing × 1 |
 | global-fund | `sr.selection_documented` | 1 | 1/1 | 0 | 0 | missing->missing × 1 |
 | global-fund | `threshold.method_aligned` | 1 | 1/1 | 0 | 0 | missing->missing × 1 |
-| ocha-cbpf | `allocation.modality` | 1 | 1/1 | 0 | 0 | present->present × 1 |
 | ocha-cbpf | `allocation.preselection_justification` | 1 | 1/1 | 0 | 0 | missing->missing × 1 |
 | ocha-cbpf | `grant.agreement_complete` | 1 | 1/1 | 0 | 0 | missing->missing × 1 |
 | ocha-cbpf | `grant.budget_template` | 1 | 1/1 | 0 | 0 | missing->missing × 1 |

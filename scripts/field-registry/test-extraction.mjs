@@ -969,7 +969,7 @@ test('a desk pack sends a Talonic schema and keeps markdown as document text', a
   })
   const result = await provider.extract(input('packet.pdf', 'application/pdf', { packId: 'unfpa' }))
   assert.equal(calls.length, 1)
-  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-v5-unfpa-${sourceFileHashOf(bytes)}`.slice(0, 64))
+  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-v4-unfpa-${sourceFileHashOf(bytes)}`.slice(0, 64))
   const corpus = result.fragments.find(fragment => fragment.tags?.includes('document_text'))
   assert.equal(corpus?.text, 'No Regional Director approval is on file.')
   assert.equal(corpus?.kind, 'text')

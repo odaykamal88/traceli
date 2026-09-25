@@ -9,9 +9,7 @@ import type { Fragment, RegistryField } from '@/lib/field-registry/schema'
  * Read pack keys only from fragments tagged `document_text`.
  * A field is filled when the text names that key's state, or when a
  * full-phrase statement for that key matches. Keyword overlap is not a match.
- * An explicit absence in the matched sentence never becomes a present or
- * true value. A later present sentence wins over an earlier one, so an
- * annex can correct a cover memorandum. Repeated absences keep the first.
+ * An explicit absence never becomes a present or true value.
  * The stored quote is the sentence that contains the match, without a
  * running header, a `Page N` marker, or markdown emphasis.
  * `required_present` absences stay missing, with a reason, because a
@@ -31,7 +29,6 @@ type Reading = {
   quote: string
   at: number
   fragment: Fragment
-  fragmentIndex: number
   page: number
 }
 
@@ -147,17 +144,11 @@ function statementsFor(keys: ReadonlySet<string>) {
   return PACK_STATEMENTS.filter(statement => keys.has(statement.key))
 }
 
-function globalCopy(pattern: RegExp) {
-  const flags = pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`
-  return new RegExp(pattern.source, flags)
-}
-
 function pushClause(
   readings: Reading[],
   statement: PackStatement,
   text: string,
   fragment: Fragment,
-  fragmentIndex: number,
   keys: readonly string[],
 ) {
   const patterns = [
@@ -165,34 +156,26 @@ function pushClause(
     ...(statement.present ?? []).map(pattern => ({ pattern, polarity: 'present' as const })),
   ]
   for (const entry of patterns) {
-    for (const match of text.matchAll(globalCopy(entry.pattern))) {
-      if (match.index === undefined || match.index < 0) continue
-      const sentence = quoteAt(text, match.index, match[0].length)
-      const absentSentence = ABSENCE_LANGUAGE.test(sentence) || ABSENCE_LANGUAGE.test(match[0])
-      const polarity = entry.polarity === 'present' && absentSentence ? 'absent' : entry.polarity
-      const quote = sentence || match[0].replace(/\*\*|__/g, '').replace(/\s+/g, ' ').trim()
-      if (!quote) continue
-      if (containsOtherKey(quote, statement.key, keys) && polarity === 'present') continue
-      readings.push({
-        key: statement.key,
-        polarity,
-        quote: clip(quote, 400),
-        at: match.index,
-        fragment,
-        fragmentIndex,
-        page: pageAt(text, match.index, fallbackPage(fragment)),
-      })
-    }
+    const match = entry.pattern.exec(text)
+    if (!match || match.index < 0) continue
+    const sentence = quoteAt(text, match.index, match[0].length)
+    const absentSentence = ABSENCE_LANGUAGE.test(sentence) || ABSENCE_LANGUAGE.test(match[0])
+    const polarity = entry.polarity === 'present' && absentSentence ? 'absent' : entry.polarity
+    const quote = sentence || match[0].replace(/\*\*|__/g, '').replace(/\s+/g, ' ').trim()
+    if (!quote) continue
+    if (containsOtherKey(quote, statement.key, keys) && polarity === 'present') continue
+    readings.push({
+      key: statement.key,
+      polarity,
+      quote: clip(quote, 400),
+      at: match.index,
+      fragment,
+      page: pageAt(text, match.index, fallbackPage(fragment)),
+    })
   }
 }
 
-function explicitCues(
-  text: string,
-  keys: readonly string[],
-  fragment: Fragment,
-  fragmentIndex: number,
-  readings: Reading[],
-) {
+function explicitCues(text: string, keys: readonly string[], fragment: Fragment, readings: Reading[]) {
   if (keys.length === 0) return
   const ordered = [...keys].sort((left, right) => right.length - left.length)
   const re = new RegExp(
@@ -218,7 +201,6 @@ function explicitCues(
         quote: detail,
         at: match.index,
         fragment,
-        fragmentIndex,
         page: pageAt(text, at, fallbackPage(fragment)),
       })
       continue
@@ -230,7 +212,6 @@ function explicitCues(
       quote: detail,
       at: match.index,
       fragment,
-      fragmentIndex,
       page: pageAt(text, match.index, fallbackPage(fragment)),
     })
   }
@@ -252,43 +233,9 @@ function attested(quote: string) {
   return new Set(quote.toLowerCase().split(/[^a-z0-9-]+/).filter(token => token.length > 0))
 }
 
-const TOKEN_ALIASES: readonly { token: string, pattern: RegExp }[] = [
-  { token: 'potential_match', pattern: /\bpotential match\b/i },
-  { token: 'confirmed_hit', pattern: /\bconfirmed hit\b/i },
-  { token: 'in_house', pattern: /\bin[- ]house\b/i },
-  { token: 'gf_preapproved_vendor', pattern: /\bpre-approved (?:provider|vendor)s?\b/i },
-  { token: 'organization', pattern: /\b(?:organisation|organization|non-governmental|legal entity|limited company)\b/i },
-  { token: 'sr', pattern: /\bsub-recipient\b/i },
-  { token: 'supplier', pattern: /\bsupplier\b/i },
-  { token: 'before_engagement', pattern: /\bbefore (?:engagement|signature)\b/i },
-  { token: 'grant_cycle_rerun', pattern: /\bgrant[- ]cycle re-?run\b/i },
-]
-
-function aliasedToken(quote: string, allowed: readonly (string | number | boolean)[]) {
-  const literal = singleAllowed(quote, allowed)
-  if (literal !== null) return literal
-  if (/not a global fund pre-approved/i.test(quote) && allowed.some(value => value === 'other')) return 'other'
-  const hits = TOKEN_ALIASES.filter(alias => (
-    allowed.some(value => value === alias.token) && alias.pattern.test(quote)
-  ))
-  return hits.length === 1 ? hits[0].token : null
-}
-
-function contractUsd(quote: string) {
-  const amounts = [...quote.matchAll(/US\$\s*([0-9][0-9,]*(?:\.\d+)?)/gi)]
-  if (amounts.length === 0) return null
-  const raw = amounts[amounts.length - 1]?.[1]?.replace(/,/g, '') ?? ''
-  const value = Number(raw)
-  return Number.isFinite(value) ? value : null
-}
-
 function valueFor(reading: Reading, rule: JudgmentRule): RegistryField['value'] | null {
   const quote = clip(reading.quote, 400)
   if (!quote) return null
-  if (rule.kind === 'value_must_be_one_of' && rule.fieldKey === 'idd.screen_timing'
-    && /after the contract had been signed|not before engagement|after engagement/i.test(quote)) {
-    return { state: 'negative', value: 'after_engagement' }
-  }
   if (reading.polarity === 'absent') {
     if (rule.kind === 'value_must_equal' && rule.expected === true) {
       return { state: 'negative', value: false }
@@ -302,18 +249,16 @@ function valueFor(reading: Reading, rule: JudgmentRule): RegistryField['value'] 
   if (rule.kind === 'value_must_equal') {
     return wholeToken(quote, rule.expected) ? { state: 'present', value: rule.expected } : null
   }
-  if (rule.kind === 'required_present' && rule.fieldKey === 'award.contract_value_usd') {
-    const amount = contractUsd(quote)
-    if (amount !== null) return { state: 'present', value: amount }
-  }
   if (rule.kind === 'required_present') {
     return { state: 'present', value: clip(quote, 4000) }
   }
   if (rule.kind === 'value_must_be_one_of') {
-    const token = aliasedToken(quote, rule.allowed)
+    const token = singleAllowed(quote, rule.allowed)
     return token === null ? null : { state: 'present', value: token }
   }
   if (rule.kind === 'text_must_include') {
+    const have = attested(quote)
+    if (!rule.tokens.every(token => have.has(token))) return null
     return { state: 'present', value: clip(quote, 4000) }
   }
   if (rule.kind === 'required_when_value_in') {
@@ -327,21 +272,9 @@ function valueFor(reading: Reading, rule: JudgmentRule): RegistryField['value'] 
 }
 
 function choose(readings: readonly Reading[]) {
-  const ordered = [...readings].sort((left, right) => {
-    if (left.fragmentIndex !== right.fragmentIndex) return left.fragmentIndex - right.fragmentIndex
-    return left.at - right.at
-  })
-  const present = ordered.filter(reading => reading.polarity === 'present')
-  if (present.length > 0) return present[present.length - 1]
-  return ordered[0]
-}
-
-function recommendationDiffers(quote: string): RegistryField['value'] | null {
-  const differs = /\brecommendation differs\b|\bdiffer(?:s|ed) from the score/i.test(quote)
-  const same = /\bfollows the scorecard ranking\b|\bno project was recommended out of rank\b|\bdoes not differ\b/i.test(quote)
-  if (same && !differs) return { state: 'present', value: false }
-  if (differs && !same) return { state: 'present', value: true }
-  return null
+  const absent = readings.filter(reading => reading.polarity === 'absent').sort((left, right) => left.at - right.at)
+  if (absent.length > 0) return absent[0]
+  return [...readings].sort((left, right) => left.at - right.at)[0]
 }
 
 export function alignPackFields(
@@ -354,14 +287,12 @@ export function alignPackFields(
   const corpus = fragments.filter(fragment => fragment.tags?.includes(DOCUMENT_TEXT_TAG))
   const readings: Reading[] = []
   const statements = statementsFor(keySet)
-  corpus.forEach((fragment, fragmentIndex) => {
+  for (const fragment of corpus) {
     const text = normalize(fragment.text)
-    if (!text) return
-    explicitCues(text, keys, fragment, fragmentIndex, readings)
-    for (const statement of statements) {
-      pushClause(readings, statement, text, fragment, fragmentIndex, keys)
-    }
-  })
+    if (!text) continue
+    explicitCues(text, keys, fragment, readings)
+    for (const statement of statements) pushClause(readings, statement, text, fragment, keys)
+  }
   const fields: RegistryField[] = []
   for (const key of keys) {
     const group = readings.filter(reading => reading.key === key)
@@ -369,11 +300,8 @@ export function alignPackFields(
     const reading = choose(group)
     if (!reading) continue
     const rule = ruleFor(rules, key)
-    const value = rule
-      ? valueFor(reading, rule)
-      : key === 'selection.recommendation_differs'
-        ? recommendationDiffers(reading.quote)
-        : null
+    if (!rule) continue
+    const value = valueFor(reading, rule)
     if (!value) continue
     const quote = clip(reading.quote, 220)
     fields.push({

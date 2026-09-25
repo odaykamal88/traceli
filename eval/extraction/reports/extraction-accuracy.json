@@ -1,12 +1,12 @@
 {
-  "pipelineVersion": "trace-v5",
+  "pipelineVersion": "trace-v4",
   "mode": "cached",
   "overall": {
     "keys": 77,
-    "stateCorrect": 69,
+    "stateCorrect": 68,
     "present": 12,
-    "presentFound": 4,
-    "falseMissing": 8,
+    "presentFound": 3,
+    "falseMissing": 9,
     "presentOther": 0,
     "notPresent": 65,
     "falsePresent": 0,
@@ -15,22 +15,22 @@
     "notStatedAbsent": 70,
     "falseStatedAbsent": 0,
     "valueGiven": 14,
-    "valueMatched": 6,
+    "valueMatched": 5,
     "pageGiven": 19,
-    "pageMatched": 9,
+    "pageMatched": 8,
     "quoteGiven": 19,
-    "quoteMatched": 8,
-    "keysRead": 9,
-    "stateAccuracy": 0.8961038961038961,
-    "presentRecall": 0.3333333333333333,
-    "falseMissingRate": 0.6666666666666666,
+    "quoteMatched": 7,
+    "keysRead": 8,
+    "stateAccuracy": 0.8831168831168831,
+    "presentRecall": 0.25,
+    "falseMissingRate": 0.75,
     "falsePresentRate": 0,
     "statedAbsentDetection": 0.7142857142857143,
     "statedAbsentFalseRate": 0,
-    "valueMatch": 0.42857142857142855,
-    "pageMatch": 0.47368421052631576,
-    "quoteMatch": 0.42105263157894735,
-    "keysReadRate": 0.11688311688311688
+    "valueMatch": 0.35714285714285715,
+    "pageMatch": 0.42105263157894735,
+    "quoteMatch": 0.3684210526315789,
+    "keysReadRate": 0.1038961038961039
   },
   "packs": [
     {
@@ -71,10 +71,10 @@
       "label": "ocha-cbpf",
       "metrics": {
         "keys": 24,
-        "stateCorrect": 20,
+        "stateCorrect": 19,
         "present": 5,
-        "presentFound": 1,
-        "falseMissing": 4,
+        "presentFound": 0,
+        "falseMissing": 5,
         "presentOther": 0,
         "notPresent": 19,
         "falsePresent": 0,
@@ -83,22 +83,22 @@
         "notStatedAbsent": 23,
         "falseStatedAbsent": 0,
         "valueGiven": 5,
-        "valueMatched": 1,
+        "valueMatched": 0,
         "pageGiven": 6,
-        "pageMatched": 1,
+        "pageMatched": 0,
         "quoteGiven": 6,
-        "quoteMatched": 1,
-        "keysRead": 1,
-        "stateAccuracy": 0.8333333333333334,
-        "presentRecall": 0.2,
-        "falseMissingRate": 0.8,
+        "quoteMatched": 0,
+        "keysRead": 0,
+        "stateAccuracy": 0.7916666666666666,
+        "presentRecall": 0,
+        "falseMissingRate": 1,
         "falsePresentRate": 0,
         "statedAbsentDetection": 0,
         "statedAbsentFalseRate": 0,
-        "valueMatch": 0.2,
-        "pageMatch": 0.16666666666666666,
-        "quoteMatch": 0.16666666666666666,
-        "keysReadRate": 0.041666666666666664
+        "valueMatch": 0,
+        "pageMatch": 0,
+        "quoteMatch": 0,
+        "keysReadRate": 0
       }
     },
     {
@@ -838,10 +838,10 @@
       "responseSource": "fixture",
       "metrics": {
         "keys": 24,
-        "stateCorrect": 20,
+        "stateCorrect": 19,
         "present": 5,
-        "presentFound": 1,
-        "falseMissing": 4,
+        "presentFound": 0,
+        "falseMissing": 5,
         "presentOther": 0,
         "notPresent": 19,
         "falsePresent": 0,
@@ -850,22 +850,22 @@
         "notStatedAbsent": 23,
         "falseStatedAbsent": 0,
         "valueGiven": 5,
-        "valueMatched": 1,
+        "valueMatched": 0,
         "pageGiven": 6,
-        "pageMatched": 1,
+        "pageMatched": 0,
         "quoteGiven": 6,
-        "quoteMatched": 1,
-        "keysRead": 1,
-        "stateAccuracy": 0.8333333333333334,
-        "presentRecall": 0.2,
-        "falseMissingRate": 0.8,
+        "quoteMatched": 0,
+        "keysRead": 0,
+        "stateAccuracy": 0.7916666666666666,
+        "presentRecall": 0,
+        "falseMissingRate": 1,
         "falsePresentRate": 0,
         "statedAbsentDetection": 0,
         "statedAbsentFalseRate": 0,
-        "valueMatch": 0.2,
-        "pageMatch": 0.16666666666666666,
-        "quoteMatch": 0.16666666666666666,
-        "keysReadRate": 0.041666666666666664
+        "valueMatch": 0,
+        "pageMatch": 0,
+        "quoteMatch": 0,
+        "keysReadRate": 0
       },
       "misses": [
         {
@@ -879,6 +879,26 @@
             "value": true,
             "page": 1,
             "quote": "Partner due diligence was completed and recorded as satisfactory before this allocation."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "allocation.modality",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "reserve",
+            "page": 1,
+            "quote": "The allocation in this file is a reserve allocation for a sudden-onset response."
           },
           "predicted": {
             "state": "missing",
@@ -1035,11 +1055,11 @@
         },
         {
           "key": "allocation.modality",
-          "stateMatch": true,
-          "falseMissing": false,
+          "stateMatch": false,
+          "falseMissing": true,
           "falsePresent": false,
-          "valueMatch": true,
-          "pageMatch": true,
+          "valueMatch": false,
+          "pageMatch": false,
           "gold": {
             "state": "present",
             "statedAbsent": false,
@@ -1048,10 +1068,10 @@
             "quote": "The allocation in this file is a reserve allocation for a sudden-onset response."
           },
           "predicted": {
-            "state": "present",
+            "state": "missing",
             "statedAbsent": false,
-            "value": "reserve",
-            "page": 1
+            "value": null,
+            "page": null
           }
         },
         {
@@ -2411,11 +2431,11 @@
       "packId": "ocha-cbpf",
       "key": "allocation.modality",
       "files": 1,
-      "stateCorrect": 1,
-      "falseMissing": 0,
+      "stateCorrect": 0,
+      "falseMissing": 1,
       "falsePresent": 0,
       "readings": {
-        "present->present": 1
+        "present->missing": 1
       }
     },
     {

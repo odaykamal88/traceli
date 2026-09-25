@@ -116,15 +116,13 @@ const IDEMPOTENCY_PREFIX = 'trace-v2-'
 /**
  * Pack-extract generation.
  * The desk idempotency key is this version, the pack id, and the file hash,
- * cut to 64 characters. `trace-v5` skips a cached `trace-v4` pack extract from
- * before later-sentence alignment and the wider award-file phrase list.
- * `trace-v4` skips a schema-less cache and a cached `trace-v3` pack extract
- * from before quote cleaning and pack-only snapshots.
+ * cut to 64 characters. `trace-v4` skips a schema-less cache and a cached
+ * `trace-v3` pack extract from before quote cleaning and pack-only snapshots.
  * The extraction accuracy harness keys its Talonic response cache by this
  * same generation. Bump it when the Talonic request or the mapping of its
  * body changes, so an old cached run is not reused.
  */
-export const TALONIC_PACK_PIPELINE_VERSION = 'trace-v5'
+export const TALONIC_PACK_PIPELINE_VERSION = 'trace-v4'
 const PACK_IDEMPOTENCY_PREFIX = `${TALONIC_PACK_PIPELINE_VERSION}-`
 
 function redact(value: string, secret: string, limit: number) {
