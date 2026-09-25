@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { existsSync } from 'node:fs'
 import test from 'node:test'
 
 import { getCaseCard, listCaseCards } from '../../lib/case-cards/catalog.ts'
@@ -20,6 +21,8 @@ import {
 } from '../../lib/case-cards/oios-2025-098-cbpf-reserve-freeze.ts'
 import { OIOS_2025_098_PDF_SHA256, oios2025098Draft, oios2025098FixtureSnapshot } from '../../lib/case-cards/oios-2025-098-cbpf-reserve.ts'
 import { listPatternTickets } from '../../lib/case-cards/pattern-tickets.ts'
+import { caseCardSocialMetadata } from '../../lib/case-cards/social.ts'
+import { SITE_OG_TITLE } from '../../lib/site-social.ts'
 import { UNFPA_ANNEX4_PDF_SHA256 } from '../../lib/case-cards/unfpa-annex4-13-esa-ip.ts'
 import {
   UNFPA_SUDAN_ACTOR_ROLE,
@@ -385,4 +388,38 @@ test('a second freeze of the Sudan public-source fixture does not replace the fo
   assert.equal(published.packsInForce[0].packId, 'unfpa')
   assert.equal(getCaseCard('unfpa-ia-2025-29-sudan').snapshotHash, UNFPA_SUDAN_SNAPSHOT_HASH)
   assert.notEqual(published.snapshotHash, UNFPA_SUDAN_SNAPSHOT_HASH)
+})
+
+test('each case card page has its own social metadata', () => {
+  assert.equal(SITE_OG_TITLE, 'Trace-li — Prove the award before you sign it')
+  assert.equal(SITE_OG_TITLE.includes('Traceli'), false)
+  const images = {
+    'gf-oig-25-005': '/research/global-fund/charts/06-value-chain-map.png',
+    'unfpa-annex4-13-esa-ip': '/research/unfpa/charts/04-value-chain-map.png',
+    'unfpa-annex4-21-arab-vendor': '/research/unfpa/charts/04-value-chain-map.png',
+    'unfpa-ia-2025-29-sudan': '/research/unfpa/charts/04-value-chain-map.png',
+    'oios-2025-098-cbpf-reserve': '/research/ocha-cbpf/charts/06-value-chain-map.png',
+    'oios-2020-005-iraq-forensic': '/research/ocha-cbpf/charts/06-value-chain-map.png',
+  }
+  const indexable = new Set(['gf-oig-25-005', 'oios-2025-098-cbpf-reserve', 'unfpa-ia-2025-29-sudan'])
+  for (const card of listCaseCards()) {
+    const social = caseCardSocialMetadata(card)
+    assert.equal(social.title, `${card.title} — Trace-li`)
+    assert.equal(social.openGraph.title, social.title)
+    assert.equal(social.twitter.title, social.title)
+    assert.equal(social.openGraph.type, 'article')
+    assert.equal(social.twitter.card, 'summary_large_image')
+    assert.equal(social.url, `https://www.trace-li.com/cases/${card.slug}`)
+    assert.equal(social.openGraph.url, social.url)
+    assert.equal(social.openGraph.description.length <= 200, true)
+    assert.equal(social.twitter.description, social.openGraph.description)
+    assert.equal(card.lede.startsWith(social.openGraph.description.replace(/…$/, '')), true)
+    assert.equal(social.robots.index, indexable.has(card.slug))
+    assert.equal(social.robots.follow, true)
+    assert.equal(social.image.url, images[card.slug])
+    assert.equal(social.openGraph.images[0].url, images[card.slug])
+    assert.equal(social.twitter.images[0].url, images[card.slug])
+    assert.match(social.image.alt, /^Trace-li value-chain map/)
+    assert.equal(existsSync(new URL(`../../public${social.image.url}`, import.meta.url)), true)
+  }
 })
