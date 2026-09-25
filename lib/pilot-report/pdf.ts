@@ -137,11 +137,11 @@ function metaRow(draw: Draw, label: string, value: string) {
   return { ...next, y: next.y - height }
 }
 
-function checklistRow(draw: Draw, title: string, detail: string, confirmed: boolean) {
+function checklistRow(draw: Draw, title: string, detail: string, confirmation: string | null) {
   const titleWidth = CONTENT_WIDTH * 0.62
   const detailWidth = CONTENT_WIDTH - titleWidth - 12
   const titleLines = wrap(title, draw.bold, 10, titleWidth)
-  const marker = confirmed ? ['Confirmed by reviewer'] : []
+  const marker = confirmation ? wrap(confirmation, draw.font, 8, titleWidth) : []
   const detailLines = wrap(detail, draw.font, 9, detailWidth)
   const leftCount = titleLines.length + marker.length
   const rows = Math.max(leftCount, detailLines.length, 1)
@@ -228,7 +228,7 @@ export async function renderPilotReportPdf(report: PilotReport): Promise<Uint8Ar
       continue
     }
     for (const row of group.rows) {
-      draw = checklistRow(draw, row.title, row.detail, row.confirmedByReviewer)
+      draw = checklistRow(draw, row.title, row.detail, row.confirmationNote)
     }
   }
 

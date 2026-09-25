@@ -20,7 +20,7 @@ const rationale = z.string().trim().min(20).max(2000)
 export const snapshotClassifications = ['synthetic', 'customer', 'public-source'] as const
 export const entityKinds = ['award', 'supplier', 'requirement', 'criterion', 'evidence', 'finding'] as const
 export const sourceRefKinds = ['page', 'node', 'cell', 'message'] as const
-export const verificationMethods = ['unverified', 'adapter_extract', 'human_confirmed', 'deterministic_check'] as const
+export const verificationMethods = ['unverified', 'adapter_extract', 'human_confirmed', 'deterministic_check', 'reviewer_attested'] as const
 export const fieldValueStates = ['present', 'missing', 'negative'] as const
 export const dispositionDecisions = [
   'request_evidence',
@@ -53,6 +53,9 @@ export const fieldProvenanceSchema = z.strictObject({
   extractedAt: z.iso.datetime(),
   confidence: z.number().min(0).max(1),
   verificationMethod: z.enum(verificationMethods),
+  /** Set by a reviewer confirm/correct step. Absent on freezes that skip that step. */
+  reviewedBy: z.string().trim().min(1).max(160).optional(),
+  reviewedAt: z.iso.datetime().optional(),
 })
 
 const scalarValue = z.union([z.string().trim().min(1).max(4000), z.number().finite(), z.boolean()])

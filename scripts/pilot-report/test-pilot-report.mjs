@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { inflateSync } from 'node:zlib'
 import { after, mock, test } from 'node:test'
 
 import { MockExtractionProvider } from '../../lib/field-registry/extract-mock.ts'
@@ -26,6 +27,7 @@ import {
   evidenceRequestForRule,
   groupPilotChecklist,
 } from '../../lib/pilot-report/build.ts'
+import { hashJson } from '../../lib/field-registry/freeze.ts'
 import { PILOT_PAGE_HEIGHT, PILOT_PAGE_WIDTH, renderPilotReportPdf } from '../../lib/pilot-report/pdf.ts'
 import { sessionFromFrozenRecord, sessionFromJson } from '../../lib/pilot-report/session.ts'
 import { PDFDocument } from 'pdf-lib'
@@ -73,6 +75,32 @@ function row(groups, id, title) {
   return groups.find(group => group.id === id)?.rows.find(item => item.title === title)
 }
 
+function pdfPlainText(bytes) {
+  const raw = Buffer.from(bytes)
+  const parts = []
+  let cursor = 0
+  while (cursor < raw.length) {
+    const start = raw.indexOf('stream', cursor)
+    if (start < 0) break
+    let bodyStart = start + 'stream'.length
+    if (raw[bodyStart] === 0x0d && raw[bodyStart + 1] === 0x0a) bodyStart += 2
+    else if (raw[bodyStart] === 0x0a) bodyStart += 1
+    const end = raw.indexOf('endstream', bodyStart)
+    if (end < 0) break
+    const body = raw.subarray(bodyStart, end)
+    try {
+      parts.push(inflateSync(body).toString('latin1'))
+    } catch {
+      parts.push(body.toString('latin1'))
+    }
+    cursor = end + 'endstream'.length
+  }
+  return parts.join('\n').replace(/<([0-9A-Fa-f]+)>/g, (match, hex) => {
+    if (hex.length % 2 !== 0) return match
+    return Buffer.from(hex, 'hex').toString('latin1')
+  })
+}
+
 test('checklist groups use human titles, quotes, pages, and an optional reviewer marker', () => {
   const groups = groupPilotChecklist([
     {
@@ -86,6 +114,21 @@ test('checklist groups use human titles, quotes, pages, and an optional reviewer
       value: { state: 'present', value: true },
       sourceRef: { kind: 'page', id: 'page-5', label: 'Quote: Conflicts were disclosed.' },
       verificationMethod: 'reviewer_attested',
+      reviewedBy: 'Ada Lovelace',
+      reviewedAt: '2026-09-22T12:05:00.000Z',
+    },
+    {
+      key: 'documentation.award_rationale_on_file',
+      value: { state: 'present', value: true },
+      sourceRef: { kind: 'page', id: 'page-6' },
+      verificationMethod: 'reviewer_attested',
+    },
+    {
+      key: 'procurement.competitive_or_exempt',
+      value: { state: 'present', value: true },
+      sourceRef: { kind: 'page', id: 'page-4' },
+      reviewedBy: 'Ada Lovelace',
+      reviewedAt: '2026-09-22T12:05:00.000Z',
     },
     {
       key: 'procurement.competition_or_exemption_documented',
@@ -122,10 +165,20 @@ test('checklist groups use human titles, quotes, pages, and an optional reviewer
   const confirmed = row(groups, 'on_file', 'Conflict of interest disclosure required')
   assert.equal(confirmed.detail, 'Page 5')
   assert.equal(confirmed.confirmedByReviewer, true)
+  assert.equal(confirmed.confirmationNote, 'Confirmed by reviewer · Ada Lovelace · 22 Sep 2026, 12:05 UTC')
+  const attestedOnly = row(groups, 'on_file', 'Award rationale documentation required')
+  assert.equal(attestedOnly.confirmedByReviewer, true)
+  assert.equal(attestedOnly.confirmationNote, 'Confirmed by reviewer')
+  const namedWithoutFlag = row(groups, 'on_file', 'Award must be competitive or an established exemption')
+  assert.equal(namedWithoutFlag.detail, 'Page 4')
+  assert.equal(namedWithoutFlag.confirmedByReviewer, false)
+  assert.equal(namedWithoutFlag.confirmationNote, null)
+  assert.equal(onFile.confirmationNote, null)
   const absent = row(groups, 'stated_absent', 'Competition or sole-source exemption documentation required')
   assert.match(absent.detail, /Page 7/)
   assert.match(absent.detail, /No competition file is in the packet/)
   assert.equal(absent.confirmedByReviewer, false)
+  assert.equal(absent.confirmationNote, null)
   const negative = row(groups, 'negative', 'Procurement method must align with value threshold')
   assert.match(negative.detail, /The method is not aligned to the threshold/)
   assert.equal(negative.confirmedByReviewer, false)
@@ -267,6 +320,46 @@ test('the signed-in desk route returns a PDF for that org only', async () => {
   const bytes = Buffer.from(await response.arrayBuffer())
   assert.equal(bytes.subarray(0, 5).toString(), '%PDF-')
   assert.equal(bytes.includes(Buffer.from('packet')), false)
+  assert.equal(pdfPlainText(bytes).includes('Confirmed by reviewer'), false)
+
+  const attested = structuredClone(payload)
+  const field = attested.view.snapshot.fields.find(item => item.key === 'integrity.coi_disclosed')
+    ?? attested.view.snapshot.fields[0]
+  field.provenance.verificationMethod = 'reviewer_attested'
+  field.provenance.reviewedBy = 'Ada Lovelace'
+  field.provenance.reviewedAt = '2026-09-22T12:05:00.000Z'
+  const attestedHash = hashJson(attested.view.snapshot)
+  attested.view.record.snapshotHash = attestedHash
+  attested.judgment.record.snapshotHash = attestedHash
+  const attestedResponse = await POST(new Request('http://127.0.0.1/api/desk/pilot-report', {
+    method: 'POST',
+    headers: { host: '127.0.0.1', origin: 'http://127.0.0.1', 'content-type': 'application/json' },
+    body: JSON.stringify(attested),
+  }))
+  assert.equal(attestedResponse.status, 200)
+  const attestedText = pdfPlainText(Buffer.from(await attestedResponse.arrayBuffer()))
+  assert.equal(attestedText.includes('Confirmed by reviewer'), true)
+  assert.equal(attestedText.includes('Ada Lovelace'), true)
+  assert.equal(attestedText.includes('22 Sep 2026, 12:05 UTC'), true)
+
+  const unnamed = structuredClone(payload)
+  const unnamedField = unnamed.view.snapshot.fields[0]
+  unnamedField.provenance.verificationMethod = 'reviewer_attested'
+  delete unnamedField.provenance.reviewedBy
+  delete unnamedField.provenance.reviewedAt
+  const unnamedHash = hashJson(unnamed.view.snapshot)
+  unnamed.view.record.snapshotHash = unnamedHash
+  unnamed.judgment.record.snapshotHash = unnamedHash
+  const unnamedResponse = await POST(new Request('http://127.0.0.1/api/desk/pilot-report', {
+    method: 'POST',
+    headers: { host: '127.0.0.1', origin: 'http://127.0.0.1', 'content-type': 'application/json' },
+    body: JSON.stringify(unnamed),
+  }))
+  assert.equal(unnamedResponse.status, 200)
+  const unnamedText = pdfPlainText(Buffer.from(await unnamedResponse.arrayBuffer()))
+  assert.equal(unnamedText.includes('Confirmed by reviewer'), true)
+  assert.equal(unnamedText.includes('Ada Lovelace'), false)
+  assert.equal(unnamedText.includes('12:05 UTC'), false)
 
   const foreign = structuredClone(payload)
   foreign.view.organizationId = 'org_other'

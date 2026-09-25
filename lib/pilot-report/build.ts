@@ -49,6 +49,8 @@ export type PilotChecklistRow = {
   title: string
   detail: string
   confirmedByReviewer: boolean
+  /** Set only when verificationMethod is reviewer_attested. */
+  confirmationNote: string | null
 }
 
 export type PilotChecklistGroup = {
@@ -103,6 +105,8 @@ type ChecklistSource = {
   value: RegistryField['value']
   sourceRef: { kind: string, id: string, label?: string }
   verificationMethod?: string
+  reviewedBy?: string
+  reviewedAt?: string
 }
 
 const groupOrder: { id: PilotChecklistGroupId, heading: string }[] = [
@@ -133,6 +137,25 @@ function titleForKey(rules: readonly JudgmentRule[], key: string) {
 
 function verificationMethodOf(field: ChecklistSource) {
   return typeof field.verificationMethod === 'string' ? field.verificationMethod : ''
+}
+
+function optionalText(value: unknown, max: number) {
+  if (typeof value !== 'string') return null
+  const clean = cleanLine(value, max)
+  return clean || null
+}
+
+/**
+ * Marker only for an explicit reviewer attestation.
+ * reviewedBy and reviewedAt are optional and are omitted when absent.
+ */
+function confirmationNote(field: ChecklistSource) {
+  if (verificationMethodOf(field) !== REVIEWER_ATTESTED) return null
+  const who = optionalText(field.reviewedBy, 160)
+  const whenRaw = optionalText(field.reviewedAt, 40)
+  const when = whenRaw ? formatDeskInstant(whenRaw) : null
+  const parts = ['Confirmed by reviewer', who, when].filter((part): part is string => Boolean(part))
+  return parts.join(' · ')
 }
 
 function pageLabel(sourceRef: ChecklistSource['sourceRef']) {
@@ -179,22 +202,25 @@ function detailFor(field: ChecklistSource, group: PilotChecklistGroupId) {
 /**
  * Group pack fields by what the file did with them.
  * Titles come from the pack rule. A key with no human title is left out.
- * `reviewer_attested` adds a marker; any other method, including none, does not.
+ * `reviewer_attested` adds a marker. reviewedBy and reviewedAt are optional.
+ * Any other method, including none, does not add a marker.
  */
 export function groupPilotChecklist(
   fields: readonly ChecklistSource[],
   rules: readonly JudgmentRule[],
 ): PilotChecklistGroup[] {
-  const buckets = new Map<PilotChecklistGroupId, { title: string, detail: string, confirmedByReviewer: boolean, sort: string }[]>()
+  const buckets = new Map<PilotChecklistGroupId, { title: string, detail: string, confirmedByReviewer: boolean, confirmationNote: string | null, sort: string }[]>()
   for (const group of groupOrder) buckets.set(group.id, [])
   for (const field of fields) {
     const group = classify(field)
     const title = titleForKey(rules, field.key)
     if (!group || !title) continue
+    const note = confirmationNote(field)
     buckets.get(group)?.push({
       title,
       detail: detailFor(field, group),
-      confirmedByReviewer: verificationMethodOf(field) === REVIEWER_ATTESTED,
+      confirmedByReviewer: note !== null,
+      confirmationNote: note,
       sort: `${title}\u0000${field.key}`,
     })
   }
@@ -203,7 +229,12 @@ export function groupPilotChecklist(
     heading: group.heading,
     rows: (buckets.get(group.id) ?? [])
       .sort((left, right) => left.sort.localeCompare(right.sort))
-      .map(({ title, detail, confirmedByReviewer }) => ({ title, detail, confirmedByReviewer })),
+      .map(({ title, detail, confirmedByReviewer, confirmationNote: note }) => ({
+        title,
+        detail,
+        confirmedByReviewer,
+        confirmationNote: note,
+      })),
   }))
 }
 
@@ -317,6 +348,8 @@ export function buildPilotReport(input: PilotReportInput): PilotReport {
     value: field.value,
     sourceRef: field.provenance.sourceRef,
     verificationMethod: field.provenance.verificationMethod,
+    reviewedBy: field.provenance.reviewedBy,
+    reviewedAt: field.provenance.reviewedAt,
   })), pack.rules)
   const asks = auditorAsks(evaluated.findings, pack.rules)
   const openItemCount = evaluated.findings.filter(finding => finding.severity === 'blocker' || finding.severity === 'warning').length
