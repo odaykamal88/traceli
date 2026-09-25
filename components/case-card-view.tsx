@@ -286,8 +286,8 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
                 <ul className="mt-3 divide-y divide-[#d8d5cc] overflow-hidden rounded-2xl border border-[#d8d5cc]">
                   {snapshot.fields.map(field => (
                     <li key={field.fieldId} className="px-4 py-4">
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <code className="text-sm text-[#145246]">{field.key}</code>
+                      <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-2">
+                        <code className="min-w-0 break-all text-sm text-[#145246]">{field.key}</code>
                         <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#748087]">{fieldState(field)}</span>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[#24343a]">{storedFieldBody(field)}</p>
