@@ -1,0 +1,18 @@
+{
+  "name": "Traceli",
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "corepack pnpm dev",
+      "description": "Next.js dev server on http://localhost:3000 (public award-assurance app; protected /workspace fails closed without WorkOS)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "dev",
+      "port": 3000
+    }
+  ]
+}
