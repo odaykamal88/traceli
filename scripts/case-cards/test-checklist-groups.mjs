@@ -102,6 +102,11 @@ test('glossary splits known acronyms without eating longer neighbours', () => {
   const terms = parts.filter(part => part.type === 'term').map(part => part.surface)
   assert.deepEqual(terms, ['RFQs', 'PO', 'IPRC', 'UNPP'])
   assert.equal(splitGlossary('idd.screen_scope').every(part => part.type === 'text'), true)
+  assert.equal(splitGlossary('audit GF-OIG-25-005').every(part => part.type === 'text'), true)
+  assert.deepEqual(
+    splitGlossary('The OIG published GF-OIG-25-005.').filter(part => part.type === 'term').map(part => part.surface),
+    ['OIG'],
+  )
   for (const entry of glossary) {
     assert.equal(entry.definition.includes('. '), false, entry.id)
     assert.ok(entry.definition.length <= 80, entry.id)

@@ -130,7 +130,7 @@ export const glossaryById = Object.fromEntries(glossary.map(entry => [entry.id, 
 }
 
 const glossaryPattern = new RegExp(
-  `\\b(${[...glossary].sort((left, right) => right.label.length - left.label.length).map(entry => entry.label).join('|')})s?\\b`,
+  `(?<![A-Za-z0-9-])(${[...glossary].sort((left, right) => right.label.length - left.label.length).map(entry => entry.label).join('|')})s?(?![A-Za-z0-9-])`,
   'g',
 )
 
