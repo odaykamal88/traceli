@@ -16,12 +16,18 @@ Spine: [extraction-adapter.md](./extraction-adapter.md), [field-registry-v1.md](
 /desk   requireTraceViewer          same session as /api/trace
         │
         ▼
-POST /api/desk
+POST /api/desk/checklist
         ├─ readDeskPacket           file + packId; organization is not accepted
         ├─ extractParsedUpload      same provider entry as POST /api/extract
-        ├─ fragmentsTowardRegistryDraft
-        ├─ pack keys not in the draft → missing evidence
-        ├─ evaluateDonorPack        global-fund | fcdo-prime | unfpa | ocha-cbpf
+        └─ one checklist row per pack key
+        │
+        ▼
+checklist on /desk                  confirm, or mark present / negative / stated absent / missing
+        │
+        ▼
+POST /api/desk/freeze
+        ├─ apply reviewer edits     reviewer_attested, original extract kept
+        ├─ evaluateDonorPack        recomputed from the reviewed snapshot
         └─ freezeAtJudgment → verifyFrozenRecord
         │
         ▼
@@ -30,6 +36,8 @@ results on /desk                    readiness, then Your judgment
         ▼
 POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordId
 ```
+
+`POST /api/desk` still freezes in one step with no reviewer edits. The signed-in page uses the checklist. A freeze that confirms every row, or leaves already-missing rows missing, reproduces that one-step snapshot hash when both use the same clock.
 
 `TRACE_EXTRACTION_PROVIDER` stays unset or `mock`. The mock hashes the file and returns a stub fragment. It does not read the document body. Pack fields the stub does not map stay `missing`. Missing is not a negative finding. Judgment on that snapshot is red, and the freeze records `request_evidence`. That is the honest mock walk: a frozen record with evidence gaps, not a faked pass.
 
@@ -47,8 +55,10 @@ POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordI
 | `GET /hub` | Trace session | Knowledge hub. Seeded packs, plus organisation manual labels kept in this browser. |
 | `GET /hub/tender` | Trace session | Name a tender, choose one seeded pack, attach manuals, continue to `/desk`. |
 | `GET /desk` | Trace session | Pack choice, file input, and the frozen record. `?pack=` preselects a seeded pack. `?engagement=` shows the tender. |
-| `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze. |
-| `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the auto record. |
+| `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze with no reviewer edits. The page does not call this. |
+| `POST /api/desk/checklist` | Trace session | Multipart upload. Returns the checklist. Does not freeze. |
+| `POST /api/desk/freeze` | Trace session | Reviewed checklist. Recomputes findings, then freezes. |
+| `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the assessment record. |
 | `POST /desk/sign-out` | WorkOS session | Clears the AuthKit session and returns to `/auth/signed-out`. |
 | `POST /desk/switch-account` | WorkOS session | Clears the AuthKit session and returns to `/auth/switch`, which starts a different sign-in. |
 | `GET /demo` | Public | Unchanged scripted Award desk. |
@@ -85,7 +95,7 @@ The freeze actor is the session user id. The snapshot `organizationId` is the se
 
 The form sends one `packId` (`global-fund`, `fcdo-prime`, `unfpa`, or `ocha-cbpf`) plus one file (pdf, docx, xlsx, eml, msg, txt, png, jpg, jpeg, at most 8 MB).
 
-The file control is a navy button labelled Choose file, associated with the packet file input. While `POST /api/desk` is in flight the submit control is disabled and the page shows a spinner with Working…. That one request extracts, runs the pack, and freezes. The page does not pretend to know which of those stages is current.
+The file control is a navy button labelled Choose file, associated with the packet file input. Extract packet calls `POST /api/desk/checklist`. While that request is in flight the submit control is disabled and the page shows a spinner with Working…. The checklist comes back before any freeze. Freeze assessment calls `POST /api/desk/freeze`. The page does not pretend to know which stage inside a request is current.
 
 `snapshotFromUpload` does four things:
 
@@ -93,6 +103,10 @@ The file control is a navy button labelled Choose file, associated with the pack
 2. `alignPackFields` reads fragments tagged `document_text` onto the selected pack's keys. A match needs the field key plus a stated `missing:` / `present:` value, or a full-phrase statement for that key. Words that merely overlap a key do not count. An absence is not stored as present or true. The stored quote is that sentence, with running header and footer text, `Page N` markers, and markdown `**` removed. The page id on the source ref stays the page the marker named.
 3. Every pack key that step 2 did not fill is stored as `missing`, reason `Not extracted from this packet.`, provenance hash of the uploaded file, `verificationMethod: adapter_extract`. A Talonic JSON value for that key is not copied in, including when the value begins with the key name.
 4. The snapshot is `classification: synthetic` while this mapper is in front of the mock. The organization id is still the session org. Pack versions are unchanged. The snapshot fields are that pack's keys only.
+
+The checklist shows every pack key with the human title from the pack rule, the state (present, missing, or negative), the value, the quote, and the page. The reviewer can confirm the extract, mark present (value, page, quote), mark negative (note and page), mark stated absent (quote and page), or leave the row missing. A page is required for a reviewer-set present, negative, or stated-absent value. Confirming a row, or leaving a row that is already missing, does not change provenance.
+
+A real edit sets `verificationMethod` to `reviewer_attested` and keeps the extracted value on `provenance.extractedValue`, plus `extractedSourceRef`, `extractedVerificationMethod`, `reviewedBy` (the session user id), and `reviewedAt`. It does not overwrite the adapter extract. Findings and readiness are computed again from that snapshot before `freezeAtJudgment`. The frozen field list badges reviewer-attested rows and extracted rows. The public Case Card already prints `verificationMethod` on each registry row, so the same distinction is in the JSON export without a separate Case Card presentation change.
 
 `evaluateDonorPack` supplies `pipelineStatus`. `freezeAtJudgment` then `verifyFrozenRecord`. Green readiness would record `accept_assessment`. Any other readiness records `request_evidence`. The mock walk is the second case.
 

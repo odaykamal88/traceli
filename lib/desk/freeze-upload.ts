@@ -6,6 +6,14 @@ import {
   sanitizeDeskReason,
   type UploadDeskJudgmentView,
 } from '@/lib/desk/judgment'
+import { applyReviewerDecisions, DeskReviewError } from '@/lib/desk/review-apply'
+import {
+  notExtractedReason,
+  sanitizeReviewerDecisions,
+  sanitizeUploadChecklist,
+  type ChecklistRow,
+  type UploadChecklist,
+} from '@/lib/desk/review'
 import { sanitizeUploadDeskView, type UploadDeskFieldView, type UploadDeskView } from '@/lib/desk/view'
 import {
   ExtractionError,
@@ -36,10 +44,12 @@ import {
   packToggleForId,
   type DonorPackId,
 } from '@/lib/field-registry/packs'
+import { packFieldExpectsBoolean, packFieldTitle } from '@/lib/field-registry/pack-schema'
 import {
   actorRoles,
   awardRegistrySnapshotSchema,
   dispositionSchema,
+  statedAbsentReasonPrefix,
   waiverRefSchema,
   type ActorRole,
   type AwardRegistrySnapshot,
@@ -53,7 +63,7 @@ export class DeskAccessError extends Error {
   }
 }
 
-const MISSING_REASON = 'Not extracted from this packet.'
+const MISSING_REASON = notExtractedReason
 
 const fieldKeysByPack = {
   'global-fund': GLOBAL_FUND_FIELD_KEYS,
@@ -201,6 +211,168 @@ export function snapshotFromUpload(
   }
 }
 
+function quoteFromLabel(label: string | undefined) {
+  if (!label?.startsWith('Quote: ')) return null
+  const quote = label.slice('Quote: '.length).trim()
+  return quote || null
+}
+
+function pageFromRef(field: RegistryField) {
+  const match = /^page-(\d+)$/.exec(field.provenance.sourceRef.id)
+  if (!match) return null
+  const page = Number(match[1])
+  return page >= 1 && page <= 10000 ? String(page) : null
+}
+
+function checklistRow(field: RegistryField, packId: DonorPackId, fromPacket: boolean): ChecklistRow {
+  const quote = quoteFromLabel(field.provenance.sourceRef.label)
+  const absentQuote = field.value.state === 'missing' && field.value.reason.startsWith(statedAbsentReasonPrefix)
+    ? field.value.reason.slice(statedAbsentReasonPrefix.length).trim() || null
+    : null
+  return {
+    fieldId: field.fieldId,
+    key: field.key,
+    title: packFieldTitle(packId, field.key),
+    state: field.value.state,
+    valueText: detailFor(field),
+    quote: quote ?? absentQuote,
+    page: pageFromRef(field),
+    fromPacket,
+    open: !fromPacket,
+    expectsBoolean: packFieldExpectsBoolean(packId, field.key),
+  }
+}
+
+export type PrepareUploadChecklistInput = {
+  extraction: ExtractionResult
+  packId: string
+  organizationId: string
+  procurementReference?: string
+  /** Override only in tests. The desk uses the request clock. */
+  asOf?: string
+}
+
+/**
+ * Extraction → checklist. Does not judge and does not freeze.
+ * The snapshot is the same one freezeUploadedPacket would freeze at this clock.
+ */
+export function prepareUploadChecklist(input: PrepareUploadChecklistInput): UploadChecklist {
+  const extraction = extractionResultSchema.parse(input.extraction)
+  const packId = input.packId
+  if (!isDonorPackId(packId)) {
+    throw new ExtractionError('invalid_input', unknownPackMessage())
+  }
+  if (extraction.organizationId && extraction.organizationId !== input.organizationId) {
+    throw new DeskAccessError()
+  }
+  const context = packContexts[packId]
+  const asOf = input.asOf ?? new Date().toISOString()
+  const awardId = extraction.awardId ?? `award.${extraction.sourceFileHash.slice(0, 16)}`
+  const procurementReference = input.procurementReference
+    ?? `UPLOAD-${extraction.sourceFileHash.slice(0, 12)}`
+  const mapped = snapshotFromUpload(extraction, packId, {
+    organizationId: input.organizationId,
+    awardId,
+    procurementReference,
+    asOf,
+  })
+  const checklist: UploadChecklist = {
+    schemaVersion: 'upload-desk-checklist-v1',
+    providerId: extraction.providerId,
+    fileName: extraction.fileName,
+    mediaType: extraction.mediaType,
+    sourceFileHash: extraction.sourceFileHash,
+    organizationId: input.organizationId,
+    awardId,
+    procurementReference,
+    packId,
+    packName: context.pack.name,
+    packVersion: context.pack.version,
+    fragmentCount: extraction.fragments.length,
+    unmappedFragmentCount: mapped.unmappedFragmentCount,
+    snapshotHash: hashJson(mapped.snapshot),
+    snapshot: mapped.snapshot,
+    rows: mapped.snapshot.fields.map(field => checklistRow(
+      field,
+      packId,
+      mapped.fromPacketFieldIds.has(field.fieldId),
+    )),
+  }
+  const sanitized = sanitizeUploadChecklist(checklist)
+  if (!sanitized || sanitized.snapshotHash !== hashJson(sanitized.snapshot)) {
+    throw new ExtractionError('invalid_input', 'The checklist could not be prepared.')
+  }
+  return sanitized
+}
+
+function fromPacketIdsAfterReview(originalIds: ReadonlySet<string>, fields: readonly RegistryField[]) {
+  const ids = new Set<string>()
+  for (const field of fields) {
+    if (field.provenance.verificationMethod === 'reviewer_attested') {
+      const plainMissing = field.value.state === 'missing' && field.value.reason === MISSING_REASON
+      if (!plainMissing) ids.add(field.fieldId)
+      continue
+    }
+    if (originalIds.has(field.fieldId)) ids.add(field.fieldId)
+  }
+  return ids
+}
+
+export type FreezeReviewedPacketInput = {
+  checklist: unknown
+  decisions: unknown
+  organizationId: string
+  actorId: string
+  actorRole: string
+  /** Override only in tests. Review time and freeze time are this clock. */
+  frozenAt?: string
+}
+
+/**
+ * Reviewed checklist → judgment on the reviewed snapshot → freezeAtJudgment.
+ * Decisions that leave every row as extracted reproduce freezeUploadedPacket's hashes
+ * when the checklist was prepared at the same clock.
+ */
+export function freezeReviewedPacket(input: FreezeReviewedPacketInput): FreezeUploadedPacketResult {
+  const checklist = sanitizeUploadChecklist(input.checklist)
+  if (!checklist) throw new DeskReviewError('Extract the packet again.')
+  if (hashJson(checklist.snapshot) !== checklist.snapshotHash) {
+    throw new DeskReviewError('Extract the packet again.')
+  }
+  if (checklist.organizationId !== input.organizationId || checklist.snapshot.organizationId !== input.organizationId) {
+    throw new DeskAccessError('This session cannot freeze that checklist.')
+  }
+  const decisions = sanitizeReviewerDecisions(input.decisions, checklist.rows)
+  if (!decisions) throw new DeskReviewError('Check the checklist and try again.')
+  const actorRole = actorRoleOf(input.actorRole)
+  const frozenAt = input.frozenAt ?? new Date().toISOString()
+  const titles = new Map(checklist.rows.map(row => [row.key, row.title]))
+  const reviewed = applyReviewerDecisions(checklist.snapshot, decisions, titles, {
+    reviewedBy: input.actorId,
+    reviewedAt: frozenAt,
+  })
+  const originalIds = new Set(
+    checklist.snapshot.fields.filter(field => field.fieldId.startsWith('field.packet.')).map(field => field.fieldId),
+  )
+  return freezeMappedSnapshot({
+    snapshot: reviewed,
+    fromPacketFieldIds: fromPacketIdsAfterReview(originalIds, reviewed.fields),
+    packId: checklist.packId,
+    organizationId: input.organizationId,
+    actorId: input.actorId,
+    actorRole,
+    awardId: checklist.awardId,
+    procurementReference: checklist.procurementReference,
+    providerId: checklist.providerId,
+    fileName: checklist.fileName,
+    mediaType: checklist.mediaType,
+    sourceFileHash: checklist.sourceFileHash,
+    fragmentCount: checklist.fragmentCount,
+    unmappedFragmentCount: checklist.unmappedFragmentCount,
+    frozenAt,
+  })
+}
+
 function detailFor(field: RegistryField) {
   if (field.value.state === 'missing') return field.value.reason
   const value = field.value.value
@@ -218,45 +390,39 @@ function rationaleFor(packName: string, readiness: string, findingCount: number)
   return `Upload desk recorded ${packName} with readiness ${readiness} and ${findingCount} findings. Evidence is still required before sign-off.`
 }
 
-/**
- * Extracted fragments → registry snapshot → donor-pack judgment → freezeAtJudgment.
- * The returned record is verified. It does not contain file bytes or a vendor payload.
- */
-export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUploadedPacketResult {
-  const extraction = extractionResultSchema.parse(input.extraction)
-  if (!isDonorPackId(input.packId)) {
-    throw new ExtractionError('invalid_input', unknownPackMessage())
-  }
-  if (extraction.organizationId && extraction.organizationId !== input.organizationId) {
-    throw new DeskAccessError()
-  }
-  const actorRole = actorRoleOf(input.actorRole)
+function freezeMappedSnapshot(input: {
+  snapshot: AwardRegistrySnapshot
+  fromPacketFieldIds: ReadonlySet<string>
+  packId: DonorPackId
+  organizationId: string
+  actorId: string
+  actorRole: ActorRole
+  awardId: string
+  procurementReference: string
+  providerId: string
+  fileName: string
+  mediaType: string
+  sourceFileHash: string
+  fragmentCount: number
+  unmappedFragmentCount: number
+  frozenAt: string
+}): FreezeUploadedPacketResult {
   const context = packContexts[input.packId]
-  const frozenAt = input.frozenAt ?? new Date().toISOString()
-  const awardId = extraction.awardId ?? `award.${extraction.sourceFileHash.slice(0, 16)}`
-  const procurementReference = input.procurementReference
-    ?? `UPLOAD-${extraction.sourceFileHash.slice(0, 12)}`
-  const mapped = snapshotFromUpload(extraction, input.packId, {
-    organizationId: input.organizationId,
-    awardId,
-    procurementReference,
-    asOf: frozenAt,
-  })
-  const judgment = evaluateDonorPack(mapped.snapshot, input.packId, { evaluatedAt: frozenAt })
+  const judgment = evaluateDonorPack(input.snapshot, input.packId, { evaluatedAt: input.frozenAt })
   const decision = judgment.pipelineStatus.readiness === 'green' ? 'accept_assessment' : 'request_evidence'
   const disposition = dispositionSchema.parse({
     decision,
     waiverRefs: [],
     actorId: input.actorId,
-    actorRole,
-    timestamp: frozenAt,
+    actorRole: input.actorRole,
+    timestamp: input.frozenAt,
     rationale: rationaleFor(context.pack.name, judgment.pipelineStatus.readiness, judgment.findings.length),
   })
-  const stamp = frozenAt.replace(/[^A-Za-z0-9]/g, '')
-  const record = verifyFrozenRecord(freezeAtJudgment(mapped.snapshot, {
-    recordId: `record.desk.${input.packId}.${extraction.sourceFileHash.slice(0, 12)}.${stamp}`,
+  const stamp = input.frozenAt.replace(/[^A-Za-z0-9]/g, '')
+  const record = verifyFrozenRecord(freezeAtJudgment(input.snapshot, {
+    recordId: `record.desk.${input.packId}.${input.sourceFileHash.slice(0, 12)}.${stamp}`,
     supersedesRecordId: null,
-    frozenAt,
+    frozenAt: input.frozenAt,
     frozenBy: input.actorId,
     packs: [packToggleForId(input.packId)],
     disposition,
@@ -267,22 +433,22 @@ export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUp
     key: field.key,
     state: field.value.state,
     detail: detailFor(field),
-    fromPacket: mapped.fromPacketFieldIds.has(field.fieldId),
+    fromPacket: input.fromPacketFieldIds.has(field.fieldId),
   }))
   const view: UploadDeskView = {
     schemaVersion: 'upload-desk-result-v1',
-    providerId: extraction.providerId,
-    fileName: extraction.fileName,
-    mediaType: extraction.mediaType,
-    sourceFileHash: extraction.sourceFileHash,
+    providerId: input.providerId,
+    fileName: input.fileName,
+    mediaType: input.mediaType,
+    sourceFileHash: input.sourceFileHash,
     organizationId: input.organizationId,
-    awardId,
-    procurementReference,
+    awardId: input.awardId,
+    procurementReference: input.procurementReference,
     packId: input.packId,
     packName: context.pack.name,
     packVersion: context.pack.version,
-    fragmentCount: extraction.fragments.length,
-    unmappedFragmentCount: mapped.unmappedFragmentCount,
+    fragmentCount: input.fragmentCount,
+    unmappedFragmentCount: input.unmappedFragmentCount,
     readiness: record.pipelineStatus.readiness,
     findingCount: judgment.findings.length,
     findings: judgment.findings.map(finding => ({
@@ -305,6 +471,50 @@ export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUp
     },
   }
   return { record, view }
+}
+
+/**
+ * Extracted fragments → registry snapshot → donor-pack judgment → freezeAtJudgment.
+ * The returned record is verified. It does not contain file bytes or a vendor payload.
+ * Callers that skip the checklist use this path. A checklist frozen with no edits
+ * reproduces these hashes when both use the same clock.
+ */
+export function freezeUploadedPacket(input: FreezeUploadedPacketInput): FreezeUploadedPacketResult {
+  const extraction = extractionResultSchema.parse(input.extraction)
+  if (!isDonorPackId(input.packId)) {
+    throw new ExtractionError('invalid_input', unknownPackMessage())
+  }
+  if (extraction.organizationId && extraction.organizationId !== input.organizationId) {
+    throw new DeskAccessError()
+  }
+  const actorRole = actorRoleOf(input.actorRole)
+  const frozenAt = input.frozenAt ?? new Date().toISOString()
+  const awardId = extraction.awardId ?? `award.${extraction.sourceFileHash.slice(0, 16)}`
+  const procurementReference = input.procurementReference
+    ?? `UPLOAD-${extraction.sourceFileHash.slice(0, 12)}`
+  const mapped = snapshotFromUpload(extraction, input.packId, {
+    organizationId: input.organizationId,
+    awardId,
+    procurementReference,
+    asOf: frozenAt,
+  })
+  return freezeMappedSnapshot({
+    snapshot: mapped.snapshot,
+    fromPacketFieldIds: mapped.fromPacketFieldIds,
+    packId: input.packId,
+    organizationId: input.organizationId,
+    actorId: input.actorId,
+    actorRole,
+    awardId,
+    procurementReference,
+    providerId: extraction.providerId,
+    fileName: extraction.fileName,
+    mediaType: extraction.mediaType,
+    sourceFileHash: extraction.sourceFileHash,
+    fragmentCount: extraction.fragments.length,
+    unmappedFragmentCount: mapped.unmappedFragmentCount,
+    frozenAt,
+  })
 }
 
 export type SupersedeUploadedPacketInput = {

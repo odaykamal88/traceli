@@ -5,7 +5,8 @@ import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent, t
 
 import { HubPath } from '@/app/hub/path'
 
-import { deskExtractionFailure, deskWorkingCopy } from '@/lib/desk/failure-copy'
+import DeskChecklist from '@/app/desk/checklist'
+import { deskExtractionFailure, deskFreezeCopy, deskWorkingCopy } from '@/lib/desk/failure-copy'
 import {
   deskJudgmentChoices,
   draftDeskReasonFromView,
@@ -16,6 +17,14 @@ import {
   type UploadDeskChoiceId,
   type UploadDeskJudgmentView,
 } from '@/lib/desk/judgment'
+import {
+  decisionIssue,
+  decisionsForRows,
+  sanitizeReviewerDecisions,
+  sanitizeUploadChecklist,
+  type ReviewerDecision,
+  type UploadChecklist,
+} from '@/lib/desk/review'
 import { deskAwardStoryFromView, formatDeskInstant, type DeskAwardStory } from '@/lib/desk/story'
 import {
   sanitizeUploadDeskView,
@@ -48,7 +57,9 @@ type Props = {
 }
 
 type StoredDesk = {
-  view: UploadDeskView
+  view: UploadDeskView | null
+  checklist: UploadChecklist | null
+  decisions: ReviewerDecision[] | null
   judgment: UploadDeskJudgmentView | null
   draft: { choice: UploadDeskChoiceId | '', reason: string } | null
   engagementId: string | null
@@ -77,13 +88,19 @@ function readStored(organizationId: string): StoredDesk | null {
     }
     if (parsed.organizationId !== organizationId) return null
     const view = sanitizeUploadDeskView(parsed.view)
-    if (!view) return null
+    const checklist = sanitizeUploadChecklist((parsed as { checklist?: unknown }).checklist)
+    const decisions = checklist ? sanitizeReviewerDecisions((parsed as { decisions?: unknown }).decisions, checklist.rows) : null
+    if (!view && !checklist) return null
     const draft = sanitizeDraft(parsed.draft)
     const engagementId = typeof parsed.engagementId === 'string' ? parsed.engagementId : null
-    if (parsed.judgment == null) return { view, judgment: null, draft, engagementId }
+    if (!view || parsed.judgment == null) {
+      return { view, checklist, decisions, judgment: null, draft, engagementId }
+    }
     const judgment = sanitizeUploadDeskJudgment(parsed.judgment)
-    if (!judgment || !judgmentMatchesView(view, judgment)) return { view, judgment: null, draft, engagementId }
-    return { view, judgment, draft: null, engagementId }
+    if (!judgment || !judgmentMatchesView(view, judgment)) {
+      return { view, checklist: null, decisions: null, judgment: null, draft, engagementId }
+    }
+    return { view, checklist: null, decisions: null, judgment, draft: null, engagementId }
   } catch {
     return null
   }
@@ -97,12 +114,22 @@ function judgmentMatchesView(view: UploadDeskView, judgment: UploadDeskJudgmentV
 
 function writeStored(
   organizationId: string,
-  view: UploadDeskView,
+  view: UploadDeskView | null,
   judgment: UploadDeskJudgmentView | null,
   draft: StoredDesk['draft'] = null,
   engagementId: string | null = null,
+  checklist: UploadChecklist | null = null,
+  decisions: ReviewerDecision[] | null = null,
 ) {
-  sessionStorage.setItem(uploadDeskStorageKey, JSON.stringify({ organizationId, view, judgment, draft, engagementId }))
+  sessionStorage.setItem(uploadDeskStorageKey, JSON.stringify({
+    organizationId,
+    view,
+    judgment,
+    draft,
+    engagementId,
+    checklist,
+    decisions,
+  }))
 }
 
 function clearStored() {
@@ -122,6 +149,13 @@ function plural(count: number, singular: string, pluralLabel: string) {
   return `${count} ${count === 1 ? singular : pluralLabel}`
 }
 
+function attestationBadge(view: UploadDeskView, fieldId: string) {
+  const method = view.snapshot.fields.find(field => field.fieldId === fieldId)?.provenance.verificationMethod
+  if (method === 'reviewer_attested') return <span className={s.badgeReview}>Reviewer attested</span>
+  if (method === 'adapter_extract') return <span className={s.badgeExtracted}>Extracted</span>
+  return null
+}
+
 function emphasize(text: string, emphasis: string | null) {
   if (!emphasis) return text
   const index = text.indexOf(emphasis)
@@ -133,13 +167,18 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
   const formRef = useRef<HTMLFormElement>(null)
   const judgmentHeadingRef = useRef<HTMLHeadingElement>(null)
   const recordHeadingRef = useRef<HTMLHeadingElement>(null)
-  const focusTarget = useRef<'judgment' | 'record' | null>(null)
+  const checklistHeadingRef = useRef<HTMLHeadingElement>(null)
+  const focusTarget = useRef<'judgment' | 'record' | 'checklist' | null>(null)
   const reasonId = useId()
   const [pending, setPending] = useState(false)
+  const [freezing, setFreezing] = useState(false)
   const [judging, setJudging] = useState(false)
   const [error, setError] = useState<DeskNotice | null>(null)
+  const [checklistError, setChecklistError] = useState<string | null>(null)
   const [judgmentError, setJudgmentError] = useState<string | null>(null)
   const [result, setResult] = useState<UploadDeskView | null>(null)
+  const [checklist, setChecklist] = useState<UploadChecklist | null>(null)
+  const [decisions, setDecisions] = useState<ReviewerDecision[]>([])
   const [judgment, setJudgment] = useState<UploadDeskJudgmentView | null>(null)
   const [restored, setRestored] = useState(false)
   const [fileLabel, setFileLabel] = useState<string | null>(null)
@@ -159,8 +198,10 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
     const sameTender = !engagementId || stored?.engagementId === engagementId
     if (stored && sameTender) {
       setResult(stored.view)
+      setChecklist(stored.view ? null : stored.checklist)
+      setDecisions(stored.view || !stored.checklist ? [] : decisionsForRows(stored.checklist.rows, stored.decisions))
       setJudgment(stored.judgment)
-      if (!stored.judgment) {
+      if (stored.view && !stored.judgment) {
         if (stored.draft) {
           setChoice(stored.draft.choice)
           setReason(stored.draft.reason)
@@ -174,8 +215,13 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
 
   useEffect(() => {
     if (!restored || !result || judgment) return
-    writeStored(viewer.organizationId, result, null, { choice, reason }, tender?.id ?? null)
+    writeStored(viewer.organizationId, result, null, { choice, reason }, tender?.id ?? null, null, null)
   }, [restored, result, judgment, choice, reason, viewer.organizationId, tender])
+
+  useEffect(() => {
+    if (!restored || result || !checklist) return
+    writeStored(viewer.organizationId, null, null, null, tender?.id ?? null, checklist, decisions)
+  }, [restored, result, checklist, decisions, viewer.organizationId, tender])
 
   useEffect(() => {
     const target = focusTarget.current
@@ -183,7 +229,8 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
     focusTarget.current = null
     if (target === 'judgment') judgmentHeadingRef.current?.focus()
     if (target === 'record') recordHeadingRef.current?.focus()
-  }, [result, judgment])
+    if (target === 'checklist') checklistHeadingRef.current?.focus()
+  }, [result, judgment, checklist])
 
   function primeDraft(view: UploadDeskView) {
     setChoice(view.readiness === 'green' ? '' : 'request')
@@ -194,7 +241,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (judging) return
+    if (judging || freezing) return
     const form = event.currentTarget
     const data = new FormData(form)
     if (!(data.get('file') instanceof File) || (data.get('file') as File).size < 1) {
@@ -203,23 +250,29 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
     }
     setPending(true)
     setError(null)
+    setChecklistError(null)
     try {
-      const response = await fetch('/api/desk', { method: 'POST', body: data })
-      const body = await response.json().catch(() => null) as { error?: string } | UploadDeskView | null
+      const response = await fetch('/api/desk/checklist', { method: 'POST', body: data })
+      const body = await response.json().catch(() => null) as { error?: string } | UploadChecklist | null
       if (!response.ok) {
-        setError(deskExtractionFailure(body) ?? deskNotice('The packet could not be frozen. Try again.'))
+        setError(deskExtractionFailure(body) ?? deskNotice('The packet could not be read into a checklist. Try again.'))
         return
       }
-      const view = sanitizeUploadDeskView(body)
-      if (!view || view.organizationId !== viewer.organizationId) {
-        setError(deskNotice('The freeze came back in an unexpected shape. Nothing was stored.'))
+      const next = sanitizeUploadChecklist(body)
+      if (!next || next.organizationId !== viewer.organizationId) {
+        setError(deskNotice('The checklist came back in an unexpected shape. Nothing was stored.'))
         return
       }
-      writeStored(viewer.organizationId, view, null, null, tender?.id ?? null)
-      focusTarget.current = 'judgment'
-      primeDraft(view)
+      const nextDecisions = decisionsForRows(next.rows, null)
+      writeStored(viewer.organizationId, null, null, null, tender?.id ?? null, next, nextDecisions)
+      focusTarget.current = 'checklist'
       setJudgment(null)
-      setResult(view)
+      setResult(null)
+      setChoice('')
+      setReason('')
+      setDecisions(nextDecisions)
+      setChecklist(next)
+      setAnnounce('Checklist ready.')
     } catch {
       setError(deskNotice('The desk could not be reached. Check your connection and try again.'))
     } finally {
@@ -232,13 +285,68 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
     setFileLabel(null)
     clearStored()
     setResult(null)
+    setChecklist(null)
+    setDecisions([])
     setJudgment(null)
     setChoice('')
     setReason('')
     setError(null)
+    setChecklistError(null)
     setJudgmentError(null)
     setAnnounce('')
     setPackId(tender?.primaryPackId ?? initialPackId ?? '')
+  }
+
+  function updateDecision(key: string, patch: Partial<ReviewerDecision>) {
+    setChecklistError(null)
+    setDecisions(current => current.map(decision => decision.key === key ? { ...decision, ...patch, key } : decision))
+  }
+
+  async function freezeChecklist() {
+    if (!checklist || freezing || pending || judging) return
+    const issue = checklist.rows.map(row => {
+      const decision = decisions.find(item => item.key === row.key)
+      return decision ? decisionIssue(row.title, decision) : `Check “${row.title}”.`
+    }).find(item => item)
+    if (issue) {
+      setChecklistError(issue)
+      return
+    }
+    setFreezing(true)
+    setChecklistError(null)
+    setAnnounce('')
+    try {
+      const response = await fetch('/api/desk/freeze', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ checklist, decisions }),
+      })
+      const body = await response.json().catch(() => null) as { error?: string } | unknown
+      if (!response.ok) {
+        const message = body && typeof body === 'object' && 'error' in body && typeof body.error === 'string'
+          ? body.error
+          : 'The checklist could not be frozen. Try again.'
+        setChecklistError(message)
+        return
+      }
+      const view = sanitizeUploadDeskView(body)
+      if (!view || view.organizationId !== viewer.organizationId || view.sourceFileHash !== checklist.sourceFileHash) {
+        setChecklistError('The freeze came back in an unexpected shape. The checklist is unchanged.')
+        return
+      }
+      writeStored(viewer.organizationId, view, null, null, tender?.id ?? null, null, null)
+      focusTarget.current = 'judgment'
+      primeDraft(view)
+      setChecklist(null)
+      setDecisions([])
+      setJudgment(null)
+      setResult(view)
+      setAnnounce('Assessment frozen.')
+    } catch {
+      setChecklistError('The desk could not be reached. Check your connection and try again.')
+    } finally {
+      setFreezing(false)
+    }
   }
 
   async function confirmJudgment() {
@@ -303,7 +411,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
     ? 'This is the local fixture session.'
     : 'You are signed in. The file is not kept after this request.'
   const reasonLength = reason.trim().length
-  const busy = pending || judging
+  const busy = pending || freezing || judging
   const recordedChoice = judgment ? deskJudgmentChoices.find(item => item.id === judgment.choice) : undefined
 
   return (
@@ -314,10 +422,12 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
           {judgment
             ? 'The golden thread is frozen in this browser. Copy the registry ids, or start another packet when you are done.'
             : result
-              ? 'Trace-li froze this packet. Review the prep, then record your judgment to finish the golden thread. The file itself is not stored.'
-              : tender
-                ? `Upload the packet for ${tender.name}. Trace-li runs ${selectedPack?.name ?? 'the seeded pack'} and freezes a citeable golden thread for your judgment.`
-                : 'Upload a packet against a seeded pack and freeze a citeable golden thread. Humans dispose; Trace-li freezes the proof.'}
+              ? 'Trace-li froze this checklist. Review the prep, then record your judgment to finish the golden thread. The file itself is not stored.'
+              : checklist
+                ? 'The checklist is ready. Fix open items that are in the file, then freeze the assessment. Trace-li does not decide the award.'
+                : tender
+                  ? `Upload the packet for ${tender.name}. Trace-li reads it against ${selectedPack?.name ?? 'the seeded pack'} and waits for your checklist before the freeze.`
+                  : 'Upload a packet against a seeded pack. Check the checklist, then freeze a citeable golden thread. Humans dispose; Trace-li freezes the proof.'}
         </p>
         {tender ? <HubPath current={judgment ? 'freeze' : 'desk'} /> : null}
         {restored && !tender ? (
@@ -344,6 +454,17 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
             </>
           )}
         </aside>
+      ) : null}
+      {checklist && !result ? (
+        <DeskChecklist
+          checklist={checklist}
+          decisions={decisions}
+          freezing={freezing}
+          error={checklistError}
+          headingRef={checklistHeadingRef}
+          onDecision={updateDecision}
+          onFreeze={freezeChecklist}
+        />
       ) : null}
       {result && story ? (
         <AwardResult
@@ -372,8 +493,8 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         />
       ) : null}
       <form ref={formRef} className={`${s.card} ${s.startCard}`} onSubmit={onSubmit} aria-busy={pending}>
-        {result ? (
-          <p className={`${s.help} ${s.leadIn}`}>Choose another pack and file to replace this record, or clear it.</p>
+        {result || checklist ? (
+          <p className={`${s.help} ${s.leadIn}`}>Choose another pack and file to replace this checklist, or clear it.</p>
         ) : null}
         {tender ? <input type="hidden" name="procurementReference" value={tender.name} /> : null}
         <fieldset>
@@ -424,18 +545,18 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         </div>
         <div className={s.actions}>
           <button className={s.primary} type="submit" disabled={busy}>
-            {pending ? deskWorkingCopy.button : 'Extract and freeze'}
+            {pending ? deskWorkingCopy.button : checklist ? 'Extract again' : 'Extract packet'}
           </button>
-          {result ? (
+          {result || checklist ? (
             <button className={s.secondary} type="button" onClick={startAnother} disabled={busy}>
               Start another packet
             </button>
           ) : null}
         </div>
-        <p className={s.status} role="status" aria-live="polite">{pending ? (
+        <p className={s.status} role="status" aria-live="polite">{pending || freezing ? (
           <span className={s.working}>
             <span className={s.spinner} aria-hidden="true" />
-            <span>{deskWorkingCopy.status}</span>
+            <span>{freezing ? deskFreezeCopy.status : deskWorkingCopy.status}</span>
           </span>
         ) : null}</p>
         {error ? (
@@ -446,12 +567,12 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         ) : null}
         <p className={`${s.help} ${s.providerNote}`}>{providerNote} {sessionNote}</p>
       </form>
-      {!result ? (
+      {!result && !checklist ? (
         <p className={s.empty}>
           {restored
             ? tender
-              ? 'No frozen record yet. Upload the packet to freeze the golden thread for this tender.'
-              : 'No frozen record yet.'
+              ? 'No checklist yet. Upload the packet to start one for this tender.'
+              : 'No checklist yet.'
             : 'Loading the last record from this browser…'}
         </p>
       ) : null}
@@ -788,6 +909,7 @@ function AwardResult({
                   <li className={s.fieldRow} key={field.fieldId}>
                     <span className={s.key}>{field.key}</span>
                     <span className={s.badge}>{field.state}</span>
+                    {attestationBadge(result, field.fieldId)}
                     <p>{field.detail}</p>
                   </li>
                 ))}
@@ -802,6 +924,7 @@ function AwardResult({
                   <li className={s.fieldRow} key={field.fieldId}>
                     <span className={s.key}>{field.key}</span>
                     <span className={s.badge}>{field.state}</span>
+                    {attestationBadge(result, field.fieldId)}
                     <p>{field.detail}</p>
                   </li>
                 ))}
