@@ -87,11 +87,12 @@ The form sends one `packId` (`global-fund`, `fcdo-prime`, `unfpa`, or `ocha-cbpf
 
 The file control is a navy button labelled Choose file, associated with the packet file input. While `POST /api/desk` is in flight the submit control is disabled and the page shows a spinner with Working…. That one request extracts, runs the pack, and freezes. The page does not pretend to know which of those stages is current.
 
-`snapshotFromUpload` does three things:
+`snapshotFromUpload` does four things:
 
 1. `fragmentsTowardRegistryDraft` maps hinted fragments onto registry fields (`pricing.table`, `capacity.letter`, and the other draft targets). Generic text stays unmapped.
-2. Every field key for the selected pack that the draft did not fill is stored as `missing`, reason `Not extracted from this packet.`, provenance hash of the uploaded file, `verificationMethod: adapter_extract`.
-3. The snapshot is `classification: synthetic` while this mapper is in front of the mock. The organization id is still the session org.
+2. `alignPackFields` reads fragments tagged `document_text` onto the selected pack's keys. A match needs the field key plus a stated `missing:` / `present:` value, or a full-phrase statement for that key. Words that merely overlap a key do not count. An absence is not stored as present or true.
+3. Every pack key that neither step filled is stored as `missing`, reason `Not extracted from this packet.`, provenance hash of the uploaded file, `verificationMethod: adapter_extract`.
+4. The snapshot is `classification: synthetic` while this mapper is in front of the mock. The organization id is still the session org. Pack versions are unchanged.
 
 `evaluateDonorPack` supplies `pipelineStatus`. `freezeAtJudgment` then `verifyFrozenRecord`. Green readiness would record `accept_assessment`. Any other readiness records `request_evidence`. The mock walk is the second case.
 
@@ -112,7 +113,7 @@ No new variables. Use the existing WorkOS and Trace contract.
 | `WORKOS_COOKIE_PASSWORD` | At least 32 characters |
 | `NEXT_PUBLIC_WORKOS_REDIRECT_URI` | `https://<host>/auth/callback` |
 | `TRACELI_TRACE_MODE` | `workos` |
-| `DATABASE_URL` | Pooled Postgres URL. The desk does not query it. `pnpm validate:env` still requires it whenever Trace mode is `workos`, because `/api/trace` does. |
+| `DATABASE_URL` | Pooled Postgres URL. The desk does not query it. `pnpm validate:env` still requires it whenever Trace mode is `workos`, because `/api/trace` does. A Vercel preview build may continue when this pair is set and the WorkOS secrets are absent, because those secrets are Production-only. Signed-in Trace-li stays closed on that preview. Production still refuses the build if WorkOS is incomplete. |
 | `DATABASE_URL_UNPOOLED` | Direct Postgres URL. Same validation rule. |
 | `TRACE_EXTRACTION_PROVIDER` | Leave unset, or set `mock`, until the founder flips Production to `talonic` after the live client is merged. The key and base URL may already be set; they are unused while the provider is mock. |
 | `TRACE_TALONIC_API_KEY` | Already set on Production `traceli-new`. Do not copy it into the repo. Unused while the provider is mock. |

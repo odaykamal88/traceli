@@ -15,7 +15,10 @@ import {
   type ExtractionResult,
   type ExtractionUpstreamDetail,
 } from '@/lib/field-registry/extract'
+import { DOCUMENT_TEXT_TAG } from '@/lib/field-registry/pack-align'
+import { talonicPackForm } from '@/lib/field-registry/pack-schema'
 import { type FragmentKindHint } from '@/lib/field-registry/schema'
+import type { DonorPackId } from '@/lib/field-registry/packs/types'
 
 /**
  * Live Talonic HTTP client. There is no SDK in this module.
@@ -25,8 +28,13 @@ import { type FragmentKindHint } from '@/lib/field-registry/schema'
  * The base URL must be https, with no userinfo, query, or hash.
  *
  * The call is `POST {base}/extract` with the file and `include_markdown`.
+ * A desk extract also sends the selected pack as a JSON schema, instructions,
+ * and options. `/api/extract` omits the pack and stays schema-less.
+ * Properties are not marked required, so Talonic is not told to fill every key.
  * `include_provenance` is not sent: the POST form and the official SDK do
  * not list it. Provenance is still mapped when the body includes it.
+ * Pack-aware calls keep the markdown as `document_text` fragments. Trace-li,
+ * not Talonic, decides which pack keys are present, missing, or negative.
  * A synchronous body is mapped into `fragmentSchema`. Non-empty fields above
  * `MAX_EXTRACTION_FRAGMENTS` are kept by confidence instead of failing the
  * extract. A 202 is polled on
@@ -71,7 +79,24 @@ type LoadedFile = {
   sourceFileHash: string
   awardId?: string
   organizationId?: string
+  packId?: DonorPackId
   bytes: Uint8Array
+}
+
+function idempotencyKey(sourceFileHash: string, packId: DonorPackId | undefined) {
+  if (!packId) return `${IDEMPOTENCY_PREFIX}${sourceFileHash}`.slice(0, 64)
+  return `${PACK_IDEMPOTENCY_PREFIX}${packId}-${sourceFileHash}`.slice(0, 64)
+}
+
+function documentChunks(markdown: string) {
+  const size = 14000
+  const overlap = 400
+  if (markdown.length <= 16000) return [markdown]
+  const chunks: string[] = []
+  for (let start = 0; start < markdown.length && chunks.length < 4; start += size - overlap) {
+    chunks.push(markdown.slice(start, start + size))
+  }
+  return chunks
 }
 
 type RequestContext = {
@@ -88,6 +113,8 @@ type RequestContext = {
 const upstreamCodePattern = /^[A-Za-z0-9_]{1,64}$/
 const upstreamRequestIdPattern = /^req_[A-Za-z0-9]{6,80}$/
 const IDEMPOTENCY_PREFIX = 'trace-v2-'
+/** New prefix when the body includes a pack schema, so a schema-less cache is not replayed. */
+const PACK_IDEMPOTENCY_PREFIX = 'trace-v3-'
 
 function redact(value: string, secret: string, limit: number) {
   let text = secret ? value.split(secret).join('redacted') : value
@@ -600,12 +627,15 @@ function mapTalonicEnvelope(envelope: Record<string, unknown>, loaded: LoadedFil
       kind,
     })
   }
+  const markdown = typeof envelope.markdown === 'string' ? envelope.markdown.trim() : ''
+  const packChunks = loaded.packId && markdown ? documentChunks(markdown) : []
   const usableCount = discovered.length
   const kept = keepHighestConfidenceFields(discovered)
-  if (kept.length > MAX_EXTRACTION_FRAGMENTS) {
+  const dataKept = packChunks.length > 0 ? kept.slice(0, MAX_EXTRACTION_FRAGMENTS - packChunks.length) : kept
+  if (dataKept.length > MAX_EXTRACTION_FRAGMENTS) {
     throw new ExtractionError('upstream', talonicFieldCeilingMessage(usableCount))
   }
-  const fragments = kept.map((field, index) => ({
+  const fragments: ExtractionResult['fragments'] = dataKept.map((field, index) => ({
     fragmentId: `frag.talonic.${loaded.sourceFileHash.slice(0, 12)}.${index}`,
     sourceFileHash: loaded.sourceFileHash,
     sourceRef: sourceRefFor(loaded.fileName, loaded.mediaType, pageOf(field.provenance)),
@@ -617,8 +647,23 @@ function mapTalonicEnvelope(envelope: Record<string, unknown>, loaded: LoadedFil
     tags: [field.kind],
     ...(field.quote ? { spans: [{ text: field.quote, label: field.label }] } : {}),
   }))
-  if (fragments.length === 0) {
-    const markdown = typeof envelope.markdown === 'string' ? envelope.markdown.trim() : ''
+  if (packChunks.length > 0) {
+    const overall = unitInterval(asRecord(envelope.confidence)?.overall) ?? 0.5
+    packChunks.forEach((chunk, index) => {
+      const text = chunk.length <= 16000 ? chunk : `${chunk.slice(0, 15999)}…`
+      fragments.push({
+        fragmentId: `frag.talonic.${loaded.sourceFileHash.slice(0, 12)}.doc.${index}`,
+        sourceFileHash: loaded.sourceFileHash,
+        sourceRef: sourceRefFor(loaded.fileName, loaded.mediaType, undefined),
+        text,
+        extractedAt,
+        confidence: overall,
+        extractorId: EXTRACTOR_ID,
+        kind: 'text' as const,
+        tags: [DOCUMENT_TEXT_TAG],
+      })
+    })
+  } else if (fragments.length === 0) {
     if (!markdown) {
       throw new ExtractionError('upstream', 'Talonic returned no usable text. No fragments were stored.')
     }
@@ -860,11 +905,17 @@ async function postExtract(ctx: RequestContext, loaded: LoadedFile) {
   copy.set(loaded.bytes)
   form.append('file', new Blob([copy], { type: loaded.mediaType }), loaded.fileName)
   form.append('include_markdown', 'true')
+  if (loaded.packId) {
+    const packForm = talonicPackForm(loaded.packId)
+    form.append('schema', packForm.schema)
+    form.append('instructions', packForm.instructions)
+    form.append('options', packForm.options)
+  }
   const response = await ctx.request(endpoint(ctx.baseUrl, 'extract'), {
     method: 'POST',
     headers: {
       ...authHeaders(ctx.apiKey),
-      'Idempotency-Key': `${IDEMPOTENCY_PREFIX}${loaded.sourceFileHash}`.slice(0, 64),
+      'Idempotency-Key': idempotencyKey(loaded.sourceFileHash, loaded.packId),
     },
     body: form,
     redirect: 'manual',
@@ -910,6 +961,7 @@ export class TalonicExtractionProvider implements ExtractionProvider {
         bytes,
         ...(loaded.input.awardId ? { awardId: loaded.input.awardId } : {}),
         ...(loaded.input.organizationId ? { organizationId: loaded.input.organizationId } : {}),
+        ...(loaded.input.packId ? { packId: loaded.input.packId } : {}),
       }
       const fetchImpl = this.options.fetchImpl ?? globalThis.fetch
       const sleep = this.options.sleep ?? defaultSleep

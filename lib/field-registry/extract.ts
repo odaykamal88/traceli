@@ -6,6 +6,7 @@ import { resolve } from 'node:path'
 
 import { z } from 'zod'
 
+import { donorPackIds } from '@/lib/field-registry/packs/types'
 import {
   fieldProvenanceSchema,
   fieldValueSchema,
@@ -127,6 +128,8 @@ export const extractionInputSchema = z.strictObject({
   path: z.string().trim().min(1).max(1024).optional(),
   awardId: idSchema.optional(),
   organizationId: idSchema.optional(),
+  /** Donor pack for a desk extract. `/api/extract` omits it and stays schema-less. */
+  packId: z.enum(donorPackIds).optional(),
 }).superRefine((input, ctx) => {
   const byteLength = input.bytes?.byteLength ?? 0
   const hasBytes = byteLength > 0

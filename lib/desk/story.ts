@@ -69,6 +69,12 @@ function cleanTitle(title: string) {
   return title.trim().replace(/\.+$/, '').slice(0, 160)
 }
 
+function linkedLabel(field: { key: string, state: UploadDeskFieldState }) {
+  if (field.state === 'negative') return `${field.key} (negative)`
+  if (field.state === 'missing') return `${field.key} (stated absent)`
+  return field.key
+}
+
 function rankedFindings(findings: DeskStoryInput['findings']) {
   return [...findings]
     .filter(finding => finding.title.trim())
@@ -151,8 +157,7 @@ export function deskAwardStory(input: DeskStoryInput): DeskAwardStory {
   else if (mapped.length === 0) canShow.push(`No pack field linked from ${fileName}.`)
   else canShow.push(`${mapped.length} of ${total} pack fields linked`)
   for (const field of shownMapped) {
-    const label = field.state === 'negative' ? `${field.key} (negative)` : field.key
-    canShow.push(`Linked · ${label}`)
+    canShow.push(`Linked · ${linkedLabel(field)}`)
   }
   if (mapped.length > shownMapped.length) {
     canShow.push(countLabel(mapped.length - shownMapped.length, 'more linked field', 'more linked fields'))
@@ -194,7 +199,7 @@ export function deskAwardStory(input: DeskStoryInput): DeskAwardStory {
   if (mapped.length === 0) {
     evidenceLines.push('No pack field was linked from the packet.')
   } else {
-    const shown = mapped.slice(0, 8).map(field => field.state === 'negative' ? `${field.key} (negative)` : field.key)
+    const shown = mapped.slice(0, 8).map(field => linkedLabel(field))
     const extra = mapped.length - shown.length
     evidenceLines.push(`Linked: ${shown.join(', ')}${extra > 0 ? `, and ${extra} more` : ''}.`)
   }

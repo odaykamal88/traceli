@@ -810,7 +810,7 @@ function AwardResult({
             <p className={s.help}>
               Assessment record {result.record.recordId}. Disposition {result.record.disposition.replaceAll('_', ' ')}.
               {' '}Snapshot hash {shortHash(result.record.snapshotHash)}.
-              {' '}Missing means the packet did not yield the field. It is not a negative finding.
+              {' '}A row still missing was not stated in the packet. A mapped missing row means the packet states that control is absent. A negative value is an adverse fact. None of these is a pass.
               This view stays in this browser until you start another packet. The file is not stored.
             </p>
           </details>
