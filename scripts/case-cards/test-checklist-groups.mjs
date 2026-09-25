@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { checklistGroupId, fieldTitle, groupChecklistFields } from '../../lib/case-card-presentation/checklist.ts'
-import { splitGlossary } from '../../lib/case-card-presentation/glossary.ts'
-import { readerFacingText } from '../../lib/case-card-presentation/reader-text.ts'
+import { checklistGroupId, checklistPreview, fieldTitle, groupChecklistFields, CHECKLIST_PREVIEW_LIMIT } from '../../lib/case-card-presentation/checklist.ts'
+import { glossary, splitGlossary, takeGlossaryTerms } from '../../lib/case-card-presentation/glossary.ts'
+import { firstSentence, readerFacingText } from '../../lib/case-card-presentation/reader-text.ts'
 import { getCaseCard } from '../../lib/case-cards/catalog.ts'
 
 function field(key, value) {
@@ -102,4 +102,42 @@ test('glossary splits known acronyms without eating longer neighbours', () => {
   const terms = parts.filter(part => part.type === 'term').map(part => part.surface)
   assert.deepEqual(terms, ['RFQs', 'PO', 'IPRC', 'UNPP'])
   assert.equal(splitGlossary('idd.screen_scope').every(part => part.type === 'text'), true)
+  for (const entry of glossary) {
+    assert.equal(entry.definition.includes('. '), false, entry.id)
+    assert.ok(entry.definition.length <= 80, entry.id)
+  }
+})
+
+test('an acronym is expanded only the first time it appears', () => {
+  const seen = new Set()
+  const first = takeGlossaryTerms('The OIG reviewed the OIG file.', seen)
+  assert.deepEqual(first.filter(part => part.type === 'term').map(part => part.surface), ['OIG'])
+  const second = takeGlossaryTerms('OIG again, and a PO.', seen)
+  assert.deepEqual(second.filter(part => part.type === 'term').map(part => part.surface), ['PO'])
+})
+
+test('the card lead is the first stored sentence, and the checklist shows the first few rows', () => {
+  const card = getCaseCard('gf-oig-25-005')
+  assert.ok(card?.frozenRecord)
+  assert.equal(
+    firstSentence(card.narrative.officialRecord),
+    'On 4 June 2025 the Global Fund Office of the Inspector General published audit GF-OIG-25-005, Global Fund Grants to the Togolese Republic.',
+  )
+  assert.equal(
+    firstSentence(card.narrative.whatWasMissing),
+    'Finding 4.4 says oversight of non-health procurement did not catch delays, incomplete files, or undocumented exceptions.',
+  )
+  assert.equal(firstSentence('About US$0.5 million. Then more.'), 'About US$0.5 million.')
+  const groups = groupChecklistFields(
+    card.frozenRecord.snapshot.fields,
+    card.packsInForce.map(pack => pack.packId),
+    card.patternTickets,
+  )
+  const missing = groups.find(group => group.id === 'missing')
+  assert.ok(missing)
+  const preview = checklistPreview(missing.rows)
+  assert.equal(CHECKLIST_PREVIEW_LIMIT, 3)
+  assert.equal(preview.shown.length, 3)
+  assert.equal(preview.hiddenCount, missing.rows.length - 3)
+  assert.deepEqual(preview.shown.map(row => row.key), missing.rows.slice(0, 3).map(row => row.key))
 })

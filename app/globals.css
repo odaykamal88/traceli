@@ -189,6 +189,9 @@
 }
 
 @media print {
+  .checklist-more[hidden] {
+    display: list-item !important;
+  }
 
   header,
   aside,

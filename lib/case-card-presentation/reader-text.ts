@@ -21,6 +21,14 @@ export function splitLeadSentence(text: string): { lead: string; rest: string } 
   return { lead: text.slice(0, index), rest: text.slice(index + 2) }
 }
 
+/** First stored sentence, including its period. Splits on ". " so "US$0.5" stays intact. */
+export function firstSentence(text: string): string {
+  const trimmed = text.trim()
+  const { lead } = splitLeadSentence(trimmed)
+  if (lead === trimmed) return trimmed
+  return lead.endsWith('.') ? lead : `${lead}.`
+}
+
 export function containsFieldKey(text: string): boolean {
   return FIELD_KEY.test(text)
 }

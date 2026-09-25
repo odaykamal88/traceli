@@ -1,10 +1,10 @@
 import { Fragment } from 'react'
 
 import { Acronym } from '@/components/acronym'
-import { splitGlossary } from '@/lib/case-card-presentation/glossary'
+import { takeGlossaryTerms, type GlossaryId } from '@/lib/case-card-presentation/glossary'
 
-export function GlossaryText({ text }: { text: string }) {
-  const parts = splitGlossary(text)
+export function GlossaryText({ text, seen }: { text: string; seen: Set<GlossaryId> }) {
+  const parts = takeGlossaryTerms(text, seen)
   return parts.map((part, index) =>
     part.type === 'text' ? (
       <Fragment key={index}>{part.text}</Fragment>

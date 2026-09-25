@@ -2,6 +2,10 @@ import { getDonorPack, isDonorPackId } from '@/lib/field-registry/packs'
 import type { JudgmentRule } from '@/lib/field-registry/judgment'
 import type { RegistryField } from '@/lib/field-registry/schema'
 
+import { CHECKLIST_PREVIEW_LIMIT } from '@/lib/case-card-presentation/preview-limit'
+
+export { CHECKLIST_PREVIEW_LIMIT }
+
 /**
  * Matches the start of pack-align’s stated-absent reason.
  * Presentation only. The stored reason is not rewritten.
@@ -21,9 +25,9 @@ export const fieldLabelMap: Record<string, string> = {
 }
 
 export const checklistGroups = [
-  { id: 'present', title: 'On file', hint: 'The record quotes this from the file.' },
-  { id: 'missing', title: 'Missing', hint: 'The file does not state this. Missing stays missing.' },
-  { id: 'stated-absent', title: 'Stated absent in the file', hint: 'The file says this is absent, and the reason starts with “Stated absent in this packet”.' },
+  { id: 'present', title: 'On file', hint: 'Quoted from the file.' },
+  { id: 'missing', title: 'Missing', hint: 'Not in the file. Missing stays missing.' },
+  { id: 'stated-absent', title: 'Stated absent in the file', hint: 'The file says this is absent.' },
   { id: 'negative', title: 'Marked negative', hint: 'The file supports an adverse answer.' },
 ] as const
 
@@ -114,4 +118,12 @@ export function groupChecklistFields(
     })
   }
   return groups
+}
+
+/** Rows shown before “Show all (n)”. The rest stay on the card, collapsed. */
+export function checklistPreview<T>(rows: readonly T[]): { shown: T[]; hiddenCount: number } {
+  return {
+    shown: rows.slice(0, CHECKLIST_PREVIEW_LIMIT),
+    hiddenCount: Math.max(0, rows.length - CHECKLIST_PREVIEW_LIMIT),
+  }
 }
