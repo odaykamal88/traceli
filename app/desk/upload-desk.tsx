@@ -139,6 +139,8 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
   const [judging, setJudging] = useState(false)
   const [error, setError] = useState<DeskNotice | null>(null)
   const [judgmentError, setJudgmentError] = useState<string | null>(null)
+  const [reportError, setReportError] = useState<string | null>(null)
+  const [reportPending, setReportPending] = useState(false)
   const [result, setResult] = useState<UploadDeskView | null>(null)
   const [judgment, setJudgment] = useState<UploadDeskJudgmentView | null>(null)
   const [restored, setRestored] = useState(false)
@@ -237,6 +239,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
     setReason('')
     setError(null)
     setJudgmentError(null)
+    setReportError(null)
     setAnnounce('')
     setPackId(tender?.primaryPackId ?? initialPackId ?? '')
   }
@@ -282,6 +285,43 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
       setJudgmentError('The desk could not be reached. Check your connection and try again.')
     } finally {
       setJudging(false)
+    }
+  }
+
+  async function downloadPilotReport() {
+    if (!result || !judgment || reportPending) return
+    setReportPending(true)
+    setReportError(null)
+    setAnnounce('Preparing the pilot report.')
+    try {
+      const response = await fetch('/api/desk/pilot-report', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ view: result, judgment }),
+      })
+      if (!response.ok) {
+        const body = await response.json().catch(() => null) as { error?: string } | null
+        setReportError(body?.error ?? 'The pilot report could not be prepared. Try again.')
+        setAnnounce('')
+        return
+      }
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const anchor = document.createElement('a')
+      const disposition = response.headers.get('content-disposition') ?? ''
+      const match = /filename="([^"]+)"/.exec(disposition)
+      anchor.href = url
+      anchor.download = match?.[1] ?? 'trace-li-pilot-report.pdf'
+      document.body.appendChild(anchor)
+      anchor.click()
+      anchor.remove()
+      URL.revokeObjectURL(url)
+      setAnnounce('Pilot report downloaded.')
+    } catch {
+      setReportError('The pilot report could not be downloaded. Check your connection and try again.')
+      setAnnounce('')
+    } finally {
+      setReportPending(false)
     }
   }
 
@@ -368,6 +408,9 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
           onReason={setReason}
           onConfirm={confirmJudgment}
           onCopy={copyValue}
+          onDownloadReport={downloadPilotReport}
+          reportPending={reportPending}
+          reportError={reportError}
           tender={tender}
         />
       ) : null}
@@ -483,6 +526,9 @@ function AwardResult({
   onReason,
   onConfirm,
   onCopy,
+  onDownloadReport,
+  reportPending,
+  reportError,
   tender,
 }: {
   result: UploadDeskView
@@ -503,6 +549,9 @@ function AwardResult({
   onReason: (reason: string) => void
   onConfirm: () => void
   onCopy: (value: string, label: string) => void
+  onDownloadReport: () => void
+  reportPending: boolean
+  reportError: string | null
   tender: DeskTenderContext | null
 }) {
   const mapped = result.fields.filter(field => field.fromPacket)
@@ -635,7 +684,21 @@ function AwardResult({
                 <button className={s.secondary} type="button" onClick={() => onCopy(judgment.record.snapshotHash, 'Snapshot hash')}>
                   Copy snapshot hash
                 </button>
+                <button
+                  className={s.primary}
+                  type="button"
+                  data-testid="download-pilot-report"
+                  onClick={onDownloadReport}
+                  disabled={reportPending}
+                  aria-busy={reportPending}
+                >
+                  {reportPending ? 'Preparing the pilot report…' : 'Download pilot report (PDF)'}
+                </button>
               </div>
+              <p className={s.freezeNote}>
+                A plain-language memo of this freeze, for a procurement or grants lead to forward. Trace-li does not certify the award.
+              </p>
+              {reportError ? <p className={s.alert} role="alert">{reportError}</p> : null}
             </div>
           ) : (
             <>
