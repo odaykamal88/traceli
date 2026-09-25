@@ -1,6 +1,8 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'Traceli — Prove the award before you sign it'
+import { SITE_OG_TITLE } from '@/lib/site-social'
+
+export const alt = SITE_OG_TITLE
 export const size = {
   width: 1200,
   height: 630,

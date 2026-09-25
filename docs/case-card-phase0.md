@@ -1,6 +1,6 @@
 # Case Card Phase 0 — publishable public case
 
-Status: rails in place. Global Fund case #1 publishes founder Freeze #1 and OIOS 2025/098 publishes founder Freeze #2 (24 September 2026). UNFPA cards and OIOS 2020/005 remain fixtures.
+Status: rails in place. Global Fund case #1 publishes founder Freeze #1, OIOS 2025/098 publishes founder Freeze #2 (24 September 2026), and UNFPA IA/2025-29 publishes founder Freeze #3 (25 September 2026). Two UNFPA cards and OIOS 2020/005 remain fixtures.
 Code: `lib/field-registry/case-card.ts`, `lib/case-cards/`, `app/cases/`, `app/api/cases/[slug]/route.ts`.
 Upstream: [award-desk-freeze.md](./eng/award-desk-freeze.md), [field-registry-v1.md](./eng/field-registry-v1.md), [donor-pack-global-fund-v1.md](./eng/donor-pack-global-fund-v1.md).
 
@@ -61,6 +61,16 @@ The card publishes founder Freeze #2, a thin rehearsal: 0 pack fields mapped fro
 
 `oios2025098FixtureSnapshot()` remains the public-source reading of the reserve slice. The published export drops that fixture and shows the synthetic rehearsal snapshot inside the verified frozen record. `packScope` stays `finding-slice`. The OCHA CBPF pack `2026.1` is stamped in force on the freeze.
 
+## UNFPA IA/2025-29 — Sudan
+
+Slug: `unfpa-ia-2025-29-sudan`.
+Route: `/cases/unfpa-ia-2025-29-sudan`.
+Export: `/cases/unfpa-ia-2025-29-sudan.json`.
+
+The card publishes founder Freeze #3, a synthetic rehearsal: 4 of 27 pack keys read from the packet (1 negative, 3 stated absent), readiness red, 26 findings, disposition evidence requested. `publicationState` is `published`. The threshold approver is negative. RFQ criteria and scores, the purchase order or contract, and the receiving and inspection report stay missing, stated absent in the packet. The freeze does not invent them as present. The OAIS narrative is still the public finding. The freeze does not say Trace-li prevented the audit finding.
+
+`unfpaSudanFixtureSnapshot()` remains the public-source reading of the pre-award slice. The published export drops that fixture and shows the synthetic rehearsal snapshot inside the verified frozen record. `packScope` stays `finding-slice`. The UNFPA pack `2026.1` is stamped in force on the freeze.
+
 ## Export shape (`case-card-export-v1`)
 
 | Field | Fixture | Published freeze |
@@ -78,11 +88,11 @@ The card publishes founder Freeze #2, a thin rehearsal: 0 pack fields mapped fro
 | `redaction` | public vs withheld | same |
 | `narrative` / `findings` | the wording the page shows | same |
 
-`confidence` on a fixture field is not a fraud probability. On the public-source helper for GF-OIG-25-005 it is `1` because the value is a direct statement from the public report, and `verificationMethod` stays `unverified`. The published freeze uses the rehearsal snapshot (`adapter_extract`, confidence `0` on unmapped fields).
+`confidence` on a fixture field is not a fraud probability. On the public-source helper for GF-OIG-25-005 it is `1` because the value is a direct statement from the public report, and `verificationMethod` stays `unverified`. The published freeze uses the rehearsal snapshot (`adapter_extract`, confidence `0` on unmapped fields). Freeze #3 records confidence `0.16` on the four Sudan keys read from the packet.
 
 ## Later public fixtures
 
-UNFPA cards and OIOS 2020/005 use the same fixture contract and the same drop-in. Their packs, ticket ids, and the founder-freeze promotion steps are in [case-factory-unfpa-ocha.md](./case-factory-unfpa-ocha.md). Those cards leave `snapshotHash` and `packsHash` null until a real desk freeze is checked in.
+The Annex 4 cards and OIOS 2020/005 use the same fixture contract and the same drop-in. Their packs, ticket ids, and the founder-freeze promotion steps are in [case-factory-unfpa-ocha.md](./case-factory-unfpa-ocha.md). Those cards leave `snapshotHash` and `packsHash` null until a real desk freeze is checked in.
 
 ## Tests
 

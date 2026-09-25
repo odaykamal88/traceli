@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { AuthKitProvider } from '@workos-inc/authkit-nextjs/components'
 import { IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
+import { SITE_OG_TITLE } from '@/lib/site-social'
 import { isWorkOSConfigured } from '@/lib/workspace-access'
 import './globals.css'
 
@@ -35,12 +36,12 @@ export const metadata: Metadata = {
     'Award assurance for donor-funded procurement: connect governing rules, supplier evidence, human judgment and approvals before sign-off.',
   openGraph: {
     type: 'website',
-    title: 'Traceli — Prove the award before you sign it',
+    title: SITE_OG_TITLE,
     description: 'Award assurance for donor-funded procurement.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Traceli — Prove the award before you sign it',
+    title: SITE_OG_TITLE,
     description: 'Award assurance for donor-funded procurement.',
   },
   icons: {
