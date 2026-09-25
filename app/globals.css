@@ -129,7 +129,67 @@
   }
 }
 
+.glossary-wrap {
+  position: relative;
+  display: inline;
+}
+
+.glossary-term {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  cursor: help;
+}
+
+.glossary-term:focus {
+  outline: none;
+}
+
+.glossary-term:focus-visible {
+  outline: 2px solid #2f8876;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.glossary-tip {
+  position: absolute;
+  z-index: 50;
+  left: 0;
+  top: calc(100% + 0.45rem);
+  width: max-content;
+  max-width: min(18rem, calc(100vw - 2rem));
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.75rem;
+  background: #071d39;
+  color: #fbf5ea;
+  font-family: var(--font-plex-sans), 'IBM Plex Sans', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  box-shadow: 0 10px 28px rgba(7, 29, 57, 0.2);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.glossary-wrap:hover > .glossary-tip,
+.glossary-wrap:focus-within > .glossary-tip {
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glossary-tip {
+    transition: none;
+  }
+}
+
 @media print {
+
   header,
   aside,
   nav,

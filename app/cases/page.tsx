@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 import { CaseCardShell } from '@/components/case-card-shell'
+import { GlossaryText } from '@/components/glossary-text'
+import { readerFacingText } from '@/lib/case-card-presentation/reader-text'
 import { listCaseCards } from '@/lib/case-cards/catalog'
 
 const cards = listCaseCards()
@@ -37,7 +39,9 @@ export default function CaseCardsPage() {
                   <h2 className="mt-3 font-display text-3xl leading-tight tracking-[-0.03em] sm:text-4xl">
                     <Link href={`/cases/${card.slug}`} className="hover:text-[#1f6f61]">{card.title}</Link>
                   </h2>
-                  <p className="mt-3 max-w-2xl text-base leading-7 text-[#52696a]">{card.lede}</p>
+                  <p className="mt-3 max-w-2xl text-base leading-7 text-[#52696a]">
+                    <GlossaryText text={readerFacingText(card.lede)} />
+                  </p>
                   <p className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
                     <Link href={`/cases/${card.slug}`} className="inline-flex min-h-11 items-center gap-2 text-[#1f6f61]">
                       Open the card <ArrowRight className="size-4" aria-hidden="true" />
