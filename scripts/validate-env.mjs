@@ -70,8 +70,14 @@ if (traceMode === 'local') {
     throw new Error('Local Trace requires development mode and an isolated loopback PostgreSQL URL without query overrides.')
   }
 }
+const previewWithoutWorkOS = process.env.VERCEL_ENV === 'preview' && !workOSConfigured && databaseConfigured
 if (traceMode === 'workos' && (!workOSConfigured || !databaseConfigured)) {
-  throw new Error('Trace WorkOS access requires complete WorkOS and database configuration.')
+  // Preview does not receive Production WorkOS secrets. The build may finish;
+  // signed-in Trace-li stays closed until WorkOS is configured at runtime.
+  if (!previewWithoutWorkOS) {
+    throw new Error('Trace WorkOS access requires complete WorkOS and database configuration.')
+  }
+  console.log('Preview build continues without WorkOS secrets. Signed-in Trace-li stays closed on this deployment.')
 }
 if (hqAccess && !['disabled', 'local', 'workos'].includes(hqAccess)) {
   throw new Error('TRACELI_HQ_ACCESS must be disabled, local or workos.')

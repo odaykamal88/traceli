@@ -131,3 +131,35 @@ test('build preflight refuses incomplete auth and local mode in production', () 
   }
   assert.equal(spawnSync(process.execPath, ['scripts/validate-env.mjs'], { env: base }).status, 0)
 })
+test('preview build allows workos mode when WorkOS secrets are absent and the database pair is set', () => {
+  const database = {
+    DATABASE_URL: 'postgres://preview:preview@ep-dummy.neon.tech/neondb?sslmode=require',
+    DATABASE_URL_UNPOOLED: 'postgres://preview:preview@ep-dummy.neon.tech/neondb?sslmode=require',
+  }
+  const preview = spawnSync(process.execPath, ['scripts/validate-env.mjs'], {
+    env: {
+      PATH: process.env.PATH,
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      VERCEL_ENV: 'preview',
+      TRACELI_TRACE_MODE: 'workos',
+      ...database,
+    },
+    encoding: 'utf8',
+  })
+  assert.equal(preview.status, 0)
+  assert.match(preview.stdout, /Signed-in Trace-li stays closed/)
+  const production = spawnSync(process.execPath, ['scripts/validate-env.mjs'], {
+    env: {
+      PATH: process.env.PATH,
+      NODE_ENV: 'production',
+      VERCEL: '1',
+      VERCEL_ENV: 'production',
+      TRACELI_TRACE_MODE: 'workos',
+      ...database,
+    },
+    encoding: 'utf8',
+  })
+  assert.notEqual(production.status, 0)
+  assert.match(production.stderr, /complete WorkOS and database configuration/)
+})
