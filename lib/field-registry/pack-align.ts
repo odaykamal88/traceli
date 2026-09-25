@@ -10,6 +10,8 @@ import type { Fragment, RegistryField } from '@/lib/field-registry/schema'
  * A field is filled when the text names that key's state, or when a
  * full-phrase statement for that key matches. Keyword overlap is not a match.
  * An explicit absence never becomes a present or true value.
+ * The stored quote is the sentence that contains the match, without a
+ * running header, a `Page N` marker, or markdown emphasis.
  * `required_present` absences stay missing, with a reason, because a
  * negative value would not raise that rule. Boolean controls expected to be
  * true are recorded negative false, which still raises the finding.
@@ -38,9 +40,10 @@ function clip(text: string, max: number) {
 
 function normalize(text: string) {
   return text
-    .replace(/[\u0000-\u001f]+/g, ' ')
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]+/g, ' ')
     .replace(/[‐‑‒–—]/g, '-')
-    .replace(/\s+/g, ' ')
+    .replace(/[^\S\n]+/g, ' ')
+    .replace(/[ \t]*\n[ \t]*/g, '\n')
     .trim()
 }
 
@@ -66,14 +69,63 @@ function pageAt(text: string, index: number, fallback: number) {
   return page
 }
 
-function sentenceAt(text: string, index: number, length: number) {
+function sentenceBounds(text: string, index: number, length: number) {
   const windowStart = Math.max(0, index - 180)
-  const prev = text.lastIndexOf('.', index - 1)
-  const start = prev >= windowStart ? prev + 1 : windowStart
+  let start = windowStart
+  for (let cursor = index - 1; cursor >= windowStart; cursor -= 1) {
+    const next = text[cursor + 1]
+    if (text[cursor] === '.' && (next === undefined || /\s/.test(next))) {
+      start = cursor + 1
+      break
+    }
+  }
   const windowEnd = Math.min(text.length, index + length + 180)
-  const next = text.indexOf('.', index + length)
-  const end = next >= 0 && next <= windowEnd ? next + 1 : windowEnd
-  return text.slice(start, end).replace(/\s+/g, ' ').trim()
+  let end = windowEnd
+  for (let cursor = index + length; cursor < windowEnd; cursor += 1) {
+    const next = text[cursor + 1]
+    if (text[cursor] === '.' && (next === undefined || /\s/.test(next))) {
+      end = cursor + 1
+      break
+    }
+  }
+  return { start, end }
+}
+
+/**
+ * A stored quote is the sentence that contains the match.
+ * Running headers often glue on at a file extension (".md") or a page
+ * marker. Those are not part of the sentence. Markdown emphasis is not either.
+ */
+function cleanQuote(sentence: string, matchAt: number) {
+  const at = Math.max(0, Math.min(matchAt, sentence.length))
+  const before = sentence.slice(0, at)
+  const pageRe = /\bpage\s+\d{1,4}\b/gi
+  let cut = 0
+  for (const match of before.matchAll(pageRe)) {
+    cut = (match.index ?? 0) + match[0].length
+  }
+  let quote = cut > 0 ? sentence.slice(cut) : sentence
+  const banner = /^(?:[^·•\n]{0,120}[·•]\s*)+/.exec(quote)
+  if (banner && banner[0].length <= 240 && /\b(file|packet|rehearsal|page|md)\b/i.test(banner[0])) {
+    quote = quote.slice(banner[0].length).replace(/^(?:not a [A-Za-z]+ file\s*)+/i, '')
+  } else {
+    quote = quote.replace(/^(?:not a [A-Za-z]+ file\s*)+/i, '')
+  }
+  const phraseAt = sentence.slice(at).replace(/\*\*|__/g, '').slice(0, 24).trim().toLowerCase()
+  quote = quote
+    .replace(/\*\*|__/g, '')
+    .replace(/\bpage\s+\d{1,4}\b/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  if (phraseAt && !quote.toLowerCase().includes(phraseAt.slice(0, Math.min(12, phraseAt.length)))) {
+    return sentence.replace(/\*\*|__/g, '').replace(/\bpage\s+\d{1,4}\b/gi, ' ').replace(/\s+/g, ' ').trim()
+  }
+  return quote
+}
+
+function quoteAt(text: string, index: number, length: number) {
+  const bounds = sentenceBounds(text, index, length)
+  return cleanQuote(text.slice(bounds.start, bounds.end), index - bounds.start)
 }
 
 function containsOtherKey(text: string, key: string, keys: readonly string[]) {
@@ -106,10 +158,11 @@ function pushClause(
   for (const entry of patterns) {
     const match = entry.pattern.exec(text)
     if (!match || match.index < 0) continue
-    const sentence = sentenceAt(text, match.index, match[0].length)
+    const sentence = quoteAt(text, match.index, match[0].length)
     const absentSentence = ABSENCE_LANGUAGE.test(sentence) || ABSENCE_LANGUAGE.test(match[0])
     const polarity = entry.polarity === 'present' && absentSentence ? 'absent' : entry.polarity
-    const quote = sentence || match[0]
+    const quote = sentence || match[0].replace(/\*\*|__/g, '').replace(/\s+/g, ' ').trim()
+    if (!quote) continue
     if (containsOtherKey(quote, statement.key, keys) && polarity === 'present') continue
     readings.push({
       key: statement.key,
@@ -134,7 +187,8 @@ function explicitCues(text: string, keys: readonly string[], fragment: Fragment,
     if (!keys.includes(key)) continue
     const gap = match[2] ?? ''
     const state = (match[3] ?? '').toLowerCase()
-    const detail = clip(match[4] ?? '', 400)
+    const rawDetail = match[4] ?? ''
+    const detail = clip(cleanQuote(rawDetail, rawDetail.length), 400)
     if (!detail || containsOtherKey(gap, key, keys) || containsOtherKey(detail, key, keys)) continue
     if (/^[a-z][a-z0-9_.]+$/.test(detail.split(/\s/)[0] ?? '') && keys.includes((detail.split(/\s/)[0] ?? '').replace(/[:.]$/, ''))) {
       continue

@@ -203,19 +203,84 @@ test('unknown content and keyword overlap stay unmapped', () => {
   assert.equal(outcome.view.fields.some(item => item.key === 'waiver.noted'), false)
 })
 
-test('a waiver fragment still maps, and a hallucinated pack value does not override the document', () => {
+test('a generic waiver fragment stays out of a pack snapshot', () => {
   const outcome = freeze([
     fragment('frag.waiver', 'Waiver stub for packet.pdf. Authority is not decided here.', { kind: 'waiver' }),
     fragment('frag.doc', 'No Regional Director approval is on file.', { tags: ['document_text'] }),
     fragment('frag.invented', 'ip.threshold_approver: true'),
   ])
-  const waiver = outcome.record.snapshot.fields.find(item => item.key === 'waiver.noted')
-  assert.equal(waiver?.value.state, 'present')
-  assert.equal(outcome.view.fields.find(item => item.key === 'waiver.noted')?.fromPacket, true)
+  assert.equal(outcome.record.snapshot.fields.some(item => item.key === 'waiver.noted'), false)
+  assert.equal(outcome.record.snapshot.fields.every(item => UNFPA_FIELD_KEYS.includes(item.key)), true)
+  assert.equal(outcome.view.fragmentCount, 3)
+  assert.equal(outcome.view.unmappedFragmentCount, 3)
   const approver = field(outcome, 'ip.threshold_approver')
   assert.equal(approver.value.state, 'negative')
   assert.equal(approver.value.state === 'negative' ? approver.value.value : null, false)
+  assert.equal(approver.provenance.sourceRef.label, 'Quote: No Regional Director approval is on file.')
+})
+
+test('a Talonic pack-key value and a contaminated quote stay honest', () => {
+  const approverQuote = 'No Regional Director approval is on file.'
+  const rfqQuote = 'RFQ evaluation criteria in the solicitation: none listed.'
+  const poQuote = 'No approved purchase order was issued before the goods were received, and no signed contract is on file.'
+  const rirQuote = 'Receiving and inspection report (RIR): no policy-compliant RIR is on file.'
+  const markdown = [
+    'SYNTHETIC REHEARSAL · Trace-li freeze packet v1 · Packet 3 of FREEZE_PACKETS_v1.md · not a UNFPA file',
+    'Page 1',
+    approverQuote,
+    '**RFQ evaluation criteria in the solicitation:** none listed.',
+    poQuote,
+    'md · not a UNFPA file Page 1 **Receiving and inspection report (RIR):** no policy-compliant RIR is on file.',
+    'IP selection path: non-competitive. NGO Partner A was engaged non-competitively in exceptional humanitarian circumstances.',
+  ].join('\n')
+  const outcome = freeze([
+    fragment(
+      'frag.talonic.0',
+      'ip.competitive_or_waiver: non-competitive. NGO Partner A was engaged non-competitively in exceptional humanitarian circumstances.',
+      { kind: 'waiver', tags: ['waiver'] },
+    ),
+    fragment('frag.doc', markdown, { tags: ['document_text'] }),
+  ])
+  assert.equal(outcome.view.readiness, 'red')
+  assert.equal(outcome.view.findingCount, 26)
+  assert.equal(outcome.view.findings.filter(item => item.severity === 'blocker').length, 20)
+  assert.equal(outcome.view.findings.filter(item => item.severity === 'warning').length, 6)
+  assert.equal(outcome.view.fragmentCount, 2)
   assert.equal(outcome.view.unmappedFragmentCount, 2)
+  assert.equal(outcome.record.snapshot.fields.some(item => !UNFPA_FIELD_KEYS.includes(item.key)), false)
+  const competitive = field(outcome, 'ip.competitive_or_waiver')
+  assert.equal(competitive.value.state, 'missing')
+  assert.equal(competitive.value.state === 'missing' ? competitive.value.reason : '', UNREAD)
+  assert.equal(outcome.view.fields.find(item => item.key === 'ip.competitive_or_waiver')?.fromPacket, false)
+
+  const approver = field(outcome, 'ip.threshold_approver')
+  assert.equal(approver.value.state, 'negative')
+  assert.equal(approver.value.state === 'negative' ? approver.value.value : null, false)
+  assert.equal(approver.provenance.sourceRef.id, 'page-1')
+  assert.equal(approver.provenance.sourceRef.label, `Quote: ${approverQuote}`)
+
+  const rfq = field(outcome, 'procurement.rfq_criteria_and_scores')
+  assert.equal(rfq.value.state, 'missing')
+  assert.equal(rfq.value.state === 'missing' ? rfq.value.reason : '', `${STATED_ABSENT_PREFIX}${rfqQuote}`)
+  assert.equal(rfq.provenance.sourceRef.id, 'page-1')
+  assert.equal(rfq.provenance.sourceRef.label, `Quote: ${rfqQuote}`)
+
+  const po = field(outcome, 'procurement.po_or_contract')
+  assert.equal(po.value.state, 'missing')
+  assert.equal(po.value.state === 'missing' ? po.value.reason : '', `${STATED_ABSENT_PREFIX}${poQuote}`)
+  assert.equal(po.provenance.sourceRef.id, 'page-1')
+  assert.equal(po.provenance.sourceRef.label, `Quote: ${poQuote}`)
+
+  const rir = field(outcome, 'procurement.rir')
+  assert.equal(rir.value.state, 'missing')
+  assert.equal(rir.value.state === 'missing' ? rir.value.reason : '', `${STATED_ABSENT_PREFIX}${rirQuote}`)
+  assert.equal(rir.provenance.sourceRef.id, 'page-1')
+  assert.equal(rir.provenance.sourceRef.label, `Quote: ${rirQuote}`)
+  const stored = `${rir.value.state === 'missing' ? rir.value.reason : ''} ${rir.provenance.sourceRef.label}`
+  assert.equal(stored.includes('**'), false)
+  assert.equal(stored.includes('Page'), false)
+  assert.equal(stored.includes('not a UNFPA file'), false)
+  assert.equal(stored.includes('md ·'), false)
 })
 
 test('the UNFPA rehearsal packet fills only the controls it states', () => {
@@ -266,9 +331,23 @@ test('the UNFPA rehearsal packet fills only the controls it states', () => {
     }
   }
   assert.equal(field(outcome, 'ip.competitive_or_waiver').value.state, 'missing')
-  assert.equal(field(outcome, 'procurement.rir').provenance.sourceRef.id, 'page-2')
+  const rir = field(outcome, 'procurement.rir')
+  const rirQuote = 'Receiving and inspection report (RIR): no policy-compliant RIR is on file.'
+  assert.equal(rir.provenance.sourceRef.id, 'page-2')
+  assert.equal(rir.provenance.sourceRef.label, `Quote: ${rirQuote}`)
+  assert.equal(rir.value.state === 'missing' ? rir.value.reason : '', `${STATED_ABSENT_PREFIX}${rirQuote}`)
+  const rfq = field(outcome, 'procurement.rfq_criteria_and_scores')
+  assert.equal(rfq.provenance.sourceRef.label, 'Quote: RFQ evaluation criteria in the solicitation: none listed.')
   assert.equal(field(outcome, 'ip.threshold_approver').provenance.sourceRef.id, 'page-1')
+  assert.equal(
+    field(outcome, 'ip.threshold_approver').provenance.sourceRef.label,
+    'Quote: Approver must match the cumulative workplan threshold: not met on this file.',
+  )
   assert.equal(field(outcome, 'procurement.po_or_contract').provenance.sourceRef.id, 'page-1')
+  assert.equal(
+    field(outcome, 'procurement.po_or_contract').provenance.sourceRef.label,
+    'Quote: No approved purchase order was issued before the goods were received, and no signed contract is on file.',
+  )
   assert.equal(outcome.record.snapshot.fields.some(item => item.key === 'audit.office_rating'), false)
   const approverFinding = outcome.view.findings.find(item => item.code === 'unfpa_ip_threshold_approver_missing')
   assert.match(approverFinding?.summary ?? '', /negative:false/)

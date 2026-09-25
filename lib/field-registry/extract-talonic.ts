@@ -16,7 +16,7 @@ import {
   type ExtractionUpstreamDetail,
 } from '@/lib/field-registry/extract'
 import { DOCUMENT_TEXT_TAG } from '@/lib/field-registry/pack-align'
-import { talonicPackForm } from '@/lib/field-registry/pack-schema'
+import { fieldKeysForDonorPack, talonicPackForm } from '@/lib/field-registry/pack-schema'
 import { type FragmentKindHint } from '@/lib/field-registry/schema'
 import type { DonorPackId } from '@/lib/field-registry/packs/types'
 
@@ -113,8 +113,12 @@ type RequestContext = {
 const upstreamCodePattern = /^[A-Za-z0-9_]{1,64}$/
 const upstreamRequestIdPattern = /^req_[A-Za-z0-9]{6,80}$/
 const IDEMPOTENCY_PREFIX = 'trace-v2-'
-/** New prefix when the body includes a pack schema, so a schema-less cache is not replayed. */
-const PACK_IDEMPOTENCY_PREFIX = 'trace-v3-'
+/**
+ * New prefix when the body includes a pack schema, so a schema-less cache is not replayed.
+ * `trace-v4` also skips a cached `trace-v3` pack extract from before quote cleaning
+ * and pack-only snapshots, so the same file is extracted again.
+ */
+const PACK_IDEMPOTENCY_PREFIX = 'trace-v4-'
 
 function redact(value: string, secret: string, limit: number) {
   let text = secret ? value.split(secret).join('redacted') : value
@@ -443,6 +447,14 @@ function resolveBudget(timeoutMs: number | undefined) {
   return { total, extension }
 }
 
+function kindForDiscoveredField(key: string, packId: DonorPackId | undefined): FragmentKindHint {
+  // `ip.competitive_or_waiver` contains "waiver", and other pack keys contain
+  // "subject" or "capacity". That substring is not a generic kind. The JSON
+  // value is not evidence; alignPackFields reads the markdown only.
+  if (packId && new Set<string>(fieldKeysForDonorPack(packId)).has(key)) return 'text'
+  return kindFromText(key) ?? 'text'
+}
+
 function kindFromText(value: string): FragmentKindHint | undefined {
   const lower = value.toLowerCase()
   if (lower.includes('waiver')) return 'waiver'
@@ -616,7 +628,7 @@ function mapTalonicEnvelope(envelope: Record<string, unknown>, loaded: LoadedFil
     if (!rendered || !label) continue
     const provenance = payload.entry ?? provenanceEntry(key, envelope)
     const quote = quoteOf(provenance)
-    const kind = kindFromText(key) ?? 'text'
+    const kind = kindForDiscoveredField(key, loaded.packId)
     discovered.push({
       key,
       label,

@@ -969,7 +969,7 @@ test('a desk pack sends a Talonic schema and keeps markdown as document text', a
   })
   const result = await provider.extract(input('packet.pdf', 'application/pdf', { packId: 'unfpa' }))
   assert.equal(calls.length, 1)
-  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-v3-unfpa-${sourceFileHashOf(bytes)}`.slice(0, 64))
+  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-v4-unfpa-${sourceFileHashOf(bytes)}`.slice(0, 64))
   const corpus = result.fragments.find(fragment => fragment.tags?.includes('document_text'))
   assert.equal(corpus?.text, 'No Regional Director approval is on file.')
   assert.equal(corpus?.kind, 'text')
@@ -985,6 +985,50 @@ test('a desk pack sends a Talonic schema and keeps markdown as document text', a
   assert.equal(approver?.value.state, 'negative')
   assert.equal(approver?.value.state === 'negative' ? approver.value.value : null, false)
   assert.equal(outcome.view.fields.find(field => field.key === 'ip.threshold_approver')?.fromPacket, true)
+  assert.equal(outcome.record.snapshot.fields.some(field => field.key === 'waiver.noted'), false)
+})
+
+test('a Talonic pack-key value is not a generic waiver and does not become present', async () => {
+  process.env.TRACE_TALONIC_API_KEY = 'tlnc_test_secret_value'
+  delete process.env.TRACE_TALONIC_BASE_URL
+  const provider = new TalonicExtractionProvider({
+    now: () => new Date('2026-09-25T12:29:25.869Z'),
+    fetchImpl: async () => jsonResponse(200, {
+      status: 'complete',
+      created_at: '2026-09-25T12:29:25.869Z',
+      data: {
+        'ip.competitive_or_waiver': 'non-competitive. NGO Partner A was engaged non-competitively in exceptional humanitarian circumstances.',
+        'ip.threshold_approver': 'true',
+      },
+      markdown: [
+        'Page 1',
+        'No Regional Director approval is on file.',
+        'IP selection path: non-competitive. NGO Partner A was engaged non-competitively in exceptional humanitarian circumstances.',
+      ].join('\n'),
+      confidence: { overall: 0.85, fields: { 'ip.competitive_or_waiver': 0.85, 'ip.threshold_approver': 0.99 } },
+    }),
+  })
+  const result = await provider.extract(input('unfpa-ia-2025-29-sudan-rehearsal.pdf', 'application/pdf', { packId: 'unfpa' }))
+  const competitive = result.fragments.find(fragment => fragment.text.startsWith('ip.competitive_or_waiver:'))
+  assert.equal(competitive?.kind, 'text')
+  assert.equal(competitive?.tags?.includes('document_text'), false)
+  const outcome = freezeUploadedPacket({
+    extraction: result,
+    packId: 'unfpa',
+    organizationId: 'org_trace_demo',
+    actorId: 'user_fixture_reviewer',
+    actorRole: 'Procurement Officer',
+    frozenAt: '2026-09-25T12:29:25.869Z',
+  })
+  const field = outcome.record.snapshot.fields.find(item => item.key === 'ip.competitive_or_waiver')
+  assert.equal(field?.value.state, 'missing')
+  assert.equal(field?.value.state === 'missing' ? field.value.reason : '', 'Not extracted from this packet.')
+  const approver = outcome.record.snapshot.fields.find(item => item.key === 'ip.threshold_approver')
+  assert.equal(approver?.value.state, 'negative')
+  assert.equal(approver?.value.state === 'negative' ? approver.value.value : null, false)
+  assert.equal(outcome.record.snapshot.fields.some(item => item.key === 'waiver.noted'), false)
+  assert.equal(outcome.view.fragmentCount, result.fragments.length)
+  assert.equal(outcome.view.unmappedFragmentCount, result.fragments.length)
 })
 
 test('rules and freeze do not import a Talonic type', () => {

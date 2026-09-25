@@ -12,7 +12,6 @@ import {
   extractionResultSchema,
   fragmentsTowardRegistryDraft,
   type ExtractionResult,
-  type RegistryEntityDraft,
 } from '@/lib/field-registry/extract'
 import { alignPackFields } from '@/lib/field-registry/pack-align'
 import {
@@ -131,17 +130,6 @@ function actorRoleOf(role: string): ActorRole {
   return role as ActorRole
 }
 
-function registryFieldFromDraft(field: RegistryEntityDraft['fields'][number]): RegistryField {
-  return {
-    fieldId: field.fieldId,
-    entityKind: field.entityKind,
-    entityId: field.entityId,
-    key: field.key,
-    value: field.value,
-    provenance: field.provenance,
-  }
-}
-
 function missingField(key: string, extraction: ExtractionResult): RegistryField {
   const fragment = extraction.fragments[0]
   return {
@@ -163,6 +151,11 @@ function missingField(key: string, extraction: ExtractionResult): RegistryField 
 /**
  * Map fragments onto registry fields, then record every pack key the packet
  * did not yield as missing evidence. A draft alone is not a snapshot.
+ *
+ * A selected pack owns the snapshot. Generic kind targets (`waiver.noted`,
+ * `pricing.table`, and the other draft keys) are not pack fields, so they
+ * stay out of the snapshot and count as unmapped. A Talonic value is not
+ * copied onto a pack key from that draft: only `alignPackFields` may fill one.
  */
 export function snapshotFromUpload(
   extraction: ExtractionResult,
@@ -178,26 +171,15 @@ export function snapshotFromUpload(
     awardId: scope.awardId,
     organizationId: scope.organizationId,
   })
-  const draftFields = draft.fields.map(registryFieldFromDraft)
   const aligned = alignPackFields(extraction.fragments, packId)
   const alignedByKey = new Map(aligned.fields.map(field => [field.key, field]))
-  const fromPacketFieldIds = new Set([
-    ...draftFields.map(field => field.fieldId),
-    ...aligned.fields.map(field => field.fieldId),
-  ])
+  const fromPacketFieldIds = new Set(aligned.fields.map(field => field.fieldId))
   const packKeys = fieldKeysByPack[packId]
-  const packKeySet = new Set<string>(packKeys)
   const fields: RegistryField[] = []
   for (const key of packKeys) {
     const fromDocument = alignedByKey.get(key)
-    if (fromDocument) fields.push(fromDocument)
-    else {
-      const matched = draftFields.filter(field => field.key === key)
-      if (matched.length > 0) fields.push(...matched)
-      else fields.push(missingField(key, extraction))
-    }
+    fields.push(fromDocument ?? missingField(key, extraction))
   }
-  fields.push(...draftFields.filter(field => !packKeySet.has(field.key)))
   const context = packContexts[packId]
   const snapshot = awardRegistrySnapshotSchema.parse({
     schemaVersion: 'award-registry-snapshot-v1',
@@ -212,7 +194,11 @@ export function snapshotFromUpload(
     asOf: scope.asOf,
     fields,
   })
-  return { snapshot, fromPacketFieldIds, unmappedFragmentCount: draft.unmappedFragmentIds.length }
+  return {
+    snapshot,
+    fromPacketFieldIds,
+    unmappedFragmentCount: draft.unmappedFragmentIds.length + draft.fields.length,
+  }
 }
 
 function detailFor(field: RegistryField) {
