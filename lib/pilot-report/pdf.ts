@@ -1,7 +1,10 @@
 /**
  * Printable pilot memo. Page size is the overlap of A4 and US Letter
  * (A4 width, Letter height) so the file prints at 100% on both.
- * Text is drawn, not painted as an image. Standard fonts cover Latin-1.
+ *
+ * Page 1 stands alone: the decision, readiness, open items, and at most
+ * five things to ask for. The checklist follows. Check codes sit in a
+ * small footer on the last page. One accent colour marks readiness.
  */
 
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
@@ -11,19 +14,20 @@ import type { PilotReport } from '@/lib/pilot-report/build'
 export const PILOT_PAGE_WIDTH = 595.28
 export const PILOT_PAGE_HEIGHT = 792
 
-const MARGIN_X = 48
-const HEADER = 46
-const FOOTER = 36
-const CONTENT_TOP = PILOT_PAGE_HEIGHT - HEADER - 18
-const CONTENT_BOTTOM = FOOTER + 16
+const MARGIN_X = 56
+const CONTENT_TOP = PILOT_PAGE_HEIGHT - 78
+const CONTENT_BOTTOM = 48
 const CONTENT_WIDTH = PILOT_PAGE_WIDTH - MARGIN_X * 2
 
 const navy = rgb(7 / 255, 29 / 255, 57 / 255)
-const ivory = rgb(251 / 255, 245 / 255, 234 / 255)
-const mint = rgb(120 / 255, 216 / 255, 196 / 255)
-const muted = rgb(82 / 255, 105 / 255, 106 / 255)
+const muted = rgb(90 / 255, 104 / 255, 112 / 255)
 const rule = rgb(214 / 255, 208 / 255, 196 / 255)
-const paper = rgb(1, 1, 1)
+const readinessAccent = {
+  red: rgb(176 / 255, 52 / 255, 42 / 255),
+  amber: rgb(176 / 255, 112 / 255, 24 / 255),
+  green: rgb(28 / 255, 112 / 255, 78 / 255),
+  unknown: muted,
+} as const
 
 function pdfText(value: string) {
   return value
@@ -68,6 +72,14 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number) {
   return lines.length > 0 ? lines : ['']
 }
 
+function clipLines(lines: string[], max: number) {
+  if (lines.length <= max) return lines
+  const kept = lines.slice(0, max)
+  const last = kept[max - 1] ?? ''
+  kept[max - 1] = last.length > 3 ? `${last.slice(0, -1).trimEnd()}...` : last
+  return kept
+}
+
 type Draw = {
   doc: PDFDocument
   page: PDFPage
@@ -79,17 +91,27 @@ type Draw = {
 
 function addPage(draw: Draw): Draw {
   const page = draw.doc.addPage([PILOT_PAGE_WIDTH, PILOT_PAGE_HEIGHT])
-  page.drawRectangle({ x: 0, y: PILOT_PAGE_HEIGHT - HEADER, width: PILOT_PAGE_WIDTH, height: HEADER, color: navy })
-  page.drawCircle({ x: MARGIN_X + 5, y: PILOT_PAGE_HEIGHT - 24, size: 4.5, color: mint })
-  page.drawText('Trace-li', { x: MARGIN_X + 16, y: PILOT_PAGE_HEIGHT - 29, size: 16, font: draw.bold, color: ivory })
+  page.drawText('Trace-li', {
+    x: MARGIN_X,
+    y: PILOT_PAGE_HEIGHT - 40,
+    size: 12,
+    font: draw.bold,
+    color: navy,
+  })
   const label = 'Pilot report'
-  const labelWidth = draw.font.widthOfTextAtSize(label, 10)
+  const labelWidth = draw.font.widthOfTextAtSize(label, 9)
   page.drawText(label, {
     x: PILOT_PAGE_WIDTH - MARGIN_X - labelWidth,
-    y: PILOT_PAGE_HEIGHT - 26,
-    size: 10,
+    y: PILOT_PAGE_HEIGHT - 38,
+    size: 9,
     font: draw.font,
-    color: ivory,
+    color: muted,
+  })
+  page.drawLine({
+    start: { x: MARGIN_X, y: PILOT_PAGE_HEIGHT - 52 },
+    end: { x: PILOT_PAGE_WIDTH - MARGIN_X, y: PILOT_PAGE_HEIGHT - 52 },
+    thickness: 0.6,
+    color: rule,
   })
   return { ...draw, page, y: CONTENT_TOP }
 }
@@ -99,7 +121,8 @@ function ensure(draw: Draw, needed: number) {
   return addPage(draw)
 }
 
-function drawLines(draw: Draw, lines: string[], font: PDFFont, size: number, color: ReturnType<typeof rgb>, gap = 4) {
+function drawWrapped(draw: Draw, text: string, font: PDFFont, size: number, color: ReturnType<typeof rgb>, maxLines?: number, gap = 5) {
+  const lines = maxLines ? clipLines(wrap(text, font, size, CONTENT_WIDTH), maxLines) : wrap(text, font, size, CONTENT_WIDTH)
   const lineHeight = size + gap
   let next = draw
   for (const line of lines) {
@@ -110,60 +133,39 @@ function drawLines(draw: Draw, lines: string[], font: PDFFont, size: number, col
   return next
 }
 
-function paragraph(draw: Draw, text: string, size = 11, color = navy, font?: PDFFont) {
-  const face = font ?? draw.font
-  const lines = wrap(text, face, size, CONTENT_WIDTH)
-  return drawLines(draw, lines, face, size, color, 4)
-}
-
 function heading(draw: Draw, text: string) {
-  let next = ensure(draw, 28)
-  next = { ...next, y: next.y - 8 }
-  next.page.drawRectangle({ x: MARGIN_X, y: next.y - 12, width: 18, height: 3, color: mint })
-  next.page.drawText(pdfText(text), { x: MARGIN_X + 24, y: next.y - 14, size: 13, font: next.bold, color: navy })
+  let next = ensure(draw, 40)
+  next = { ...next, y: next.y - 18 }
+  next.page.drawText(pdfText(text), { x: MARGIN_X, y: next.y - 14, size: 13, font: next.bold, color: navy })
   return { ...next, y: next.y - 24 }
 }
 
-function metaRow(draw: Draw, label: string, value: string) {
-  const labelWidth = 132
-  const valueWidth = CONTENT_WIDTH - labelWidth
-  const lines = wrap(value, draw.font, 10, valueWidth)
-  const height = Math.max(16, lines.length * 14 + 4)
-  let next = ensure(draw, height)
-  next.page.drawText(pdfText(label), { x: MARGIN_X, y: next.y - 11, size: 9, font: next.bold, color: muted })
-  lines.forEach((line, index) => {
-    next.page.drawText(line, { x: MARGIN_X + labelWidth, y: next.y - 11 - index * 14, size: 10, font: next.font, color: navy })
-  })
-  return { ...next, y: next.y - height }
-}
-
 function checklistRow(draw: Draw, title: string, detail: string, confirmation: string | null) {
-  const titleWidth = CONTENT_WIDTH * 0.62
-  const detailWidth = CONTENT_WIDTH - titleWidth - 12
+  const detailWidth = 168
+  const titleWidth = CONTENT_WIDTH - detailWidth - 18
   const titleLines = wrap(title, draw.bold, 10, titleWidth)
-  const marker = confirmation ? wrap(confirmation, draw.font, 8, titleWidth) : []
   const detailLines = wrap(detail, draw.font, 9, detailWidth)
-  const leftCount = titleLines.length + marker.length
-  const rows = Math.max(leftCount, detailLines.length, 1)
-  const height = rows * 13 + 10
+  const marker = confirmation ? clipLines(wrap(confirmation, draw.font, 8, titleWidth), 2) : []
+  const bodyRows = Math.max(titleLines.length, detailLines.length, 1)
+  const height = bodyRows * 13 + marker.length * 11 + 8
   let next = ensure(draw, height)
   titleLines.forEach((line, index) => {
-    next.page.drawText(line, { x: MARGIN_X, y: next.y - 12 - index * 13, size: 10, font: next.bold, color: navy })
+    next.page.drawText(line, { x: MARGIN_X, y: next.y - 11 - index * 13, size: 10, font: next.bold, color: navy })
+  })
+  detailLines.forEach((line, index) => {
+    next.page.drawText(line, {
+      x: MARGIN_X + titleWidth + 18,
+      y: next.y - 11 - index * 13,
+      size: 9,
+      font: next.font,
+      color: muted,
+    })
   })
   marker.forEach((line, index) => {
     next.page.drawText(line, {
       x: MARGIN_X,
-      y: next.y - 12 - (titleLines.length + index) * 13,
+      y: next.y - 11 - bodyRows * 13 - index * 11,
       size: 8,
-      font: next.font,
-      color: navy,
-    })
-  })
-  detailLines.forEach((line, index) => {
-    next.page.drawText(line, {
-      x: MARGIN_X + titleWidth + 12,
-      y: next.y - 12 - index * 13,
-      size: 9,
       font: next.font,
       color: muted,
     })
@@ -172,18 +174,180 @@ function checklistRow(draw: Draw, title: string, detail: string, confirmation: s
   next.page.drawLine({
     start: { x: MARGIN_X, y: bottom },
     end: { x: MARGIN_X + CONTENT_WIDTH, y: bottom },
-    thickness: 0.4,
+    thickness: 0.3,
     color: rule,
   })
-  return { ...next, y: bottom - 4 }
+  return { ...next, y: bottom - 2 }
 }
 
 function stampFooters(doc: PDFDocument, font: PDFFont) {
   const pages = doc.getPages()
   pages.forEach((page, index) => {
-    const label = `Trace-li  ·  Page ${index + 1} of ${pages.length}  ·  Prints on A4 and US Letter`
-    page.drawText(label, { x: MARGIN_X, y: 18, size: 8, font, color: muted })
+    const label = `Page ${index + 1} of ${pages.length}`
+    const width = font.widthOfTextAtSize(label, 8)
+    page.drawText(label, {
+      x: PILOT_PAGE_WIDTH - MARGIN_X - width,
+      y: 22,
+      size: 8,
+      font,
+      color: muted,
+    })
   })
+}
+
+function drawFirstPage(draw: Draw, report: PilotReport) {
+  const reviewer = report.reviewerRole ? `${report.reviewerName}, ${report.reviewerRole}` : report.reviewerName
+  const identity = [
+    report.fileName,
+    report.procurementReference,
+    `${report.donorName}  ·  ${report.packName}  ·  version ${report.packVersion}`,
+    `Frozen ${report.frozenAtLabel}  ·  ${reviewer}`,
+  ]
+  let next = draw
+  for (const line of identity) {
+    const lines = clipLines(wrap(line, next.font, 10, CONTENT_WIDTH), 2)
+    for (const part of lines) {
+      next.page.drawText(part, { x: MARGIN_X, y: next.y - 11, size: 10, font: next.font, color: muted })
+      next = { ...next, y: next.y - 16 }
+    }
+  }
+  next = { ...next, y: next.y - 28 }
+
+  const decisionLines = wrap(report.decisionSentence, next.bold, 16, CONTENT_WIDTH)
+  for (const line of decisionLines) {
+    next.page.drawText(line, { x: MARGIN_X, y: next.y - 16, size: 16, font: next.bold, color: navy })
+    next = { ...next, y: next.y - 22 }
+  }
+  next = { ...next, y: next.y - 18 }
+
+  const accent = readinessAccent[report.readiness]
+  next.page.drawRectangle({
+    x: MARGIN_X,
+    y: next.y - 18,
+    width: 4,
+    height: 18,
+    color: accent,
+  })
+  next.page.drawText(pdfText(report.readinessLabel), {
+    x: MARGIN_X + 14,
+    y: next.y - 16,
+    size: 20,
+    font: next.bold,
+    color: accent,
+  })
+  next = { ...next, y: next.y - 36 }
+  next.page.drawText(pdfText(report.openItemLine), {
+    x: MARGIN_X,
+    y: next.y - 14,
+    size: 13,
+    font: next.font,
+    color: navy,
+  })
+  next = { ...next, y: next.y - 40 }
+
+  next.page.drawText('What to ask for', {
+    x: MARGIN_X,
+    y: next.y - 13,
+    size: 13,
+    font: next.bold,
+    color: navy,
+  })
+  next = { ...next, y: next.y - 26 }
+
+  if (report.frontAskLines.length === 0) {
+    const empty = report.openItemCount === 0
+      ? 'Nothing to ask for before you sign.'
+      : 'The open items are listed in the checklist.'
+    return drawWrapped(next, empty, next.font, 12, navy, 2, 4)
+  }
+
+  report.frontAskLines.forEach((line, index) => {
+    const number = `${index + 1}.`
+    const numberWidth = next.bold.widthOfTextAtSize(number, 12)
+    const textWidth = CONTENT_WIDTH - numberWidth - 10
+    const parts = clipLines(wrap(line, next.font, 12, textWidth), 2)
+    parts.forEach((part, partIndex) => {
+      if (partIndex === 0) {
+        next.page.drawText(number, { x: MARGIN_X, y: next.y - 12, size: 12, font: next.bold, color: navy })
+      }
+      next.page.drawText(part, {
+        x: MARGIN_X + numberWidth + 10,
+        y: next.y - 12,
+        size: 12,
+        font: next.font,
+        color: navy,
+      })
+      next = { ...next, y: next.y - 17 }
+    })
+    next = { ...next, y: next.y - 6 }
+  })
+
+  if (report.furtherOpenItemCount > 0) {
+    const more = report.furtherOpenItemCount === 1
+      ? 'And 1 more open item is in the checklist.'
+      : `And ${report.furtherOpenItemCount} more open items are in the checklist.`
+    next = { ...next, y: next.y - 6 }
+    next = drawWrapped(next, more, next.font, 11, muted, 2, 3)
+  }
+  return next
+}
+
+function drawChecklist(draw: Draw, report: PilotReport) {
+  let next = heading(draw, 'The reviewer\'s reason')
+  next = drawWrapped(next, report.decisionReason, next.font, 11, navy, undefined, 4)
+  next = { ...next, y: next.y - 8 }
+  next = heading(next, 'Checklist')
+  next = drawWrapped(next, 'The full list from this file. Each line uses the checklist\'s own words.', next.font, 10, muted, 3, 3)
+  for (const group of report.groups) {
+    next = { ...next, y: next.y - 16 }
+    next = ensure(next, 22)
+    next.page.drawText(pdfText(group.heading), { x: MARGIN_X, y: next.y - 12, size: 12, font: next.bold, color: navy })
+    next = { ...next, y: next.y - 20 }
+    if (group.rows.length === 0) {
+      next = drawWrapped(next, 'None.', next.font, 10, muted, 1, 2)
+      continue
+    }
+    for (const row of group.rows) {
+      next = checklistRow(next, row.title, row.detail, row.confirmationNote)
+    }
+  }
+  return next
+}
+
+function drawVerification(draw: Draw, report: PilotReport) {
+  const checks: [string, string][] = [
+    ['Record id', report.verification.recordId],
+    ['Snapshot hash', report.verification.snapshotHash],
+    ['Packs hash', report.verification.packsHash],
+    ['Hash method', report.verification.hashMethod],
+  ]
+  const sentence = wrap(report.verification.recompute, draw.font, 9, CONTENT_WIDTH)
+  const boundary = wrap(report.boundary, draw.font, 9, CONTENT_WIDTH)
+  const needed = 28 + checks.length * 12 + sentence.length * 12 + 10 + boundary.length * 12 + 8
+  let next = draw.y - 24 < CONTENT_BOTTOM + needed ? addPage(draw) : { ...draw, y: draw.y - 28 }
+  next.page.drawText('To check this note', { x: MARGIN_X, y: next.y - 10, size: 9, font: next.bold, color: muted })
+  next = { ...next, y: next.y - 16 }
+  for (const [label, value] of checks) {
+    const lines = wrap(value, next.mono, 7.5, CONTENT_WIDTH - 118)
+    const height = Math.max(12, lines.length * 10)
+    next = ensure(next, height)
+    next.page.drawText(label, { x: MARGIN_X, y: next.y - 8, size: 8, font: next.font, color: muted })
+    lines.forEach((line, index) => {
+      next.page.drawText(line, { x: MARGIN_X + 118, y: next.y - 8 - index * 10, size: 7.5, font: next.mono, color: navy })
+    })
+    next = { ...next, y: next.y - height }
+  }
+  next = { ...next, y: next.y - 8 }
+  next = drawWrapped(next, report.verification.recompute, next.font, 9, navy, undefined, 3)
+  next = { ...next, y: next.y - 8 }
+  next.page.drawLine({
+    start: { x: MARGIN_X, y: next.y },
+    end: { x: MARGIN_X + CONTENT_WIDTH, y: next.y },
+    thickness: 0.4,
+    color: rule,
+  })
+  next = { ...next, y: next.y - 8 }
+  return drawWrapped(next, report.boundary, next.font, 9, navy, undefined, 3)
 }
 
 export async function renderPilotReportPdf(report: PilotReport): Promise<Uint8Array> {
@@ -193,99 +357,15 @@ export async function renderPilotReportPdf(report: PilotReport): Promise<Uint8Ar
   doc.setCreator('Trace-li')
   doc.setProducer('Trace-li')
   doc.setLanguage('en-GB')
-  doc.setSubject('Pilot report for one frozen award checklist')
+  doc.setSubject('Pilot report for one frozen checklist')
   const font = await doc.embedFont(StandardFonts.Helvetica)
   const bold = await doc.embedFont(StandardFonts.HelveticaBold)
   const mono = await doc.embedFont(StandardFonts.Courier)
   let draw = addPage({ doc, page: undefined as unknown as PDFPage, y: 0, font, bold, mono })
-
-  draw = heading(draw, 'Pilot report')
-  const reviewer = report.reviewerRole ? `${report.reviewerName} · ${report.reviewerRole}` : report.reviewerName
-  const meta: [string, string][] = [
-    ['File', report.fileName],
-    ['Procurement reference', report.procurementReference],
-    ['Donor', report.donorName],
-    ['Checklist', report.packName],
-    ['Checklist version', report.packVersion],
-    ['Frozen', report.frozenAtLabel],
-    ['Reviewer', reviewer],
-  ]
-  for (const [label, value] of meta) draw = metaRow(draw, label, value)
-
-  draw = heading(draw, 'Summary')
-  draw = paragraph(draw, report.summary, 11, navy)
-  draw = { ...draw, y: draw.y - 6 }
-
-  draw = heading(draw, 'Checklist')
-  draw = paragraph(draw, 'Grouped from the frozen file. Titles are the checklist\'s own words.', 10, muted)
-  for (const group of report.groups) {
-    draw = { ...draw, y: draw.y - 8 }
-    draw = ensure(draw, 22)
-    draw.page.drawText(pdfText(group.heading), { x: MARGIN_X, y: draw.y - 12, size: 11, font: draw.bold, color: navy })
-    draw = { ...draw, y: draw.y - 18 }
-    if (group.rows.length === 0) {
-      draw = paragraph(draw, 'None.', 10, muted)
-      continue
-    }
-    for (const row of group.rows) {
-      draw = checklistRow(draw, row.title, row.detail, row.confirmationNote)
-    }
-  }
-
-  draw = heading(draw, 'What an auditor would ask for next')
-  if (report.auditorAsks.length === 0) {
-    draw = paragraph(draw, 'No blocker is open on this checklist, so this report does not ask for further evidence.', 11, navy)
-  } else {
-    draw = paragraph(draw, 'Each blocker below uses the checklist rule\'s own wording. Nothing here is a new policy.', 10, muted)
-    report.auditorAsks.forEach((ask, index) => {
-      draw = { ...draw, y: draw.y - 6 }
-      const onlyTitle = ask.request === `Ask for this evidence: ${ask.title.replace(/\.+$/, '')}.`
-      if (onlyTitle) {
-        draw = paragraph(draw, `${index + 1}. ${ask.request}`, 11, navy)
-      } else {
-        draw = paragraph(draw, `${index + 1}. ${ask.title}`, 11, navy, draw.bold)
-        draw = paragraph(draw, ask.request, 10, navy)
-      }
-    })
-  }
-
-  draw = heading(draw, 'How to check this freeze')
-  const checks: [string, string][] = [
-    ['Record id', report.verification.recordId],
-    ['Snapshot hash', report.verification.snapshotHash],
-    ['Packs hash', report.verification.packsHash],
-    ['Hash method', report.verification.hashMethod],
-  ]
-  for (const [label, value] of checks) {
-    const lines = wrap(value, draw.mono, 8, CONTENT_WIDTH - 132)
-    const height = Math.max(16, lines.length * 11 + 4)
-    draw = ensure(draw, height)
-    draw.page.drawText(label, { x: MARGIN_X, y: draw.y - 10, size: 9, font: draw.bold, color: muted })
-    lines.forEach((line, index) => {
-      draw.page.drawText(line, { x: MARGIN_X + 132, y: draw.y - 10 - index * 11, size: 8, font: draw.mono, color: navy })
-    })
-    draw = { ...draw, y: draw.y - height }
-  }
-  draw = { ...draw, y: draw.y - 6 }
-  draw = paragraph(draw, report.verification.recompute, 10, navy)
-
-  draw = { ...draw, y: draw.y - 10 }
-  const boundaryLines = wrap(report.boundary, draw.font, 9, CONTENT_WIDTH - 16)
-  const boxHeight = boundaryLines.length * 12 + 16
-  draw = ensure(draw, boxHeight + 8)
-  draw.page.drawRectangle({
-    x: MARGIN_X,
-    y: draw.y - boxHeight,
-    width: CONTENT_WIDTH,
-    height: boxHeight,
-    color: paper,
-    borderColor: navy,
-    borderWidth: 0.8,
-  })
-  boundaryLines.forEach((line, index) => {
-    draw.page.drawText(line, { x: MARGIN_X + 8, y: draw.y - 14 - index * 12, size: 9, font: draw.font, color: navy })
-  })
-
+  drawFirstPage(draw, report)
+  draw = addPage(draw)
+  draw = drawChecklist(draw, report)
+  drawVerification(draw, report)
   stampFooters(doc, font)
   return doc.save()
 }

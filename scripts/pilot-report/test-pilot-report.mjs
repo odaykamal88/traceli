@@ -75,7 +75,7 @@ function row(groups, id, title) {
   return groups.find(group => group.id === id)?.rows.find(item => item.title === title)
 }
 
-function pdfPlainText(bytes) {
+function pdfPages(bytes) {
   const raw = Buffer.from(bytes)
   const parts = []
   let cursor = 0
@@ -95,10 +95,16 @@ function pdfPlainText(bytes) {
     }
     cursor = end + 'endstream'.length
   }
-  return parts.join('\n').replace(/<([0-9A-Fa-f]+)>/g, (match, hex) => {
-    if (hex.length % 2 !== 0) return match
-    return Buffer.from(hex, 'hex').toString('latin1')
-  })
+  return parts
+    .map(part => part.replace(/<([0-9A-Fa-f]+)>/g, (match, hex) => {
+      if (hex.length % 2 !== 0) return match
+      return Buffer.from(hex, 'hex').toString('latin1')
+    }))
+    .filter(part => part.includes('Tj'))
+}
+
+function pdfPlainText(bytes) {
+  return pdfPages(bytes).join('\n')
 }
 
 test('checklist groups use human titles, quotes, pages, and an optional reviewer marker', () => {
@@ -244,7 +250,17 @@ test('published freezes keep their hashes and human checklist titles', () => {
     assert.equal(report.auditorAsks.length, blockers)
     assert.match(report.summary, /not ready \(red\)/)
     assert.match(report.summary, /request evidence/)
+    assert.match(report.summary, /open items/)
     assert.match(report.summary, new RegExp(sample.record.disposition.rationale.slice(0, 40).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+    assert.equal(report.decisionSentence, 'The decision is to request evidence before you sign.')
+    assert.equal(report.readinessLabel, 'Not ready')
+    assert.match(report.openItemLine, /^\d+ open items\.$/)
+    assert.ok(report.frontAskLines.length >= 3 && report.frontAskLines.length <= 5)
+    assert.equal(report.furtherOpenItemCount, report.openItemCount - report.frontAskLines.length)
+    assert.equal(report.decisionSentence.includes(sample.record.disposition.rationale.slice(0, 40)), false)
+    for (const line of report.frontAskLines) {
+      assert.equal(/^[a-z][a-z0-9_.]+$/.test(line), false)
+    }
     assert.equal(report.groups.find(group => group.id === 'on_file').rows.length, 0)
     assert.equal(report.groups.find(group => group.id === 'stated_absent').rows.length, 0)
     assert.equal(report.groups.find(group => group.id === 'negative').rows.length, 0)
@@ -278,6 +294,31 @@ test('the PDF is a real document sized for A4 and US Letter', async () => {
   assert.ok(size.width <= 612)
   assert.ok(size.height <= 792 + 0.01)
   assert.ok(size.height <= 841.89)
+  assert.ok(loaded.getPageCount() >= 2)
+  const pages = pdfPages(bytes)
+  assert.ok(pages.length >= 2)
+  const first = pages[0]
+  const last = pages[pages.length - 1]
+  const rest = pages.slice(1).join('\n')
+  assert.match(first, /The decision is to request evidence before you sign/)
+  assert.match(first, /Not ready/)
+  assert.match(first, /open items/)
+  assert.match(first, /What to ask for/)
+  for (const line of report.frontAskLines) assert.match(first, new RegExp(line.slice(0, 24).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+  assert.equal(first.includes(report.verification.snapshotHash), false)
+  assert.equal(first.includes(report.verification.packsHash), false)
+  assert.equal(first.includes(report.verification.recordId), false)
+  assert.equal(first.includes('On file'), false)
+  assert.equal(first.includes('Snapshot hash'), false)
+  assert.match(rest, /Checklist/)
+  assert.match(rest, /On file/)
+  assert.match(rest, /Missing/)
+  assert.match(last, new RegExp(report.verification.recordId))
+  assert.match(last, new RegExp(report.verification.snapshotHash))
+  assert.match(last, new RegExp(report.verification.packsHash))
+  assert.match(last, /These codes confirm this note still matches the frozen checklist/)
+  assert.match(last, /does not certify the award/)
+  assert.match(last, /not a finding of fraud/)
 })
 
 test('the signed-in desk route returns a PDF for that org only', async () => {

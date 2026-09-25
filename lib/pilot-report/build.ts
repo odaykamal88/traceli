@@ -16,7 +16,10 @@ import type { RegistryField } from '@/lib/field-registry/schema'
 export const PILOT_WORDMARK = 'Trace-li'
 
 export const PILOT_HASH_RECOMPUTE =
-  'Recompute each hash as the SHA-256 of the canonical JSON for that part: sort object keys alphabetically, keep array order, and hash the UTF-8 text. The snapshot hash covers the award registry snapshot. The packs hash covers the packs in force on this freeze.'
+  'These codes confirm this note still matches the frozen checklist.'
+
+/** Page 1 lists at most this many things to ask for. The rest stay in the checklist. */
+export const PILOT_FRONT_ASK_LIMIT = 5
 
 export const PILOT_BOUNDARY =
   'Trace-li does not certify the award or replace the organisation\'s own committees. A missing item is not a finding of fraud.'
@@ -76,11 +79,18 @@ export type PilotReport = {
   reviewerName: string
   reviewerRole: string | null
   summary: string
+  /** One sentence for the first page. The stated reason stays in decisionReason. */
+  decisionSentence: string
   readiness: UploadDeskView['readiness']
   readinessWords: string
+  readinessLabel: string
   openItemCount: number
+  openItemLine: string
   decisionLabel: string
   decisionReason: string
+  /** At most five plain lines for the first page, blockers first. */
+  frontAskLines: string[]
+  furtherOpenItemCount: number
   groups: PilotChecklistGroup[]
   auditorAsks: PilotAuditorAsk[]
   verification: {
@@ -258,6 +268,44 @@ export function evidenceRequestForRule(rule: JudgmentRule): string | null {
   return `Ask for this evidence: ${sentence}.`
 }
 
+function humanFindingTitle(finding: Finding, rulesById: Map<string, JudgmentRule>) {
+  const rule = rulesById.get(finding.ruleId)
+  const fromRule = rule ? ruleTitle(rule) : ''
+  if (fromRule) return fromRule
+  const fromFinding = finding.title.includes(' ') ? finding.title.trim() : ''
+  return fromFinding
+}
+
+/**
+ * The few things a director should ask for.
+ * Blockers come first, then warnings. Titles are the checklist's own words.
+ */
+export function frontAskLinesFor(
+  findings: readonly Finding[],
+  rules: readonly JudgmentRule[],
+  limit = PILOT_FRONT_ASK_LIMIT,
+): string[] {
+  const take = Math.min(PILOT_FRONT_ASK_LIMIT, Math.max(0, limit))
+  const byId = new Map(rules.map(rule => [rule.ruleId, rule]))
+  const ranked = findings
+    .filter(finding => finding.severity === 'blocker' || finding.severity === 'warning')
+    .map(finding => ({
+      title: humanFindingTitle(finding, byId),
+      rank: finding.severity === 'blocker' ? 0 : 1,
+    }))
+    .filter(item => item.title)
+    .sort((left, right) => left.rank - right.rank || left.title.localeCompare(right.title))
+  const lines: string[] = []
+  const seen = new Set<string>()
+  for (const item of ranked) {
+    if (seen.has(item.title)) continue
+    seen.add(item.title)
+    lines.push(item.title)
+    if (lines.length === take) break
+  }
+  return lines
+}
+
 function auditorAsks(findings: readonly Finding[], rules: readonly JudgmentRule[]): PilotAuditorAsk[] {
   const byId = new Map(rules.map(rule => [rule.ruleId, rule]))
   const asks: PilotAuditorAsk[] = []
@@ -297,9 +345,24 @@ function reviewerLabel(name: string) {
 }
 
 function openSentence(count: number) {
-  if (count === 0) return 'No items are still open.'
-  if (count === 1) return '1 item is still open.'
-  return `${count} items are still open.`
+  if (count === 0) return 'No open items.'
+  if (count === 1) return '1 open item.'
+  return `${count} open items.`
+}
+
+function decisionSentence(label: string, waiver: boolean) {
+  if (label === 'request evidence') return 'The decision is to request evidence before you sign.'
+  if (label === 'escalate') return 'The decision is to escalate this before you sign.'
+  if (label === 'accept with exception') {
+    return waiver
+      ? 'The decision is to accept with an exception, and a note is recorded on this freeze.'
+      : 'The decision is to accept with an exception.'
+  }
+  return `The decision is to ${label}.`
+}
+
+function readinessLabel(words: string) {
+  return words ? words.charAt(0).toUpperCase() + words.slice(1) : words
 }
 
 /**
@@ -352,6 +415,7 @@ export function buildPilotReport(input: PilotReportInput): PilotReport {
     reviewedAt: field.provenance.reviewedAt,
   })), pack.rules)
   const asks = auditorAsks(evaluated.findings, pack.rules)
+  const frontAskLines = frontAskLinesFor(evaluated.findings, pack.rules)
   const openItemCount = evaluated.findings.filter(finding => finding.severity === 'blocker' || finding.severity === 'warning').length
   const readiness = judgment.readiness
   const words = readinessWords[readiness]
@@ -360,6 +424,7 @@ export function buildPilotReport(input: PilotReportInput): PilotReport {
   const reviewerRole = reviewerRoleRaw && reviewerRoleRaw !== reviewerName ? reviewerRoleRaw : null
   const exception = judgment.waiver ? ' A desk-session exception note is on this freeze.' : ''
   const summary = `Readiness is ${words} (${readiness}). ${openSentence(openItemCount)} The reviewer decided to ${decisionLabel}.${exception} Their reason: ${judgment.reason}`
+  const sentence = decisionSentence(decisionLabel, Boolean(judgment.waiver))
   return {
     wordmark: PILOT_WORDMARK,
     fileName: view.fileName,
@@ -372,11 +437,16 @@ export function buildPilotReport(input: PilotReportInput): PilotReport {
     reviewerName,
     reviewerRole,
     summary,
+    decisionSentence: sentence,
     readiness,
     readinessWords: words,
+    readinessLabel: readinessLabel(words),
     openItemCount,
+    openItemLine: openSentence(openItemCount),
     decisionLabel,
     decisionReason: judgment.reason,
+    frontAskLines,
+    furtherOpenItemCount: Math.max(0, openItemCount - frontAskLines.length),
     groups,
     auditorAsks: asks,
     verification: {

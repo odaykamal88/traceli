@@ -2,6 +2,7 @@
  * Render sample pilot reports from published founder freezes.
  * Writes PDFs under docs/examples/pilot-reports/ (gitignored).
  * Skips the UNFPA Sudan freeze when that module is not in the tree.
+ * node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/pilot-report/render-samples.mjs
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
