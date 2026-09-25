@@ -23,7 +23,9 @@ import {
   PILOT_BOUNDARY,
   PILOT_HASH_RECOMPUTE,
   PilotReportError,
+  askForLine,
   buildPilotReport,
+  clientFacingReason,
   evidenceRequestForRule,
   groupPilotChecklist,
 } from '../../lib/pilot-report/build.ts'
@@ -198,6 +200,35 @@ test('checklist groups use human titles, quotes, pages, and an optional reviewer
   assert.equal(rendered.includes('award.contract_value_usd'), false)
 })
 
+test('ask lines name the thing to request and leave other titles alone', () => {
+  assert.equal(askForLine('Award rationale documentation required'), 'Award rationale documentation')
+  assert.equal(askForLine('Conflict of interest disclosure required'), 'Conflict of interest disclosure')
+  assert.equal(askForLine('Contract value must be on the registry'), 'Contract value')
+  assert.equal(askForLine('Affiliated and key persons, with roles, required on the IDD record'), 'Affiliated and key persons, with roles')
+  assert.equal(askForLine('List vintage cited by the screening evidence is required'), 'List vintage cited by the screening evidence')
+  assert.equal(askForLine('Award must be competitive or an established exemption'), 'Award must be competitive or an established exemption')
+  assert.equal(askForLine('Bid solicitation notice to prospective bidders'), 'Bid solicitation notice to prospective bidders')
+})
+
+test('an untouched desk draft is replaced, and an edited reason drops keys and instructions', () => {
+  const draft = 'Global Fund Grant Regulations v1 readiness is red. 22 findings. Pack fields still missing: eligibility.contractor_capable, integrity.coi_disclosed, and 18 more. Evidence is still open. Edit this draft, then confirm your judgment.'
+  assert.equal(
+    clientFacingReason(draft, 'request_evidence', draft),
+    'The reviewer asked for the missing evidence before signing.',
+  )
+  assert.equal(
+    clientFacingReason(draft, 'escalate', draft),
+    'The reviewer escalated this before signing.',
+  )
+  const edited = 'The committee still needs the signed conflict note for eligibility.contractor_capable. Edit this draft, then confirm your judgment. Please send it before Friday.'
+  const printed = clientFacingReason(edited, 'request_evidence', draft)
+  assert.match(printed, /signed conflict note/)
+  assert.match(printed, /before Friday/)
+  assert.equal(printed.includes('eligibility.contractor_capable'), false)
+  assert.equal(printed.includes('Edit this draft'), false)
+  assert.equal(/[a-z_]+\.[a-z_]+/.test(printed), false)
+})
+
 test('auditor requests use the pack rule text and an optional remediation field', () => {
   const rule = GLOBAL_FUND_RULES.find(item => item.fieldKey === 'integrity.coi_disclosed')
   const request = evidenceRequestForRule(rule)
@@ -236,7 +267,7 @@ test('published freezes keep their hashes and human checklist titles', () => {
     const evaluated = evaluateDonorPack(sample.record.snapshot, sample.record.snapshot.framework.frameworkId, {
       evaluatedAt: sample.record.frozenAt,
     })
-    const open = evaluated.findings.filter(finding => finding.severity === 'blocker' || finding.severity === 'warning').length
+    const openRows = report.groups.filter(group => group.id !== 'on_file').reduce((sum, group) => sum + group.rows.length, 0)
     const blockers = evaluated.findings.filter(finding => finding.severity === 'blocker').length
     assert.equal(report.wordmark, 'Trace-li')
     assert.equal(report.fileName, sample.file)
@@ -246,13 +277,17 @@ test('published freezes keep their hashes and human checklist titles', () => {
     assert.equal(report.verification.hashMethod, 'sha256:sorted-json-v1')
     assert.equal(report.verification.recompute, PILOT_HASH_RECOMPUTE)
     assert.equal(report.boundary, PILOT_BOUNDARY)
-    assert.equal(report.openItemCount, open)
+    assert.equal(report.openItemCount, openRows)
+    assert.equal(report.frontAskLines.length + report.furtherOpenItemCount, openRows)
     assert.equal(report.auditorAsks.length, blockers)
     assert.match(report.summary, /not ready \(red\)/)
     assert.match(report.summary, /request evidence/)
     assert.match(report.summary, /open items/)
     assert.match(report.summary, new RegExp(sample.record.disposition.rationale.slice(0, 40).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
     assert.equal(report.decisionSentence, 'The decision is to request evidence before you sign.')
+    assert.equal(report.printedReason, 'The reviewer asked for the missing evidence before signing.')
+    assert.equal(report.printedReason.includes('Edit this draft'), false)
+    assert.equal(/[a-z_]+\.[a-z_]+/.test(report.printedReason), false)
     assert.equal(report.readinessLabel, 'Not ready')
     assert.match(report.openItemLine, /^\d+ open items\.$/)
     assert.ok(report.frontAskLines.length >= 3 && report.frontAskLines.length <= 5)
@@ -313,6 +348,19 @@ test('the PDF is a real document sized for A4 and US Letter', async () => {
   assert.match(rest, /Checklist/)
   assert.match(rest, /On file/)
   assert.match(rest, /Missing/)
+  assert.match(rest, /The reviewer asked for the missing evidence before signing/)
+  assert.equal(rest.includes('Edit this draft'), false)
+  assert.equal(rest.includes('Not in this file'), false)
+  assert.match(first, new RegExp(`${report.openItemCount} open items`))
+  if (report.furtherOpenItemCount > 0) {
+    assert.match(first, new RegExp(`And ${report.furtherOpenItemCount} more open items`))
+  }
+  const packKey = /[a-z_]+\.[a-z_]+/
+  pages.slice(0, -1).forEach((page, index) => {
+    const withoutFileName = report.fileName ? page.split(report.fileName).join(' ') : page
+    const hit = withoutFileName.match(packKey)
+    assert.equal(hit, null, `page ${index + 1} includes ${hit?.[0] ?? ''}`)
+  })
   assert.match(last, new RegExp(report.verification.recordId))
   assert.match(last, new RegExp(report.verification.snapshotHash))
   assert.match(last, new RegExp(report.verification.packsHash))

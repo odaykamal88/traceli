@@ -4,7 +4,7 @@
  * the hashes, or the pack rules.
  */
 
-import type { UploadDeskJudgmentView } from '@/lib/desk/judgment'
+import { draftDeskReasonFromView, type UploadDeskJudgmentView } from '@/lib/desk/judgment'
 import type { UploadDeskView } from '@/lib/desk/view'
 import { formatDeskInstant } from '@/lib/desk/story'
 import { hashJson } from '@/lib/field-registry/freeze'
@@ -88,6 +88,8 @@ export type PilotReport = {
   openItemLine: string
   decisionLabel: string
   decisionReason: string
+  /** Client page text. An untouched desk draft is replaced with one plain sentence. */
+  printedReason: string
   /** At most five plain lines for the first page, blockers first. */
   frontAskLines: string[]
   furtherOpenItemCount: number
@@ -277,33 +279,97 @@ function humanFindingTitle(finding: Finding, rulesById: Map<string, JudgmentRule
 }
 
 /**
- * The few things a director should ask for.
- * Blockers come first, then warnings. Titles are the checklist's own words.
+ * Turn a checklist title into the thing to ask for.
+ * Strips a trailing "required" or a trailing "must be …" when that leaves a phrase.
+ * Otherwise the title is kept as written.
+ */
+export function askForLine(title: string): string {
+  const clean = title.replace(/\s+/g, ' ').trim().replace(/\.+$/, '')
+  if (!clean) return title.trim()
+  const withoutRequired = clean.replace(/\s+(?:is\s+)?required$/i, '').trim()
+  if (withoutRequired && withoutRequired !== clean) return withoutRequired
+  const requiredOn = /^(.*)\s+required on\b/i.exec(clean)
+  if (requiredOn) {
+    const left = requiredOn[1].trim().replace(/[,:;]+$/, '')
+    if (left.split(/\s+/).filter(Boolean).length >= 2) return left
+  }
+  const mustBe = /^(.*)\s+must be\b/i.exec(clean)
+  if (mustBe) {
+    const left = mustBe[1].trim().replace(/[,:;]+$/, '')
+    if (left.split(/\s+/).filter(Boolean).length >= 2) return left
+  }
+  return clean
+}
+
+/**
+ * The few things a director should ask for, taken from checklist rows that are not on file.
+ * Blockers come first. Each line is the thing to request, not a second policy sentence.
  */
 export function frontAskLinesFor(
+  rows: readonly { title: string }[],
   findings: readonly Finding[],
   rules: readonly JudgmentRule[],
   limit = PILOT_FRONT_ASK_LIMIT,
 ): string[] {
   const take = Math.min(PILOT_FRONT_ASK_LIMIT, Math.max(0, limit))
   const byId = new Map(rules.map(rule => [rule.ruleId, rule]))
-  const ranked = findings
-    .filter(finding => finding.severity === 'blocker' || finding.severity === 'warning')
-    .map(finding => ({
-      title: humanFindingTitle(finding, byId),
-      rank: finding.severity === 'blocker' ? 0 : 1,
-    }))
-    .filter(item => item.title)
-    .sort((left, right) => left.rank - right.rank || left.title.localeCompare(right.title))
-  const lines: string[] = []
-  const seen = new Set<string>()
-  for (const item of ranked) {
-    if (seen.has(item.title)) continue
-    seen.add(item.title)
-    lines.push(item.title)
-    if (lines.length === take) break
+  const rankByTitle = new Map<string, number>()
+  for (const finding of findings) {
+    if (finding.severity !== 'blocker' && finding.severity !== 'warning') continue
+    const title = humanFindingTitle(finding, byId)
+    if (!title) continue
+    const rank = finding.severity === 'blocker' ? 0 : 1
+    const previous = rankByTitle.get(title)
+    if (previous === undefined || rank < previous) rankByTitle.set(title, rank)
   }
-  return lines
+  return [...rows]
+    .map(row => ({ title: row.title.trim(), rank: rankByTitle.get(row.title.trim()) ?? 2 }))
+    .filter(row => row.title)
+    .sort((left, right) => left.rank - right.rank || left.title.localeCompare(right.title))
+    .slice(0, take)
+    .map(row => askForLine(row.title))
+}
+
+const PACK_KEY = /\b[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+\b/g
+
+function fallbackReason(decision: string) {
+  if (decision === 'request_evidence') return 'The reviewer asked for the missing evidence before signing.'
+  if (decision === 'accept_with_exception') return 'The reviewer accepted this with an exception.'
+  if (decision === 'escalate') return 'The reviewer escalated this before signing.'
+  return 'The reviewer recorded a decision on this checklist.'
+}
+
+function isDeskInstruction(sentence: string) {
+  return /edit this draft/i.test(sentence) || /confirm your judgment/i.test(sentence)
+}
+
+function stripDeskLeakage(text: string) {
+  const sentences = text.split(/(?<=[.!?])\s+/).filter(sentence => !isDeskInstruction(sentence))
+  let joined = sentences.join(' ').replace(PACK_KEY, ' ')
+  joined = joined
+    .replace(/\s+,/g, ',')
+    .replace(/(?:,\s*){2,}/g, ', ')
+    .replace(/:\s*,/g, ':')
+    .replace(/\(\s*\)/g, '')
+    .replace(/\s+([,.;])/g, '$1')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^(?:,|and)\s+/i, '')
+    .replace(/\s+(?:,|and)\s*$/i, '')
+    .trim()
+  return joined
+}
+
+/**
+ * Text for the client page. An untouched desk draft becomes one sentence.
+ * An edited reason is kept, without pack keys or the desk's instruction line.
+ */
+export function clientFacingReason(reason: string, decision: string, draft: string | null) {
+  const normalized = reason.replace(/\s+/g, ' ').trim()
+  const normalizedDraft = draft?.replace(/\s+/g, ' ').trim() ?? ''
+  if (!normalized || (normalizedDraft && normalized === normalizedDraft)) return fallbackReason(decision)
+  const stripped = stripDeskLeakage(normalized)
+  if (stripped.replace(/[^A-Za-z0-9]+/g, '').length < 12) return fallbackReason(decision)
+  return stripped
 }
 
 function auditorAsks(findings: readonly Finding[], rules: readonly JudgmentRule[]): PilotAuditorAsk[] {
@@ -366,7 +432,7 @@ function readinessLabel(words: string) {
 }
 
 /**
- * Build the memo. Open items are pack findings still marked blocker or warning.
+ * Build the memo. An open item is a checklist row that is not on file.
  * Hashes are recomputed and must match the judgment freeze.
  */
 export function buildPilotReport(input: PilotReportInput): PilotReport {
@@ -415,8 +481,9 @@ export function buildPilotReport(input: PilotReportInput): PilotReport {
     reviewedAt: field.provenance.reviewedAt,
   })), pack.rules)
   const asks = auditorAsks(evaluated.findings, pack.rules)
-  const frontAskLines = frontAskLinesFor(evaluated.findings, pack.rules)
-  const openItemCount = evaluated.findings.filter(finding => finding.severity === 'blocker' || finding.severity === 'warning').length
+  const openRows = groups.filter(group => group.id !== 'on_file').flatMap(group => group.rows)
+  const frontAskLines = frontAskLinesFor(openRows, evaluated.findings, pack.rules)
+  const openItemCount = openRows.length
   const readiness = judgment.readiness
   const words = readinessWords[readiness]
   const reviewerName = reviewerLabel(input.reviewerName)
@@ -445,6 +512,7 @@ export function buildPilotReport(input: PilotReportInput): PilotReport {
     openItemLine: openSentence(openItemCount),
     decisionLabel,
     decisionReason: judgment.reason,
+    printedReason: clientFacingReason(judgment.reason, judgment.decision, draftDeskReasonFromView(view)),
     frontAskLines,
     furtherOpenItemCount: Math.max(0, openItemCount - frontAskLines.length),
     groups,

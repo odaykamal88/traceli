@@ -140,11 +140,11 @@ function heading(draw: Draw, text: string) {
   return { ...next, y: next.y - 24 }
 }
 
-function checklistRow(draw: Draw, title: string, detail: string, confirmation: string | null) {
-  const detailWidth = 168
-  const titleWidth = CONTENT_WIDTH - detailWidth - 18
+function checklistRow(draw: Draw, title: string, detail: string, confirmation: string | null, showDetail: boolean) {
+  const detailWidth = showDetail ? 168 : 0
+  const titleWidth = CONTENT_WIDTH - detailWidth - (showDetail ? 18 : 0)
   const titleLines = wrap(title, draw.bold, 10, titleWidth)
-  const detailLines = wrap(detail, draw.font, 9, detailWidth)
+  const detailLines = showDetail ? wrap(detail, draw.font, 9, detailWidth) : []
   const marker = confirmation ? clipLines(wrap(confirmation, draw.font, 8, titleWidth), 2) : []
   const bodyRows = Math.max(titleLines.length, detailLines.length, 1)
   const height = bodyRows * 13 + marker.length * 11 + 8
@@ -152,15 +152,17 @@ function checklistRow(draw: Draw, title: string, detail: string, confirmation: s
   titleLines.forEach((line, index) => {
     next.page.drawText(line, { x: MARGIN_X, y: next.y - 11 - index * 13, size: 10, font: next.bold, color: navy })
   })
-  detailLines.forEach((line, index) => {
-    next.page.drawText(line, {
-      x: MARGIN_X + titleWidth + 18,
-      y: next.y - 11 - index * 13,
-      size: 9,
-      font: next.font,
-      color: muted,
+  if (showDetail) {
+    detailLines.forEach((line, index) => {
+      next.page.drawText(line, {
+        x: MARGIN_X + titleWidth + 18,
+        y: next.y - 11 - index * 13,
+        size: 9,
+        font: next.font,
+        color: muted,
+      })
     })
-  })
+  }
   marker.forEach((line, index) => {
     next.page.drawText(line, {
       x: MARGIN_X,
@@ -294,7 +296,7 @@ function drawFirstPage(draw: Draw, report: PilotReport) {
 
 function drawChecklist(draw: Draw, report: PilotReport) {
   let next = heading(draw, 'The reviewer\'s reason')
-  next = drawWrapped(next, report.decisionReason, next.font, 11, navy, undefined, 4)
+  next = drawWrapped(next, report.printedReason, next.font, 11, navy, undefined, 4)
   next = { ...next, y: next.y - 8 }
   next = heading(next, 'Checklist')
   next = drawWrapped(next, 'The full list from this file. Each line uses the checklist\'s own words.', next.font, 10, muted, 3, 3)
@@ -308,7 +310,7 @@ function drawChecklist(draw: Draw, report: PilotReport) {
       continue
     }
     for (const row of group.rows) {
-      next = checklistRow(next, row.title, row.detail, row.confirmationNote)
+      next = checklistRow(next, row.title, row.detail, row.confirmationNote, group.id !== 'missing')
     }
   }
   return next
