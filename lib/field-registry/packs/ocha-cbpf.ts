@@ -54,6 +54,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_partner_due_diligence_not_met',
     title: 'Partner due diligence must be recorded as passed',
+    ask: 'Partner due diligence shown as passed',
   },
   {
     ruleId: 'ocha_partner_capacity',
@@ -62,6 +63,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_partner_capacity_missing',
     title: 'Partner capacity assessment required',
+    ask: 'Partner capacity assessment',
   },
   {
     ruleId: 'ocha_partner_annex7',
@@ -71,6 +73,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_partner_annex7_incomplete',
     title: 'Annex 7 declarations required, including conflict of interest and designated entity',
+    ask: 'Annex 7 declarations, including conflict of interest and designated entity',
   },
   {
     ruleId: 'ocha_allocation_modality',
@@ -80,6 +83,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_allocation_modality_invalid',
     title: 'Allocation modality must be standard or reserve',
+    ask: 'Allocation modality (standard or reserve)',
   },
   {
     ruleId: 'ocha_allocation_reserve_justification',
@@ -90,6 +94,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_reserve_preselection_unjustified',
     title: 'Reserve pre-selection needs a written justification for each invited partner',
+    ask: 'Written justification for each invited partner on a reserve pre-selection',
   },
   {
     ruleId: 'ocha_allocation_strategy',
@@ -98,6 +103,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_allocation_strategy_missing',
     title: 'Allocation strategy filed, including reserve pre-selection criteria',
+    ask: 'Allocation strategy, including reserve pre-selection criteria',
   },
   {
     ruleId: 'ocha_selection_scorecard',
@@ -106,6 +112,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_selection_scorecard_missing',
     title: 'Scorecard or alternative selection document required before recommendation',
+    ask: 'Scorecard or alternative selection document',
   },
   {
     ruleId: 'ocha_selection_committee',
@@ -114,6 +121,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_selection_committee_missing',
     title: 'Review-committee decision recorded',
+    ask: 'Review-committee decision',
   },
   {
     ruleId: 'ocha_selection_mismatch',
@@ -124,6 +132,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_selection_mismatch_undispositioned',
     title: 'A score and recommendation mismatch needs a disposition note',
+    ask: 'Disposition note for a score and recommendation mismatch',
   },
   {
     ruleId: 'ocha_grant_agreement',
@@ -132,6 +141,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_grant_agreement_missing',
     title: 'Grant agreement completeness recorded',
+    ask: 'Grant agreement completeness',
   },
   {
     ruleId: 'ocha_grant_budget',
@@ -140,6 +150,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'ocha_grant_budget_missing',
     title: 'Budget template on the grant file',
+    ask: 'Budget template on the grant file',
   },
   {
     ruleId: 'ocha_grant_consortium',
@@ -148,6 +159,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'ocha_grant_consortium_missing',
     title: 'Consortium or sub-grant pass-through controls named',
+    ask: 'Consortium or sub-grant pass-through controls',
   },
   {
     ruleId: 'ocha_misconduct_annex8',
@@ -156,6 +168,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'ocha_annex8_path_missing',
     title: 'Annex 8 non-compliance path recorded (suggested measures, not a fraud regime)',
+    ask: 'Annex 8 non-compliance path (suggested measures, not a fraud regime)',
   },
   {
     ruleId: 'ocha_misconduct_annex9',
@@ -164,6 +177,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_annex9_notification_missing',
     title: 'Annex 9 fraud notification path recorded, including the 48-hour partner duty',
+    ask: 'Annex 9 fraud notification path, including the 48-hour partner duty',
   },
   {
     ruleId: 'ocha_misconduct_oios',
@@ -172,6 +186,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'ocha_oios_path_missing',
     title: 'OIOS notification pathway named',
+    ask: 'OIOS notification pathway',
   },
   {
     ruleId: 'ocha_misconduct_no_secretariat_list',
@@ -181,6 +196,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_secretariat_list_invented',
     title: 'Secretariat partner-sanctions regime must be recorded as none',
+    ask: 'Secretariat partner-sanctions regime set to none',
   },
   {
     ruleId: 'ocha_onegms_project',
@@ -189,6 +205,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_onegms_project_missing',
     title: 'OneGMS project status required',
+    ask: 'OneGMS project status',
   },
   {
     ruleId: 'ocha_onegms_selection',
@@ -197,6 +214,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_onegms_selection_missing',
     title: 'OneGMS selection record required',
+    ask: 'OneGMS selection record',
   },
   {
     ruleId: 'ocha_idd_subject',
@@ -205,6 +223,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_idd_subject_missing',
     title: 'Designated-entity subject required before signature',
+    ask: 'Designated-entity subject',
   },
   {
     ruleId: 'ocha_idd_screen_scope',
@@ -214,6 +233,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_idd_scope_incomplete',
     title: 'Annex 7 designated-entity scope must be attested',
+    ask: 'Annex 7 designated-entity scope',
   },
   {
     ruleId: 'ocha_idd_screen_result',
@@ -223,6 +243,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_idd_result_invalid',
     title: 'Designated-entity result must be clear, potential match, confirmed hit, or unresolved',
+    ask: 'Designated-entity result (clear, potential match, confirmed hit, or unresolved)',
   },
   {
     ruleId: 'ocha_idd_evidence_ref',
@@ -231,6 +252,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_idd_evidence_missing',
     title: 'Designated-entity evidence reference required',
+    ask: 'Designated-entity evidence reference',
   },
   {
     ruleId: 'ocha_idd_hit_decision',
@@ -242,6 +264,7 @@ export const OCHA_CBPF_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'ocha_idd_hit_needs_decision',
     title: 'A non-clear designated-entity result needs a select, continue, or terminate decision',
+    ask: 'Select, continue, or terminate decision for a non-clear designated-entity result',
   },
 ]
 

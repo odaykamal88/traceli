@@ -278,27 +278,45 @@ function humanFindingTitle(finding: Finding, rulesById: Map<string, JudgmentRule
   return fromFinding
 }
 
+function tidyAskPhrase(phrase: string) {
+  return phrase
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([,.;:])/g, '$1')
+    .replace(/([,.;:])\1+/g, '$1')
+    .replace(/^[,.;:\s]+/, '')
+    .replace(/[,.;:]+\s*$/, '')
+    .replace(/\s+(?:and|or)\s*$/i, '')
+    .replace(/^(?:and|or)\s+/i, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
+function askWordCount(phrase: string) {
+  return phrase.split(/\s+/).filter(Boolean).length
+}
+
 /**
- * Turn a checklist title into the thing to ask for.
- * Strips a trailing "required" or a trailing "must be …" when that leaves a phrase.
- * Otherwise the title is kept as written.
+ * Turn a checklist title into the thing to ask for when a rule has no ask label.
+ * Strips "required", "filed", "recorded", and "must be …" anywhere in the phrase.
+ * If that leaves fewer than two words, the title is kept as written.
  */
 export function askForLine(title: string): string {
   const clean = title.replace(/\s+/g, ' ').trim().replace(/\.+$/, '')
   if (!clean) return title.trim()
-  const withoutRequired = clean.replace(/\s+(?:is\s+)?required$/i, '').trim()
-  if (withoutRequired && withoutRequired !== clean) return withoutRequired
-  const requiredOn = /^(.*)\s+required on\b/i.exec(clean)
-  if (requiredOn) {
-    const left = requiredOn[1].trim().replace(/[,:;]+$/, '')
-    if (left.split(/\s+/).filter(Boolean).length >= 2) return left
-  }
-  const mustBe = /^(.*)\s+must be\b/i.exec(clean)
-  if (mustBe) {
-    const left = mustBe[1].trim().replace(/[,:;]+$/, '')
-    if (left.split(/\s+/).filter(Boolean).length >= 2) return left
-  }
+  const stripped = tidyAskPhrase(
+    clean
+      .replace(/\bmust be\b[\s\S]*/i, ' ')
+      .replace(/\b(?:is\s+)?required\b|\bfiled\b|\brecorded\b/gi, ' '),
+  )
+  if (askWordCount(stripped) >= 2) return stripped
   return clean
+}
+
+/** Page-1 line for one rule: the plain ask label, or the title rewrite. */
+export function askLineForRule(rule: JudgmentRule): string {
+  const ask = typeof rule.ask === 'string' ? rule.ask.replace(/\s+/g, ' ').trim().replace(/\.+$/, '') : ''
+  if (ask) return ask
+  return askForLine(ruleTitle(rule))
 }
 
 /**
@@ -327,7 +345,10 @@ export function frontAskLinesFor(
     .filter(row => row.title)
     .sort((left, right) => left.rank - right.rank || left.title.localeCompare(right.title))
     .slice(0, take)
-    .map(row => askForLine(row.title))
+    .map(row => {
+      const rule = rules.find(item => ruleTitle(item) === row.title)
+      return rule ? askLineForRule(rule) : askForLine(row.title)
+    })
 }
 
 const PACK_KEY = /\b[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+\b/g

@@ -5,6 +5,8 @@ import { after, mock, test } from 'node:test'
 import { MockExtractionProvider } from '../../lib/field-registry/extract-mock.ts'
 import { STATED_ABSENT_PREFIX } from '../../lib/field-registry/pack-align.ts'
 import { GLOBAL_FUND_RULES } from '../../lib/field-registry/packs/global-fund.ts'
+import { OCHA_CBPF_RULES } from '../../lib/field-registry/packs/ocha-cbpf.ts'
+import { listDonorPacks } from '../../lib/field-registry/packs/index.ts'
 import {
   GF_OIG_25_005_PACKS_HASH,
   GF_OIG_25_005_RECORD_ID,
@@ -24,6 +26,7 @@ import {
   PILOT_HASH_RECOMPUTE,
   PilotReportError,
   askForLine,
+  frontAskLinesFor,
   buildPilotReport,
   clientFacingReason,
   evidenceRequestForRule,
@@ -204,10 +207,49 @@ test('ask lines name the thing to request and leave other titles alone', () => {
   assert.equal(askForLine('Award rationale documentation required'), 'Award rationale documentation')
   assert.equal(askForLine('Conflict of interest disclosure required'), 'Conflict of interest disclosure')
   assert.equal(askForLine('Contract value must be on the registry'), 'Contract value')
-  assert.equal(askForLine('Affiliated and key persons, with roles, required on the IDD record'), 'Affiliated and key persons, with roles')
+  assert.equal(askForLine('Affiliated and key persons, with roles, required on the IDD record'), 'Affiliated and key persons, with roles, on the IDD record')
   assert.equal(askForLine('List vintage cited by the screening evidence is required'), 'List vintage cited by the screening evidence')
   assert.equal(askForLine('Award must be competitive or an established exemption'), 'Award must be competitive or an established exemption')
   assert.equal(askForLine('Bid solicitation notice to prospective bidders'), 'Bid solicitation notice to prospective bidders')
+  assert.equal(
+    askForLine('Allocation strategy filed, including reserve pre-selection criteria'),
+    'Allocation strategy, including reserve pre-selection criteria',
+  )
+  assert.equal(
+    askForLine('Annex 7 declarations required, including conflict of interest and designated entity'),
+    'Annex 7 declarations, including conflict of interest and designated entity',
+  )
+  assert.equal(
+    askForLine('Annex 9 fraud notification path recorded, including the 48-hour partner duty'),
+    'Annex 9 fraud notification path, including the 48-hour partner duty',
+  )
+})
+
+test('seeded pack ask lines do not read as rules', () => {
+  const banned = /\b(required|must|filed|recorded)\b/i
+  const expected = new Map([
+    ['gf_procurement_competitive_or_exempt', 'Proof the award was competitive, or the exemption used'],
+    ['ocha_allocation_strategy', 'Allocation strategy, including reserve pre-selection criteria'],
+    ['ocha_partner_annex7', 'Annex 7 declarations, including conflict of interest and designated entity'],
+    ['ocha_misconduct_annex9', 'Annex 9 fraud notification path, including the 48-hour partner duty'],
+  ])
+  assert.ok(listDonorPacks().length >= 4)
+  for (const pack of listDonorPacks()) {
+    assert.ok(pack.rules.length > 0, pack.packId)
+    for (const rule of pack.rules) {
+      const line = frontAskLinesFor([{ title: rule.title }], [], [rule], 1)[0]
+      assert.equal(banned.test(line), false, `${pack.packId} ${rule.ruleId}: ${line}`)
+      const wanted = expected.get(rule.ruleId)
+      if (wanted) {
+        assert.equal(line, wanted)
+        assert.notEqual(rule.title, line)
+      }
+    }
+  }
+  const competitive = GLOBAL_FUND_RULES.find(rule => rule.ruleId === 'gf_procurement_competitive_or_exempt')
+  assert.equal(competitive.title, 'Award must be competitive or an established exemption')
+  const annex = OCHA_CBPF_RULES.find(rule => rule.ruleId === 'ocha_partner_annex7')
+  assert.match(annex.title, /required/)
 })
 
 test('an untouched desk draft is replaced, and an edited reason drops keys and instructions', () => {
@@ -295,6 +337,13 @@ test('published freezes keep their hashes and human checklist titles', () => {
     assert.equal(report.decisionSentence.includes(sample.record.disposition.rationale.slice(0, 40)), false)
     for (const line of report.frontAskLines) {
       assert.equal(/^[a-z][a-z0-9_.]+$/.test(line), false)
+      assert.equal(/\b(required|must|filed|recorded)\b/i.test(line), false, line)
+    }
+    if (sample.file.startsWith('gf-')) {
+      assert.ok(report.frontAskLines.includes('Proof the award was competitive, or the exemption used'))
+    }
+    if (sample.file.startsWith('oios-')) {
+      assert.ok(report.frontAskLines.includes('Allocation strategy, including reserve pre-selection criteria'))
     }
     assert.equal(report.groups.find(group => group.id === 'on_file').rows.length, 0)
     assert.equal(report.groups.find(group => group.id === 'stated_absent').rows.length, 0)
@@ -339,6 +388,9 @@ test('the PDF is a real document sized for A4 and US Letter', async () => {
   assert.match(first, /Not ready/)
   assert.match(first, /open items/)
   assert.match(first, /What to ask for/)
+  assert.match(first, /Proof the award was competitive, or the exemption used/)
+  assert.equal(first.includes('Award must be competitive'), false)
+  assert.match(rest, /Award must be competitive or an established exemption/)
   for (const line of report.frontAskLines) assert.match(first, new RegExp(line.slice(0, 24).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
   assert.equal(first.includes(report.verification.snapshotHash), false)
   assert.equal(first.includes(report.verification.packsHash), false)

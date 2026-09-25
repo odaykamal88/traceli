@@ -56,6 +56,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_ip_competition_not_satisfied',
     title: 'IP selection must be competitive or a documented non-competitive path',
+    ask: 'Proof the IP selection was competitive, or the non-competitive path used',
   },
   {
     ruleId: 'unfpa_ip_path_documented',
@@ -64,6 +65,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_ip_path_docs_missing',
     title: 'Competition file or waiver template required',
+    ask: 'Competition file or waiver template',
   },
   {
     ruleId: 'unfpa_ip_threshold_approver',
@@ -73,6 +75,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_ip_threshold_approver_missing',
     title: 'Approver must match the cumulative workplan threshold',
+    ask: 'Approver for the cumulative workplan threshold',
   },
   {
     ruleId: 'unfpa_ip_unpp_profile',
@@ -81,6 +84,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_ip_unpp_missing',
     title: 'UNPP profile complete and validated',
+    ask: 'UNPP profile, complete and validated',
   },
   {
     ruleId: 'unfpa_ip_hact',
@@ -89,6 +93,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_ip_hact_missing',
     title: 'HACT micro-assessment date and risk rating required',
+    ask: 'HACT micro-assessment date and risk rating',
   },
   {
     ruleId: 'unfpa_ip_psea',
@@ -97,6 +102,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'unfpa_ip_psea_missing',
     title: 'PSEA capacity assessment status on the IP file',
+    ask: 'PSEA capacity assessment status on the IP file',
   },
   {
     ruleId: 'unfpa_procurement_plan_line',
@@ -105,6 +111,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_procurement_plan_missing',
     title: 'Annual procurement plan line required',
+    ask: 'Annual procurement plan line',
   },
   {
     ruleId: 'unfpa_procurement_method_threshold',
@@ -114,6 +121,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_procurement_method_misaligned',
     title: 'Solicitation method must align with the value threshold',
+    ask: 'Solicitation method for the value threshold',
   },
   {
     ruleId: 'unfpa_procurement_crc_gate',
@@ -122,6 +130,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_procurement_crc_missing',
     title: 'Contracts Review Committee gate recorded',
+    ask: 'Contracts Review Committee gate',
   },
   {
     ruleId: 'unfpa_procurement_contract_split',
@@ -131,6 +140,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_procurement_split_unchecked',
     title: 'Contract-split check recorded for the same vendor and object',
+    ask: 'Contract-split check for the same vendor and object',
   },
   {
     ruleId: 'unfpa_procurement_rfq_scores',
@@ -139,6 +149,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_procurement_rfq_scores_missing',
     title: 'RFQ evaluation criteria and individual scores required',
+    ask: 'RFQ evaluation criteria and individual scores',
   },
   {
     ruleId: 'unfpa_procurement_po',
@@ -147,6 +158,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_procurement_po_missing',
     title: 'Binding purchase order or contract required before delivery',
+    ask: 'Binding purchase order or contract',
   },
   {
     ruleId: 'unfpa_procurement_rir',
@@ -155,6 +167,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'unfpa_procurement_rir_missing',
     title: 'Receiving and inspection report named on the file',
+    ask: 'Receiving and inspection report',
   },
   {
     ruleId: 'unfpa_procurement_lta_rate',
@@ -163,6 +176,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'unfpa_procurement_lta_rate_missing',
     title: 'LTA source and rate reconciliation on the file',
+    ask: 'LTA source and rate reconciliation',
   },
   {
     ruleId: 'unfpa_integrity_coi',
@@ -172,6 +186,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_coi_not_declared',
     title: 'Conflict of interest declared for staff, vendor, and IP',
+    ask: 'Conflict of interest declaration for staff, vendor, and IP',
   },
   {
     ruleId: 'unfpa_integrity_related_party',
@@ -180,6 +195,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_related_party_missing',
     title: 'Related-party, shared-contact, and beneficial-ownership check required',
+    ask: 'Related-party, shared-contact, and beneficial-ownership check',
   },
   {
     ruleId: 'unfpa_payment_face',
@@ -188,6 +204,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'unfpa_face_workplan_missing',
     title: 'FACE or workplan linkage named before payment',
+    ask: 'FACE or workplan linkage',
   },
   {
     ruleId: 'unfpa_payment_commodity_lines',
@@ -196,6 +213,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'unfpa_commodity_lines_missing',
     title: 'Non-cash commodity lines named on the IP workplan',
+    ask: 'Non-cash commodity lines on the IP workplan',
   },
   {
     ruleId: 'unfpa_idd_subject',
@@ -204,6 +222,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_subject_missing',
     title: 'Restrictive-measures subject required before signature',
+    ask: 'Restrictive-measures subject',
   },
   {
     ruleId: 'unfpa_idd_subject_kind',
@@ -213,6 +232,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_subject_kind_invalid',
     title: 'Restrictive-measures subject must be an organization or an individual',
+    ask: 'Whether the restrictive-measures subject is an organization or an individual',
   },
   {
     ruleId: 'unfpa_idd_screen_scope',
@@ -222,6 +242,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_screen_scope_incomplete',
     title: 'Restrictive-measures scope must attest UN and UNGM',
+    ask: 'Restrictive-measures scope covering UN and UNGM',
   },
   {
     ruleId: 'unfpa_idd_screen_date',
@@ -230,6 +251,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_screen_date_missing',
     title: 'Restrictive-measures screen date required before signature',
+    ask: 'Restrictive-measures screen date',
   },
   {
     ruleId: 'unfpa_idd_screen_result',
@@ -239,6 +261,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_result_invalid',
     title: 'Restrictive-measures result must be clear, potential match, confirmed hit, or unresolved',
+    ask: 'Restrictive-measures result (clear, potential match, confirmed hit, or unresolved)',
   },
   {
     ruleId: 'unfpa_idd_evidence_ref',
@@ -247,6 +270,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_evidence_missing',
     title: 'Restrictive-measures evidence reference required',
+    ask: 'Restrictive-measures evidence reference',
   },
   {
     ruleId: 'unfpa_idd_vrc_iprc',
@@ -255,6 +279,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_vrc_iprc_missing',
     title: 'VRC, IPRC, and UNPP flag status required',
+    ask: 'VRC, IPRC, and UNPP flag status',
   },
   {
     ruleId: 'unfpa_idd_clearcheck',
@@ -263,6 +288,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'warning',
     code: 'unfpa_idd_clearcheck_missing',
     title: 'ClearCheck status where personnel are in scope',
+    ask: 'ClearCheck status where personnel are in scope',
   },
   {
     ruleId: 'unfpa_idd_hit_decision',
@@ -274,6 +300,7 @@ export const UNFPA_RULES: readonly JudgmentRule[] = [
     severity: 'blocker',
     code: 'unfpa_idd_hit_needs_decision',
     title: 'A non-clear restrictive-measures result needs a select, continue, or terminate decision',
+    ask: 'Select, continue, or terminate decision for a non-clear restrictive-measures result',
   },
 ]
 
