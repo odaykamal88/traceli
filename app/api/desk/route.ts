@@ -26,6 +26,7 @@ export async function POST(request: Request) {
       fileName: packet.fileName,
       mediaType: packet.mediaType,
       bytes: packet.bytes,
+      packId: packet.packId,
       ...(packet.awardId ? { awardId: packet.awardId } : {}),
     }, { organizationId: viewer.organizationId }))
     const outcome = freezeUploadedPacket({

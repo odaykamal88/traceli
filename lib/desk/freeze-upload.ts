@@ -14,6 +14,7 @@ import {
   type ExtractionResult,
   type RegistryEntityDraft,
 } from '@/lib/field-registry/extract'
+import { alignPackFields } from '@/lib/field-registry/pack-align'
 import {
   dispositionFromAwardDeskDecision,
   freezeAtJudgment,
@@ -178,14 +179,23 @@ export function snapshotFromUpload(
     organizationId: scope.organizationId,
   })
   const draftFields = draft.fields.map(registryFieldFromDraft)
-  const fromPacketFieldIds = new Set(draftFields.map(field => field.fieldId))
+  const aligned = alignPackFields(extraction.fragments, packId)
+  const alignedByKey = new Map(aligned.fields.map(field => [field.key, field]))
+  const fromPacketFieldIds = new Set([
+    ...draftFields.map(field => field.fieldId),
+    ...aligned.fields.map(field => field.fieldId),
+  ])
   const packKeys = fieldKeysByPack[packId]
   const packKeySet = new Set<string>(packKeys)
   const fields: RegistryField[] = []
   for (const key of packKeys) {
-    const matched = draftFields.filter(field => field.key === key)
-    if (matched.length > 0) fields.push(...matched)
-    else fields.push(missingField(key, extraction))
+    const fromDocument = alignedByKey.get(key)
+    if (fromDocument) fields.push(fromDocument)
+    else {
+      const matched = draftFields.filter(field => field.key === key)
+      if (matched.length > 0) fields.push(...matched)
+      else fields.push(missingField(key, extraction))
+    }
   }
   fields.push(...draftFields.filter(field => !packKeySet.has(field.key)))
   const context = packContexts[packId]
@@ -209,7 +219,10 @@ function detailFor(field: RegistryField) {
   if (field.value.state === 'missing') return field.value.reason
   const value = field.value.value
   const shown = typeof value === 'string' ? value.slice(0, 160) : String(value)
-  return field.value.state === 'negative' ? `Negative: ${shown}` : shown
+  if (field.value.state !== 'negative') return shown
+  const label = field.provenance.sourceRef.label ?? ''
+  const quote = label.startsWith('Quote: ') ? label.slice('Quote: '.length).trim() : ''
+  return quote ? `Negative: ${shown}. ${quote}`.slice(0, 500) : `Negative: ${shown}`
 }
 
 function rationaleFor(packName: string, readiness: string, findingCount: number) {

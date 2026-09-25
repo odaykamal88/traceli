@@ -939,6 +939,54 @@ test('Talonic keeps award-packet field counts and truncates only above the cap',
   assert.equal(truncatedFreeze.view.unmappedFragmentCount, MAX_EXTRACTION_FRAGMENTS)
 })
 
+test('a desk pack sends a Talonic schema and keeps markdown as document text', async () => {
+  const secret = 'tlnc_test_secret_value'
+  process.env.TRACE_TALONIC_API_KEY = secret
+  delete process.env.TRACE_TALONIC_BASE_URL
+  const calls = []
+  const provider = new TalonicExtractionProvider({
+    now: () => new Date('2026-09-23T00:00:00.000Z'),
+    fetchImpl: async (url, init) => {
+      calls.push({ url: String(url), init })
+      const form = init.body
+      const schema = JSON.parse(form.get('schema'))
+      assert.equal(schema.required, undefined)
+      assert.equal(typeof schema.properties['ip.threshold_approver'].description, 'string')
+      assert.equal(schema.properties['procurement.po_or_contract'].type, 'string')
+      assert.match(form.get('instructions'), /verbatim/i)
+      assert.match(form.get('instructions'), /absent/i)
+      assert.equal(JSON.parse(form.get('options')).include_raw_text, true)
+      assert.equal(form.get('include_provenance'), null)
+      assert.equal(form.get('include_markdown'), 'true')
+      return jsonResponse(200, {
+        status: 'complete',
+        created_at: '2026-09-23T12:00:00.000Z',
+        data: { 'ip.threshold_approver': 'true' },
+        markdown: 'No Regional Director approval is on file.',
+        confidence: { overall: 0.66, fields: { 'ip.threshold_approver': 0.99 } },
+      })
+    },
+  })
+  const result = await provider.extract(input('packet.pdf', 'application/pdf', { packId: 'unfpa' }))
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].init.headers['Idempotency-Key'], `trace-v3-unfpa-${sourceFileHashOf(bytes)}`.slice(0, 64))
+  const corpus = result.fragments.find(fragment => fragment.tags?.includes('document_text'))
+  assert.equal(corpus?.text, 'No Regional Director approval is on file.')
+  assert.equal(corpus?.kind, 'text')
+  const outcome = freezeUploadedPacket({
+    extraction: result,
+    packId: 'unfpa',
+    organizationId: 'org_trace_demo',
+    actorId: 'user_fixture_reviewer',
+    actorRole: 'Procurement Officer',
+    frozenAt: '2026-09-23T12:00:00.000Z',
+  })
+  const approver = outcome.record.snapshot.fields.find(field => field.key === 'ip.threshold_approver')
+  assert.equal(approver?.value.state, 'negative')
+  assert.equal(approver?.value.state === 'negative' ? approver.value.value : null, false)
+  assert.equal(outcome.view.fields.find(field => field.key === 'ip.threshold_approver')?.fromPacket, true)
+})
+
 test('rules and freeze do not import a Talonic type', () => {
   for (const file of [
     'lib/field-registry/freeze.ts',
