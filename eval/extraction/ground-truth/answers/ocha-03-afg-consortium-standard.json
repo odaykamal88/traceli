@@ -1,0 +1,441 @@
+{
+  "file": "ocha-03-afg-consortium-standard.pdf",
+  "packId": "ocha-cbpf",
+  "packVersion": "2026.1",
+  "packName": "OCHA CBPF Global Guidelines-shaped award desk v0",
+  "sha256": "4b28755c829f8f3959296819a54e5965f7039833b69ae325272a67fcb337ad1d",
+  "pages": 30,
+  "title": "Standard allocation file: consortium project for winterisation and protection, north-eastern provinces",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "allocation.strategy_on_file",
+      "description": "Section 1 quotes the requirement for an HC-approved allocation strategy on file; none is filed or referenced."
+    },
+    {
+      "kind": "invented-regime",
+      "key": "misconduct.secretariat_sanctions_regime",
+      "description": "File claims a check against an \"OCHA Secretariat partner sanctions list\"; pack expects none -> negative."
+    },
+    {
+      "kind": "conflict-resolved-later",
+      "key": "onegms.project_status",
+      "description": "Cover table and memo: OneGMS status Draft; Annex A: as of 19 May 2026 Pending HC approval."
+    }
+  ],
+  "fields": {
+    "partner.due_diligence_passed": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "PVRA is an eligible partner of the fund, having passed due diligence in 2023, and KWA passed due diligence on 19 January 2026.",
+      "note": "Due diligence passed (lead and member).",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Partner due diligence must be recorded as passed",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "partner.capacity_assessment": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No capacity assessment of PVRA or KWA is mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Partner capacity assessment required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "partner.annex7_declarations": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "accurate information; compliance; conflict of interest; designated entity; legal process (disability and PSEA declarations not signed)",
+      "page": 4,
+      "quote": "The Annex 7 form signed by PVRA covers accurate information, compliance, conflict of interest, designated entity and legal process, but the disability and PSEA declarations were left unsigned.",
+      "note": "Present but incomplete: disability and psea missing, so the text_must_include rule fails.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Annex 7 declarations required, including conflict of interest and designated entity",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "accurate information; compliance; conflict of interest; designated entity; legal process (disability and PSEA declarations not signed)"
+      }
+    },
+    "allocation.modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "standard",
+      "page": 4,
+      "quote": "Project 0588 was submitted under the second standard allocation of 2026, which opened on 6 April 2026.",
+      "note": "standard.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Allocation modality must be standard or reserve",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "standard"
+      }
+    },
+    "allocation.preselection_justification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Standard allocation; not mentioned.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "Reserve pre-selection needs a written justification for each invited partner",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "allocation.strategy_on_file": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The requirement that each allocation be based on an HC-approved strategy kept on file is quoted, but no SA2 strategy document or approval is on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Allocation strategy filed, including reserve pre-selection criteria",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "selection.scorecard_or_alternative": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Scorecard 64/100, rank 5 of 9",
+      "page": 4,
+      "quote": "Project 0588 received a scorecard total of 64 out of 100, ranking fifth of the nine proposals in the window.",
+      "note": "Scorecard.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Scorecard or alternative selection document required before recommendation",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Scorecard 64/100, rank 5 of 9"
+      }
+    },
+    "selection.committee_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Review committee 14 May 2026 recommended 0588 for funding",
+      "page": 4,
+      "quote": "The review committee meeting of 14 May 2026 recommended project 0588 for funding at US$ 1,480,000.",
+      "note": "Committee decision.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Review-committee decision recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Review committee 14 May 2026 recommended 0588 for funding"
+      }
+    },
+    "selection.recommendation_differs": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "The committee recommended project 0588 although two higher-scoring proposals in the same window were not recommended.",
+      "note": "Recommendation differs from scores (true).",
+      "rule": {
+        "kind": "no_own_rule",
+        "title": "(no rule of its own; trigger for selection.mismatch_note when true)",
+        "severity": "n/a"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "selection.mismatch_note": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Disposition note: recommended for coverage of Warduj-Tar and Yamgan-Bala districts not covered by higher-ranked proposals",
+      "page": 4,
+      "quote": "Disposition note: project 0588 was preferred because it is the only proposal covering Warduj-Tar and Yamgan-Bala districts, which the two higher-ranked proposals do not reach.",
+      "note": "Mismatch disposition note.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A score and recommendation mismatch needs a disposition note",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Disposition note: recommended for coverage of Warduj-Tar and Yamgan-Bala districts not covered by higher-ranked proposals"
+      }
+    },
+    "grant.agreement_complete": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Grant agreement completeness is not addressed.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Grant agreement completeness recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "grant.budget_template": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The budget is shown but its template is not stated.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Budget template on the grant file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "grant.consortium_controls": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Consortium agreement: PVRA passes funds quarterly on verified reports; quarterly spot checks of KWA; joint bank reconciliation",
+      "page": 5,
+      "quote": "Under the consortium agreement, PVRA transfers funds to KWA quarterly on the basis of verified financial reports, carries out a spot check of KWA each quarter, and reconciles the sub-grant account jointly with KWA.",
+      "note": "Pass-through controls named.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Consortium or sub-grant pass-through controls named",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Consortium agreement: PVRA passes funds quarterly on verified reports; quarterly spot checks of KWA; joint bank reconciliation"
+      }
+    },
+    "misconduct.annex8_path": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "The Annex 8 measures for non-compliance are not referenced anywhere in the agreement file.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annex 8 non-compliance path recorded (suggested measures, not a fraud regime)",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The Annex 8 measures for non-compliance are not referenced anywhere in the agreement file."
+      }
+    },
+    "misconduct.annex9_notification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annex 9 fraud notification path recorded, including the 48-hour partner duty",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "misconduct.oios_notification_path": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "No channel for notifying OIOS is specified in the consortium or grant documents.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OIOS notification pathway named",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No channel for notifying OIOS is specified in the consortium or grant documents."
+      }
+    },
+    "misconduct.secretariat_sanctions_regime": {
+      "state": "negative",
+      "statedAbsent": false,
+      "value": "OCHA Secretariat partner sanctions list (checked, not listed)",
+      "page": 5,
+      "quote": "PVRA was checked against the OCHA Secretariat partner sanctions list on 3 May 2026 and is not listed.",
+      "note": "Trap: the file asserts a Secretariat partner-sanctions list exists and was checked. The pack requires the regime to be recorded as none (OIOS 2025/098 para 37), so this is an adverse statement: negative.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Secretariat partner-sanctions regime must be recorded as none",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": "OCHA Secretariat partner sanctions list (checked, not listed)"
+      },
+      "trap": "invented-regime"
+    },
+    "onegms.project_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Pending HC approval (19 May 2026)",
+      "page": 6,
+      "quote": "As of 19 May 2026 the OneGMS status of project 0588 is Pending HC approval.",
+      "note": "Cover says Draft at file opening; resolved late in Annex A: Pending HC approval.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OneGMS project status required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Pending HC approval (19 May 2026)"
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "onegms.selection_record": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Selection record uploaded to OneGMS 16 May 2026, before recommendation to HC",
+      "page": 4,
+      "quote": "The selection record, including the scorecards and the disposition note, was uploaded to OneGMS on 16 May 2026 before the recommendation was sent to the HC.",
+      "note": "OneGMS selection record.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OneGMS selection record required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Selection record uploaded to OneGMS 16 May 2026, before recommendation to HC"
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Pamir Valley Rural Aid and Kokcha Women's Association",
+      "page": 5,
+      "quote": "The designated-entity screening covers both consortium members, PVRA as lead and KWA as member.",
+      "note": "Subjects.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Designated-entity subject required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Pamir Valley Rural Aid and Kokcha Women's Association"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "designated-entity",
+      "page": 5,
+      "quote": "Scope of the check: designated-entity, per the Annex 7 declaration.",
+      "note": "Canonical token.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Annex 7 designated-entity scope must be attested",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "designated-entity"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "potential_match",
+      "page": 5,
+      "quote": "One potential match was found for the name of a KWA board member.",
+      "note": "Non-clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Designated-entity result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "potential_match"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "The designated-entity screening record is not attached to the file.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Designated-entity evidence reference required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The designated-entity screening record is not attached to the file."
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "continue",
+      "page": 5,
+      "quote": "Decision: continue with the selection process, since the board member was shown to be a different person by national identity card and father's name.",
+      "note": "Decision continue.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear designated-entity result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "continue"
+      }
+    }
+  }
+}

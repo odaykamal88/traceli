@@ -1,0 +1,429 @@
+{
+  "file": "ocha-02-nga-reserve-allocation.pdf",
+  "packId": "ocha-cbpf",
+  "packVersion": "2026.1",
+  "packName": "OCHA CBPF Global Guidelines-shaped award desk v0",
+  "sha256": "5aa3de419420e6dc9c68ee1a66556a4fcf534f84d708053f74d0773ad5b5cc63",
+  "pages": 23,
+  "title": "Reserve allocation file: emergency health response to riverine flooding, north-east (three invited partners)",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "conflict-resolved-later",
+      "key": "misconduct.annex9_notification",
+      "description": "Cover memo and section 6: 5 working days; Annex B corrects to the Annex 9 48-hour duty (true = present)."
+    }
+  ],
+  "fields": {
+    "partner.due_diligence_passed": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 4,
+      "quote": "At the time of pre-selection NFHRI had not completed due diligence, and its registration in OneGMS was still pending review.",
+      "note": "Due diligence not passed at pre-selection (stated). Negative false.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Partner due diligence must be recorded as passed",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "partner.capacity_assessment": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "No capacity assessment is available for NFHRI, which is a new partner of the fund.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Partner capacity assessment required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No capacity assessment is available for NFHRI, which is a new partner of the fund."
+      }
+    },
+    "partner.annex7_declarations": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "accurate-info compliance coi designated-entity legal-process disability psea",
+      "page": 4,
+      "quote": "Declarations attested on the Annex 7 form: accurate-info, compliance, coi, designated-entity, legal-process, disability, psea.",
+      "note": "All canonical tokens given.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Annex 7 declarations required, including conflict of interest and designated entity",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "accurate-info compliance coi designated-entity legal-process disability psea"
+      }
+    },
+    "allocation.modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "reserve",
+      "page": 4,
+      "quote": "The funds are released under the reserve for emergencies, as a reserve allocation of US$ 3.5 million for health.",
+      "note": "Modality reserve.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Allocation modality must be standard or reserve",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "reserve"
+      }
+    },
+    "allocation.preselection_justification": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "No written justification is recorded for inviting the third partner, NFHRI, although justifications exist for the other two invited partners.",
+      "note": "Required when modality = reserve; missing for the subject partner (stated).",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "Reserve pre-selection needs a written justification for each invited partner",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No written justification is recorded for inviting the third partner, NFHRI, although justifications exist for the other two invited partners."
+      }
+    },
+    "allocation.strategy_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Reserve allocation strategy note 8 August 2026 with pre-selection criteria",
+      "page": 4,
+      "quote": "The reserve allocation strategy note of 8 August 2026 sets the pre-selection criteria: operational presence in the affected local government areas, active health cluster membership, and pipeline stock of cholera supplies.",
+      "note": "Strategy with pre-selection criteria.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Allocation strategy filed, including reserve pre-selection criteria",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Reserve allocation strategy note 8 August 2026 with pre-selection criteria"
+      }
+    },
+    "selection.scorecard_or_alternative": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "No scorecard or alternative selection document was completed; the three partners were invited and funded directly.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Scorecard or alternative selection document required before recommendation",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No scorecard or alternative selection document was completed; the three partners were invited and funded directly."
+      }
+    },
+    "selection.committee_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Review committee 22 August 2026 recommended funding of all three projects",
+      "page": 4,
+      "quote": "The review committee met on 22 August 2026 and recommended funding for all three projects, including project 0417 at US$ 1,050,000.",
+      "note": "Committee decision.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Review-committee decision recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Review committee 22 August 2026 recommended funding of all three projects"
+      }
+    },
+    "selection.recommendation_differs": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No scoring exists, so no comparison between scores and recommendation is stated.",
+      "rule": {
+        "kind": "no_own_rule",
+        "title": "(no rule of its own; trigger for selection.mismatch_note when true)",
+        "severity": "n/a"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "selection.mismatch_note": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not mentioned.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A score and recommendation mismatch needs a disposition note",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "grant.agreement_complete": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Grant agreement NGA-26/HFU/R2/H/NNGO/0417 signed 29 August 2026 with budget, workplan and logframe",
+      "page": 5,
+      "quote": "Grant agreement NGA-26/HFU/R2/H/NNGO/0417 was signed on 29 August 2026 with all its annexes attached, including the budget, the workplan and the logical framework.",
+      "note": "Agreement complete.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Grant agreement completeness recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Grant agreement NGA-26/HFU/R2/H/NNGO/0417 signed 29 August 2026 with budget, workplan and logframe"
+      }
+    },
+    "grant.budget_template": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Budget on standard fund template (annex 2 of agreement)",
+      "page": 5,
+      "quote": "The budget attached to the agreement uses the standard fund budget template, with direct costs, support costs at 7 percent and a separate audit line.",
+      "note": "Budget template.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Budget template on the grant file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Budget on standard fund template (annex 2 of agreement)"
+      }
+    },
+    "grant.consortium_controls": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No consortium or sub-grant; not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Consortium or sub-grant pass-through controls named",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "misconduct.annex8_path": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Annex 8 non-compliance measures are not referenced.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annex 8 non-compliance path recorded (suggested measures, not a fraud regime)",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "misconduct.annex9_notification": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Annex 9: partner reports suspected fraud to the HFU within 48 hours",
+      "page": 7,
+      "quote": "Correction: the Annex 9 duty is to notify the HFU within 48 hours, and the five-working-day period quoted in the cover memorandum and in section 6 comes from a superseded template and is withdrawn.",
+      "note": "Cover memo and section 6 say 5 working days; corrected late in Annex B to 48 hours.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annex 9 fraud notification path recorded, including the 48-hour partner duty",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Annex 9: partner reports suspected fraud to the HFU within 48 hours"
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "misconduct.oios_notification_path": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Allegations involving UN personnel reported to OIOS through the HFU",
+      "page": 5,
+      "quote": "Allegations involving UN personnel or UN-administered funds are reported by the HFU to OIOS, which decides whether to investigate.",
+      "note": "OIOS pathway.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OIOS notification pathway named",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Allegations involving UN personnel reported to OIOS through the HFU"
+      }
+    },
+    "misconduct.secretariat_sanctions_regime": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "none",
+      "page": 5,
+      "quote": "Secretariat partner-sanctions regime: none.",
+      "note": "Recorded as none.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Secretariat partner-sanctions regime must be recorded as none",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "none"
+      }
+    },
+    "onegms.project_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Approved by HC; grant agreement signed",
+      "page": 4,
+      "quote": "OneGMS project status as of 30 August 2026: approved by the HC, grant agreement signed, first instalment pending.",
+      "note": "Project status.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OneGMS project status required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Approved by HC; grant agreement signed"
+      }
+    },
+    "onegms.selection_record": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The OneGMS selection record is not mentioned anywhere in the file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "OneGMS selection record required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Northern Floodplain Health Response Initiative",
+      "page": 5,
+      "quote": "The designated-entity screening covers NFHRI as an organisation and the members of its board.",
+      "note": "Subject.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Designated-entity subject required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Northern Floodplain Health Response Initiative"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "designated-entity",
+      "page": 5,
+      "quote": "Designated-entity check: attested in the Annex 7 declaration signed on 25 August 2026.",
+      "note": "Scope.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Annex 7 designated-entity scope must be attested",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "designated-entity"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "unresolved",
+      "page": 5,
+      "quote": "The screening of board members could not be completed because NFHRI has not provided its full board list, so the result is recorded as unresolved.",
+      "note": "Non-clear: unresolved.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Designated-entity result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "unresolved"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "HFU screening note HFU/NGA/DD/2026/118",
+      "page": 5,
+      "quote": "The screening note is filed as HFU/NGA/DD/2026/118.",
+      "note": "Evidence ref.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Designated-entity evidence reference required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "HFU screening note HFU/NGA/DD/2026/118"
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Result is unresolved but no select/continue/terminate decision is recorded; the agreement was nevertheless signed.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear designated-entity result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    }
+  }
+}

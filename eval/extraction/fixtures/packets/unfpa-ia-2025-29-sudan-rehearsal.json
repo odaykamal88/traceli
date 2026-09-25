@@ -1,0 +1,225 @@
+{
+  "file": "unfpa-ia-2025-29-sudan-rehearsal.pdf",
+  "packId": "unfpa",
+  "packVersion": "2026.1",
+  "sha256": "be80723e5df1013dfc8c9244bdcc342742db769dabab254ae0d4ddd8e93ad7d2",
+  "pages": 2,
+  "fields": {
+    "ip.competitive_or_waiver": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "ip.waiver_or_competition_documented": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "ip.threshold_approver": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 1,
+      "quote": "No Regional Director approval is on file.",
+      "note": "Boolean control expected true. The packet states the Regional Director approval is absent, so the desk state is negative false. The fixture Talonic data says true and must not override the markdown."
+    },
+    "ip.unpp_profile": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "ip.hact_micro_assessment": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "ip.psea_assessment": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "procurement.plan_line": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "procurement.method_vs_threshold": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "procurement.crc_gate": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "procurement.contract_split_checked": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "procurement.rfq_criteria_and_scores": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 1,
+      "quote": "RFQ evaluation criteria in the solicitation: none listed.",
+      "note": "The solicitation lists no evaluation criteria and the score cells are blank."
+    },
+    "procurement.po_or_contract": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 1,
+      "quote": "No approved purchase order was issued before the goods were received, and no signed contract is on file.",
+      "note": "Required document stated absent. The desk keeps this missing, with a stated-absent reason."
+    },
+    "procurement.rir": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 2,
+      "quote": "Receiving and inspection report (RIR): no policy-compliant RIR is on file.",
+      "note": "Required document stated absent on page 2."
+    },
+    "procurement.lta_rate_reconciliation": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "integrity.coi_declared": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "integrity.related_party_checked": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "payment.face_workplan_link": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "payment.commodity_lines": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.subject": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.subject_kind": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.screen_scope": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.screen_date": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.screen_result": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.evidence_ref": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.vrc_iprc_status": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.clearcheck_where_personnel": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The packet says it carries no other UNFPA pack evidence."
+    }
+  }
+}

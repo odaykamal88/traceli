@@ -1,0 +1,486 @@
+{
+  "file": "unfpa-03-jor-ngo-noncompetitive.pdf",
+  "packId": "unfpa",
+  "packVersion": "2026.1",
+  "packName": "UNFPA OAIS-shaped award desk v0",
+  "sha256": "24e00615ad7caf92690e5af01c08557e35b358e4a7b2f0e92573bdd9f3ee45de",
+  "pages": 27,
+  "title": "Implementing partner file: non-competitive engagement of a women-led NGO for GBV case management, Al-Rimal settlement",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "integrity.coi_declared",
+      "description": "Procedure text requires COI declarations before the selection decision; none is evidenced."
+    },
+    {
+      "kind": "conflict-resolved-later",
+      "key": "ip.unpp_profile",
+      "description": "Cover table and memo: UNPP not validated; Annex B: validation completed 20 April 2026 (present)."
+    }
+  ],
+  "fields": {
+    "ip.competitive_or_waiver": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "WSWC is engaged through the documented non-competitive path for humanitarian situations, which the country office invoked on 2 April 2026.",
+      "note": "Documented non-competitive path.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "IP selection must be competitive or a documented non-competitive path",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "ip.waiver_or_competition_documented": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Non-competitive selection template signed by the Representative 2 April 2026 (Annex A)",
+      "page": 4,
+      "quote": "The non-competitive selection template, setting out the humanitarian justification and the reasons for choosing WSWC, was signed by the Representative on 2 April 2026 and is at Annex A.",
+      "note": "Waiver template on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Competition file or waiver template required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Non-competitive selection template signed by the Representative 2 April 2026 (Annex A)"
+      }
+    },
+    "ip.threshold_approver": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 4,
+      "quote": "Regional Director approval was requested on 5 April 2026 for the cumulative amount of US$ 734,000 but had not been granted at the date of this file.",
+      "note": "Cumulative > US$0.5m requires RD; not obtained (stated). Negative false.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Approver must match the cumulative workplan threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "ip.unpp_profile": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "UNPP profile validated 20 April 2026; partner ID JO-NGO-77104",
+      "page": 7,
+      "quote": "UNPP validation of the WSWC profile was completed on 20 April 2026 under partner ID JO-NGO-77104, after the date of the cover memorandum.",
+      "note": "Cover says \"Not validated\"; resolved late in Annex B: validated 20 April 2026.",
+      "rule": {
+        "kind": "required_present",
+        "title": "UNPP profile complete and validated",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "UNPP profile validated 20 April 2026; partner ID JO-NGO-77104"
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "ip.hact_micro_assessment": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026-03-09; high",
+      "page": 4,
+      "quote": "Micro-assessment by an external firm, report dated 9 March 2026: overall risk rating high, driven by financial reporting and procurement.",
+      "note": "HACT date and rating (different wording).",
+      "rule": {
+        "kind": "required_present",
+        "title": "HACT micro-assessment date and risk rating required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026-03-09; high"
+      }
+    },
+    "ip.psea_assessment": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "PSEA capacity assessment 11 March 2026: full capacity (7 of 8 core standards)",
+      "page": 4,
+      "quote": "The PSEA capacity assessment carried out on 11 March 2026 found that WSWC meets 7 of the 8 core standards, which is rated as full capacity.",
+      "note": "PSEA status.",
+      "rule": {
+        "kind": "required_present",
+        "title": "PSEA capacity assessment status on the IP file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "PSEA capacity assessment 11 March 2026: full capacity (7 of 8 core standards)"
+      }
+    },
+    "procurement.plan_line": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "CO procurement plan 2026 line 22: solar lamps, 1,200 units",
+      "page": 5,
+      "quote": "The solar lamps are covered by line 22 of the country office procurement plan for 2026.",
+      "note": "Plan line.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annual procurement plan line required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "CO procurement plan 2026 line 22: solar lamps, 1,200 units"
+      }
+    },
+    "procurement.method_vs_threshold": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No solicitation discussed.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Solicitation method must align with the value threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.crc_gate": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No CRC mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Contracts Review Committee gate recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.contract_split_checked": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 4,
+      "quote": "The two workplans of US$ 367,000 each are for the same partner and a closely related object, and no review of whether the split avoids the higher approval level has been recorded.",
+      "note": "Two workplans each below US$0.5m for same IP/object; no split review recorded (stated). Negative false.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Contract-split check recorded for the same vendor and object",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "procurement.rfq_criteria_and_scores": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No RFQ.",
+      "rule": {
+        "kind": "required_present",
+        "title": "RFQ evaluation criteria and individual scores required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.po_or_contract": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No PO or contract for the lamps is mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Binding purchase order or contract required before delivery",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.rir": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "No receiving and inspection report is on file for the 400 lamps handed over in March.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Receiving and inspection report named on the file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No receiving and inspection report is on file for the 400 lamps handed over in March."
+      }
+    },
+    "procurement.lta_rate_reconciliation": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No LTA mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "LTA source and rate reconciliation on the file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "integrity.coi_declared": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The procedure requiring COI declarations from staff involved in selection is quoted, but no declaration by staff, vendor or IP is on file.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Conflict of interest declared for staff, vendor, and IP",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "integrity.related_party_checked": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Related-party check 12 April 2026: WSWC treasurer shares a residential address with a UNFPA programme associate; referred to ethics focal point",
+      "page": 4,
+      "quote": "The related-party check of 12 April 2026 found that the WSWC treasurer shares a residential address with a UNFPA programme associate, and the matter was referred to the ethics focal point.",
+      "note": "Check performed (present) with an adverse finding. The pack rule is required_present, so the field is present; the finding itself needs a human disposition.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Related-party, shared-contact, and beneficial-ownership check required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Related-party check 12 April 2026: WSWC treasurer shares a residential address with a UNFPA programme associate; referred to ethics focal point"
+      }
+    },
+    "payment.face_workplan_link": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "FACE / payment modality not described.",
+      "rule": {
+        "kind": "required_present",
+        "title": "FACE or workplan linkage named before payment",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "payment.commodity_lines": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "1,200 solar lamps; 1,500 dignity kits (in kind)",
+      "page": 5,
+      "quote": "Both workplans list in-kind supplies from the country office: 1,200 solar lamps and 1,500 dignity kits for safe-space participants.",
+      "note": "Commodity lines.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Non-cash commodity lines named on the IP workplan",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "1,200 solar lamps; 1,500 dignity kits (in kind)"
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Wadi Sirhan Women's Collective",
+      "page": 5,
+      "quote": "Wadi Sirhan Women's Collective (WSWC), registration MSD-NGO-2017-0291",
+      "note": "Subject.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures subject required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Wadi Sirhan Women's Collective"
+      }
+    },
+    "idd.subject_kind": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "organization",
+      "page": 5,
+      "quote": "Organization",
+      "note": "organization.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Restrictive-measures subject must be an organization or an individual",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "organization"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "UN Consolidated List only",
+      "page": 5,
+      "quote": "The screen was run against the UN Security Council Consolidated List only; the UNGM ineligibility list was not consulted.",
+      "note": "Present but incomplete: UNGM not covered, so the text_must_include (un, ungm) rule fails.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Restrictive-measures scope must attest UN and UNGM",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "UN Consolidated List only"
+      }
+    },
+    "idd.screen_date": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026-04-13",
+      "page": 5,
+      "quote": "13 April 2026 (desk screen)",
+      "note": "Date.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures screen date required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026-04-13"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "potential_match",
+      "page": 5,
+      "quote": "The screen returned a potential match with a similarly named association registered in another country.",
+      "note": "Non-clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Restrictive-measures result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "potential_match"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "The screening printout is not attached to the file, and no screening record number was noted.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures evidence reference required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The screening printout is not attached to the file, and no screening record number was noted."
+      }
+    },
+    "idd.vrc_iprc_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "No VRC or IPRC record; no UNPP flag",
+      "page": 5,
+      "quote": "There is no VRC or IPRC record concerning WSWC, and its UNPP profile carries no flag.",
+      "note": "VRC/IPRC/UNPP flag status.",
+      "rule": {
+        "kind": "required_present",
+        "title": "VRC, IPRC, and UNPP flag status required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "No VRC or IPRC record; no UNPP flag"
+      }
+    },
+    "idd.clearcheck_where_personnel": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "ClearCheck has not been run for the three WSWC case workers who will be seconded to the UNFPA-supported safe spaces.",
+      "note": "Personnel in scope; stated not run.",
+      "rule": {
+        "kind": "required_present",
+        "title": "ClearCheck status where personnel are in scope",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: ClearCheck has not been run for the three WSWC case workers who will be seconded to the UNFPA-supported safe spaces."
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "select",
+      "page": 5,
+      "quote": "The Deputy Representative recorded the decision to select WSWC after confirming that the listed association has a different registration number, address and founders.",
+      "note": "Decision select.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear restrictive-measures result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "select"
+      }
+    }
+  }
+}

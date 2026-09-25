@@ -1,0 +1,469 @@
+{
+  "file": "gf-03-cmr-single-source-fleet.pdf",
+  "packId": "global-fund",
+  "packVersion": "2026.2",
+  "packName": "Global Fund Grant Regulations v1",
+  "sha256": "d14dca0105e8b529451d4b330a3389c7fe54535170a32fd065fa15d19055f807",
+  "pages": 14,
+  "title": "Direct contracting file: fleet repair and maintenance for TB programme vehicles",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "conflict-resolved-later",
+      "key": "integrity.coi_disclosed",
+      "description": "Cover memo: \"COI declarations ... are pending\"; section 6 update of 20 February 2026 records them signed (true = present)."
+    },
+    {
+      "kind": "mentioned-not-attached",
+      "key": "procurement.competition_or_exemption_documented",
+      "description": "Cover table lists \"Attachment 4: Global Fund non-objection\"; the attachment list says not included."
+    }
+  ],
+  "fields": {
+    "eligibility.contractor_capable": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "A site visit on 3 February 2026 confirmed that the workshop has four service bays, diagnostic equipment for the vehicle model, and six certified mechanics, and is able to complete the repairs within 30 days.",
+      "note": "Capability affirmed by site visit.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Contractor ability to perform must be affirmed",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "integrity.coi_disclosed": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "Update of 20 February 2026: the three officers have now signed conflict-of-interest declarations, and none reported any interest in Nkolbo Motors SARL.",
+      "note": "Cover memo says declarations pending; resolved later by the 20 February update.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Conflict of interest disclosure required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "procurement.competitive_or_exempt": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 3,
+      "quote": "No exemption from competitive procurement was approved for this contract; the direct award was processed on the basis of the urgency described in the memorandum alone.",
+      "note": "Neither competitive nor an established exemption; stated. Negative false.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Award must be competitive or an established exemption",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "procurement.competition_or_exemption_documented": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "Attachment 4, the Global Fund non-objection listed on the cover, is not included in this file copy and no other exemption document is on file.",
+      "note": "Cover lists the non-objection as Attachment 4, but it is not attached; stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Competition or sole-source exemption documentation required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: Attachment 4, the Global Fund non-objection listed on the cover, is not included in this file copy and no other exemption document is on file."
+      },
+      "trap": "mentioned-not-attached"
+    },
+    "procurement.solicitation_notified": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 3,
+      "quote": "No solicitation notice was issued, as only one workshop was approached.",
+      "note": "Explicitly none.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Bid solicitation notice to prospective bidders",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No solicitation notice was issued, as only one workshop was approached."
+      }
+    },
+    "documentation.award_rationale_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Justification memo of 5 February 2026: urgency, prior servicing history, workshop capacity",
+      "page": 3,
+      "quote": "The justification memorandum dated 5 February 2026 records the reasons for choosing Nkolbo Motors SARL: urgency, its servicing history on nine of the fourteen vehicles, and the availability of parts in stock.",
+      "note": "Award rationale on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Award rationale documentation required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Justification memo of 5 February 2026: urgency, prior servicing history, workshop capacity"
+      }
+    },
+    "award.contract_value_usd": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": 309800,
+      "page": 4,
+      "quote": "The contract amount is XAF 186,450,000, equivalent to US$ 309,800 at the UN operational rate of exchange of February 2026.",
+      "note": "Contract value in USD stated with XAF amount.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Contract value must be on the registry",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": 309800
+      }
+    },
+    "threshold.method_aligned": {
+      "state": "negative",
+      "statedAbsent": false,
+      "value": false,
+      "page": 3,
+      "quote": "At the contract value the direct contracting route falls outside the single-source ceiling of US$ 100,000 that applies without a prior Global Fund non-objection.",
+      "note": "Adverse fact: method misaligned with threshold.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Procurement method must align with value threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "sr.selection_documented": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable to a works/services contract and not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Sub-recipient selection process documented",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "sr.capacity_assessed": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable to a works/services contract and not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Sub-recipient capacity assessment on file",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "sr.written_agreement_on_file": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable to a works/services contract and not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Written sub-recipient agreement required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Nkolbo Motors SARL",
+      "page": 4,
+      "quote": "Nkolbo Motors SARL and its sole owner-manager",
+      "note": "Subject (company).",
+      "rule": {
+        "kind": "required_present",
+        "title": "IDD subject organization or individual required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Nkolbo Motors SARL"
+      }
+    },
+    "idd.subject_kind": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "organization",
+      "page": 4,
+      "quote": "Organisation (limited liability company)",
+      "note": "organization.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD subject must be recorded as an organization or an individual",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "organization"
+      }
+    },
+    "idd.subject_role": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "supplier",
+      "page": 4,
+      "quote": "Supplier (works and services)",
+      "note": "supplier.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD subject role required (SR, supplier, signatory, or key personnel)",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "supplier"
+      }
+    },
+    "idd.affiliated_persons": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Owner-manager (sole shareholder) and workshop manager",
+      "page": 4,
+      "quote": "Persons screened with the company: the owner-manager, who is the sole shareholder, and the workshop manager.",
+      "note": "Affiliated persons with roles.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Affiliated and key persons, with roles, required on the IDD record",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Owner-manager (sole shareholder) and workshop manager"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "UN consolidated list; OFAC SDN; World Bank debarment",
+      "page": 4,
+      "quote": "The law firm screened the names against the UN consolidated list, the OFAC SDN list and the World Bank list of debarred firms.",
+      "note": "Scope present but incomplete: US State, Switzerland and ineligibility not covered, so the text_must_include rule fails even though the field is present.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Restrictive Measures scope must attest UN, OFAC, US State, Switzerland, and debarment",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "UN consolidated list; OFAC SDN; World Bank debarment"
+      }
+    },
+    "idd.screen_date": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026-02-11",
+      "page": 5,
+      "quote": "The screening was carried out on 11 February 2026.",
+      "note": "Screen date (after signature).",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive Measures screen date required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026-02-11"
+      }
+    },
+    "idd.list_vintage": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No list version or date is cited.",
+      "rule": {
+        "kind": "required_present",
+        "title": "List vintage cited by the screening evidence is required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.screen_modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "other",
+      "page": 4,
+      "quote": "External law firm instructed by PR legal counsel; not a Global Fund pre-approved provider",
+      "note": "Modality other.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD modality must be in-house, a Global Fund pre-approved vendor, or other",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "other"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "potential_match",
+      "page": 5,
+      "quote": "Result: one potential match on the UN consolidated list for the name of the owner-manager.",
+      "note": "Non-clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "potential_match"
+      }
+    },
+    "idd.screen_timing": {
+      "state": "negative",
+      "statedAbsent": false,
+      "value": "after_engagement",
+      "page": 5,
+      "quote": "The screen was therefore performed one day after the contract had been signed, not before engagement.",
+      "note": "Adverse fact: screen after engagement. Neither allowed token (before_engagement / grant_cycle_rerun) applies; negative with value after_engagement.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Screen must be attested before engagement or as the grant-cycle re-run",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": "after_engagement"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "LEG/2026/031",
+      "page": 4,
+      "quote": "Legal memorandum LEG/2026/031",
+      "note": "Evidence reference.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Screening evidence reference required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "LEG/2026/031"
+      }
+    },
+    "idd.disposition_owner": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Director of Programmes, FMKS",
+      "page": 5,
+      "quote": "The Director of Programmes was designated to handle the potential match.",
+      "note": "Owner named.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear Restrictive Measures result needs a disposition owner",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Director of Programmes, FMKS"
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No select/continue/terminate decision is recorded for the potential match, although an owner is named.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.disposition_rationale": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "No rationale for continuing with the contract despite the potential match is recorded in the file.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear Restrictive Measures result needs a disposition rationale",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No rationale for continuing with the contract despite the potential match is recorded in the file."
+      }
+    },
+    "idd.gf_notification": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Country Team informed by email 19 February 2026 (ref. FMKS/CT/2026/012)",
+      "page": 5,
+      "quote": "The Global Fund Country Team was informed of the potential match by email on 19 February 2026, reference FMKS/CT/2026/012.",
+      "note": "Communicated to GF.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "Restrictive Measures findings must be communicable to the Global Fund",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Country Team informed by email 19 February 2026 (ref. FMKS/CT/2026/012)"
+      }
+    }
+  }
+}

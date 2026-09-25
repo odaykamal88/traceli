@@ -1,0 +1,18 @@
+{
+  "pipelineVersion": "trace-v4",
+  "packId": "ocha-cbpf",
+  "sha256": "e1f174b47dd90380d6050f2014e897148c4aaac5322f92cc3d8662c43b05e4f7",
+  "file": "ocha-short-synthetic.pdf",
+  "source": "fixture",
+  "envelope": {
+    "status": "complete",
+    "created_at": "2026-09-25T00:00:00.000Z",
+    "markdown": "Page 1\nSynthetic rehearsal. Trace-li extraction fixture. Not an OCHA country-based pooled fund file.\nPartner due diligence was completed and recorded as satisfactory before this allocation.\nThe allocation in this file is a reserve allocation for a sudden-onset response.\nThe humanitarian country team filed the allocation strategy with the reserve criteria attached.\n\nPage 2\nThe review committee recommended Partner C on 4 April 2026 after reading the project proposal.\nA scorecard was not placed on the file.\nThe committee used a narrative note instead.\nOneGMS shows the project as under review.\nThis fixture does not state the remaining OCHA CBPF pack controls.",
+    "data": {
+      "allocation.modality": "standard"
+    },
+    "confidence": {
+      "overall": 0.5
+    }
+  }
+}

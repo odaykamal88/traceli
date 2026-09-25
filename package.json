@@ -32,6 +32,8 @@
     "test:donor-packs": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-donor-packs.mjs",
     "test:case-cards": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/case-cards/test-case-cards.mjs",
     "extract:stub": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/field-registry/extract-stub.mjs",
+    "eval:extraction": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs eval/extraction/run.mjs",
+    "test:extraction-eval": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test eval/extraction/test-harness.mjs",
     "test:trace:postgres": "node --conditions=react-server --import ./scripts/agent/register.mjs scripts/trace/test-postgres.mjs",
     "test:trace:migration": "node scripts/trace/test-migration.mjs",
     "trace:seed": "node scripts/trace/seed-local.mjs",
