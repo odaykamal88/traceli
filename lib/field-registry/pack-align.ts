@@ -3,7 +3,7 @@ import { getDonorPack } from '@/lib/field-registry/packs'
 import { fieldKeysForDonorPack } from '@/lib/field-registry/pack-schema'
 import { PACK_STATEMENTS, type PackStatement } from '@/lib/field-registry/pack-statements'
 import type { DonorPackId } from '@/lib/field-registry/packs/types'
-import type { Fragment, RegistryField } from '@/lib/field-registry/schema'
+import { statedAbsentReasonPrefix, type Fragment, type RegistryField } from '@/lib/field-registry/schema'
 
 /**
  * Read pack keys only from fragments tagged `document_text`.
@@ -18,7 +18,7 @@ import type { Fragment, RegistryField } from '@/lib/field-registry/schema'
  */
 
 export const DOCUMENT_TEXT_TAG = 'document_text'
-export const STATED_ABSENT_PREFIX = 'Stated absent in this packet: '
+export const STATED_ABSENT_PREFIX = statedAbsentReasonPrefix
 
 const ABSENCE_LANGUAGE = /\b(not on file|not met|none listed|no approved|no policy-compliant|not certified|are blank|is blank|scores blank|no criteria|no evaluation criteria|no individual scores|not approved|no regional director|does not certify|does not state|do not state)\b/i
 const BARE_AFFIRMATION = /^(true|yes|y|present|met|satisfied|ok)\.?$/i

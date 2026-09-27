@@ -322,6 +322,7 @@
   margin: 0;
   color: var(--navy-mid);
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 .providerNote { margin-top: 16px; }
 
@@ -427,10 +428,11 @@
 }
 .awardLayout {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 36px;
   align-items: start;
 }
+.awardLayout > * { min-width: 0; }
 .metaPanel { position: sticky; top: 88px; }
 .metaBlock { margin-bottom: 20px; }
 .metaBlock dt {
@@ -696,7 +698,7 @@
   text-transform: uppercase;
   color: var(--navy-mid);
 }
-.recordSection p { margin: 0 0 6px; font-size: 14px; }
+.recordSection p { margin: 0 0 6px; font-size: 14px; overflow-wrap: anywhere; }
 .recordSection p:last-child { margin-bottom: 0; }
 .muted { color: var(--navy-mid); }
 .who {
@@ -774,6 +776,8 @@
   text-transform: uppercase;
   color: var(--navy-mid);
 }
+.packTable th,
+.packTable td:not(:first-child) { white-space: nowrap; }
 
 .detail { margin-top: 28px; }
 .detail summary {
@@ -795,14 +799,17 @@
   margin: 0;
   padding: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
 }
 .finding,
 .fieldRow {
+  min-width: 0;
   padding: 12px 14px;
   border: 1px solid var(--navy-line);
   border-radius: 8px;
   background: var(--white);
+  overflow-wrap: anywhere;
 }
 .finding header,
 .fieldRow {
@@ -827,6 +834,8 @@
 .key {
   font-family: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 13px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .empty,
@@ -1004,6 +1013,119 @@
 .banner p:last-child { margin-bottom: 0; }
 .plainList { margin: 8px 0 0; padding-left: 1.2em; }
 
+.checklist {
+  margin: 0 0 28px;
+}
+.checklistRows {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.checklistRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 16px 24px;
+  padding: 16px 18px;
+  background: var(--white);
+  border: 1px solid var(--navy-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.checklistRow[hidden] { display: none; }
+.checklistSummary h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.checklistMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 8px 0;
+}
+.checklistFacts {
+  margin: 8px 0 0;
+  display: grid;
+  gap: 6px;
+}
+.checklistFacts div {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+.checklistFacts dt {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--navy-mid);
+}
+.checklistFacts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.checklistActions {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.checklistInputs {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+.checklistInputs label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.checklistFilter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  min-height: 44px;
+}
+.checklistFilter input {
+  width: 18px;
+  height: 18px;
+}
+.checklistBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--navy-line);
+  border-radius: var(--radius);
+  background: var(--ivory);
+}
+.checklistBar p { margin: 0; font-weight: 500; }
+.badgeReview {
+  background: var(--yellow);
+  color: var(--attention-ink);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.badgeExtracted {
+  background: var(--navy-soft);
+  color: var(--navy-mid);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
 .visuallyHidden {
   position: absolute;
   width: 1px;
@@ -1022,7 +1144,7 @@
   .nav { margin-left: 0; }
   .sourceGrid { grid-template-columns: 1fr; }
   .uploadItem { flex-direction: column; }
-  .awardLayout { grid-template-columns: 1fr; gap: 24px; }
+  .awardLayout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .metaPanel { position: static; }
   .splitPanels { grid-template-columns: 1fr; }
   .intro h1,
@@ -1031,6 +1153,7 @@
   .sub { text-align: left; }
   .frozenMeta div { grid-template-columns: 1fr; }
   .card { padding: 22px 18px; }
+  .checklistRow { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

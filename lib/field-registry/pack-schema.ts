@@ -32,6 +32,20 @@ export function fieldKeysForDonorPack(packId: DonorPackId): readonly string[] {
   return fieldKeysByPack[packId]
 }
 
+/** Human title from the pack rule. The key is the fallback when a rule has no title. */
+export function packFieldTitle(packId: DonorPackId, key: string): string {
+  return ruleTitle(getDonorPack(packId).rules, key)
+}
+
+export function packFieldExpectsBoolean(packId: DonorPackId, key: string): boolean {
+  for (const rule of getDonorPack(packId).rules) {
+    if ('fieldKey' in rule && rule.fieldKey === key && rule.kind === 'value_must_equal') {
+      return typeof rule.expected === 'boolean'
+    }
+  }
+  return false
+}
+
 function ruleTitle(rules: readonly JudgmentRule[], key: string) {
   for (const rule of rules) {
     if ('fieldKey' in rule && rule.fieldKey === key && rule.title) return rule.title

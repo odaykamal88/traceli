@@ -29,6 +29,9 @@ export {
   sourceRefKinds,
   sourceRefSchema,
   toggledScopeSchema,
+  extractedVerificationMethods,
+  reviewerAttestationError,
+  statedAbsentReasonPrefix,
   verificationMethods,
   waiverRefSchema,
 } from '@/lib/field-registry/schema'
