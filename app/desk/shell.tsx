@@ -9,11 +9,13 @@ export function DeskShell({
   viewer,
   showSignOut,
   current,
+  durable = false,
 }: {
   children: ReactNode
   viewer?: { name: string, role: string, organizationId?: string }
   showSignOut?: boolean
   current?: 'hub' | 'desk'
+  durable?: boolean
 }) {
   return (
     <div className={s.shell}>
@@ -21,14 +23,14 @@ export function DeskShell({
       <header className={s.topbar}>
         <Suspense fallback={
           <div className={s.topbarLeft}>
-            <Link className={s.wordmark} href="/desk">Trace-li</Link>
+            <Link className={s.wordmark} href={durable ? '/hub' : '/desk'}>Trace-li</Link>
             <nav className={s.nav} aria-label="Award assurance">
               <Link href="/hub">Knowledge hub</Link>
-              <Link href="/desk">Award desk</Link>
+              <Link href={durable ? '/hub' : '/desk'}>Award desk</Link>
             </nav>
           </div>
         }>
-          <DeskNav current={current} organizationId={viewer?.organizationId} />
+          <DeskNav current={current} organizationId={viewer?.organizationId} durable={durable} />
         </Suspense>
         <div className={s.topbarMeta}>
           <span>{current === 'hub' ? 'Knowledge hub' : 'Award desk'}</span>

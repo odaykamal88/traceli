@@ -37,6 +37,8 @@ export default function DeskChecklist({
   headingRef,
   onDecision,
   onFreeze,
+  freezeDisabled = false,
+  readOnly = false,
 }: {
   checklist: UploadChecklist
   decisions: ReviewerDecision[]
@@ -45,6 +47,8 @@ export default function DeskChecklist({
   headingRef: RefObject<HTMLHeadingElement | null>
   onDecision: (key: string, patch: Partial<ReviewerDecision>) => void
   onFreeze: () => void
+  freezeDisabled?: boolean
+  readOnly?: boolean
 }) {
   const filterId = useId()
   const [openOnly, setOpenOnly] = useState(false)
@@ -71,7 +75,7 @@ export default function DeskChecklist({
           className={s.primary}
           type="button"
           onClick={onFreeze}
-          disabled={freezing || issues.length > 0}
+          disabled={freezing || issues.length > 0 || freezeDisabled || readOnly}
           aria-busy={freezing}
           data-testid="freeze-checklist"
         >
@@ -134,7 +138,7 @@ export default function DeskChecklist({
                   </div>
                 </dl>
               </div>
-              <fieldset className={s.checklistActions} disabled={freezing}>
+              <fieldset className={s.checklistActions} disabled={freezing || readOnly}>
                 <legend className={s.fieldLabel}>What should this row say?</legend>
                 {reviewerActions.map(action => (
                   <label key={action} className={`${s.radioOption} ${decision.action === action ? s.radioSelected : ''}`}>
@@ -273,7 +277,7 @@ export default function DeskChecklist({
           className={s.primary}
           type="button"
           onClick={onFreeze}
-          disabled={freezing || issues.length > 0}
+          disabled={freezing || issues.length > 0 || freezeDisabled || readOnly}
           aria-busy={freezing}
         >
           {freezing ? 'Working…' : 'Freeze assessment'}

@@ -49,3 +49,11 @@ Sprint 1 implementation is complete and prepared for draft PR review. The three 
 - The browser held stale development components during live edits; a full refresh loaded the final components before the passing interaction checks. This is local synthetic verification, not an authenticated production or live extraction result.
 - Added the hub/continuity regression command to CI. Server/database/production boundaries are unchanged; durable saving is still Sprint 2.
 - End-of-implementation account usage: 26% used / 74% remaining weekly. This is an account-wide observation, not a measured per-agent or per-sprint charge. No reset credit was used.
+
+## Sprint 2 delivery — 27 September 2026
+
+Implemented on a branch stacked on Sprint 1, with GPT-6 Sol (backend), GPT-6 Sol (UI) and GPT-6 Luna (negative tests and verification notes). No additional Astra agent was dispatched. The coordinator integrated API gates, server-record PDF rendering and release checks.
+
+The opt-in path now persists named tenders, exact packet/manual references and draft revisions; incomplete corrections save without becoming issuable. Server issuance and exports reload retained inputs, enforce current permissions, and retain audit/command/export receipts. The browser path is preserved when rollout is disabled. [Verification and activation limits](TENDER_WORKSPACE_SPRINT2_VERIFICATION.md) document actual evidence. Sprint 3 navigation work has not started.
+
+End-of-implementation account usage: 34% used / 66% remaining weekly (27% used at Sprint 2 start). These are account-wide readings, not attributed per-agent charges. No reset credit was used.

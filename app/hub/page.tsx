@@ -5,6 +5,7 @@ import { DeskAccessRequired, DeskShell, DeskUnavailable } from '@/app/desk/shell
 import { openSignedInDesk } from '@/lib/desk/gate'
 import { listDonorPacks } from '@/lib/field-registry/packs'
 import { hubSeedSources, hubSynthesisNote } from '@/lib/hub/library'
+import { tenderWorkspacesEnabled } from '@/lib/tenders/config'
 
 import s from '../desk/desk.module.css'
 import HubUploads from './hub-uploads'
@@ -23,6 +24,7 @@ export default async function HubPage() {
   const gate = await openSignedInDesk()
   if (gate.status === 'unavailable') return <DeskUnavailable />
   if (gate.status === 'denied') return <DeskAccessRequired />
+  const durable = tenderWorkspacesEnabled()
 
   const seeds = listDonorPacks().map(pack => ({
     packId: pack.packId,
@@ -37,20 +39,21 @@ export default async function HubPage() {
       viewer={{ name: gate.viewer.name, role: gate.viewer.role, organizationId: gate.viewer.organizationId }}
       showSignOut={gate.viewer.mode === 'workos'}
       current="hub"
+      durable={durable}
     >
       <div className={s.page}>
         <header className={s.intro}>
           <p className={s.eyebrow}>Before the award</p>
           <h1>Knowledge hub</h1>
-          <p className={s.lede}>
-            Before you open a packet, choose the control source that will judge it. Start from a Trace-li seeded pack. Add your own manuals only if you need them on the record. Then name one tender and freeze a citeable golden thread.
-          </p>
+          <p className={s.lede}>{durable
+            ? 'Start or resume a tender. Choose the public-control pack that will judge its packet, then review and save the checklist before issuing a record.'
+            : 'This workspace saves tender names and desk work in this browser only. Choose a seeded pack, then start a browser tender.'}</p>
           <HubPath current="hub" />
         </header>
         <p className={s.actions}>
           <Link className={s.primary} href="/hub/tender">Start a tender</Link>
         </p>
-        <SavedTenders key={gate.viewer.organizationId} organizationId={gate.viewer.organizationId} packNames={Object.fromEntries(seeds.map(seed => [seed.packId, seed.name]))} />
+        <SavedTenders key={gate.viewer.organizationId} organizationId={gate.viewer.organizationId} packNames={Object.fromEntries(seeds.map(seed => [seed.packId, seed.name]))} durable={durable} />
         <section className={s.section} aria-labelledby="seeded-sources">
           <h2 id="seeded-sources">Start from a Trace-li pack</h2>
           <p className={s.help}>{hubSynthesisNote} One pack drives the freeze.</p>
@@ -62,13 +65,13 @@ export default async function HubPage() {
                 <p>{seed.summary}</p>
                 <p className={s.help}>Version {seed.version}. {seed.ruleCount} deterministic checks.</p>
                 <p className={s.sourceAction}>
-                  <Link className={s.secondary} href={`/desk?pack=${seed.packId}`}>Open on the award desk</Link>
+                  <Link className={s.secondary} href={durable ? '/hub/tender' : `/desk?pack=${seed.packId}`}>{durable ? 'Start a tender' : 'Open on the award desk'}</Link>
                 </p>
               </article>
             ))}
           </div>
         </section>
-        <HubUploads organizationId={gate.viewer.organizationId} />
+        {durable ? <p className={s.help}>Optional manuals can be recorded against a tender after you open it. File bytes are discarded after verification.</p> : <HubUploads organizationId={gate.viewer.organizationId} />}
       </div>
     </DeskShell>
   )
