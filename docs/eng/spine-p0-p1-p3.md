@@ -1,5 +1,9 @@
 # Trace engineering spine: P0, P1, and P3
 
+## Implementation update — 27 September 2026
+
+This 22 September ownership contract predates later implementation. The signed-in `/desk` now maps extraction fragments onto the selected donor pack, runs deterministic judgments and freezes a record; the public Award desk also calls the registry freeze helper. The signed-in path supports human disposition and a pilot PDF, and `/hub` supplies tender context. The “later” mapping/judgment/export steps and “does not call the registry helper” statements below are the original sequence, not current availability. Durable registry persistence remains unfinished. Use [current state](../CURRENT_STATE.md), [the upload desk](workos-upload-desk.md), [extraction adapter](extraction-adapter.md) and [Award desk freeze](award-desk-freeze.md) for current behavior. Ownership boundaries below remain applicable.
+
 Status: contract for the sellable service. 22 September 2026.
 Audience: engineers building Platform Core, Field Registry, and the Rule Library.
 
