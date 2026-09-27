@@ -25,10 +25,10 @@ export const fieldLabelMap: Record<string, string> = {
 }
 
 export const checklistGroups = [
-  { id: 'present', title: 'On file', hint: 'Quoted from the file.' },
-  { id: 'missing', title: 'Missing', hint: 'These items were not found in the file.' },
-  { id: 'stated-absent', title: 'Stated absent in the file', hint: 'The file says this is absent.' },
-  { id: 'negative', title: 'Marked negative', hint: 'The file supports an adverse answer.' },
+  { id: 'present', title: 'On file', hint: 'Recorded as present in this packet.' },
+  { id: 'missing', title: 'Missing', hint: 'Not established by this packet. This does not prove the evidence was absent from the original award file.' },
+  { id: 'stated-absent', title: 'Stated absent in the packet', hint: 'The packet says this is absent.' },
+  { id: 'negative', title: 'Marked negative', hint: 'This packet records an adverse answer.' },
 ] as const
 
 export type ChecklistGroupId = (typeof checklistGroups)[number]['id']

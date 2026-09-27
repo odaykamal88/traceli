@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { CaseCardShell } from '@/components/case-card-shell'
 import { GlossaryText } from '@/components/glossary-text'
 import type { GlossaryId } from '@/lib/case-card-presentation/glossary'
-import { firstSentence, readerFacingText } from '@/lib/case-card-presentation/reader-text'
+import { readerFacingText } from '@/lib/case-card-presentation/reader-text'
 import { listCaseCards } from '@/lib/case-cards/catalog'
 
 const cards = listCaseCards()
@@ -26,7 +26,7 @@ export default function CaseCardsPage() {
         <div className="mx-auto max-w-[1100px]">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2f8876]">Trace-li · pre-signature award assurance</p>
           <h1 className="mt-4 font-display text-5xl leading-none tracking-[-0.03em] sm:text-7xl">Case cards</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-[#52696a]">Each card says what happened, what was missing before signature, and what the checklist shows. A published card is a frozen record. A fixture says so and does not invent hashes.</p>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-[#52696a]">Each card separates the official findings from a Trace-li rehearsal or fixture checklist. Published cards cite a frozen rehearsal record. Fixtures awaiting a freeze are labelled and have no freeze hashes.</p>
         </div>
       </header>
       <div className="px-5 py-12 sm:px-8">
@@ -42,7 +42,7 @@ export default function CaseCardsPage() {
                     <Link href={`/cases/${card.slug}`} className="hover:text-[#1f6f61]">{card.title}</Link>
                   </h2>
                   <p className="mt-3 max-w-2xl text-base leading-7 text-[#52696a]">
-                    <GlossaryText text={readerFacingText(firstSentence(card.lede))} seen={seen} />
+                    <GlossaryText text={readerFacingText(card.lede)} seen={seen} />
                   </p>
                   <p className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
                     <Link href={`/cases/${card.slug}`} className="inline-flex min-h-11 items-center gap-2 text-[#1f6f61]">

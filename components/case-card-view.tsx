@@ -36,7 +36,7 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
   const groups = snapshot ? groupChecklistFields(snapshot.fields, packIds, card.patternTickets) : []
   const checklistNames = card.packsInForce.map(pack => pack.name).join('; ')
   const happened = firstSentence(card.narrative.officialRecord)
-  const missingBeforeSignature = firstSentence(card.narrative.whatWasMissing)
+  const officialFinding = firstSentence(card.narrative.whatWasMissing)
 
   return (
     <article className="px-5 py-10 sm:px-8 sm:py-14">
@@ -45,6 +45,9 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
         <h1 className="mt-3 font-display text-4xl leading-[1.05] tracking-[-0.03em] sm:text-5xl">
           <GlossaryText text={card.title} seen={seen} />
         </h1>
+        <p className="mt-4 text-base leading-7 text-[#52696a]">
+          <Reader text={card.lede} seen={seen} />
+        </p>
 
         <section className="mt-8" aria-labelledby="happened-heading">
           <h2 id="happened-heading" className="text-sm font-semibold text-[#145246]">What happened</h2>
@@ -54,9 +57,9 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
         </section>
 
         <section className="mt-8" aria-labelledby="missing-heading">
-          <h2 id="missing-heading" className="text-sm font-semibold text-[#145246]">What was missing before signature</h2>
+          <h2 id="missing-heading" className="text-sm font-semibold text-[#145246]">What the official record found</h2>
           <p className="mt-2 text-lg leading-8 text-[#24343a]">
-            <Reader text={missingBeforeSignature} seen={seen} />
+            <Reader text={officialFinding} seen={seen} />
           </p>
         </section>
 
