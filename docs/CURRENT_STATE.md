@@ -2,7 +2,11 @@
 
 Reconciled 27 September 2026. This is a dated evidence register, not an instruction to dispatch work. Refresh external state before releasing or selecting a task. Historical reviewed artifacts retain their original bytes and dates.
 
-## Production and source
+## Approved merge follow-up
+
+Later on 27 September, Oday approved merging the four reconciliation pull requests. [#57](https://github.com/odaykamal88/traceli/pull/57), [#60](https://github.com/odaykamal88/traceli/pull/60) and [#61](https://github.com/odaykamal88/traceli/pull/61) are merged into main at `18130e8bc513c0a862b85a4ec26bc831ca8e7132`. This baseline is delivered by [#62](https://github.com/odaykamal88/traceli/pull/62). The combined code passed 17 case-card and 8 pilot-report tests; the main-based cloud-startup branch passed [full CI](https://github.com/odaykamal88/traceli/actions/runs/36328378468). Final production deployment and smoke results are a separate post-merge verification; the deployment observation below is the earlier baseline.
+
+## Production and source — before the approved merges
 
 `www.trace-li.com` serves Vercel deployment `dpl_DBJpaKLEHweCJ9UuokCsV6rx9yvG`, READY, production, created 25 September. Its Git commit is main [`09c8ae2e5300982fba87c52788e6594d61d6a9a3`](https://github.com/odaykamal88/traceli/commit/09c8ae2e5300982fba87c52788e6594d61d6a9a3), the merge of [pilot-report PR #59](https://github.com/odaykamal88/traceli/pull/59). This was confirmed through the authenticated Vercel CLI; the connector alone could not establish it.
 
@@ -16,7 +20,7 @@ Production Trace mode is `workos`. WorkOS and extraction configuration keys are 
 | --- | --- | --- |
 | `/` and `/demo` | Six-week, one-file pilot offer; 52-second film; fictional Award desk, disposition and frozen record | Public fictional request-evidence journey reached verified freeze in the 27 September browser review. |
 | `/method` | Eight fictional evidence/policy/human-review scenarios | No live model calls or real award decisions. |
-| `/login`, `/desk` | Invitation-based WorkOS entry; packet extraction; one selected donor pack; assessment, human disposition and pilot PDF | Live login redirect observed. Authenticated end-to-end journey remains to be verified for this release. |
+| `/login`, `/desk` | Invitation-based WorkOS entry; packet extraction; one selected donor pack; cited reviewer checklist, assessment, human disposition and pilot PDF | Live login redirect observed. Authenticated end-to-end journey remains to be verified for this release. |
 | `/hub`, `/hub/tender` | Tender setup, four seeded packs, optional manual metadata | One selected pack is evaluated. Manual bytes/rules are not retained/compiled. |
 | Field Registry | Typed values and provenance, deterministic checks, present/missing/negative states, snapshot and pack hashes | New desk freezes remain in browser session storage, without durable server records. Hash validation is not server issuance. |
 | `/workspace/trace` | Separate tenant-scoped Postgres workflow with synthetic source versions, decisions and export | Has not converged with the newer upload-desk records. |
@@ -37,15 +41,15 @@ Next readiness work is measured held-out extraction performance, a source-linked
 
 | PR / work | Reconciliation disposition |
 | --- | --- |
-| [#57 Case Card readability](https://github.com/odaykamal88/traceli/pull/57) | Retain the simplified view; correct wording that could turn rehearsal gaps into historical pre-signature facts. Keep the full rehearsal qualification visible. Updated with qualified wording and full ledes; 17 tests, typecheck, production build and desktop browser checks passed. Awaiting merge/release review. |
-| [#60 reviewer checklist](https://github.com/odaykamal88/traceli/pull/60) | Reconcile with current main and the #59 PDF route. Preserve original extraction provenance; use the reviewed snapshot for checks, disposition and PDF. Schema conflict resolved; 61 targeted tests, typecheck and production build passed. Local synthetic correction → freeze → judgment → PDF flow passed. Awaiting merge/release review. |
-| [#61 cloud development](https://github.com/odaykamal88/traceli/pull/61) | Currently based on #60. Automatic database mutation removed from startup; four isolated safety checks passed. No full cloud boot is claimed. Development setup and product readiness are separate. |
+| [#57 Case Card readability](https://github.com/odaykamal88/traceli/pull/57) | Retain the simplified view; correct wording that could turn rehearsal gaps into historical pre-signature facts. Keep the full rehearsal qualification visible. Updated with qualified wording and full ledes; 17 tests, typecheck, production build and desktop browser checks passed. Merged following owner approval; production verification follows the final merge. |
+| [#60 reviewer checklist](https://github.com/odaykamal88/traceli/pull/60) | Reconcile with current main and the #59 PDF route. Preserve original extraction provenance; use the reviewed snapshot for checks, disposition and PDF. Schema conflict resolved; 61 targeted tests, typecheck and production build passed. Local synthetic correction → freeze → judgment → PDF flow passed. Merged following owner approval; production verification follows the final merge. |
+| [#61 cloud development](https://github.com/odaykamal88/traceli/pull/61) | Merged into main after #60, with a clean five-file setup diff. Automatic database mutation removed from startup; four isolated safety checks passed. No full cloud boot is claimed. Development setup and product readiness are separate. |
 | [#29 film source](https://github.com/odaykamal88/traceli/pull/29) | Partially integrated: MP4 is byte-identical to main, but Remotion source/render scripts remain unique. Preserve and reconcile reproducibility work before any closure. |
 | [#20 Actions update](https://github.com/odaykamal88/traceli/pull/20) | Still unique: pnpm/action-setup 6.0.10 → 6.1.0. Keep for routine dependency validation. |
 | [#9 dev dependencies](https://github.com/odaykamal88/traceli/pull/9) | Keep separate: includes TypeScript 5.7.3 → 7.0.2 and Node types 24 → 26. Green old checks alone do not justify a combined upgrade. |
 | [#8 old editorial work](https://github.com/odaykamal88/traceli/pull/8) | Superseded-content candidate after the revised publication in #12; check unique source/approval provenance before closure. |
 
-No row above claims a candidate is deployed or grants publication approval. See the [reconciliation validation record](reconciliation/VALIDATION_2026-09-27.md) for scope and limitations.
+Merged status does not by itself establish production deployment or customer readiness. No row grants separate publication approval. See the [reconciliation validation record](reconciliation/VALIDATION_2026-09-27.md) for scope and limitations.
 
 ## Operating Room and HQ
 
