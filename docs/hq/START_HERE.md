@@ -1,5 +1,9 @@
 # Trace-li HQ operating package
 
+## Current state — 27 September 2026
+
+Read [the current-state register](../CURRENT_STATE.md) before using the historical status below. Production serves main `09c8ae2` (25 September); Field Registry, the signed-in desk/hub and three founder rehearsal freezes were delivered after this handoff. The original Operating Room remains authoritative for tasks and reviews. A fresh read found 56 tasks: 23 done, 9 todo, 13 blocked, 10 awaiting review and 1 doing, with no active claims. All six local desktop schedules are paused. A configured Railway worker is a separate runtime and does not establish that those desks are running. Historical accepted artifacts and pending owner reviews remain intact.
+
 ## 20 September: decision contract continuation
 
 [Continuation and queue recovery](moat/CONTINUATION_2026-09-20.md): M02's shared decision contract, field map, fictional examples and UX/security criteria passed independent Auditor and separate Supervisor internal acceptance. Original task47 is submitted for its own review. M03's first UN Secretariat inventory is partial: official source access403, no retained PDF/hash or admitted rule. Its live task48 closure needs a distinct claim ID after the existing lease expires; the handoff preserves that discrepancy. Current application/database code is unchanged.

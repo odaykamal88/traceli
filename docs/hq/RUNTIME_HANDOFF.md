@@ -1,5 +1,9 @@
 # Trace-li HQ activation and desk handoff
 
+## Current state — 27 September 2026
+
+The activation statements below describe their dated September baseline. Read [the current-state register](../CURRENT_STATE.md) for the reconciled product and operating evidence. All six actual local Codex desk schedules are paused. The fresh Operating Room counts are 56 tasks: 23 done, 9 todo, 13 blocked, 10 awaiting review and 1 doing; no active claims. Preserve review decisions and pauses. A status reconciliation is not a dispatch instruction. The newer Award desk, extraction, Field Registry and published rehearsals do not by themselves close the older source-admission, benchmark, customer-evidence or human-review tasks.
+
 ## 20 September: decision contract continuation
 
 [Continuation and queue recovery](moat/CONTINUATION_2026-09-20.md): M02's shared decision contract, field map, fictional examples and UX/security criteria passed independent Auditor and separate Supervisor internal acceptance. Original task47 is submitted for its own review. M03's first UN Secretariat inventory is partial: official source access403, no retained PDF/hash or admitted rule. Its live task48 closure needs a distinct claim ID after the existing lease expires; the handoff preserves that discrepancy. Current application/database code is unchanged.

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "completed": true,
+  "scope": "Six existing registry state labels Active to Paused; established HQ metadata sync only",
+  "finished_at": "2026-09-27T13:33:24.324929Z",
+  "registry_changes": [
+    {
+      "id": "customer-learning",
+      "before": "Active",
+      "after": "Paused",
+      "verified_at": "2026-09-27T13:32:35.524890Z"
+    },
+    {
+      "id": "editorial-desk",
+      "before": "Active",
+      "after": "Paused",
+      "verified_at": "2026-09-27T13:32:44.730021Z"
+    },
+    {
+      "id": "execution-desk",
+      "before": "Active",
+      "after": "Paused",
+      "verified_at": "2026-09-27T13:32:53.400126Z"
+    },
+    {
+      "id": "funding-watch",
+      "before": "Active",
+      "after": "Paused",
+      "verified_at": "2026-09-27T13:33:02.334223Z"
+    },
+    {
+      "id": "learning-readiness",
+      "before": "Active",
+      "after": "Paused",
+      "verified_at": "2026-09-27T13:33:11.527275Z"
+    },
+    {
+      "id": "security-posture",
+      "before": "Active",
+      "after": "Paused",
+      "verified_at": "2026-09-27T13:33:19.786098Z"
+    }
+  ],
+  "schedules_unchanged": true,
+  "protected_state_unchanged": true,
+  "hq_bridge_acknowledgement": {
+    "status": "synced",
+    "captured_at": "2026-09-27T13:33:23.083Z"
+  },
+  "hosted_hq_parity": "not_independently_verified",
+  "tasks": {
+    "total": 56,
+    "by_status": {
+      "todo": 9,
+      "doing": 1,
+      "done": 23,
+      "blocked": 13,
+      "review": 10
+    },
+    "pending_review_task_ids": [
+      19,
+      23,
+      26,
+      38,
+      44,
+      45,
+      46,
+      47,
+      49,
+      50
+    ]
+  }
+}

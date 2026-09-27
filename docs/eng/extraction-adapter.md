@@ -7,7 +7,7 @@ Ownership: [spine-p0-p1-p3.md](./spine-p0-p1-p3.md).
 
 Extraction is rented. The Field Registry, the Rule library, and freeze stay Trace IP.
 
-A vendor may read a PDF, spreadsheet, or message. Trace keeps the normalized `Fragment` and the registry field that a person can freeze. Rules never import a Talonic type. `freezeAtJudgment` never sees file bytes or a vendor payload. Award desk is not wired to this adapter.
+A vendor may read a PDF, spreadsheet, or message. Trace keeps the normalized `Fragment` and the registry field that a person can freeze. Rules never import a Talonic type. `freezeAtJudgment` never sees file bytes or a vendor payload. The signed-in `/desk` uses this adapter; the public `/demo` remains a scripted fictional walkthrough.
 
 ## Buy versus build
 
@@ -100,7 +100,7 @@ TRACE_TALONIC_API_KEY=...
 TRACE_TALONIC_BASE_URL=https://api.talonic.com/v1
 ```
 
-Production project `traceli-new` already has the Talonic key and base URL. This change does not edit Vercel env vars. After this pull request is merged, the founder sets Production `TRACE_EXTRACTION_PROVIDER` to `talonic`. Until that flip, Production keeps the mock.
+Production selection must be read from dated runtime/configuration evidence. The 27 September check confirms that `traceli-new` has the provider-setting and credential keys, but Vercel does not return the sensitive provider value. Its effective selection remains unverified in that check. The code default and old enablement instructions are not evidence that production uses the mock. See [current state](../CURRENT_STATE.md). Changing the setting to `talonic` sends uploaded files to the provider and must stay within the agreed data and spending scope.
 
 ### Assumptions to confirm against the live API
 
