@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# One-time repository bootstrap for the Traceli Cloud Agent environment.
-# Idempotent: safe to run repeatedly and against cached/snapshotted state.
+# Install the runtime and dependencies for the Traceli Cloud Agent environment.
+# Database setup is an explicit, separate task; existing env files are preserved.
 set -euo pipefail
 
-export DEBIAN_FRONTEND=noninteractive
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -37,32 +36,7 @@ hash -r || true
 corepack enable >/dev/null 2>&1 || true
 echo "Node: $(node -v)"
 
-# --- PostgreSQL 16 ----------------------------------------------------------
-PGBIN=/usr/lib/postgresql/16/bin
-if [ ! -x "$PGBIN/initdb" ]; then
-  sudo apt-get update -qq
-  sudo apt-get install -y -qq --no-install-recommends postgresql-16 postgresql-client-16
-fi
-
-PGDATA="$HOME/traceli-pgdata"
-if [ ! -f "$PGDATA/PG_VERSION" ]; then
-  "$PGBIN/initdb" -D "$PGDATA" -U postgres --auth=trust >/dev/null
-fi
-
 # --- Application dependencies ----------------------------------------------
 corepack pnpm install --frozen-lockfile
 
-# --- Local development env file (fictional, non-production loopback DB) ------
-# Real WorkOS/database secrets belong only in .env.local or the deployment
-# environment; this file only wires up the local demo Postgres cluster.
-if [ ! -f .env.local ]; then
-  cat > .env.local <<'ENVEOF'
-# Local Cloud Agent development environment (non-production, fictional data only).
-DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/traceli_agent_demo"
-DATABASE_URL_UNPOOLED="postgres://postgres:postgres@127.0.0.1:5432/traceli_agent_demo"
-TRACELI_SEED_ORGANIZATION_ID="org_traceli_relief"
-ENVEOF
-  echo "Created .env.local with local demo database configuration."
-fi
-
-echo "Traceli install complete."
+echo "Traceli dependencies installed. Database setup is not part of cloud startup."
