@@ -1,0 +1,469 @@
+{
+  "file": "gf-02-moz-lab-reagents-tender.pdf",
+  "packId": "global-fund",
+  "packVersion": "2026.2",
+  "packName": "Global Fund Grant Regulations v1",
+  "sha256": "b919c781d16225394436d1d93469a135e2dd2c896801feb9bd6f4946c23cd581",
+  "pages": 25,
+  "title": "Procurement file: laboratory reagents and consumables for viral load testing, national open tender",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "integrity.coi_disclosed",
+      "description": "Evaluation policy extract requires signed COI declarations; none are evidenced."
+    },
+    {
+      "kind": "template-placeholder-date",
+      "key": "idd.screen_date",
+      "description": "Annex D blank IDD request form shows \"Date of screening: DD/MM/YYYY (e.g. 15/01/2025)\"; this is not a screen date."
+    }
+  ],
+  "fields": {
+    "eligibility.contractor_capable": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 5,
+      "quote": "Post-qualification confirmed that Tavira Diagnostics Lda holds a valid distribution licence, has delivered comparable volumes to two national programmes in the last three years, and has a cold-chain warehouse in Beira.",
+      "note": "Ability to perform affirmed through post-qualification.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Contractor ability to perform must be affirmed",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "integrity.coi_disclosed": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The policy extract states that evaluators must sign declarations of impartiality and absence of conflict of interest, but no signed declarations or disclosure statement appear anywhere in the file.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Conflict of interest disclosure required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "procurement.competitive_or_exempt": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "The requirement was procured through national open competitive tendering, with both lots open to all eligible bidders.",
+      "note": "Competitive.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Award must be competitive or an established exemption",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "procurement.competition_or_exemption_documented": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Tender dossier, bid opening record and evaluation report filed under PSM/2026/LAB-07",
+      "page": 4,
+      "quote": "The tender dossier, the bid opening record and the evaluation committee report are filed in this procurement file under reference PSM/2026/LAB-07.",
+      "note": "Competition record.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Competition or sole-source exemption documentation required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Tender dossier, bid opening record and evaluation report filed under PSM/2026/LAB-07"
+      }
+    },
+    "procurement.solicitation_notified": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Invitation published 2 March 2026 in Noticias and on the national procurement portal; bids due 1 April 2026",
+      "page": 4,
+      "quote": "The invitation to bid was published on 2 March 2026 in the daily newspaper Noticias and on the national public procurement portal, and bids were due on 1 April 2026 at 10:00.",
+      "note": "Solicitation notice with channels and dates.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Bid solicitation notice to prospective bidders",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Invitation published 2 March 2026 in Noticias and on the national procurement portal; bids due 1 April 2026"
+      }
+    },
+    "documentation.award_rationale_on_file": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "The award recommendation memorandum referred to in paragraph 7 of the evaluation report is not on file, and the report itself does not record why the two lower-priced Lot 1 bids were set aside beyond the table above.",
+      "note": "Explicit statement that the award rationale memo is not on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Award rationale documentation required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The award recommendation memorandum referred to in paragraph 7 of the evaluation report is not on file, and the report itself does not record why the two lower-priced Lot 1 bids were set aside beyond the table above."
+      }
+    },
+    "award.contract_value_usd": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": 2317452.8,
+      "page": 5,
+      "quote": "US$ 2,317,452.80 (Lot 1 US$ 1,902,318.40; Lot 2 US$ 415,134.40), DAP central medical store",
+      "note": "Contract value in USD.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Contract value must be on the registry",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": 2317452.8
+      }
+    },
+    "threshold.method_aligned": {
+      "state": "negative",
+      "statedAbsent": false,
+      "value": false,
+      "page": 4,
+      "quote": "At an estimated value of US$ 2.41 million, the requirement exceeded the US$ 1,500,000 ceiling above which the IZSC procurement manual requires international competitive tendering, so the national method used was not the method required for this value.",
+      "note": "Adverse fact: method below the one required by the threshold (negative false). Not phrased as a missing document.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Procurement method must align with value threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "sr.selection_documented": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 6,
+      "quote": "No sub-recipient is involved in this procurement; the PR procures and distributes the goods directly.",
+      "note": "Stated not applicable / absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Sub-recipient selection process documented",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No sub-recipient is involved in this procurement; the PR procures and distributes the goods directly."
+      }
+    },
+    "sr.capacity_assessed": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable to a goods procurement and not mentioned; genuinely absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Sub-recipient capacity assessment on file",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "sr.written_agreement_on_file": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not applicable to a goods procurement and not mentioned; genuinely absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Written sub-recipient agreement required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Tavira Diagnostics Lda",
+      "page": 6,
+      "quote": "Tavira Diagnostics Lda, commercial registration 100874412, Beira",
+      "note": "Subject.",
+      "rule": {
+        "kind": "required_present",
+        "title": "IDD subject organization or individual required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Tavira Diagnostics Lda"
+      }
+    },
+    "idd.subject_kind": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "organization",
+      "page": 6,
+      "quote": "Company (legal entity)",
+      "note": "Company = organization token.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD subject must be recorded as an organization or an individual",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "organization"
+      }
+    },
+    "idd.subject_role": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "supplier",
+      "page": 6,
+      "quote": "Supplier of goods under tender PSM/2026/LAB-07",
+      "note": "supplier.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD subject role required (SR, supplier, signatory, or key personnel)",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "supplier"
+      }
+    },
+    "idd.affiliated_persons": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The introduction mentions shareholders and the managing director as in scope, but no list of affiliated persons with roles is given.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Affiliated and key persons, with roles, required on the IDD record",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "un ofac us-state switzerland debarment ineligibility",
+      "page": 6,
+      "quote": "Scope codes attested by the provider: un, ofac, us-state, switzerland, debarment, ineligibility.",
+      "note": "Scope given with the canonical tokens.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Restrictive Measures scope must attest UN, OFAC, US State, Switzerland, and debarment",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "un ofac us-state switzerland debarment ineligibility"
+      }
+    },
+    "idd.screen_date": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Only the template placeholder in Annex D carries a date (example date in the blank form). The completed screen date is never given.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive Measures screen date required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "template-placeholder-date"
+    },
+    "idd.list_vintage": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Lists as downloaded 28 April 2026 (provider dataset release 2026-04-27)",
+      "page": 6,
+      "quote": "The provider states that the lists were downloaded on 28 April 2026 from its dataset release of 27 April 2026.",
+      "note": "List vintage.",
+      "rule": {
+        "kind": "required_present",
+        "title": "List vintage cited by the screening evidence is required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Lists as downloaded 28 April 2026 (provider dataset release 2026-04-27)"
+      }
+    },
+    "idd.screen_modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "gf_preapproved_vendor",
+      "page": 6,
+      "quote": "External due diligence firm on the Global Fund list of pre-approved providers",
+      "note": "GF pre-approved vendor modality.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD modality must be in-house, a Global Fund pre-approved vendor, or other",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "gf_preapproved_vendor"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "potential_match",
+      "page": 6,
+      "quote": "The provider reported one potential match: a shareholder of the supplier shares a full name with an individual on the OFAC list.",
+      "note": "Non-clear result.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "IDD result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "potential_match"
+      }
+    },
+    "idd.screen_timing": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No attestation that the screen was run before engagement or as a grant-cycle re-run.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Screen must be attested before engagement or as the grant-cycle re-run",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "NDC-2026-0917",
+      "page": 6,
+      "quote": "Provider report NDC-2026-0917",
+      "note": "Evidence reference.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Screening evidence reference required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "NDC-2026-0917"
+      }
+    },
+    "idd.disposition_owner": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No named owner or function is recorded for the disposition of the potential match, although the result is non-clear.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear Restrictive Measures result needs a disposition owner",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "select",
+      "page": 6,
+      "quote": "Decision: select — the potential match was discounted after the shareholder provided a passport copy showing a different date of birth and nationality.",
+      "note": "Decision token select.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "select"
+      }
+    },
+    "idd.disposition_rationale": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Different date of birth and nationality from the listed individual (passport copy)",
+      "page": 6,
+      "quote": "The rationale recorded is that the listed individual was born in 1961 and holds a different nationality, whereas the shareholder was born in 1984.",
+      "note": "Rationale.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear Restrictive Measures result needs a disposition rationale",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Different date of birth and nationality from the listed individual (passport copy)"
+      }
+    },
+    "idd.gf_notification": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 6,
+      "quote": "The potential match and its disposition have not been communicated to the Global Fund Country Team.",
+      "note": "Explicitly not communicated. Rule gf_idd_hit_communicable would fire (result is non-clear).",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "Restrictive Measures findings must be communicable to the Global Fund",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The potential match and its disposition have not been communicated to the Global Fund Country Team."
+      }
+    }
+  }
+}

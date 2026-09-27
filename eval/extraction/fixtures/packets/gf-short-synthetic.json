@@ -1,0 +1,217 @@
+{
+  "file": "gf-short-synthetic.pdf",
+  "packId": "global-fund",
+  "packVersion": "2026.2",
+  "sha256": "3d107f98d4e176f4f1ebc4c83482e2a31c5452f38bffbba8ce2095eb7ef05d17",
+  "pages": 2,
+  "fields": {
+    "eligibility.contractor_capable": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 1,
+      "quote": "The contractor is able to perform the health-product distribution described in this solicitation.",
+      "note": "The packet affirms the contractor can perform. The control is boolean true."
+    },
+    "integrity.coi_disclosed": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 1,
+      "quote": "No conflict of interest disclosure on file.",
+      "note": "Boolean control expected true. The packet states the disclosure is absent."
+    },
+    "procurement.competitive_or_exempt": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 1,
+      "quote": "A competitive award or an established exemption is on file for this purchase.",
+      "note": "The packet states a competitive award or established exemption is on file."
+    },
+    "procurement.competition_or_exemption_documented": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "procurement.solicitation_notified": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "The solicitation was advertised on the national procurement portal on 2 February 2026.",
+      "page": 1,
+      "quote": "The solicitation was advertised on the national procurement portal on 2 February 2026.",
+      "note": "Stated in ordinary prose. A correct extract stores that sentence."
+    },
+    "documentation.award_rationale_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "The evaluation panel recorded the award rationale in the bid report dated 12 March 2026.",
+      "page": 1,
+      "quote": "The evaluation panel recorded the award rationale in the bid report dated 12 March 2026.",
+      "note": "Stated in ordinary prose. A correct extract stores that sentence."
+    },
+    "award.contract_value_usd": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "The contract value is USD 184000.",
+      "page": 1,
+      "quote": "The contract value is USD 184000.",
+      "note": "The amount is stated. A correct extract stores the sentence, not a bare number."
+    },
+    "threshold.method_aligned": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "sr.selection_documented": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "sr.capacity_assessed": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 2,
+      "quote": "The sub-recipient capacity assessment was not completed before signature.",
+      "note": "The packet says the assessment was not completed."
+    },
+    "sr.written_agreement_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "A signed sub-recipient agreement is attached as Annex B.",
+      "page": 2,
+      "quote": "A signed sub-recipient agreement is attached as Annex B.",
+      "note": "Stated in ordinary prose. A correct extract stores that sentence."
+    },
+    "idd.subject": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.subject_kind": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.subject_role": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.affiliated_persons": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.screen_scope": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.screen_date": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.list_vintage": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.screen_modality": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "clear",
+      "page": 2,
+      "quote": "Restrictive-measures result: clear.",
+      "note": "The packet states a clear restrictive-measures result."
+    },
+    "idd.screen_timing": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.evidence_ref": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.disposition_owner": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.disposition_rationale": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.gf_notification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    }
+  }
+}

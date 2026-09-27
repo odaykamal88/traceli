@@ -5,7 +5,7 @@ import { hashJson, verifyFrozenRecord } from '../../lib/field-registry/freeze.ts
 import { awardRegistrySnapshotSchema } from '../../lib/field-registry/schema.ts'
 import { DeskReviewError } from '../../lib/desk/review-apply.ts'
 import { decisionsForRows } from '../../lib/desk/review.ts'
-import { freezeReviewedPacket, freezeUploadedPacket, prepareUploadChecklist } from '../../lib/desk/freeze-upload.ts'
+import { DeskAccessError, freezeReviewedPacket, freezeUploadedPacket, prepareUploadChecklist } from '../../lib/desk/freeze-upload.ts'
 
 const secret = 'SECRET_FILE_BYTES_SHOULD_NOT_LEAK'
 const secretBytes = new TextEncoder().encode(secret)
@@ -224,4 +224,36 @@ test('the checklist route does not freeze, and freeze records the session review
     }),
   }))
   assert.equal(refused.status, 400)
+  const foreignOrigin = await postFreeze(new Request('http://127.0.0.1/api/desk/freeze', {
+    method: 'POST',
+    headers: { host: '127.0.0.1', origin: 'https://example.org', 'content-type': 'application/json' },
+    body: JSON.stringify({ checklist, decisions: [] }),
+  }))
+  assert.equal(foreignOrigin.status, 403)
+})
+
+test('reviewed freeze rejects a foreign organization, unknown role, or inconsistent snapshot', async () => {
+  const { checklist } = await packet()
+  assert.throws(() => freezeReviewedPacket({
+    checklist,
+    decisions: [],
+    ...actor,
+    organizationId: 'org_other',
+    frozenAt,
+  }), DeskAccessError)
+  assert.throws(() => freezeReviewedPacket({
+    checklist,
+    decisions: [],
+    ...actor,
+    actorRole: 'Visitor',
+    frozenAt,
+  }), DeskAccessError)
+  const altered = structuredClone(checklist)
+  altered.snapshot.fields[0].value = { state: 'present', value: true }
+  assert.throws(() => freezeReviewedPacket({
+    checklist: altered,
+    decisions: [],
+    ...actor,
+    frozenAt,
+  }), DeskReviewError)
 })

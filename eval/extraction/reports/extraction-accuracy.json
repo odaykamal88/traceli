@@ -1,0 +1,2959 @@
+{
+  "pipelineVersion": "trace-v4",
+  "mode": "cached",
+  "overall": {
+    "keys": 77,
+    "stateCorrect": 68,
+    "present": 12,
+    "presentFound": 3,
+    "falseMissing": 9,
+    "presentOther": 0,
+    "notPresent": 65,
+    "falsePresent": 0,
+    "statedAbsent": 7,
+    "statedAbsentDetected": 5,
+    "notStatedAbsent": 70,
+    "falseStatedAbsent": 0,
+    "valueGiven": 14,
+    "valueMatched": 5,
+    "pageGiven": 19,
+    "pageMatched": 8,
+    "quoteGiven": 19,
+    "quoteMatched": 7,
+    "keysRead": 8,
+    "stateAccuracy": 0.8831168831168831,
+    "presentRecall": 0.25,
+    "falseMissingRate": 0.75,
+    "falsePresentRate": 0,
+    "statedAbsentDetection": 0.7142857142857143,
+    "statedAbsentFalseRate": 0,
+    "valueMatch": 0.35714285714285715,
+    "pageMatch": 0.42105263157894735,
+    "quoteMatch": 0.3684210526315789,
+    "keysReadRate": 0.1038961038961039
+  },
+  "packs": [
+    {
+      "label": "global-fund",
+      "metrics": {
+        "keys": 26,
+        "stateCorrect": 22,
+        "present": 7,
+        "presentFound": 3,
+        "falseMissing": 4,
+        "presentOther": 0,
+        "notPresent": 19,
+        "falsePresent": 0,
+        "statedAbsent": 2,
+        "statedAbsentDetected": 1,
+        "notStatedAbsent": 24,
+        "falseStatedAbsent": 0,
+        "valueGiven": 8,
+        "valueMatched": 4,
+        "pageGiven": 9,
+        "pageMatched": 4,
+        "quoteGiven": 9,
+        "quoteMatched": 4,
+        "keysRead": 4,
+        "stateAccuracy": 0.8461538461538461,
+        "presentRecall": 0.42857142857142855,
+        "falseMissingRate": 0.5714285714285714,
+        "falsePresentRate": 0,
+        "statedAbsentDetection": 0.5,
+        "statedAbsentFalseRate": 0,
+        "valueMatch": 0.5,
+        "pageMatch": 0.4444444444444444,
+        "quoteMatch": 0.4444444444444444,
+        "keysReadRate": 0.15384615384615385
+      }
+    },
+    {
+      "label": "ocha-cbpf",
+      "metrics": {
+        "keys": 24,
+        "stateCorrect": 19,
+        "present": 5,
+        "presentFound": 0,
+        "falseMissing": 5,
+        "presentOther": 0,
+        "notPresent": 19,
+        "falsePresent": 0,
+        "statedAbsent": 1,
+        "statedAbsentDetected": 0,
+        "notStatedAbsent": 23,
+        "falseStatedAbsent": 0,
+        "valueGiven": 5,
+        "valueMatched": 0,
+        "pageGiven": 6,
+        "pageMatched": 0,
+        "quoteGiven": 6,
+        "quoteMatched": 0,
+        "keysRead": 0,
+        "stateAccuracy": 0.7916666666666666,
+        "presentRecall": 0,
+        "falseMissingRate": 1,
+        "falsePresentRate": 0,
+        "statedAbsentDetection": 0,
+        "statedAbsentFalseRate": 0,
+        "valueMatch": 0,
+        "pageMatch": 0,
+        "quoteMatch": 0,
+        "keysReadRate": 0
+      }
+    },
+    {
+      "label": "unfpa",
+      "metrics": {
+        "keys": 27,
+        "stateCorrect": 27,
+        "present": 0,
+        "presentFound": 0,
+        "falseMissing": 0,
+        "presentOther": 0,
+        "notPresent": 27,
+        "falsePresent": 0,
+        "statedAbsent": 4,
+        "statedAbsentDetected": 4,
+        "notStatedAbsent": 23,
+        "falseStatedAbsent": 0,
+        "valueGiven": 1,
+        "valueMatched": 1,
+        "pageGiven": 4,
+        "pageMatched": 4,
+        "quoteGiven": 4,
+        "quoteMatched": 3,
+        "keysRead": 4,
+        "stateAccuracy": 1,
+        "presentRecall": null,
+        "falseMissingRate": null,
+        "falsePresentRate": 0,
+        "statedAbsentDetection": 1,
+        "statedAbsentFalseRate": 0,
+        "valueMatch": 1,
+        "pageMatch": 1,
+        "quoteMatch": 0.75,
+        "keysReadRate": 0.14814814814814814
+      }
+    }
+  ],
+  "splits": null,
+  "files": [
+    {
+      "file": "gf-short-synthetic.pdf",
+      "packId": "global-fund",
+      "packVersion": "2026.2",
+      "sha256": "3d107f98d4e176f4f1ebc4c83482e2a31c5452f38bffbba8ce2095eb7ef05d17",
+      "pages": 2,
+      "split": "train",
+      "responseSource": "fixture",
+      "metrics": {
+        "keys": 26,
+        "stateCorrect": 22,
+        "present": 7,
+        "presentFound": 3,
+        "falseMissing": 4,
+        "presentOther": 0,
+        "notPresent": 19,
+        "falsePresent": 0,
+        "statedAbsent": 2,
+        "statedAbsentDetected": 1,
+        "notStatedAbsent": 24,
+        "falseStatedAbsent": 0,
+        "valueGiven": 8,
+        "valueMatched": 4,
+        "pageGiven": 9,
+        "pageMatched": 4,
+        "quoteGiven": 9,
+        "quoteMatched": 4,
+        "keysRead": 4,
+        "stateAccuracy": 0.8461538461538461,
+        "presentRecall": 0.42857142857142855,
+        "falseMissingRate": 0.5714285714285714,
+        "falsePresentRate": 0,
+        "statedAbsentDetection": 0.5,
+        "statedAbsentFalseRate": 0,
+        "valueMatch": 0.5,
+        "pageMatch": 0.4444444444444444,
+        "quoteMatch": 0.4444444444444444,
+        "keysReadRate": 0.15384615384615385
+      },
+      "misses": [
+        {
+          "key": "procurement.solicitation_notified",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The solicitation was advertised on the national procurement portal on 2 February 2026.",
+            "page": 1,
+            "quote": "The solicitation was advertised on the national procurement portal on 2 February 2026."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "documentation.award_rationale_on_file",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The evaluation panel recorded the award rationale in the bid report dated 12 March 2026.",
+            "page": 1,
+            "quote": "The evaluation panel recorded the award rationale in the bid report dated 12 March 2026."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "award.contract_value_usd",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The contract value is USD 184000.",
+            "page": 1,
+            "quote": "The contract value is USD 184000."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "sr.capacity_assessed",
+          "falseMissing": false,
+          "falsePresent": false,
+          "statedAbsentMiss": true,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 2,
+            "quote": "The sub-recipient capacity assessment was not completed before signature."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "sr.written_agreement_on_file",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "A signed sub-recipient agreement is attached as Annex B.",
+            "page": 2,
+            "quote": "A signed sub-recipient agreement is attached as Annex B."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        }
+      ],
+      "keys": [
+        {
+          "key": "eligibility.contractor_capable",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": true,
+          "pageMatch": true,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": true,
+            "page": 1,
+            "quote": "The contractor is able to perform the health-product distribution described in this solicitation."
+          },
+          "predicted": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": true,
+            "page": 1
+          }
+        },
+        {
+          "key": "integrity.coi_disclosed",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": true,
+          "pageMatch": true,
+          "gold": {
+            "state": "negative",
+            "statedAbsent": true,
+            "value": false,
+            "page": 1,
+            "quote": "No conflict of interest disclosure on file."
+          },
+          "predicted": {
+            "state": "negative",
+            "statedAbsent": true,
+            "value": false,
+            "page": 1
+          }
+        },
+        {
+          "key": "procurement.competitive_or_exempt",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": true,
+          "pageMatch": true,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": true,
+            "page": 1,
+            "quote": "A competitive award or an established exemption is on file for this purchase."
+          },
+          "predicted": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": true,
+            "page": 1
+          }
+        },
+        {
+          "key": "procurement.competition_or_exemption_documented",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "procurement.solicitation_notified",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The solicitation was advertised on the national procurement portal on 2 February 2026.",
+            "page": 1,
+            "quote": "The solicitation was advertised on the national procurement portal on 2 February 2026."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "documentation.award_rationale_on_file",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The evaluation panel recorded the award rationale in the bid report dated 12 March 2026.",
+            "page": 1,
+            "quote": "The evaluation panel recorded the award rationale in the bid report dated 12 March 2026."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "award.contract_value_usd",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The contract value is USD 184000.",
+            "page": 1,
+            "quote": "The contract value is USD 184000."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "threshold.method_aligned",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "sr.selection_documented",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "sr.capacity_assessed",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": false,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 2,
+            "quote": "The sub-recipient capacity assessment was not completed before signature."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "sr.written_agreement_on_file",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "A signed sub-recipient agreement is attached as Annex B.",
+            "page": 2,
+            "quote": "A signed sub-recipient agreement is attached as Annex B."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.subject",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.subject_kind",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.subject_role",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.affiliated_persons",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_scope",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_date",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.list_vintage",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_modality",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_result",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": true,
+          "pageMatch": true,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "clear",
+            "page": 2,
+            "quote": "Restrictive-measures result: clear."
+          },
+          "predicted": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "clear",
+            "page": 2
+          }
+        },
+        {
+          "key": "idd.screen_timing",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.evidence_ref",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.disposition_owner",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.disposition_decision",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.disposition_rationale",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.gf_notification",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "file": "ocha-short-synthetic.pdf",
+      "packId": "ocha-cbpf",
+      "packVersion": "2026.1",
+      "sha256": "e1f174b47dd90380d6050f2014e897148c4aaac5322f92cc3d8662c43b05e4f7",
+      "pages": 2,
+      "split": "train",
+      "responseSource": "fixture",
+      "metrics": {
+        "keys": 24,
+        "stateCorrect": 19,
+        "present": 5,
+        "presentFound": 0,
+        "falseMissing": 5,
+        "presentOther": 0,
+        "notPresent": 19,
+        "falsePresent": 0,
+        "statedAbsent": 1,
+        "statedAbsentDetected": 0,
+        "notStatedAbsent": 23,
+        "falseStatedAbsent": 0,
+        "valueGiven": 5,
+        "valueMatched": 0,
+        "pageGiven": 6,
+        "pageMatched": 0,
+        "quoteGiven": 6,
+        "quoteMatched": 0,
+        "keysRead": 0,
+        "stateAccuracy": 0.7916666666666666,
+        "presentRecall": 0,
+        "falseMissingRate": 1,
+        "falsePresentRate": 0,
+        "statedAbsentDetection": 0,
+        "statedAbsentFalseRate": 0,
+        "valueMatch": 0,
+        "pageMatch": 0,
+        "quoteMatch": 0,
+        "keysReadRate": 0
+      },
+      "misses": [
+        {
+          "key": "partner.due_diligence_passed",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": true,
+            "page": 1,
+            "quote": "Partner due diligence was completed and recorded as satisfactory before this allocation."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "allocation.modality",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "reserve",
+            "page": 1,
+            "quote": "The allocation in this file is a reserve allocation for a sudden-onset response."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "allocation.strategy_on_file",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The humanitarian country team filed the allocation strategy with the reserve criteria attached.",
+            "page": 1,
+            "quote": "The humanitarian country team filed the allocation strategy with the reserve criteria attached."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "selection.scorecard_or_alternative",
+          "falseMissing": false,
+          "falsePresent": false,
+          "statedAbsentMiss": true,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 2,
+            "quote": "A scorecard was not placed on the file."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "selection.committee_decision",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The review committee recommended Partner C on 4 April 2026 after reading the project proposal.",
+            "page": 2,
+            "quote": "The review committee recommended Partner C on 4 April 2026 after reading the project proposal."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        },
+        {
+          "key": "onegms.project_status",
+          "falseMissing": true,
+          "falsePresent": false,
+          "statedAbsentMiss": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "OneGMS shows the project as under review.",
+            "page": 2,
+            "quote": "OneGMS shows the project as under review."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          }
+        }
+      ],
+      "keys": [
+        {
+          "key": "partner.due_diligence_passed",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": true,
+            "page": 1,
+            "quote": "Partner due diligence was completed and recorded as satisfactory before this allocation."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "partner.capacity_assessment",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "partner.annex7_declarations",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "allocation.modality",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "reserve",
+            "page": 1,
+            "quote": "The allocation in this file is a reserve allocation for a sudden-onset response."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "allocation.preselection_justification",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "allocation.strategy_on_file",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The humanitarian country team filed the allocation strategy with the reserve criteria attached.",
+            "page": 1,
+            "quote": "The humanitarian country team filed the allocation strategy with the reserve criteria attached."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "selection.scorecard_or_alternative",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": false,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 2,
+            "quote": "A scorecard was not placed on the file."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "selection.committee_decision",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "The review committee recommended Partner C on 4 April 2026 after reading the project proposal.",
+            "page": 2,
+            "quote": "The review committee recommended Partner C on 4 April 2026 after reading the project proposal."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "selection.recommendation_differs",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "selection.mismatch_note",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "grant.agreement_complete",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "grant.budget_template",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "grant.consortium_controls",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "misconduct.annex8_path",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "misconduct.annex9_notification",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "misconduct.oios_notification_path",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "misconduct.secretariat_sanctions_regime",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "onegms.project_status",
+          "stateMatch": false,
+          "falseMissing": true,
+          "falsePresent": false,
+          "valueMatch": false,
+          "pageMatch": false,
+          "gold": {
+            "state": "present",
+            "statedAbsent": false,
+            "value": "OneGMS shows the project as under review.",
+            "page": 2,
+            "quote": "OneGMS shows the project as under review."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "onegms.selection_record",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.subject",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_scope",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_result",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.evidence_ref",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.disposition_decision",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "file": "unfpa-ia-2025-29-sudan-rehearsal.pdf",
+      "packId": "unfpa",
+      "packVersion": "2026.1",
+      "sha256": "be80723e5df1013dfc8c9244bdcc342742db769dabab254ae0d4ddd8e93ad7d2",
+      "pages": 2,
+      "split": "train",
+      "responseSource": "fixture",
+      "metrics": {
+        "keys": 27,
+        "stateCorrect": 27,
+        "present": 0,
+        "presentFound": 0,
+        "falseMissing": 0,
+        "presentOther": 0,
+        "notPresent": 27,
+        "falsePresent": 0,
+        "statedAbsent": 4,
+        "statedAbsentDetected": 4,
+        "notStatedAbsent": 23,
+        "falseStatedAbsent": 0,
+        "valueGiven": 1,
+        "valueMatched": 1,
+        "pageGiven": 4,
+        "pageMatched": 4,
+        "quoteGiven": 4,
+        "quoteMatched": 3,
+        "keysRead": 4,
+        "stateAccuracy": 1,
+        "presentRecall": null,
+        "falseMissingRate": null,
+        "falsePresentRate": 0,
+        "statedAbsentDetection": 1,
+        "statedAbsentFalseRate": 0,
+        "valueMatch": 1,
+        "pageMatch": 1,
+        "quoteMatch": 0.75,
+        "keysReadRate": 0.14814814814814814
+      },
+      "misses": [],
+      "keys": [
+        {
+          "key": "ip.competitive_or_waiver",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "ip.waiver_or_competition_documented",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "ip.threshold_approver",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": true,
+          "pageMatch": true,
+          "gold": {
+            "state": "negative",
+            "statedAbsent": true,
+            "value": false,
+            "page": 1,
+            "quote": "No Regional Director approval is on file."
+          },
+          "predicted": {
+            "state": "negative",
+            "statedAbsent": true,
+            "value": false,
+            "page": 1
+          }
+        },
+        {
+          "key": "ip.unpp_profile",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "ip.hact_micro_assessment",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "ip.psea_assessment",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "procurement.plan_line",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "procurement.method_vs_threshold",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "procurement.crc_gate",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "procurement.contract_split_checked",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "procurement.rfq_criteria_and_scores",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": true,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 1,
+            "quote": "RFQ evaluation criteria in the solicitation: none listed."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 1
+          }
+        },
+        {
+          "key": "procurement.po_or_contract",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": true,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 1,
+            "quote": "No approved purchase order was issued before the goods were received, and no signed contract is on file."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 1
+          }
+        },
+        {
+          "key": "procurement.rir",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": true,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 2,
+            "quote": "Receiving and inspection report (RIR): no policy-compliant RIR is on file."
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": true,
+            "value": null,
+            "page": 2
+          }
+        },
+        {
+          "key": "procurement.lta_rate_reconciliation",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "integrity.coi_declared",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "integrity.related_party_checked",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "payment.face_workplan_link",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "payment.commodity_lines",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.subject",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.subject_kind",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_scope",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_date",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.screen_result",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.evidence_ref",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.vrc_iprc_status",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.clearcheck_where_personnel",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        },
+        {
+          "key": "idd.disposition_decision",
+          "stateMatch": true,
+          "falseMissing": false,
+          "falsePresent": false,
+          "valueMatch": null,
+          "pageMatch": null,
+          "gold": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null,
+            "quote": null
+          },
+          "predicted": {
+            "state": "missing",
+            "statedAbsent": false,
+            "value": null,
+            "page": null
+          }
+        }
+      ]
+    }
+  ],
+  "confusion": [
+    {
+      "packId": "global-fund",
+      "key": "eligibility.contractor_capable",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "present->present": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "integrity.coi_disclosed",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "negative->negative": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "procurement.competitive_or_exempt",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "present->present": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "procurement.competition_or_exemption_documented",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "procurement.solicitation_notified",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "documentation.award_rationale_on_file",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "award.contract_value_usd",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "threshold.method_aligned",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "sr.selection_documented",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "sr.capacity_assessed",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "sr.written_agreement_on_file",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.subject",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.subject_kind",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.subject_role",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.affiliated_persons",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.screen_scope",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.screen_date",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.list_vintage",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.screen_modality",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.screen_result",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "present->present": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.screen_timing",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.evidence_ref",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.disposition_owner",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.disposition_decision",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.disposition_rationale",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "global-fund",
+      "key": "idd.gf_notification",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "partner.due_diligence_passed",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "partner.capacity_assessment",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "partner.annex7_declarations",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "allocation.modality",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "allocation.preselection_justification",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "allocation.strategy_on_file",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "selection.scorecard_or_alternative",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "selection.committee_decision",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "selection.recommendation_differs",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "selection.mismatch_note",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "grant.agreement_complete",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "grant.budget_template",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "grant.consortium_controls",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "misconduct.annex8_path",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "misconduct.annex9_notification",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "misconduct.oios_notification_path",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "misconduct.secretariat_sanctions_regime",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "onegms.project_status",
+      "files": 1,
+      "stateCorrect": 0,
+      "falseMissing": 1,
+      "falsePresent": 0,
+      "readings": {
+        "present->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "onegms.selection_record",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "idd.subject",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "idd.screen_scope",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "idd.screen_result",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "idd.evidence_ref",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "ocha-cbpf",
+      "key": "idd.disposition_decision",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "ip.competitive_or_waiver",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "ip.waiver_or_competition_documented",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "ip.threshold_approver",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "negative->negative": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "ip.unpp_profile",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "ip.hact_micro_assessment",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "ip.psea_assessment",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.plan_line",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.method_vs_threshold",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.crc_gate",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.contract_split_checked",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.rfq_criteria_and_scores",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.po_or_contract",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.rir",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "procurement.lta_rate_reconciliation",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "integrity.coi_declared",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "integrity.related_party_checked",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "payment.face_workplan_link",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "payment.commodity_lines",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.subject",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.subject_kind",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.screen_scope",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.screen_date",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.screen_result",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.evidence_ref",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.vrc_iprc_status",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.clearcheck_where_personnel",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    },
+    {
+      "packId": "unfpa",
+      "key": "idd.disposition_decision",
+      "files": 1,
+      "stateCorrect": 1,
+      "falseMissing": 0,
+      "falsePresent": 0,
+      "readings": {
+        "missing->missing": 1
+      }
+    }
+  ]
+}

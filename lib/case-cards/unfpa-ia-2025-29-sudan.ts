@@ -2,6 +2,7 @@ import type { CaseCardDraft } from '@/lib/field-registry/case-card'
 import { UNFPA_PACK } from '@/lib/field-registry/packs/unfpa'
 import type { AwardRegistrySnapshot } from '@/lib/field-registry/schema'
 
+import { unfpaSudanFrozenRecord } from '@/lib/case-cards/unfpa-ia-2025-29-sudan-freeze'
 import { patternTicketsFor } from '@/lib/case-cards/pattern-tickets'
 import { sourceField } from '@/lib/case-cards/public-source-field'
 
@@ -107,13 +108,13 @@ export function unfpaSudanFixtureSnapshot(): AwardRegistrySnapshot {
   }
 }
 
-/** Fixture. `frozenRecord` stays null until a founder-confirmed freeze is dropped in. */
+/** Published from founder Freeze #3 (synthetic rehearsal, 4 of 27 pack keys read, evidence requested). */
 export function unfpaSudanDraft(): CaseCardDraft {
   return {
     slug: SLUG,
     title: 'Sudan country office pre-award file, IA/2025-29',
     lede:
-      'OAIS audit IA/2025-29 rated the UNFPA Country Office in Sudan Partially Satisfactory with Major Improvement Needed. This fixture maps the pre-award documentation gaps onto the UNFPA pack. It is not a frozen desk record.',
+      'OAIS audit IA/2025-29 rated the UNFPA Country Office in Sudan Partially Satisfactory with Major Improvement Needed. This card publishes the founder desk freeze of a synthetic rehearsal packet: evidence requested, readiness red, 26 findings, and 4 of 27 pack keys read from the file (1 negative, 3 stated absent).',
     caseId: 'case:unfpa-ia-2025-29-sudan',
     packScope: 'finding-slice',
     findings: [
@@ -143,13 +144,13 @@ export function unfpaSudanDraft(): CaseCardDraft {
       officialRecord:
         'On 24 December 2025 OAIS published IA/2025-29, Audit of the UNFPA Country Office in the Republic of the Sudan. The remote audit ran from 23 June to 12 September 2025. The period covered is 1 January 2024 to 31 March 2025. The overall rating is Partially Satisfactory with Major Improvement Needed.',
       whatWasMissing:
-        'This slice is the pre-award file: the Regional Director approval above the US$0.5 million cumulative workplan threshold, evaluation criteria and individual scores on RFQs, approved purchase orders, and receiving and inspection reports. Other Sudan findings, including inventory access and HACT assurance counts, sit outside this card.',
+        'This slice is the pre-award file: the Regional Director approval above the US$0.5 million cumulative workplan threshold, evaluation criteria and individual scores on RFQs, approved purchase orders, and receiving and inspection reports. The published freeze is a synthetic rehearsal of that slice on the UNFPA pack. Four pack keys were read from the packet: the threshold approver is negative, and the RFQ criteria and scores, the purchase order or contract, and the receiving and inspection report are stated absent. The other 23 pack keys were not extracted. Other Sudan findings, including inventory access and HACT assurance counts, sit outside this card.',
       whatFollowed:
         'Recommendation 5, on IP selection and HACT assurance, is high priority. OAIS records the status as Agree, with estimated completion in December 2026. Recommendation 9, on procurement documentation, is medium priority, status Agree, estimated completion March 2026. Agreed is not done. This card does not report a later completion.',
       assuranceQuestion:
         'Before signature, can a reviewer see the threshold approver, the RFQ criteria and individual scores, the purchase order or contract, and the receiving and inspection report the file will have to carry?',
       whereTraceLiFits:
-        'The UNFPA pack checks those four fields. The receiving-report check is a warning because the control is completed after delivery; the pack still names it. This card is a fixture awaiting a founder freeze. Nothing here says Trace-li would have prevented the audit finding. The Sudan office is not a Trace-li client.',
+        'The UNFPA pack checks those four fields. The receiving-report check is a warning because the control is completed after delivery; the pack still names it. The published freeze keeps the threshold approver negative and keeps the RFQ, purchase order, and receiving report stated absent. Nothing here says Trace-li would have prevented the audit finding. The Sudan office is not a Trace-li client.',
     },
     patternTicketIds: [...TICKET_IDS],
     patternTickets: patternTicketsFor(TICKET_IDS),
@@ -180,12 +181,12 @@ export function unfpaSudanDraft(): CaseCardDraft {
         'Implementing partner names and staff names',
         'Procurement file bytes, bid prices, and evaluation sheets beyond the audit’s own summary',
         'Any customer upload or live desk packet',
-        'Freeze hashes — no founder-confirmed freeze exists for this card',
+        'Freeze hashes — published from the founder desk freeze. Customer upload bytes stay withheld.',
       ],
     },
     claimBoundary:
       'Trace-li cites UNFPA OAIS. This card is a pre-signature missing-evidence surface. It does not say Trace-li prevents fraud, does not certify the country office, and does not imply that UNFPA is a customer or endorser. An audit is not a criminal verdict. An agreed recommendation is not a completed action.',
     fixtureSnapshot: unfpaSudanFixtureSnapshot(),
-    frozenRecord: null,
+    frozenRecord: unfpaSudanFrozenRecord(),
   }
 }
