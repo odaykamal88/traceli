@@ -1,0 +1,17 @@
+{
+  "name": "Traceli",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "bash .cursor/start.sh",
+      "description": "Next.js dev server on http://localhost:3000. Public demo works without a database; signed-in features require explicit configuration."
+    }
+  ],
+  "ports": [
+    {
+      "name": "dev",
+      "port": 3000
+    }
+  ]
+}
