@@ -64,6 +64,8 @@ export const judgmentResultSchema = z.strictObject({
 const scalarExpected = z.union([z.string().trim().min(1).max(4000), z.number().finite(), z.boolean()])
 /** Whole attested token. Hyphens stay inside the token; matching is exact, not fuzzy. */
 const attestedToken = z.string().trim().regex(/^[a-z0-9][a-z0-9-]{0,40}$/)
+/** Noun phrase for the page-1 request line. Omitted keys stay out of parsed output. */
+const askLabel = z.string().trim().min(1).max(180).optional()
 
 export const judgmentRuleSchema = z.discriminatedUnion('kind', [
   z.strictObject({
@@ -73,6 +75,7 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('required_field_missing'),
     title: shortText.optional(),
+    ask: askLabel,
   }),
   z.strictObject({
     ruleId: idSchema,
@@ -81,6 +84,7 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('fields_disagree'),
     title: shortText.optional(),
+    ask: askLabel,
   }),
   z.strictObject({
     ruleId: idSchema,
@@ -90,6 +94,7 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('field_value_mismatch'),
     title: shortText.optional(),
+    ask: askLabel,
   }),
   z.strictObject({
     ruleId: idSchema,
@@ -99,6 +104,7 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('field_value_not_allowed'),
     title: shortText.optional(),
+    ask: askLabel,
   }),
   z.strictObject({
     ruleId: idSchema,
@@ -108,6 +114,7 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('attested_tokens_missing'),
     title: shortText.optional(),
+    ask: askLabel,
   }),
   z.strictObject({
     ruleId: idSchema,
@@ -119,6 +126,7 @@ export const judgmentRuleSchema = z.discriminatedUnion('kind', [
     severity: z.enum(findingSeverities).default('blocker'),
     code: z.string().trim().min(1).max(80).default('conditional_field_missing'),
     title: shortText.optional(),
+    ask: askLabel,
   }),
 ])
 

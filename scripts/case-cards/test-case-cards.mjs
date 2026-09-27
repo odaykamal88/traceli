@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { existsSync } from 'node:fs'
 import test from 'node:test'
 
 import { getCaseCard, listCaseCards } from '../../lib/case-cards/catalog.ts'
@@ -20,9 +21,17 @@ import {
 } from '../../lib/case-cards/oios-2025-098-cbpf-reserve-freeze.ts'
 import { OIOS_2025_098_PDF_SHA256, oios2025098Draft, oios2025098FixtureSnapshot } from '../../lib/case-cards/oios-2025-098-cbpf-reserve.ts'
 import { listPatternTickets } from '../../lib/case-cards/pattern-tickets.ts'
+import { caseCardSocialMetadata } from '../../lib/case-cards/social.ts'
+import { SITE_OG_TITLE } from '../../lib/site-social.ts'
 import { UNFPA_ANNEX4_PDF_SHA256 } from '../../lib/case-cards/unfpa-annex4-13-esa-ip.ts'
-import { UNFPA_SUDAN_PDF_SHA256 } from '../../lib/case-cards/unfpa-ia-2025-29-sudan.ts'
-import { unfpaSudanDraft } from '../../lib/case-cards/unfpa-ia-2025-29-sudan.ts'
+import {
+  UNFPA_SUDAN_ACTOR_ROLE,
+  UNFPA_SUDAN_PACKS_HASH,
+  UNFPA_SUDAN_RECORD_ID,
+  UNFPA_SUDAN_SNAPSHOT_HASH,
+  UNFPA_SUDAN_SUPERSEDES_RECORD_ID,
+} from '../../lib/case-cards/unfpa-ia-2025-29-sudan-freeze.ts'
+import { UNFPA_SUDAN_PDF_SHA256, unfpaSudanDraft, unfpaSudanFixtureSnapshot } from '../../lib/case-cards/unfpa-ia-2025-29-sudan.ts'
 import {
   FieldRegistryError,
   GLOBAL_FUND_PACK,
@@ -39,6 +48,7 @@ import {
 
 const card = getCaseCard('gf-oig-25-005')
 const ochaCard = getCaseCard('oios-2025-098-cbpf-reserve')
+const sudanCard = getCaseCard('unfpa-ia-2025-29-sudan')
 
 test('the public Togo card publishes the founder Freeze #1', () => {
   assert.ok(card)
@@ -157,6 +167,80 @@ test('the public OIOS 2025/098 card publishes founder Freeze #2', () => {
   }
 })
 
+test('the public UNFPA IA/2025-29 card publishes founder Freeze #3', () => {
+  assert.ok(sudanCard)
+  const draft = unfpaSudanDraft()
+  const published = publishCaseCard(draft)
+  const record = verifyFrozenRecord(published.frozenRecord)
+  const judged = evaluateDonorPack(record.snapshot, 'unfpa', { evaluatedAt: record.frozenAt })
+  assert.equal(published.product, 'Trace-li')
+  assert.equal(sudanCard.product, 'Trace-li')
+  assert.equal(published.recordKind, 'frozen')
+  assert.equal(published.publicationState, 'published')
+  assert.equal(sudanCard.publicationState, 'published')
+  assert.equal(published.fixtureSnapshot, null)
+  assert.equal(sudanCard.fixtureSnapshot, null)
+  assert.equal(published.packsStamped, true)
+  assert.equal(published.hashMethod, 'sha256:sorted-json-v1')
+  assert.equal(published.snapshotHash, UNFPA_SUDAN_SNAPSHOT_HASH)
+  assert.equal(published.packsHash, UNFPA_SUDAN_PACKS_HASH)
+  assert.equal(record.snapshotHash, UNFPA_SUDAN_SNAPSHOT_HASH)
+  assert.equal(record.packsHash, UNFPA_SUDAN_PACKS_HASH)
+  assert.equal(record.recordId, UNFPA_SUDAN_RECORD_ID)
+  assert.equal(record.supersedesRecordId, UNFPA_SUDAN_SUPERSEDES_RECORD_ID)
+  assert.equal(published.frozenRecordId, record.recordId)
+  assert.equal(sudanCard.snapshotHash, record.snapshotHash)
+  assert.equal(sudanCard.packsHash, record.packsHash)
+  assert.equal(record.pipelineStatus.readiness, 'red')
+  assert.equal(published.readiness, 'red')
+  assert.equal(judged.pipelineStatus.readiness, 'red')
+  assert.equal(judged.findings.length, 26)
+  assert.equal(judged.findings.filter(finding => finding.severity === 'blocker').length, 20)
+  assert.equal(judged.findings.filter(finding => finding.severity === 'warning').length, 6)
+  assert.equal(record.disposition.decision, 'request_evidence')
+  assert.equal(record.disposition.actorRole, UNFPA_SUDAN_ACTOR_ROLE)
+  assert.equal(record.disposition.waiverRefs.length, 0)
+  assert.equal(record.frozenAt, '2026-09-25T13:05:53.746Z')
+  assert.equal(record.frozenBy, 'user_01M2MDYWCDDT13QGCTJHHSYD1C')
+  assert.equal(record.packsInForce[0].packId, 'unfpa')
+  assert.equal(record.packsInForce[0].version, UNFPA_PACK.version)
+  assert.equal(record.snapshot.fields.length, 27)
+  assert.equal(record.snapshot.classification, 'synthetic')
+  const approver = record.snapshot.fields.find(field => field.key === 'ip.threshold_approver')
+  const rfq = record.snapshot.fields.find(field => field.key === 'procurement.rfq_criteria_and_scores')
+  const po = record.snapshot.fields.find(field => field.key === 'procurement.po_or_contract')
+  const rir = record.snapshot.fields.find(field => field.key === 'procurement.rir')
+  assert.equal(approver.value.state, 'negative')
+  assert.equal(approver.value.value, false)
+  assert.equal(approver.provenance.confidence, 0.16)
+  assert.equal(approver.provenance.sourceRef.id, 'page-1')
+  assert.equal(rfq.value.state, 'missing')
+  assert.equal(rfq.value.reason, 'Stated absent in this packet: RFQ evaluation criteria in the solicitation: none listed.')
+  assert.equal(po.value.state, 'missing')
+  assert.equal(po.value.reason, 'Stated absent in this packet: No approved purchase order was issued before the goods were received, and no signed contract is on file.')
+  assert.equal(rir.value.state, 'missing')
+  assert.equal(rir.value.reason, 'Stated absent in this packet: Receiving and inspection report (RIR): no policy-compliant RIR is on file.')
+  const unextracted = record.snapshot.fields.filter(field => !['ip.threshold_approver', 'procurement.rfq_criteria_and_scores', 'procurement.po_or_contract', 'procurement.rir'].includes(field.key))
+  assert.equal(unextracted.length, 23)
+  assert.equal(unextracted.every(field => field.value.state === 'missing' && field.value.reason === 'Not extracted from this packet.'), true)
+  assert.equal(record.snapshot.fields.some(field => field.value.state === 'present'), false)
+  assert.equal(sudanCard.primarySourceFile.sha256, UNFPA_SUDAN_PDF_SHA256)
+  assert.notEqual(sudanCard.primarySourceFile.sha256, sudanCard.snapshotHash)
+  assert.match(sudanCard.claimBoundary, /prevents fraud/)
+  assert.match(sudanCard.statusLabel, /Published frozen record/)
+  assert.match(sudanCard.redaction.withheld.join('\n'), /founder desk freeze/)
+  const fixture = unfpaSudanFixtureSnapshot()
+  assert.equal(draft.fixtureSnapshot.classification, 'public-source')
+  assert.equal(fixture.classification, 'public-source')
+  assert.equal(fixture.framework.frameworkId, 'unfpa')
+  assert.equal(fixture.framework.version, UNFPA_PACK.version)
+  assert.equal(fixture.fields.find(field => field.key === 'audit.office_rating').value.state, 'present')
+  for (const field of fixture.fields) {
+    assert.equal(field.provenance.sourceFileHash, UNFPA_SUDAN_PDF_SHA256)
+    assert.equal(field.provenance.verificationMethod, 'unverified')
+  }
+})
+
 test('pattern ticket ids are stable and only cite rules that exist', () => {
   const ids = listPatternTickets().map(ticket => ticket.ticketId)
   assert.equal(new Set(ids).size, ids.length)
@@ -220,7 +304,6 @@ test('a second freeze of the public-source fixture does not replace the founder 
 const publicFixtures = [
   ['unfpa-annex4-13-esa-ip', 'unfpa', UNFPA_PACK.version, UNFPA_ANNEX4_PDF_SHA256],
   ['unfpa-annex4-21-arab-vendor', 'unfpa', UNFPA_PACK.version, UNFPA_ANNEX4_PDF_SHA256],
-  ['unfpa-ia-2025-29-sudan', 'unfpa', UNFPA_PACK.version, UNFPA_SUDAN_PDF_SHA256],
   ['oios-2020-005-iraq-forensic', 'ocha-cbpf', OCHA_CBPF_PACK.version, OIOS_2020_005_PDF_SHA256],
 ]
 
@@ -278,7 +361,7 @@ test('pattern tickets cite pack rules that exist, except the forensic non-equiva
   ])
 })
 
-test('a verified Sudan freeze can drop in without changing the public fixture', () => {
+test('a second freeze of the Sudan public-source fixture does not replace the founder record', () => {
   const frozenAt = '2026-09-24T12:00:00.000Z'
   const frozenBy = 'user_founder'
   const draft = unfpaSudanDraft()
@@ -303,5 +386,40 @@ test('a verified Sudan freeze can drop in without changing the public fixture', 
   assert.equal(published.packsHash, record.packsHash)
   assert.equal(published.fixtureSnapshot, null)
   assert.equal(published.packsInForce[0].packId, 'unfpa')
-  assert.equal(getCaseCard('unfpa-ia-2025-29-sudan').snapshotHash, null)
+  assert.equal(getCaseCard('unfpa-ia-2025-29-sudan').snapshotHash, UNFPA_SUDAN_SNAPSHOT_HASH)
+  assert.notEqual(published.snapshotHash, UNFPA_SUDAN_SNAPSHOT_HASH)
+})
+
+test('each case card page has its own social metadata', () => {
+  assert.equal(SITE_OG_TITLE, 'Trace-li — Prove the award before you sign it')
+  assert.equal(SITE_OG_TITLE.includes('Traceli'), false)
+  const images = {
+    'gf-oig-25-005': '/research/global-fund/charts/06-value-chain-map.png',
+    'unfpa-annex4-13-esa-ip': '/research/unfpa/charts/04-value-chain-map.png',
+    'unfpa-annex4-21-arab-vendor': '/research/unfpa/charts/04-value-chain-map.png',
+    'unfpa-ia-2025-29-sudan': '/research/unfpa/charts/04-value-chain-map.png',
+    'oios-2025-098-cbpf-reserve': '/research/ocha-cbpf/charts/06-value-chain-map.png',
+    'oios-2020-005-iraq-forensic': '/research/ocha-cbpf/charts/06-value-chain-map.png',
+  }
+  const indexable = new Set(['gf-oig-25-005', 'oios-2025-098-cbpf-reserve', 'unfpa-ia-2025-29-sudan'])
+  for (const card of listCaseCards()) {
+    const social = caseCardSocialMetadata(card)
+    assert.equal(social.title, `${card.title} — Trace-li`)
+    assert.equal(social.openGraph.title, social.title)
+    assert.equal(social.twitter.title, social.title)
+    assert.equal(social.openGraph.type, 'article')
+    assert.equal(social.twitter.card, 'summary_large_image')
+    assert.equal(social.url, `https://www.trace-li.com/cases/${card.slug}`)
+    assert.equal(social.openGraph.url, social.url)
+    assert.equal(social.openGraph.description.length <= 200, true)
+    assert.equal(social.twitter.description, social.openGraph.description)
+    assert.equal(card.lede.startsWith(social.openGraph.description.replace(/…$/, '')), true)
+    assert.equal(social.robots.index, indexable.has(card.slug))
+    assert.equal(social.robots.follow, true)
+    assert.equal(social.image.url, images[card.slug])
+    assert.equal(social.openGraph.images[0].url, images[card.slug])
+    assert.equal(social.twitter.images[0].url, images[card.slug])
+    assert.match(social.image.alt, /^Trace-li value-chain map/)
+    assert.equal(existsSync(new URL(`../../public${social.image.url}`, import.meta.url)), true)
+  }
 })

@@ -1,0 +1,486 @@
+{
+  "file": "unfpa-02-bgd-dignity-kits-rfq.pdf",
+  "packId": "unfpa",
+  "packVersion": "2026.1",
+  "packName": "UNFPA OAIS-shaped award desk v0",
+  "sha256": "65ca9f2e31fc5badde0733f880602d7f471ddfbbe64e9f8d4edb53b812c6fef7",
+  "pages": 13,
+  "title": "Vendor award file: local procurement of dignity kits for cyclone preparedness (RFQ)",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "integrity.related_party_checked",
+      "description": "Vendor policy text requires BO/shared-contact checks before award; none is recorded."
+    },
+    {
+      "kind": "template-placeholder-date",
+      "key": "idd.screen_date",
+      "description": "Annex D screening log shows \"Screening date: [dd.mm.yyyy] e.g. 15.01.2024\" (placeholder); no real date."
+    }
+  ],
+  "fields": {
+    "ip.competitive_or_waiver": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Vendor award; IP selection not mentioned.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "IP selection must be competitive or a documented non-competitive path",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "ip.waiver_or_competition_documented": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Competition file or waiver template required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "ip.threshold_approver": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not mentioned.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Approver must match the cumulative workplan threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "ip.unpp_profile": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "UNPP registration is not applicable to commercial vendors and was not checked.",
+      "note": "Stated not applicable / not checked.",
+      "rule": {
+        "kind": "required_present",
+        "title": "UNPP profile complete and validated",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: UNPP registration is not applicable to commercial vendors and was not checked."
+      }
+    },
+    "ip.hact_micro_assessment": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "HACT micro-assessment date and risk rating required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "ip.psea_assessment": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not mentioned (supplier code of conduct not referenced).",
+      "rule": {
+        "kind": "required_present",
+        "title": "PSEA capacity assessment status on the IP file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.plan_line": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026 procurement plan item 14: dignity kits, 18,000 units, est. US$ 396,000 (two tranches)",
+      "page": 3,
+      "quote": "The requirement corresponds to item 14 of the 2026 country office procurement plan, which provides for 18,000 dignity kits in two tranches with an estimated value of US$ 396,000.",
+      "note": "Procurement plan line.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annual procurement plan line required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026 procurement plan item 14: dignity kits, 18,000 units, est. US$ 396,000 (two tranches)"
+      }
+    },
+    "procurement.method_vs_threshold": {
+      "state": "negative",
+      "statedAbsent": false,
+      "value": false,
+      "page": 3,
+      "quote": "The award value of US$ 214,900 is above the US$ 100,000 ceiling for requests for quotation under the office procurement delegation, above which an invitation to bid is required, so the RFQ method did not match the value.",
+      "note": "Adverse fact: method misaligned with threshold (negative false).",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Solicitation method must align with the value threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "procurement.crc_gate": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Local CRC meeting 16 June 2026, minutes LCRC/2026/22, recommended award",
+      "page": 3,
+      "quote": "The local Contracts Review Committee reviewed the submission at its meeting of 16 June 2026 and recommended award to Meghna Supply House Ltd (minutes LCRC/2026/22).",
+      "note": "CRC gate recorded.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Contracts Review Committee gate recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Local CRC meeting 16 June 2026, minutes LCRC/2026/22, recommended award"
+      }
+    },
+    "procurement.contract_split_checked": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 3,
+      "quote": "The buyer checked cumulative orders and confirmed that no other dignity-kit order had been placed with the same vendor in the previous 12 months, so the award is not split.",
+      "note": "Split check recorded.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Contract-split check recorded for the same vendor and object",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "procurement.rfq_criteria_and_scores": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Criteria in RFQ: technical compliance pass/fail; delivery time 20; price 80. Individual scores recorded in the evaluation table.",
+      "page": 3,
+      "quote": "The evaluation criteria were stated in the RFQ itself: technical compliance on a pass or fail basis, then delivery time (20 points) and price (80 points) for technically compliant quotations.",
+      "note": "Criteria in the solicitation; individual scores in the table that follows.",
+      "rule": {
+        "kind": "required_present",
+        "title": "RFQ evaluation criteria and individual scores required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Criteria in RFQ: technical compliance pass/fail; delivery time 20; price 80. Individual scores recorded in the evaluation table."
+      }
+    },
+    "procurement.po_or_contract": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "PO BGD10-2026-0381 approved 24 June 2026",
+      "page": 3,
+      "quote": "Purchase order BGD10-2026-0381 was approved in the ERP on 24 June 2026, before any goods were shipped.",
+      "note": "Binding PO before delivery.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Binding purchase order or contract required before delivery",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "PO BGD10-2026-0381 approved 24 June 2026"
+      }
+    },
+    "procurement.rir": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 3,
+      "quote": "The receiving and inspection report will be completed on delivery at the Khulna warehouse and is not part of this file at award stage.",
+      "note": "Stated not yet on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Receiving and inspection report named on the file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The receiving and inspection report will be completed on delivery at the Khulna warehouse and is not part of this file at award stage."
+      }
+    },
+    "procurement.lta_rate_reconciliation": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Offered US$ 23.878/kit vs PSB global LTA reference US$ 22.10 + US$ 1.95 freight = US$ 24.05",
+      "page": 3,
+      "quote": "The offered unit price of US$ 23.878 was reconciled against the PSB global LTA reference price of US$ 22.10 per kit plus estimated freight and clearance of US$ 1.95 per kit.",
+      "note": "LTA source and rate reconciliation.",
+      "rule": {
+        "kind": "required_present",
+        "title": "LTA source and rate reconciliation on the file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Offered US$ 23.878/kit vs PSB global LTA reference US$ 22.10 + US$ 1.95 freight = US$ 24.05"
+      }
+    },
+    "integrity.coi_declared": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 3,
+      "quote": "The three members of the evaluation team and the buyer each signed a declaration of no conflict of interest before the quotations were opened on 2 June 2026.",
+      "note": "Staff COI declared.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Conflict of interest declared for staff, vendor, and IP",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "integrity.related_party_checked": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The vendor policy requirement for beneficial-ownership and shared-contact checks is quoted, but no such check or result is recorded.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Related-party, shared-contact, and beneficial-ownership check required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "payment.face_workplan_link": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "No FACE form applies to this order, and payment will be made against the vendor invoice after acceptance of the goods.",
+      "note": "Stated not applicable.",
+      "rule": {
+        "kind": "required_present",
+        "title": "FACE or workplan linkage named before payment",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No FACE form applies to this order, and payment will be made against the vendor invoice after acceptance of the goods."
+      }
+    },
+    "payment.commodity_lines": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "No implementing-partner workplan is linked to this order at the time of award.",
+      "note": "Stated absent.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Non-cash commodity lines named on the IP workplan",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: No implementing-partner workplan is linked to this order at the time of award."
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Meghna Supply House Ltd",
+      "page": 4,
+      "quote": "Meghna Supply House Ltd, trade licence TRAD/CTG/2011/55821",
+      "note": "Subject.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures subject required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Meghna Supply House Ltd"
+      }
+    },
+    "idd.subject_kind": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "organization",
+      "page": 4,
+      "quote": "Private limited company",
+      "note": "organization.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Restrictive-measures subject must be an organization or an individual",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "organization"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "un ungm",
+      "page": 4,
+      "quote": "un / ungm",
+      "note": "Canonical tokens given literally in the log.",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Restrictive-measures scope must attest UN and UNGM",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "un ungm"
+      }
+    },
+    "idd.screen_date": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The screening date line in the log template (Annex D) still shows the placeholder \"[dd.mm.yyyy] e.g. 15.01.2024\"; no actual screen date appears.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures screen date required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "template-placeholder-date"
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "clear",
+      "page": 4,
+      "quote": "Clear (no match)",
+      "note": "clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Restrictive-measures result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "clear"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Screen log SCL-BGD-2026-0602-3",
+      "page": 4,
+      "quote": "Screen log SCL-BGD-2026-0602-3",
+      "note": "Evidence ref.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures evidence reference required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Screen log SCL-BGD-2026-0602-3"
+      }
+    },
+    "idd.vrc_iprc_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Not on VRC sanctions list; no UNGM ineligibility flag",
+      "page": 4,
+      "quote": "The vendor does not appear on the Vendor Review Committee sanctions list and carries no ineligibility flag in its UNGM registration.",
+      "note": "VRC status (IPRC/UNPP not applicable to vendor).",
+      "rule": {
+        "kind": "required_present",
+        "title": "VRC, IPRC, and UNPP flag status required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Not on VRC sanctions list; no UNGM ineligibility flag"
+      }
+    },
+    "idd.clearcheck_where_personnel": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "ClearCheck does not apply here because no individual contractors are engaged under this purchase order.",
+      "note": "Stated not applicable.",
+      "rule": {
+        "kind": "required_present",
+        "title": "ClearCheck status where personnel are in scope",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: ClearCheck does not apply here because no individual contractors are engaged under this purchase order."
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated; result clear.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear restrictive-measures result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    }
+  }
+}

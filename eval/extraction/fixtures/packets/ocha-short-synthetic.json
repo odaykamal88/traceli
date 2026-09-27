@@ -1,0 +1,201 @@
+{
+  "file": "ocha-short-synthetic.pdf",
+  "packId": "ocha-cbpf",
+  "packVersion": "2026.1",
+  "sha256": "e1f174b47dd90380d6050f2014e897148c4aaac5322f92cc3d8662c43b05e4f7",
+  "pages": 2,
+  "fields": {
+    "partner.due_diligence_passed": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 1,
+      "quote": "Partner due diligence was completed and recorded as satisfactory before this allocation.",
+      "note": "The packet says due diligence was completed and recorded as satisfactory. The control is boolean true."
+    },
+    "partner.capacity_assessment": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "partner.annex7_declarations": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "allocation.modality": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "reserve",
+      "page": 1,
+      "quote": "The allocation in this file is a reserve allocation for a sudden-onset response.",
+      "note": "The packet states a reserve allocation. The fixture data field says standard and must not be trusted."
+    },
+    "allocation.preselection_justification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "allocation.strategy_on_file": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "The humanitarian country team filed the allocation strategy with the reserve criteria attached.",
+      "page": 1,
+      "quote": "The humanitarian country team filed the allocation strategy with the reserve criteria attached.",
+      "note": "Stated in ordinary prose. A correct extract stores that sentence."
+    },
+    "selection.scorecard_or_alternative": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 2,
+      "quote": "A scorecard was not placed on the file.",
+      "note": "The packet says the scorecard was not placed on the file."
+    },
+    "selection.committee_decision": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "The review committee recommended Partner C on 4 April 2026 after reading the project proposal.",
+      "page": 2,
+      "quote": "The review committee recommended Partner C on 4 April 2026 after reading the project proposal.",
+      "note": "Stated in ordinary prose. A correct extract stores that sentence."
+    },
+    "selection.recommendation_differs": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "selection.mismatch_note": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "grant.agreement_complete": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "grant.budget_template": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "grant.consortium_controls": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "misconduct.annex8_path": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "misconduct.annex9_notification": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "misconduct.oios_notification_path": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "misconduct.secretariat_sanctions_regime": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "onegms.project_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "OneGMS shows the project as under review.",
+      "page": 2,
+      "quote": "OneGMS shows the project as under review.",
+      "note": "Stated in ordinary prose. A correct extract stores that sentence."
+    },
+    "onegms.selection_record": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.subject": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.screen_scope": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.screen_result": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.evidence_ref": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated in this packet."
+    }
+  }
+}

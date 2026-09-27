@@ -9,6 +9,9 @@ __v0_jsx-dev-runtime.ts
 # Environment variables
 .env*.local
 
+# Generated pilot-report samples. Rebuild with scripts/pilot-report/render-samples.mjs
+docs/examples/pilot-reports/*.pdf
+
 # Common ignores
 node_modules
 .next/
@@ -16,3 +19,6 @@ node_modules
 .DS_Store
 .vercel
 .env*
+
+# Raw Talonic bodies for the extraction accuracy harness. Live runs write here.
+eval/extraction/.cache/

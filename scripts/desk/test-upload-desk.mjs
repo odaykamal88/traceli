@@ -320,6 +320,8 @@ test('the upload desk file control is a labelled button with a working spinner',
   assert.match(view, /Start another packet/)
   assert.match(view, /Copy record id/)
   assert.match(view, /Copy snapshot hash/)
+  assert.match(view, /Download pilot report \(PDF\)/)
+  assert.match(view, /data-testid="download-pilot-report"/)
   assert.match(view, /Record frozen · verified/)
   assert.match(view, /aria-live="polite"/)
   assert.match(view, /aria-busy=\{judging\}/)

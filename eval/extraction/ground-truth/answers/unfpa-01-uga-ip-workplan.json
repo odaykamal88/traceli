@@ -1,0 +1,487 @@
+{
+  "file": "unfpa-01-uga-ip-workplan.pdf",
+  "packId": "unfpa",
+  "packVersion": "2026.1",
+  "packName": "UNFPA OAIS-shaped award desk v0",
+  "sha256": "3ea1fa35a31e6faba84f048fd3d8e56b164f3dab9c4c25d9a373096aa4eaac57",
+  "pages": 20,
+  "title": "Implementing partner selection and 2026 workplan file: maternal health and GBV response, Nyabuhoro and Kigando districts",
+  "classification": "synthetic",
+  "quoteVerification": "pdftotext (poppler, default mode) per page; quote is an exact substring after collapsing whitespace runs to one space",
+  "traps": [
+    {
+      "kind": "boilerplate-requirement-not-evidenced",
+      "key": "procurement.crc_gate",
+      "description": "Policy reminder: \"contracts ... above US$ 100,000 must be reviewed by the Contracts Review Committee\"; no CRC gate recorded."
+    },
+    {
+      "kind": "conflict-resolved-later",
+      "key": "ip.hact_micro_assessment",
+      "description": "Cover memo cites \"significant risk\"; Annex C final report (14 March 2026) supersedes it: moderate."
+    }
+  ],
+  "fields": {
+    "ip.competitive_or_waiver": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 3,
+      "quote": "RWHI was selected competitively through a call for expression of interest published on the UN Partner Portal on 12 January 2026 (reference CEFI/UGA/2026/003).",
+      "note": "Competitive selection.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "IP selection must be competitive or a documented non-competitive path",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "ip.waiver_or_competition_documented": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "CFEI notice, panel scoring sheets and selection memo (Annex B)",
+      "page": 3,
+      "quote": "The call notice, the individual panel scoring sheets and the selection memorandum signed by the panel chair on 9 February 2026 are filed at Annex B.",
+      "note": "Competition file on file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Competition file or waiver template required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "CFEI notice, panel scoring sheets and selection memo (Annex B)"
+      }
+    },
+    "ip.threshold_approver": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": true,
+      "page": 4,
+      "quote": "Because the cumulative workplan amount for the programme cycle exceeds US$ 0.5 million, the engagement was submitted to the Regional Director, who approved it on 27 February 2026 (memorandum ESARO/RD/2026/044).",
+      "note": "Approver matches the cumulative threshold (RD approval above US$0.5m).",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Approver must match the cumulative workplan threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": true
+      }
+    },
+    "ip.unpp_profile": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "UNPP partner ID UG-NGO-48213; profile complete; verified 30 January 2026",
+      "page": 4,
+      "quote": "The partner profile of RWHI on UNPP (partner ID UG-NGO-48213) is complete and was verified by the country office on 30 January 2026.",
+      "note": "UNPP profile complete and validated.",
+      "rule": {
+        "kind": "required_present",
+        "title": "UNPP profile complete and validated",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "UNPP partner ID UG-NGO-48213; profile complete; verified 30 January 2026"
+      }
+    },
+    "ip.hact_micro_assessment": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026-03-14; moderate",
+      "page": 8,
+      "quote": "The final micro-assessment report issued on 14 March 2026 rates RWHI as moderate risk overall; the significant-risk rating quoted in the cover memorandum was the draft rating and is superseded.",
+      "note": "Cover memo says significant (draft); resolved late in Annex C: final report 14 March 2026, moderate.",
+      "rule": {
+        "kind": "required_present",
+        "title": "HACT micro-assessment date and risk rating required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026-03-14; moderate"
+      },
+      "trap": "conflict-resolved-later"
+    },
+    "ip.psea_assessment": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "The PSEA capacity assessment of RWHI is scheduled for the second quarter and has not been completed at the date of this file.",
+      "note": "Stated not completed.",
+      "rule": {
+        "kind": "required_present",
+        "title": "PSEA capacity assessment status on the IP file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The PSEA capacity assessment of RWHI is scheduled for the second quarter and has not been completed at the date of this file."
+      }
+    },
+    "procurement.plan_line": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 5,
+      "quote": "The workplan does not contain a procurement line for the partner, since no procurement by RWHI is foreseen in 2026.",
+      "note": "Stated absent (no procurement plan line). Commodities in kind are procured by the CO, not listed here.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Annual procurement plan line required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: The workplan does not contain a procurement line for the partner, since no procurement by RWHI is foreseen in 2026."
+      }
+    },
+    "procurement.method_vs_threshold": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No solicitation in this IP file.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Solicitation method must align with the value threshold",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.crc_gate": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The policy reminder states that awards above US$ 100,000 must be reviewed by the CRC, but no CRC review is recorded (and none is evidenced for anything in this file).",
+      "rule": {
+        "kind": "required_present",
+        "title": "Contracts Review Committee gate recorded",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "procurement.contract_split_checked": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "The prohibition and the procurement unit practice are described generically; no split check is recorded for this file.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Contract-split check recorded for the same vendor and object",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      },
+      "trap": "boilerplate-requirement-not-evidenced"
+    },
+    "procurement.rfq_criteria_and_scores": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No RFQ in this file (CFEI scoring is IP selection, not RFQ).",
+      "rule": {
+        "kind": "required_present",
+        "title": "RFQ evaluation criteria and individual scores required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.po_or_contract": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No purchase order or procurement contract in the file.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Binding purchase order or contract required before delivery",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.rir": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No receiving and inspection report mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Receiving and inspection report named on the file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "procurement.lta_rate_reconciliation": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "No LTA mentioned.",
+      "rule": {
+        "kind": "required_present",
+        "title": "LTA source and rate reconciliation on the file",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    },
+    "integrity.coi_declared": {
+      "state": "negative",
+      "statedAbsent": true,
+      "value": false,
+      "page": 4,
+      "quote": "The conflict-of-interest declaration of RWHI, which the partner was asked to sign with its concept note, was returned unsigned and has not been replaced.",
+      "note": "IP-side COI declaration missing (stated). Boolean control expected true -> negative false.",
+      "rule": {
+        "kind": "value_must_equal",
+        "title": "Conflict of interest declared for staff, vendor, and IP",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "negative",
+        "value": false
+      }
+    },
+    "integrity.related_party_checked": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Related-party and beneficial-ownership check 10 March 2026: no shared addresses, bank accounts or board members",
+      "page": 4,
+      "quote": "A related-party and beneficial-ownership check completed on 10 March 2026 found no shared addresses, bank accounts, telephone numbers or board members between RWHI, UNFPA personnel and current UNFPA vendors.",
+      "note": "Related-party / shared-contact / BO check.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Related-party, shared-contact, and beneficial-ownership check required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Related-party and beneficial-ownership check 10 March 2026: no shared addresses, bank accounts or board members"
+      }
+    },
+    "payment.face_workplan_link": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "FACE advances linked to WP-UGA-2026-RWHI-01",
+      "page": 5,
+      "quote": "Cash will be advanced quarterly on FACE forms that reference workplan WP-UGA-2026-RWHI-01, and each FACE will be checked against the workplan budget lines before release.",
+      "note": "FACE-workplan linkage.",
+      "rule": {
+        "kind": "required_present",
+        "title": "FACE or workplan linkage named before payment",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "FACE advances linked to WP-UGA-2026-RWHI-01"
+      }
+    },
+    "payment.commodity_lines": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2,400 dignity kits; 60 midwifery kits; 12 clinical management of rape kits (in kind)",
+      "page": 5,
+      "quote": "The workplan includes non-cash lines for 2,400 dignity kits, 60 midwifery kits and 12 clinical management of rape kits supplied in kind by the country office.",
+      "note": "Commodity lines.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Non-cash commodity lines named on the IP workplan",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2,400 dignity kits; 60 midwifery kits; 12 clinical management of rape kits (in kind)"
+      }
+    },
+    "idd.subject": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Rwenzo Women's Health Initiative",
+      "page": 4,
+      "quote": "Rwenzo Women's Health Initiative (RWHI), NGO registration INDR-114/2019",
+      "note": "Subject.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures subject required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Rwenzo Women's Health Initiative"
+      }
+    },
+    "idd.subject_kind": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "organization",
+      "page": 4,
+      "quote": "Non-governmental organisation",
+      "note": "organization token.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Restrictive-measures subject must be an organization or an individual",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "organization"
+      }
+    },
+    "idd.screen_scope": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "un ungm",
+      "page": 4,
+      "quote": "RWHI and its two directors were screened against the UN Security Council Consolidated List and the UNGM ineligibility list.",
+      "note": "Scope complete in prose (UN + UNGM); literal token \"un\" absent (prose \"UN Security Council\" tokenises as \"un\" in practice, since split on non-alphanumerics).",
+      "rule": {
+        "kind": "text_must_include",
+        "title": "Restrictive-measures scope must attest UN and UNGM",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "un ungm"
+      }
+    },
+    "idd.screen_date": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "2026-03-11",
+      "page": 4,
+      "quote": "Screened on 11 March 2026",
+      "note": "Date.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures screen date required before signature",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "2026-03-11"
+      }
+    },
+    "idd.screen_result": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "clear",
+      "page": 4,
+      "quote": "No match was found, and the screen result is recorded as clear.",
+      "note": "Clear.",
+      "rule": {
+        "kind": "value_must_be_one_of",
+        "title": "Restrictive-measures result must be clear, potential match, confirmed hit, or unresolved",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "clear"
+      }
+    },
+    "idd.evidence_ref": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "Screening printout UGA-RM-2026-031",
+      "page": 4,
+      "quote": "Printout UGA-RM-2026-031 in the registry",
+      "note": "Evidence ref.",
+      "rule": {
+        "kind": "required_present",
+        "title": "Restrictive-measures evidence reference required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "Screening printout UGA-RM-2026-031"
+      }
+    },
+    "idd.vrc_iprc_status": {
+      "state": "present",
+      "statedAbsent": false,
+      "value": "No VRC sanction, no IPRC case, no UNPP flag",
+      "page": 4,
+      "quote": "RWHI is not subject to any VRC sanction or IPRC case, and no flag is shown on its UNPP profile.",
+      "note": "VRC / IPRC / UNPP flag status.",
+      "rule": {
+        "kind": "required_present",
+        "title": "VRC, IPRC, and UNPP flag status required",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "present",
+        "value": "No VRC sanction, no IPRC case, no UNPP flag"
+      }
+    },
+    "idd.clearcheck_where_personnel": {
+      "state": "missing",
+      "statedAbsent": true,
+      "value": null,
+      "page": 4,
+      "quote": "ClearCheck was not run, as no individual personnel of RWHI are engaged under a UNFPA contract.",
+      "note": "Stated not run (not applicable).",
+      "rule": {
+        "kind": "required_present",
+        "title": "ClearCheck status where personnel are in scope",
+        "severity": "warning"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Stated absent in this packet: ClearCheck was not run, as no individual personnel of RWHI are engaged under a UNFPA contract."
+      }
+    },
+    "idd.disposition_decision": {
+      "state": "missing",
+      "statedAbsent": false,
+      "value": null,
+      "page": null,
+      "quote": null,
+      "note": "Not stated; result clear, so the conditional rule does not fire.",
+      "rule": {
+        "kind": "required_when_value_in",
+        "title": "A non-clear restrictive-measures result needs a select, continue, or terminate decision",
+        "severity": "blocker"
+      },
+      "expectedRegistryValue": {
+        "state": "missing",
+        "reason": "Not in this packet."
+      }
+    }
+  }
+}
