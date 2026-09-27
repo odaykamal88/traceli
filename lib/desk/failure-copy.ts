@@ -9,13 +9,17 @@ const codePattern = /^[A-Za-z0-9_]{1,64}$/
 const requestIdPattern = /^req_[A-Za-z0-9]{6,80}$/
 
 /**
- * Copy while POST /api/desk is in flight.
- * The route extracts, runs the pack, and freezes in one response, so the
- * page does not claim a live stage.
+ * Copy while a desk request is in flight.
+ * The page does not claim a live stage inside the request.
  */
 export const deskWorkingCopy = {
   button: 'Working…',
-  status: 'Working… Trace-li is extracting this packet, running the pack, and freezing the record.',
+  status: 'Working… Trace-li is reading this packet into a checklist.',
+} as const
+
+export const deskFreezeCopy = {
+  button: 'Working…',
+  status: 'Working… Trace-li is recording the checklist and running the pack.',
 } as const
 
 export type DeskExtractionFailure = {

@@ -1,6 +1,6 @@
 # WorkOS upload desk
 
-Status: signed-in mock path. 22 September 2026.
+Status: reviewer-checklist reconciliation candidate, 27 September 2026. Supports mock or Talonic extraction; active deployment configuration must be checked separately.
 Code: `app/login/route.ts`, `app/desk/`, `app/api/desk/route.ts`, `lib/desk/`.
 Session: the same Trace gate as [`/api/trace`](../../lib/trace/access.ts) and [`/api/extract`](../../app/api/extract/route.ts).
 Spine: [extraction-adapter.md](./extraction-adapter.md), [field-registry-v1.md](./field-registry-v1.md), [donor-packs-v1.md](./donor-packs-v1.md), [award-desk-freeze.md](./award-desk-freeze.md).
@@ -16,12 +16,18 @@ Spine: [extraction-adapter.md](./extraction-adapter.md), [field-registry-v1.md](
 /desk   requireTraceViewer          same session as /api/trace
         │
         ▼
-POST /api/desk
+POST /api/desk/checklist
         ├─ readDeskPacket           file + packId; organization is not accepted
         ├─ extractParsedUpload      same provider entry as POST /api/extract
-        ├─ fragmentsTowardRegistryDraft
-        ├─ pack keys not in the draft → missing evidence
-        ├─ evaluateDonorPack        global-fund | fcdo-prime | unfpa | ocha-cbpf
+        └─ one checklist row per pack key
+        │
+        ▼
+checklist on /desk                  confirm, or mark present / negative / stated absent / missing
+        │
+        ▼
+POST /api/desk/freeze
+        ├─ apply reviewer edits     reviewer_attested, original extract kept
+        ├─ evaluateDonorPack        recomputed from the reviewed snapshot
         └─ freezeAtJudgment → verifyFrozenRecord
         │
         ▼
@@ -29,9 +35,14 @@ results on /desk                    readiness, then Your judgment
         │
         ▼
 POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordId
+        │
+        ▼
+POST /api/desk/pilot-report         reviewed snapshot + matching human judgment → PDF
 ```
 
-`TRACE_EXTRACTION_PROVIDER` stays unset or `mock`. The mock hashes the file and returns a stub fragment. It does not read the document body. Pack fields the stub does not map stay `missing`. Missing is not a negative finding. Judgment on that snapshot is red, and the freeze records `request_evidence`. That is the honest mock walk: a frozen record with evidence gaps, not a faked pass.
+`POST /api/desk` still freezes in one step with no reviewer edits. The signed-in page uses the checklist. A freeze that confirms every row, or leaves already-missing rows missing, reproduces that one-step snapshot hash when both use the same clock.
+
+When `TRACE_EXTRACTION_PROVIDER` is unset or `mock`, the mock hashes the file and returns a stub fragment. It does not read the document body. Pack fields the stub does not map stay `missing`. Missing is not a negative finding. Judgment on that snapshot is red, and the freeze records `request_evidence`. With `talonic`, the live adapter supplies extracted fragments; the same mapping and review rules apply.
 
 ## Routes
 
@@ -47,8 +58,11 @@ POST /api/desk/disposition          same snapshot, new freeze, supersedesRecordI
 | `GET /hub` | Trace session | Knowledge hub. Seeded packs, plus organisation manual labels kept in this browser. |
 | `GET /hub/tender` | Trace session | Name a tender, choose one seeded pack, attach manuals, continue to `/desk`. |
 | `GET /desk` | Trace session | Pack choice, file input, and the frozen record. `?pack=` preselects a seeded pack. `?engagement=` shows the tender. |
-| `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze. |
-| `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the auto record. |
+| `POST /api/desk` | Trace session | Multipart upload, pack judgment, auto freeze with no reviewer edits. The page does not call this. |
+| `POST /api/desk/checklist` | Trace session | Multipart upload. Returns the checklist. Does not freeze. |
+| `POST /api/desk/freeze` | Trace session | Reviewed checklist. Recomputes findings, then freezes. |
+| `POST /api/desk/disposition` | Trace session | Human disposition. Re-freezes the returned snapshot and supersedes the assessment record. |
+| `POST /api/desk/pilot-report` | Trace session | PDF from the assessment's reviewed snapshot and its matching human disposition; checks organization, hashes, and recomputed findings. |
 | `POST /desk/sign-out` | WorkOS session | Clears the AuthKit session and returns to `/auth/signed-out`. |
 | `POST /desk/switch-account` | WorkOS session | Clears the AuthKit session and returns to `/auth/switch`, which starts a different sign-in. |
 | `GET /demo` | Public | Unchanged scripted Award desk. |
@@ -81,24 +95,32 @@ Login still returns to `/desk`. A cold desk visit shows one line, “New here? S
 
 The freeze actor is the session user id. The snapshot `organizationId` is the session organization. The client cannot choose either.
 
+Current authority boundary: any accepted Trace role can enter this desk flow; there is no separate reviewer or exception-approval policy here. The returned checklist and record are browser-held copies. Recomputing their hashes detects inconsistent payloads, but a client can recompute those hashes too: this does not prove server issuance. Durable server-held records, award-level authorization, and verified reviewer/approver separation remain pilot-readiness requirements.
+
 ## Pack select and freeze
 
 The form sends one `packId` (`global-fund`, `fcdo-prime`, `unfpa`, or `ocha-cbpf`) plus one file (pdf, docx, xlsx, eml, msg, txt, png, jpg, jpeg, at most 8 MB).
 
-The file control is a navy button labelled Choose file, associated with the packet file input. While `POST /api/desk` is in flight the submit control is disabled and the page shows a spinner with Working…. That one request extracts, runs the pack, and freezes. The page does not pretend to know which of those stages is current.
+The file control is a navy button labelled Choose file, associated with the packet file input. Extract packet calls `POST /api/desk/checklist`. While that request is in flight the submit control is disabled and the page shows a spinner with Working…. The checklist comes back before any freeze. Freeze assessment calls `POST /api/desk/freeze`. The page does not pretend to know which stage inside a request is current.
 
 `snapshotFromUpload` does four things:
 
 1. `fragmentsTowardRegistryDraft` still maps hinted fragments onto generic registry fields (`pricing.table`, `waiver.noted`, and the other draft targets). On a pack snapshot those generic keys are not copied in. The fragment counts as unmapped. `fragmentCount` remains the number of fragments Talonic or the mock returned.
 2. `alignPackFields` reads fragments tagged `document_text` onto the selected pack's keys. A match needs the field key plus a stated `missing:` / `present:` value, or a full-phrase statement for that key. Words that merely overlap a key do not count. An absence is not stored as present or true. The stored quote is that sentence, with running header and footer text, `Page N` markers, and markdown `**` removed. The page id on the source ref stays the page the marker named.
 3. Every pack key that step 2 did not fill is stored as `missing`, reason `Not extracted from this packet.`, provenance hash of the uploaded file, `verificationMethod: adapter_extract`. A Talonic JSON value for that key is not copied in, including when the value begins with the key name.
-4. The snapshot is `classification: synthetic` while this mapper is in front of the mock. The organization id is still the session org. Pack versions are unchanged. The snapshot fields are that pack's keys only.
+4. The mapper currently stamps `classification: synthetic` for either provider. The organization id is still the session org. Pack versions are unchanged. The snapshot fields are that pack's keys only. Customer-file classification and custody are not implemented by this path.
+
+The checklist shows every pack key with the human title from the pack rule, the state (present, missing, or negative), the value, the quote, and the page. The reviewer can confirm the extract, mark present (value, page, quote), mark negative (note and page), mark stated absent (quote and page), or leave the row missing. A page is required for a reviewer-set present, negative, or stated-absent value. Confirming a row, or leaving a row that is already missing, does not change provenance.
+
+A real edit sets `verificationMethod` to `reviewer_attested` and keeps the extracted value on `provenance.extractedValue`, plus `extractedSourceRef`, `extractedVerificationMethod`, `reviewedBy` (the session user id), and `reviewedAt`. It does not overwrite the adapter extract. Findings and readiness are computed again from that snapshot before `freezeAtJudgment`. The frozen field list badges reviewer-attested rows and extracted rows. The public Case Card already prints `verificationMethod` on each registry row, so the same distinction is in the JSON export without a separate Case Card presentation change.
 
 `evaluateDonorPack` supplies `pipelineStatus`. `freezeAtJudgment` then `verifyFrozenRecord`. Green readiness would record `accept_assessment`. Any other readiness records `request_evidence`. The mock walk is the second case.
 
 The JSON response is a view: provider id, file name, file hash, pack, findings, field states, the registry snapshot, record id, snapshot hash, packs hash. It does not include file bytes or a vendor payload. The browser keeps that view in `sessionStorage` (`traceli.uploadDesk.frozen.v2`) until the next packet. Nothing is written to Postgres. The file is not retained. There is no server cache of the frozen record.
 
 After the assessment freeze, the same page asks for a human disposition: Request evidence, Accept with exception, or Escalate. The reason is drafted from readiness, the top findings, and missing pack fields. Confirm calls `POST /api/desk/disposition`. The server checks the session organization and actor, recomputes the snapshot hash, and writes a new verified freeze with `supersedesRecordId` set to the assessment record. The assessment record is not mutated. Accept with exception adds a desk-session waiver stub (`waiver.desk.<short>`, authority is the signed-in actor). That note is not an organization waiver system. The decision record stays in `sessionStorage` with the assessment. Start another packet clears both.
+
+Download pilot report sends that reviewed assessment view and the human judgment to `POST /api/desk/pilot-report`. The human record must cite the reviewed assessment's record id and snapshot hash; pairing it with the earlier extraction snapshot is refused. Reviewer-attested fields retain their original extraction value and provenance, and the PDF labels them with reviewer identity and time. An incomplete reviewer audit object is rejected. Existing published freezes without reviewer edits retain their hashes.
 
 When extraction fails, the desk uses the same JSON as `POST /api/extract`: `error`, `code`, and `upstream` (`status`, `code`, `message`, `requestId`) when Talonic returned them. The page shows the `error` sentence and that detail. The API key and Authorization header are not included.
 
@@ -115,9 +137,9 @@ No new variables. Use the existing WorkOS and Trace contract.
 | `TRACELI_TRACE_MODE` | `workos` |
 | `DATABASE_URL` | Pooled Postgres URL. The desk does not query it. `pnpm validate:env` still requires it whenever Trace mode is `workos`, because `/api/trace` does. A Vercel preview build may continue when this pair is set and the WorkOS secrets are absent, because those secrets are Production-only. Signed-in Trace-li stays closed on that preview. Production still refuses the build if WorkOS is incomplete. |
 | `DATABASE_URL_UNPOOLED` | Direct Postgres URL. Same validation rule. |
-| `TRACE_EXTRACTION_PROVIDER` | Leave unset, or set `mock`, until the founder flips Production to `talonic` after the live client is merged. The key and base URL may already be set; they are unused while the provider is mock. |
-| `TRACE_TALONIC_API_KEY` | Already set on Production `traceli-new`. Do not copy it into the repo. Unused while the provider is mock. |
-| `TRACE_TALONIC_BASE_URL` | Production value `https://api.talonic.com/v1`. Unused while the provider is mock. |
+| `TRACE_EXTRACTION_PROVIDER` | Supported values: `mock` (default) or `talonic`. Read the deployment configuration to determine which is active. This reconciliation does not change it. |
+| `TRACE_TALONIC_API_KEY` | Required for the Talonic provider. Read state through authorized deployment tooling; do not copy the value into the repo. Unused while the provider is mock. |
+| `TRACE_TALONIC_BASE_URL` | Talonic endpoint, normally `https://api.talonic.com/v1`. Unused while the provider is mock. |
 
 Signup stays closed. Trace-li does not offer a public registration form. AuthKit sign-up in the dashboard Authentication section stays off. A valid invitation still opens registration for that email, including when signup is disabled. After acceptance, the desk still requires a verified email, one active organization membership, and a Trace role. An invitation alone does not grant the desk.
 
@@ -168,6 +190,7 @@ Open `http://127.0.0.1:3000/desk`. The database URL only has to be a loopback Po
 
 ```sh
 pnpm test:upload-desk
+pnpm test:pilot-report
 pnpm test:hub
 pnpm test:authkit
 pnpm test:extraction
@@ -182,7 +205,7 @@ pnpm typecheck
 
 ## Non-goals
 
-- Flipping Production `TRACE_EXTRACTION_PROVIDER` to `talonic` in this desk change. The founder does that after the live client is merged. See [extraction-adapter.md](./extraction-adapter.md).
+- Changing Production `TRACE_EXTRACTION_PROVIDER` in this reconciliation. See [extraction-adapter.md](./extraction-adapter.md).
 - A tenant table for frozen upload-desk records
 - Public case studies, homepage, or film changes
 - Rule library workspace productization

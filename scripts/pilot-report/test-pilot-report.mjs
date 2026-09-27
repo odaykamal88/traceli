@@ -19,7 +19,7 @@ import {
   OIOS_2025_098_SNAPSHOT_HASH,
   oios2025098FrozenRecord,
 } from '../../lib/case-cards/oios-2025-098-cbpf-reserve-freeze.ts'
-import { freezeUploadedPacket, supersedeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
+import { freezeReviewedPacket, freezeUploadedPacket, prepareUploadChecklist, supersedeUploadedPacket } from '../../lib/desk/freeze-upload.ts'
 import { evaluateDonorPack } from '../../lib/field-registry/packs/index.ts'
 import {
   PILOT_BOUNDARY,
@@ -463,15 +463,44 @@ test('the signed-in desk route returns a PDF for that org only', async () => {
   assert.equal(bytes.includes(Buffer.from('packet')), false)
   assert.equal(pdfPlainText(bytes).includes('Confirmed by reviewer'), false)
 
-  const attested = structuredClone(payload)
-  const field = attested.view.snapshot.fields.find(item => item.key === 'integrity.coi_disclosed')
-    ?? attested.view.snapshot.fields[0]
-  field.provenance.verificationMethod = 'reviewer_attested'
-  field.provenance.reviewedBy = 'Ada Lovelace'
-  field.provenance.reviewedAt = '2026-09-22T12:05:00.000Z'
-  const attestedHash = hashJson(attested.view.snapshot)
-  attested.view.record.snapshotHash = attestedHash
-  attested.judgment.record.snapshotHash = attestedHash
+  const checklist = prepareUploadChecklist({
+    extraction,
+    packId: 'global-fund',
+    organizationId: 'org_trace_local',
+    procurementReference: 'RFP-LOCAL-41',
+    asOf: '2026-09-22T12:00:00.000Z',
+  })
+  const reviewed = freezeReviewedPacket({
+    checklist,
+    decisions: [{
+      key: 'eligibility.contractor_capable',
+      action: 'present',
+      value: 'true',
+      page: '4',
+      quote: 'The contractor is able to perform the work.',
+      note: '',
+    }],
+    organizationId: 'org_trace_local',
+    actorId: 'fixture-reviewer',
+    actorRole: 'Procurement Director',
+    frozenAt: '2026-09-22T12:05:00.000Z',
+  })
+  const reviewedJudgment = supersedeUploadedPacket({
+    view: reviewed.view,
+    decision: 'escalate',
+    reason: 'Send this reviewed packet for committee review before sign-off.',
+    organizationId: 'org_trace_local',
+    actorId: 'fixture-reviewer',
+    actorRole: 'Procurement Director',
+    frozenAt: '2026-09-22T12:30:00.000Z',
+  })
+  const attested = { view: reviewed.view, judgment: reviewedJudgment.judgment }
+  assert.notEqual(attested.view.record.snapshotHash, frozen.view.record.snapshotHash)
+  assert.equal(attested.judgment.record.snapshotHash, attested.view.record.snapshotHash)
+  const reviewedField = attested.view.snapshot.fields.find(item => item.key === 'eligibility.contractor_capable')
+  assert.equal(reviewedField.value.state, 'present')
+  assert.equal(reviewedField.provenance.extractedValue.state, 'missing')
+  assert.equal(attested.view.findingCount, frozen.view.findingCount - 1)
   const attestedResponse = await POST(new Request('http://127.0.0.1/api/desk/pilot-report', {
     method: 'POST',
     headers: { host: '127.0.0.1', origin: 'http://127.0.0.1', 'content-type': 'application/json' },
@@ -480,12 +509,13 @@ test('the signed-in desk route returns a PDF for that org only', async () => {
   assert.equal(attestedResponse.status, 200)
   const attestedText = pdfPlainText(Buffer.from(await attestedResponse.arrayBuffer()))
   assert.equal(attestedText.includes('Confirmed by reviewer'), true)
-  assert.equal(attestedText.includes('Ada Lovelace'), true)
+  assert.equal(attestedText.includes('fixture-reviewer'), true)
   assert.equal(attestedText.includes('22 Sep 2026, 12:05 UTC'), true)
+  assert.equal(attestedText.includes(attested.judgment.record.snapshotHash), true)
+  assert.equal(attestedText.includes(frozen.view.record.snapshotHash), false)
 
-  const unnamed = structuredClone(payload)
-  const unnamedField = unnamed.view.snapshot.fields[0]
-  unnamedField.provenance.verificationMethod = 'reviewer_attested'
+  const unnamed = structuredClone(attested)
+  const unnamedField = unnamed.view.snapshot.fields.find(item => item.key === 'eligibility.contractor_capable')
   delete unnamedField.provenance.reviewedBy
   delete unnamedField.provenance.reviewedAt
   const unnamedHash = hashJson(unnamed.view.snapshot)
@@ -496,11 +526,14 @@ test('the signed-in desk route returns a PDF for that org only', async () => {
     headers: { host: '127.0.0.1', origin: 'http://127.0.0.1', 'content-type': 'application/json' },
     body: JSON.stringify(unnamed),
   }))
-  assert.equal(unnamedResponse.status, 200)
-  const unnamedText = pdfPlainText(Buffer.from(await unnamedResponse.arrayBuffer()))
-  assert.equal(unnamedText.includes('Confirmed by reviewer'), true)
-  assert.equal(unnamedText.includes('Ada Lovelace'), false)
-  assert.equal(unnamedText.includes('12:05 UTC'), false)
+  assert.equal(unnamedResponse.status, 400)
+
+  const mismatched = await POST(new Request('http://127.0.0.1/api/desk/pilot-report', {
+    method: 'POST',
+    headers: { host: '127.0.0.1', origin: 'http://127.0.0.1', 'content-type': 'application/json' },
+    body: JSON.stringify({ view: frozen.view, judgment: reviewedJudgment.judgment }),
+  }))
+  assert.equal(mismatched.status, 400)
 
   const foreign = structuredClone(payload)
   foreign.view.organizationId = 'org_other'

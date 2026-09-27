@@ -19,7 +19,7 @@ export function DeskShell({
       <a className={s.skip} href="#desk-main">{current === 'hub' ? 'Skip to knowledge hub' : 'Skip to award desk'}</a>
       <header className={s.topbar}>
         <div className={s.topbarLeft}>
-          <Link className={s.wordmark} href="/desk">Traceli</Link>
+          <Link className={s.wordmark} href="/desk">Trace-li</Link>
           <nav className={s.nav} aria-label="Award assurance">
             <Link href="/hub" aria-current={current === 'hub' ? 'page' : undefined}>Knowledge hub</Link>
             <Link href="/desk" aria-current={current === 'desk' ? 'page' : undefined}>Award desk</Link>

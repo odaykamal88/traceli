@@ -292,7 +292,10 @@ test('desk working copy stays on one honest status', () => {
 })
 
 test('the upload desk file control is a labelled button with a working spinner', () => {
-  const view = readFileSync(new URL('../../app/desk/upload-desk.tsx', import.meta.url), 'utf8')
+  const view = [
+    readFileSync(new URL('../../app/desk/upload-desk.tsx', import.meta.url), 'utf8'),
+    readFileSync(new URL('../../app/desk/checklist.tsx', import.meta.url), 'utf8'),
+  ].join('\n')
   const css = readFileSync(new URL('../../app/desk/desk.module.css', import.meta.url), 'utf8')
   const route = readFileSync(new URL('../../app/api/desk/route.ts', import.meta.url), 'utf8')
   assert.match(view, /htmlFor="packet-file"/)
@@ -301,7 +304,11 @@ test('the upload desk file control is a labelled button with a working spinner',
   assert.match(view, /deskWorkingCopy/)
   assert.match(view, /className=\{s\.spinner\}/)
   assert.match(view, /disabled=\{busy\}/)
-  assert.match(view, /const busy = pending \|\| judging/)
+  assert.match(view, /const busy = pending \|\| freezing \|\| judging/)
+  assert.match(view, /Checklist/)
+  assert.match(view, /Freeze assessment/)
+  assert.match(view, /data-testid="checklist"/)
+  assert.match(view, /Reviewer attested/)
   assert.match(view, /Record disposition/)
   assert.match(view, /Confirm judgment/)
   assert.match(view, /Packet prep/)
@@ -752,8 +759,13 @@ test('the disposition route freezes a superseding record for the signed-in revie
 test('desk sources do not log and do not name Talonic', () => {
   for (const file of [
     'app/api/desk/route.ts',
+    'app/api/desk/checklist/route.ts',
+    'app/api/desk/freeze/route.ts',
     'app/api/desk/disposition/route.ts',
     'lib/desk/freeze-upload.ts',
+    'lib/desk/freeze-body.ts',
+    'lib/desk/review.ts',
+    'lib/desk/review-apply.ts',
     'lib/desk/disposition-body.ts',
     'lib/desk/judgment.ts',
     'lib/desk/packet.ts',

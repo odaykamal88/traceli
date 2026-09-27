@@ -21,6 +21,10 @@ export const snapshotClassifications = ['synthetic', 'customer', 'public-source'
 export const entityKinds = ['award', 'supplier', 'requirement', 'criterion', 'evidence', 'finding'] as const
 export const sourceRefKinds = ['page', 'node', 'cell', 'message'] as const
 export const verificationMethods = ['unverified', 'adapter_extract', 'human_confirmed', 'deterministic_check', 'reviewer_attested'] as const
+/** Methods an extractor or an earlier check can hold. A review never claims one of these by overwriting it. */
+export const extractedVerificationMethods = ['unverified', 'adapter_extract', 'human_confirmed', 'deterministic_check'] as const
+/** Reason prefix for a packet that states a control is absent. Shared with pack alignment. */
+export const statedAbsentReasonPrefix = 'Stated absent in this packet: '
 export const fieldValueStates = ['present', 'missing', 'negative'] as const
 export const dispositionDecisions = [
   'request_evidence',
@@ -47,17 +51,6 @@ export const sourceRefSchema = z.strictObject({
   label: shortText.optional(),
 })
 
-export const fieldProvenanceSchema = z.strictObject({
-  sourceFileHash: hashSchema,
-  sourceRef: sourceRefSchema,
-  extractedAt: z.iso.datetime(),
-  confidence: z.number().min(0).max(1),
-  verificationMethod: z.enum(verificationMethods),
-  /** Set by a reviewer confirm/correct step. Absent on freezes that skip that step. */
-  reviewedBy: z.string().trim().min(1).max(160).optional(),
-  reviewedAt: z.iso.datetime().optional(),
-})
-
 const scalarValue = z.union([z.string().trim().min(1).max(4000), z.number().finite(), z.boolean()])
 
 /** Missing means the packet did not contain the fact. Negative means the packet supports an adverse fact. */
@@ -67,6 +60,72 @@ export const fieldValueSchema = z.discriminatedUnion('state', [
   z.strictObject({ state: z.literal('negative'), value: scalarValue }),
 ])
 
+const reviewerAuditKeys = ['extractedValue', 'extractedSourceRef', 'extractedVerificationMethod', 'reviewedBy', 'reviewedAt'] as const
+
+export const fieldProvenanceSchema = z.strictObject({
+  sourceFileHash: hashSchema,
+  sourceRef: sourceRefSchema,
+  extractedAt: z.iso.datetime(),
+  confidence: z.number().min(0).max(1),
+  verificationMethod: z.enum(verificationMethods),
+  /**
+   * Present only when verificationMethod is reviewer_attested.
+   * Omitted on an untouched extract so existing snapshot hashes stay stable.
+   * Snapshot schema stays award-registry-snapshot-v1 for that reason.
+   */
+  extractedValue: fieldValueSchema.optional(),
+  extractedSourceRef: sourceRefSchema.optional(),
+  extractedVerificationMethod: z.enum(extractedVerificationMethods).optional(),
+  reviewedBy: idSchema.optional(),
+  reviewedAt: z.iso.datetime().optional(),
+  /** Full quote or pointer. Omitted when the reviewer did not give one. */
+  reviewQuote: z.string().trim().min(1).max(500).optional(),
+}).superRefine((provenance, ctx) => {
+  const attested = provenance.verificationMethod === 'reviewer_attested'
+  const filled = reviewerAuditKeys.filter(key => provenance[key] !== undefined)
+  if (attested && filled.length !== reviewerAuditKeys.length) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'A reviewer-attested value keeps the extracted value, the original provenance, the reviewer, and the review time.',
+    })
+  }
+  if (!attested && (filled.length > 0 || provenance.reviewQuote !== undefined)) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Reviewer audit fields belong only on a reviewer-attested value.',
+    })
+  }
+})
+
+export function reviewerAttestationError(field: {
+  value: z.infer<typeof fieldValueSchema>
+  provenance: z.infer<typeof fieldProvenanceSchema>
+}): string | null {
+  if (field.provenance.verificationMethod !== 'reviewer_attested') return null
+  const statedAbsent = field.value.state === 'missing' && field.value.reason.startsWith(statedAbsentReasonPrefix)
+  const needsPage = field.value.state === 'present' || field.value.state === 'negative' || statedAbsent
+  if (!needsPage) return null
+  const page = /^page-([1-9]\d{0,3}|10000)$/.exec(field.provenance.sourceRef.id)
+  if (field.provenance.sourceRef.kind !== 'page' || !page) {
+    return 'A reviewer-set present, negative, or stated-absent value needs a page reference.'
+  }
+  const pageNumber = Number(page[1])
+  if (pageNumber < 1 || pageNumber > 10000) {
+    return 'A reviewer-set present, negative, or stated-absent value needs a page reference.'
+  }
+  const label = field.provenance.sourceRef.label ?? ''
+  if (statedAbsent || field.value.state === 'present') {
+    const quote = field.provenance.reviewQuote ?? ''
+    if (quote.trim().length < 1 || !label.startsWith('Quote: ')) {
+      return 'A reviewer-set present or stated-absent value needs a quote or pointer.'
+    }
+  }
+  if (field.value.state === 'negative' && label.trim().length < 1) {
+    return 'A reviewer-set negative value needs the note on the page reference.'
+  }
+  return null
+}
+
 export const registryFieldSchema = z.strictObject({
   fieldId: idSchema,
   entityKind: z.enum(entityKinds),
@@ -74,6 +133,9 @@ export const registryFieldSchema = z.strictObject({
   key: z.string().trim().regex(/^[a-z][a-z0-9_.]{0,119}$/),
   value: fieldValueSchema,
   provenance: fieldProvenanceSchema,
+}).superRefine((field, ctx) => {
+  const issue = reviewerAttestationError(field)
+  if (issue) ctx.addIssue({ code: 'custom', message: issue })
 })
 
 export const donorRefSchema = z.strictObject({

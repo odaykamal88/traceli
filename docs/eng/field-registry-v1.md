@@ -40,9 +40,11 @@ Every field value includes:
 | `sourceRef` | `kind` of `page`, `node`, `cell`, or `message`, plus that location's id. `message` is the mail or chat message id. Optional `label` is a display locator such as `Annex B`. |
 | `extractedAt` | When the value was taken from the source. This can be earlier than judgment. |
 | `confidence` | Number from 0 to 1, produced by the extractor or a reviewer. |
-| `verificationMethod` | `unverified`, `adapter_extract`, `human_confirmed`, or `deterministic_check`. |
+| `verificationMethod` | `unverified`, `adapter_extract`, `human_confirmed`, `deterministic_check`, or `reviewer_attested`. |
 
 A field that omits provenance fails validation.
+
+`reviewer_attested` is a reviewer edit on the signed-in award desk. It does not replace the extract. The same provenance object keeps `extractedValue`, `extractedSourceRef`, `extractedVerificationMethod` (never `reviewer_attested`), `reviewedBy` (the WorkOS user id), and `reviewedAt`. The page sits on `sourceRef`. The quote they gave is `reviewQuote`, with a short copy on `sourceRef.label`. Those audit fields are absent when the method is anything else, so an untouched snapshot still canonicalizes to the same hash. The snapshot schema stays `award-registry-snapshot-v1` for that reason. A version bump would change every untouched hash and would reject published Case Card freezes. `verifyFrozenRecord` rejects a reviewer-attested present, negative, or stated-absent value that has no page reference.
 
 ## Value states
 

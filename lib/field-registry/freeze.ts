@@ -8,6 +8,7 @@ import {
   dispositionSchema,
   freezeAtJudgmentInputSchema,
   frozenDecisionRecordSchema,
+  reviewerAttestationError,
   type ActorRole,
   type AwardDeskDecisionId,
   type AwardRegistrySnapshot,
@@ -150,6 +151,10 @@ export function verifyFrozenRecord(record: unknown): FrozenDecisionRecord {
     if (!stamped) {
       throw new FieldRegistryError('Every frozen pack must stay in force under the judgment actor and time.')
     }
+  }
+  for (const field of parsed.snapshot.fields) {
+    const issue = reviewerAttestationError(field)
+    if (issue) throw new FieldRegistryError(issue)
   }
   return deepFreeze(parsed) as FrozenDecisionRecord
 }
