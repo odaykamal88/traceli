@@ -32,7 +32,8 @@ import {
   type UploadDeskPackId,
   type UploadDeskView,
 } from '@/lib/desk/view'
-import { deskTenderContext, readHubLibrary, type DeskTenderContext } from '@/lib/hub/library'
+import { readHubLibraryResult, type DeskTenderContext } from '@/lib/hub/library'
+import { readActiveDesk, resolveDeskContinuity, writeActiveDesk } from '@/lib/hub/desk-continuity'
 
 import s from './desk.module.css'
 
@@ -164,6 +165,7 @@ function emphasize(text: string, emphasis: string | null) {
 }
 
 export default function UploadDesk({ viewer, providerId, packs, initialPackId = null, engagementId = null }: Props) {
+  const mountedRef = useRef(false)
   const formRef = useRef<HTMLFormElement>(null)
   const judgmentHeadingRef = useRef<HTMLHeadingElement>(null)
   const recordHeadingRef = useRef<HTMLHeadingElement>(null)
@@ -189,16 +191,44 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
   const [announce, setAnnounce] = useState('')
   const [packId, setPackId] = useState<UploadDeskPackId | ''>(initialPackId ?? '')
   const [tender, setTender] = useState<DeskTenderContext | null>(null)
+  const [tenderProblem, setTenderProblem] = useState<string | null>(null)
+  const [blockUpload, setBlockUpload] = useState(false)
+  const [storageError, setStorageError] = useState<string | null>(null)
 
   useEffect(() => {
-    const context = engagementId ? deskTenderContext(readHubLibrary(viewer.organizationId), engagementId) : null
-    if (context) {
-      setTender(context)
-      setPackId(context.primaryPackId)
-    }
+    mountedRef.current = true
+    return () => { mountedRef.current = false }
+  }, [])
+
+  useEffect(() => {
+    setRestored(false)
+    setResult(null)
+    setChecklist(null)
+    setDecisions([])
+    setJudgment(null)
+    setChoice('')
+    setReason('')
+    const libraryResult = readHubLibraryResult(viewer.organizationId)
     const stored = readStored(viewer.organizationId)
-    const sameTender = !engagementId || stored?.engagementId === engagementId
-    if (stored && sameTender) {
+    const active = readActiveDesk(viewer.organizationId)
+    const query = new URLSearchParams(window.location.search)
+    const continuity = resolveDeskContinuity({
+      library: libraryResult.ok ? libraryResult.state : { organizationId: viewer.organizationId, uploads: [], engagements: [] },
+      requestedTenderId: engagementId,
+      requestedTenderPresent: query.has('engagement'),
+      requestedPackId: initialPackId,
+      requestedPackPresent: query.has('pack'),
+      activeTenderId: active?.engagementId ?? null,
+      activePackId: active?.packId ?? null,
+      storedTenderId: stored?.engagementId ?? null,
+      storedPackId: stored?.view?.packId ?? stored?.checklist?.packId ?? null,
+      hasStored: Boolean(stored),
+    })
+    setTender(continuity.tender)
+    setPackId(continuity.packId ?? '')
+    setTenderProblem(libraryResult.ok ? continuity.problem : libraryResult.error)
+    setBlockUpload(libraryResult.ok ? continuity.blockUpload : query.has('engagement'))
+    if (stored && continuity.restore && libraryResult.ok) {
       setResult(stored.view)
       setChecklist(stored.view ? null : stored.checklist)
       setDecisions(stored.view || !stored.checklist ? [] : decisionsForRows(stored.checklist.rows, stored.decisions))
@@ -213,16 +243,39 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
       }
     }
     setRestored(true)
-  }, [viewer.organizationId, engagementId])
+  }, [viewer.organizationId, engagementId, initialPackId])
+
+  useEffect(() => {
+    if (!restored || blockUpload || !packId) return
+    try {
+      writeActiveDesk(viewer.organizationId, { engagementId: tender?.id ?? null, packId })
+      setStorageError(current => current?.startsWith('This browser could not remember the active tender.') ? null : current)
+    } catch {
+      setStorageError('This browser could not remember the active tender. Reopen it from the Knowledge hub if you leave this page.')
+    }
+  }, [restored, blockUpload, packId, tender, viewer.organizationId])
+
+  function persist(view: UploadDeskView | null, record: UploadDeskJudgmentView | null, draft: StoredDesk['draft'] = null,
+    checklistValue: UploadChecklist | null = null, decisionValues: ReviewerDecision[] | null = null) {
+    if (!mountedRef.current) return false
+    try {
+      writeStored(viewer.organizationId, view, record, draft, tender?.id ?? null, checklistValue, decisionValues)
+      setStorageError(current => current?.startsWith('This browser could not remember the active tender.') ? current : null)
+      return true
+    } catch {
+      setStorageError('This browser could not save the desk record. Keep this page open; the work may be lost if you leave or refresh.')
+      return false
+    }
+  }
 
   useEffect(() => {
     if (!restored || !result || judgment) return
-    writeStored(viewer.organizationId, result, null, { choice, reason }, tender?.id ?? null, null, null)
+    persist(result, null, { choice, reason })
   }, [restored, result, judgment, choice, reason, viewer.organizationId, tender])
 
   useEffect(() => {
     if (!restored || result || !checklist) return
-    writeStored(viewer.organizationId, null, null, null, tender?.id ?? null, checklist, decisions)
+    persist(null, null, null, checklist, decisions)
   }, [restored, result, checklist, decisions, viewer.organizationId, tender])
 
   useEffect(() => {
@@ -243,7 +296,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (judging || freezing) return
+    if (judging || freezing || blockUpload) return
     const form = event.currentTarget
     const data = new FormData(form)
     if (!(data.get('file') instanceof File) || (data.get('file') as File).size < 1) {
@@ -261,12 +314,12 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         return
       }
       const next = sanitizeUploadChecklist(body)
-      if (!next || next.organizationId !== viewer.organizationId) {
+      if (!next || next.organizationId !== viewer.organizationId || (tender && next.packId !== tender.primaryPackId)) {
         setError(deskNotice('The checklist came back in an unexpected shape. Nothing was stored.'))
         return
       }
       const nextDecisions = decisionsForRows(next.rows, null)
-      writeStored(viewer.organizationId, null, null, null, tender?.id ?? null, next, nextDecisions)
+      persist(null, null, null, next, nextDecisions)
       focusTarget.current = 'checklist'
       setJudgment(null)
       setResult(null)
@@ -285,7 +338,12 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
   function startAnother() {
     formRef.current?.reset()
     setFileLabel(null)
-    clearStored()
+    try {
+      clearStored()
+      setStorageError(null)
+    } catch {
+      setStorageError('This browser could not clear the saved desk record. Check browser storage before leaving.')
+    }
     setResult(null)
     setChecklist(null)
     setDecisions([])
@@ -333,11 +391,11 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         return
       }
       const view = sanitizeUploadDeskView(body)
-      if (!view || view.organizationId !== viewer.organizationId || view.sourceFileHash !== checklist.sourceFileHash) {
+      if (!view || view.organizationId !== viewer.organizationId || view.sourceFileHash !== checklist.sourceFileHash || view.packId !== checklist.packId) {
         setChecklistError('The freeze came back in an unexpected shape. The checklist is unchanged.')
         return
       }
-      writeStored(viewer.organizationId, view, null, null, tender?.id ?? null, null, null)
+      persist(view, null)
       focusTarget.current = 'judgment'
       primeDraft(view)
       setChecklist(null)
@@ -385,7 +443,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
         setJudgmentError('The judgment came back in an unexpected shape. The assessment freeze is unchanged.')
         return
       }
-      writeStored(viewer.organizationId, result, recorded, null, tender?.id ?? null)
+      persist(result, recorded)
       focusTarget.current = 'record'
       setAnnounce('Record frozen · verified')
       setJudgment(recorded)
@@ -469,13 +527,15 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
                   ? `Upload the packet for ${tender.name}. Trace-li reads it against ${selectedPack?.name ?? 'the seeded pack'} and waits for your checklist before the freeze.`
                   : 'Upload a packet against a seeded pack. Check the checklist, then freeze a citeable golden thread. Humans dispose; Trace-li freezes the proof.'}
         </p>
-        {tender ? <HubPath current={judgment ? 'freeze' : 'desk'} /> : null}
+        {tender ? <HubPath current={judgment ? 'freeze' : 'desk'} tender={tender} /> : null}
         {restored && !tender ? (
           <p className={s.cue} data-testid="desk-cold-cue">
             New here? <Link href="/hub">Start in the Knowledge hub</Link>.
           </p>
         ) : null}
       </header>
+      {tenderProblem ? <p className={s.alert} role="alert" data-testid="tender-problem">{tenderProblem} <Link href="/hub">Open Knowledge hub</Link>.</p> : null}
+      {storageError ? <p className={s.alert} role="alert" data-testid="desk-storage-error">{storageError}</p> : null}
       {tender ? (
         <aside className={s.banner} data-testid="tender-context">
           <p className={s.eyebrow}>This tender</p>
@@ -550,7 +610,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
                   name="packId"
                   value={pack.packId}
                   required
-                  disabled={busy}
+                  disabled={busy || blockUpload || Boolean(tender && tender.primaryPackId !== pack.packId)}
                   checked={packId === pack.packId}
                   onChange={() => setPackId(pack.packId)}
                 />
@@ -571,7 +631,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
               name="file"
               type="file"
               required
-              disabled={busy}
+              disabled={busy || blockUpload}
               aria-describedby="packet-file-help"
               accept=".pdf,.docx,.xlsx,.eml,.msg,.txt,.png,.jpg,.jpeg,application/pdf,text/plain"
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
@@ -587,7 +647,7 @@ export default function UploadDesk({ viewer, providerId, packs, initialPackId = 
           <span className={s.help} id="packet-file-help">PDF, Word, Excel, email, text, or image. Up to 8 MB.</span>
         </div>
         <div className={s.actions}>
-          <button className={s.primary} type="submit" disabled={busy}>
+          <button className={s.primary} type="submit" disabled={busy || blockUpload}>
             {pending ? deskWorkingCopy.button : checklist ? 'Extract again' : 'Extract packet'}
           </button>
           {result || checklist ? (

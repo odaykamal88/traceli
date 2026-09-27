@@ -120,6 +120,25 @@ export function openItemCount(rows: readonly ChecklistRow[], decisions: readonly
   }).length
 }
 
+export function incompleteCorrectionCount(rows: readonly ChecklistRow[], decisions: readonly ReviewerDecision[]): number {
+  const byKey = new Map(decisions.map(decision => [decision.key, decision]))
+  return rows.filter(row => {
+    const decision = byKey.get(row.key)
+    return decision ? decisionIssue(row.title, decision) !== null : false
+  }).length
+}
+
+export function checklistRowVisible(
+  openOnly: boolean,
+  row: ChecklistRow,
+  decision: ReviewerDecision,
+  activeKey: string | null,
+): boolean {
+  if (!openOnly) return true
+  if (activeKey === row.key || decisionIssue(row.title, decision)) return true
+  return openItemCount([row], [decision]) > 0
+}
+
 export function isStatedAbsentReason(reason: string) {
   return reason.startsWith(statedAbsentReasonPrefix)
 }

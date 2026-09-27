@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import type { ReactNode } from 'react'
+import { Suspense, type ReactNode } from 'react'
 
 import s from './desk.module.css'
+import { DeskNav } from './desk-nav'
 
 export function DeskShell({
   children,
@@ -10,7 +11,7 @@ export function DeskShell({
   current,
 }: {
   children: ReactNode
-  viewer?: { name: string, role: string }
+  viewer?: { name: string, role: string, organizationId?: string }
   showSignOut?: boolean
   current?: 'hub' | 'desk'
 }) {
@@ -18,13 +19,17 @@ export function DeskShell({
     <div className={s.shell}>
       <a className={s.skip} href="#desk-main">{current === 'hub' ? 'Skip to knowledge hub' : 'Skip to award desk'}</a>
       <header className={s.topbar}>
-        <div className={s.topbarLeft}>
-          <Link className={s.wordmark} href="/desk">Trace-li</Link>
-          <nav className={s.nav} aria-label="Award assurance">
-            <Link href="/hub" aria-current={current === 'hub' ? 'page' : undefined}>Knowledge hub</Link>
-            <Link href="/desk" aria-current={current === 'desk' ? 'page' : undefined}>Award desk</Link>
-          </nav>
-        </div>
+        <Suspense fallback={
+          <div className={s.topbarLeft}>
+            <Link className={s.wordmark} href="/desk">Trace-li</Link>
+            <nav className={s.nav} aria-label="Award assurance">
+              <Link href="/hub">Knowledge hub</Link>
+              <Link href="/desk">Award desk</Link>
+            </nav>
+          </div>
+        }>
+          <DeskNav current={current} organizationId={viewer?.organizationId} />
+        </Suspense>
         <div className={s.topbarMeta}>
           <span>{current === 'hub' ? 'Knowledge hub' : 'Award desk'}</span>
           <span className={s.dot} aria-hidden="true" />

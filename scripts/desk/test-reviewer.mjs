@@ -4,7 +4,7 @@ import { MockExtractionProvider } from '../../lib/field-registry/extract-mock.ts
 import { hashJson, verifyFrozenRecord } from '../../lib/field-registry/freeze.ts'
 import { awardRegistrySnapshotSchema } from '../../lib/field-registry/schema.ts'
 import { DeskReviewError } from '../../lib/desk/review-apply.ts'
-import { decisionsForRows } from '../../lib/desk/review.ts'
+import { checklistRowVisible, decisionsForRows, decisionIssue, incompleteCorrectionCount, openItemCount } from '../../lib/desk/review.ts'
 import { DeskAccessError, freezeReviewedPacket, freezeUploadedPacket, prepareUploadChecklist } from '../../lib/desk/freeze-upload.ts'
 
 const secret = 'SECRET_FILE_BYTES_SHOULD_NOT_LEAK'
@@ -26,6 +26,37 @@ function presentDecision(page = '4') {
     note: '',
   }
 }
+
+test('open-only keeps incomplete missing-row corrections visible and releases them when complete', async () => {
+  const { checklist } = await packet()
+  const row = checklist.rows.find(item => item.open)
+  assert.ok(row)
+  const missing = decisionsForRows([row], [])[0]
+  assert.equal(openItemCount([row], [missing]), 1)
+  assert.equal(checklistRowVisible(true, row, missing, null), true)
+
+  const incompletePresent = { ...missing, action: 'present' }
+  assert.match(decisionIssue(row.title, incompletePresent), /page number/)
+  assert.equal(openItemCount([row], [incompletePresent]), 0)
+  assert.equal(incompleteCorrectionCount([row], [incompletePresent]), 1)
+  assert.equal(checklistRowVisible(true, row, incompletePresent, null), true)
+
+  const present = { ...incompletePresent, ...presentDecision(), key: row.key }
+  assert.equal(decisionIssue(row.title, present), null)
+  assert.equal(incompleteCorrectionCount([row], [present]), 0)
+  assert.equal(checklistRowVisible(true, row, present, row.key), true)
+  assert.equal(checklistRowVisible(true, row, present, null), false)
+
+  for (const action of ['negative', 'stated_absent']) {
+    const incomplete = { ...missing, action }
+    assert.equal(checklistRowVisible(true, row, incomplete, null), true)
+    const complete = action === 'negative'
+      ? { ...incomplete, note: 'No evidence found in the packet.', page: '4' }
+      : { ...incomplete, quote: 'This packet states the item is absent.', page: '4' }
+    assert.equal(decisionIssue(row.title, complete), null)
+    assert.equal(checklistRowVisible(true, row, complete, null), false)
+  }
+})
 
 async function packet() {
   const provider = new MockExtractionProvider()

@@ -9,6 +9,7 @@ import { hubSeedSources, hubSynthesisNote } from '@/lib/hub/library'
 import s from '../desk/desk.module.css'
 import HubUploads from './hub-uploads'
 import { HubPath } from './path'
+import SavedTenders from './saved-tenders'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,7 +34,7 @@ export default async function HubPage() {
 
   return (
     <DeskShell
-      viewer={{ name: gate.viewer.name, role: gate.viewer.role }}
+      viewer={{ name: gate.viewer.name, role: gate.viewer.role, organizationId: gate.viewer.organizationId }}
       showSignOut={gate.viewer.mode === 'workos'}
       current="hub"
     >
@@ -49,6 +50,7 @@ export default async function HubPage() {
         <p className={s.actions}>
           <Link className={s.primary} href="/hub/tender">Start a tender</Link>
         </p>
+        <SavedTenders key={gate.viewer.organizationId} organizationId={gate.viewer.organizationId} packNames={Object.fromEntries(seeds.map(seed => [seed.packId, seed.name]))} />
         <section className={s.section} aria-labelledby="seeded-sources">
           <h2 id="seeded-sources">Start from a Trace-li pack</h2>
           <p className={s.help}>{hubSynthesisNote} One pack drives the freeze.</p>

@@ -32,7 +32,7 @@ export default async function NewTenderPage() {
 
   return (
     <DeskShell
-      viewer={{ name: gate.viewer.name, role: gate.viewer.role }}
+      viewer={{ name: gate.viewer.name, role: gate.viewer.role, organizationId: gate.viewer.organizationId }}
       showSignOut={gate.viewer.mode === 'workos'}
       current="hub"
     >

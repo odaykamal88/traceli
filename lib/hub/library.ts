@@ -292,12 +292,21 @@ export function sanitizeHubLibrary(input: unknown, organizationId: string): HubL
 }
 
 export function readHubLibrary(organizationId: string): HubLibraryState {
-  if (typeof localStorage === 'undefined') return emptyHubLibrary(organizationId)
+  const result = readHubLibraryResult(organizationId)
+  return result.ok ? result.state : emptyHubLibrary(organizationId)
+}
+
+export function readHubLibraryResult(organizationId: string):
+  | { ok: true, state: HubLibraryState }
+  | { ok: false, error: string } {
+  if (typeof localStorage === 'undefined') {
+    return { ok: false, error: 'Browser storage is unavailable. Saved tenders cannot be opened here.' }
+  }
   try {
     const raw = localStorage.getItem(hubStorageKey)
-    return sanitizeHubLibrary(raw ? JSON.parse(raw) : null, organizationId)
+    return { ok: true, state: sanitizeHubLibrary(raw ? JSON.parse(raw) : null, organizationId) }
   } catch {
-    return emptyHubLibrary(organizationId)
+    return { ok: false, error: 'Saved tenders could not be read from this browser. Check browser storage and try again.' }
   }
 }
 

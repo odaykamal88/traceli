@@ -8,13 +8,14 @@ import {
   deskTenderContext,
   newHubId,
   parseHubEngagement,
-  readHubLibrary,
+  readHubLibraryResult,
   writeHubLibrary,
   type DonorPackId,
   type HubUpload,
 } from '@/lib/hub/library'
 
 import s from '../../desk/desk.module.css'
+import { deskTenderHref } from '@/lib/hub/desk-continuity'
 
 export type TenderSeed = {
   packId: DonorPackId
@@ -40,7 +41,9 @@ export default function NewTender({
   const [pending, setPending] = useState(false)
 
   useEffect(() => {
-    setUploads(readHubLibrary(organizationId).uploads)
+    const result = readHubLibraryResult(organizationId)
+    if (result.ok) setUploads(result.state.uploads)
+    else setError(result.error)
     setReady(true)
   }, [organizationId])
 
@@ -52,7 +55,12 @@ export default function NewTender({
     event.preventDefault()
     if (pending) return
     const form = new FormData(event.currentTarget)
-    const library = readHubLibrary(organizationId)
+    const libraryResult = readHubLibraryResult(organizationId)
+    if (!libraryResult.ok) {
+      setError(libraryResult.error)
+      return
+    }
+    const library = libraryResult.state
     const parsed = parseHubEngagement({
       id: newHubId('eng'),
       name: String(form.get('name') ?? ''),
@@ -66,14 +74,20 @@ export default function NewTender({
       return
     }
     const next = addHubEngagement(library, parsed.engagement)
-    writeHubLibrary(next)
-    const stored = deskTenderContext(next, parsed.engagement.id)
+    try {
+      writeHubLibrary(next)
+    } catch {
+      setError('This browser could not save the tender. Check browser storage and try again.')
+      return
+    }
+    const verified = readHubLibraryResult(organizationId)
+    const stored = verified.ok ? deskTenderContext(verified.state, parsed.engagement.id) : null
     if (!stored) {
-      setError('The tender could not be saved.')
+      setError('The tender could not be verified in this browser. Check browser storage and try again.')
       return
     }
     setPending(true)
-    router.push(`/desk?pack=${stored.primaryPackId}&engagement=${stored.id}`)
+    router.push(deskTenderHref(stored))
   }
 
   return (
