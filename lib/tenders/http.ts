@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { z } from 'zod'
-import { ExtractionAccessError, ExtractionError } from '@/lib/field-registry/extract'
+import { ExtractionAccessError, ExtractionError, type ExtractionErrorCode } from '@/lib/field-registry/extract'
 import { readMultipartForm, uploadFromMultipartForm } from '@/lib/field-registry/extract-upload'
 import { requireTraceViewer, TraceAccessError } from '@/lib/trace/access'
 import { privateHeaders } from '@/lib/trace/http'
@@ -89,9 +89,25 @@ export function tenderJson(value: unknown, status = 200) {
   return Response.json(value, { status, headers: { ...privateHeaders, ...(etag ? { ETag: etag } : {}) } })
 }
 
+// Provider failures must keep their category without disclosing provider response text.
+const extractionProblems: Record<ExtractionErrorCode, { status: number; message: string }> = {
+  not_configured: { status: 501, message: 'Extraction is not configured for this workspace. Ask your workspace administrator to check the processing connection.' },
+  unimplemented: { status: 501, message: 'This extraction route is not available yet. Ask your workspace administrator to check the processing connection.' },
+  invalid_input: { status: 400, message: 'The file could not be prepared for review. Check its format and try again.' },
+  unsupported_media: { status: 400, message: 'This file type could not be extracted. Choose a supported PDF, document, spreadsheet, email or image.' },
+  too_large: { status: 413, message: 'This file is too large to extract. Choose a smaller file.' },
+  unauthorized: { status: 502, message: 'The extraction provider refused this request. Ask your workspace administrator to check the processing connection.' },
+  timeout: { status: 504, message: 'The extraction provider did not finish in time. Try the same file again shortly.' },
+  upstream: { status: 502, message: 'The extraction provider could not complete this request. Try again shortly; if it continues, contact your workspace administrator.' },
+}
+
 export function tenderHttpError(error: unknown): Response {
   if (error instanceof TenderError) return tenderJson({ error: error.message, code: error.code, ...(error.latestRevision !== undefined ? { latestRevision: error.latestRevision } : {}) }, error.status)
   if (error instanceof TraceAccessError || error instanceof ExtractionAccessError) return tenderJson({ error: 'This tender or action is unavailable for your current access.', code: 'unavailable' }, 403)
-  if (error instanceof z.ZodError || error instanceof SyntaxError || error instanceof ExtractionError) return tenderJson({ error: 'Check the required fields and try again. Your draft has been kept.', code: 'invalid' }, 400)
+  if (error instanceof ExtractionError) {
+    const problem = extractionProblems[error.code]
+    return tenderJson({ error: problem.message, code: error.code }, problem.status)
+  }
+  if (error instanceof z.ZodError || error instanceof SyntaxError) return tenderJson({ error: 'Check the required fields and try again. Your draft has been kept.', code: 'invalid' }, 400)
   return tenderJson({ error: 'Saved work is temporarily unavailable. Your draft has been kept; try again.', code: 'unavailable' }, 503)
 }
