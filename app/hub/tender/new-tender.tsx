@@ -29,17 +29,19 @@ export default function NewTender({
   organizationId,
   seeds,
   durable = false,
+  initialPackId = null,
 }: {
   organizationId: string
   seeds: TenderSeed[]
   durable?: boolean
+  initialPackId?: DonorPackId | null
 }) {
   const router = useRouter()
   const createKey = useRef<{ signature: string, key: string } | null>(null)
   const nameId = useId()
   const [ready, setReady] = useState(false)
   const [uploads, setUploads] = useState<HubUpload[]>([])
-  const [packId, setPackId] = useState<DonorPackId | ''>('')
+  const [packId, setPackId] = useState<DonorPackId | ''>(initialPackId ?? '')
   const [attached, setAttached] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
@@ -69,7 +71,7 @@ export default function NewTender({
       if (createKey.current?.signature !== signature) createKey.current = { signature, key: tenderIdempotencyKey() }
       try {
         const created = await createTender(title, packId, createKey.current.key)
-        router.push(`/desk?tender=${encodeURIComponent(created.tender.id)}`)
+        router.push(`/work/${encodeURIComponent(created.tender.id)}`)
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : 'The tender could not be saved. Try again.')
         setPending(false)
@@ -184,7 +186,7 @@ export default function NewTender({
       {error ? <p className={s.alert} role="alert">{error}</p> : null}
       <div className={s.actions}>
         <button className={s.primary} type="submit" disabled={!ready || pending}>
-          {pending ? 'Opening the award desk…' : 'Continue to award desk'}
+          {pending ? 'Opening tender…' : durable ? 'Create tender and add evidence' : 'Continue to award desk'}
         </button>
       </div>
     </form>

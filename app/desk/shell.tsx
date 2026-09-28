@@ -14,26 +14,26 @@ export function DeskShell({
   children: ReactNode
   viewer?: { name: string, role: string, organizationId?: string }
   showSignOut?: boolean
-  current?: 'hub' | 'desk'
+  current?: 'hub' | 'desk' | 'work'
   durable?: boolean
 }) {
   return (
     <div className={s.shell}>
-      <a className={s.skip} href="#desk-main">{current === 'hub' ? 'Skip to knowledge hub' : 'Skip to award desk'}</a>
+      <a className={s.skip} href="#desk-main">{current === 'hub' ? 'Skip to knowledge hub' : durable ? 'Skip to work' : 'Skip to award desk'}</a>
       <header className={s.topbar}>
         <Suspense fallback={
           <div className={s.topbarLeft}>
-            <Link className={s.wordmark} href={durable ? '/hub' : '/desk'}>Trace-li</Link>
+            <Link className={s.wordmark} href={durable ? '/work' : '/desk'}>Trace-li</Link>
             <nav className={s.nav} aria-label="Award assurance">
               <Link href="/hub">Knowledge hub</Link>
-              <Link href={durable ? '/hub' : '/desk'}>Award desk</Link>
+              <Link href={durable ? '/work' : '/desk'}>{durable ? "My work" : "Award desk"}</Link>
             </nav>
           </div>
         }>
           <DeskNav current={current} organizationId={viewer?.organizationId} durable={durable} />
         </Suspense>
         <div className={s.topbarMeta}>
-          <span>{current === 'hub' ? 'Knowledge hub' : 'Award desk'}</span>
+          <span>{current === 'hub' ? 'Knowledge hub' : durable ? 'My work' : 'Award desk'}</span>
           <span className={s.dot} aria-hidden="true" />
           {viewer ? <span>{viewer.name} · {viewer.role}</span> : <span>Sign-in required</span>}
           {showSignOut ? (

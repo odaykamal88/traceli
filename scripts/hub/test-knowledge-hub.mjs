@@ -149,7 +149,6 @@ test('hub and desk copy keep uploads outside the freeze rules', () => {
   const proxy = readFileSync(new URL('../../proxy.ts', import.meta.url), 'utf8')
   assert.match(hub, /hubSynthesisNote/)
   assert.match(hub, /Before the award/)
-  assert.match(hub, /citeable golden thread/)
   assert.match(hub, /Start from a Trace-li pack/)
   assert.match(hub, /One pack drives the freeze/)
   assert.match(hub, /Start a tender/)

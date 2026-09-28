@@ -6,22 +6,17 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 import { deskNavigationHref, readActiveDesk } from '@/lib/hub/desk-continuity'
 import { readHubLibraryResult } from '@/lib/hub/library'
-import { readActiveTenderNavigation, tenderNavigationHref, writeActiveTenderNavigation } from '@/lib/tenders/client'
 
 import s from './desk.module.css'
 
-export function DeskNav({ current, organizationId, durable = false }: { current?: 'hub' | 'desk', organizationId?: string, durable?: boolean }) {
-  const [deskHref, setDeskHref] = useState(durable ? '/hub' : '/desk')
+export function DeskNav({ current, organizationId, durable = false }: { current?: 'hub' | 'desk' | 'work', organizationId?: string, durable?: boolean }) {
+  const [deskHref, setDeskHref] = useState(durable ? '/work' : '/desk')
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   useEffect(() => {
     if (durable) {
-      const fromUrl = pathname === '/desk' ? searchParams.get('tender') : null
-      if (organizationId && fromUrl) writeActiveTenderNavigation(organizationId, fromUrl)
-      const activeTender = organizationId ? readActiveTenderNavigation(organizationId) : null
-      const selected = pathname === '/desk' && fromUrl ? fromUrl : activeTender
-      setDeskHref(tenderNavigationHref(selected))
+      setDeskHref('/work')
       return
     }
     const active = organizationId ? readActiveDesk(organizationId) : null
@@ -36,10 +31,11 @@ export function DeskNav({ current, organizationId, durable = false }: { current?
 
   return (
     <div className={s.topbarLeft}>
-      <Link className={s.wordmark} href={deskHref}>Trace-li</Link>
+      <Link className={s.wordmark} href={durable ? "/work" : deskHref}>Trace-li</Link>
       <nav className={s.nav} aria-label="Award assurance">
+        {durable ? <Link href="/work" aria-current={current === "work" ? "page" : undefined}>My work</Link> : null}
         <Link href="/hub" aria-current={current === 'hub' ? 'page' : undefined}>Knowledge hub</Link>
-        <Link href={deskHref} aria-current={current === 'desk' ? 'page' : undefined}>Award desk</Link>
+        {durable ? (pathname.startsWith("/work/") && pathname !== "/work/new" ? <Link href={pathname} aria-current="page">Current tender</Link> : null) : <Link href={deskHref} aria-current={current === 'desk' ? 'page' : undefined}>Award desk</Link>}
       </nav>
     </div>
   )

@@ -35,6 +35,7 @@ mock.module('@workos-inc/authkit-nextjs', {
 })
 mock.module('next/navigation', { namedExports: { redirect } })
 
+const { GET: legacySignIn } = await import('../../app/sign-in/route.ts')
 const { GET: login } = await import('../../app/login/route.ts')
 const { GET: initiate } = await import('../../app/auth/login/route.ts')
 const { GET: accountSwitch } = await import('../../app/auth/switch/route.ts')
@@ -53,6 +54,7 @@ function configureWorkOS() {
 
 beforeEach(() => {
   configureWorkOS()
+  delete process.env.TRACELI_TENDER_WORKSPACES
   sessionUser = null
   signInOptions = null
   signOutOptions = null
@@ -300,4 +302,33 @@ test('missing WorkOS configuration does not start AuthKit or echo the token', as
   assert.equal(signInOptions, null)
   assert.equal(signOutOptions, null)
   assert.equal(signUpCalls, 0)
+})
+
+
+test('durable product entry uses My work and ignores untrusted return paths', async () => {
+  process.env.TRACELI_TENDER_WORKSPACES = '1'
+  sessionUser = { id: 'user_signed_in' }
+  for (const route of [login, legacySignIn]) {
+    await assert.rejects(() => route(new Request('https://www.trace-li.com/login?returnTo=https://evil.example&organizationId=org_other')), /redirect:\/work$/)
+    assert.equal(signInOptions, null)
+  }
+  sessionUser = null
+  await assert.rejects(() => login(new Request('https://www.trace-li.com/login')), /redirect:https:/)
+  assert.deepEqual(signInOptions, { returnTo: '/work' })
+})
+
+test('durable invite, reset and account switch retain their handoff into My work', async () => {
+  process.env.TRACELI_TENDER_WORKSPACES = '1'
+  for (const [route, url] of [
+    [inviteRoute, `https://www.trace-li.com/invite?invitation_token=${invite}`],
+    [resetPassword, `https://www.trace-li.com/reset-password?token=${reset}`],
+    [initiate, 'https://www.trace-li.com/auth/login'],
+  ]) {
+    await assert.rejects(() => route(new Request(url)), /redirect:https:/)
+    assert.deepEqual(signInOptions, { returnTo: '/work' })
+  }
+  await assert.rejects(() => accountSwitch(new Request('https://www.trace-li.com/auth/switch')), /redirect:https:/)
+  assert.deepEqual(signInOptions, { returnTo: '/work', prompt: 'consent' })
+  delete process.env.WORKOS_API_KEY
+  await assert.rejects(() => login(new Request('https://www.trace-li.com/login')), /redirect:\/work\?auth=unavailable$/)
 })

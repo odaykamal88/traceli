@@ -5,10 +5,12 @@ import {
 } from '@/lib/dal/workspace'
 import { getWorkspaceViewer } from '@/lib/workspace-access'
 import { redirect } from 'next/navigation'
+import { tenderWorkspacesEnabled } from '@/lib/tenders/config'
 
 export const dynamic = 'force-dynamic'
 
 export default async function WorkspacePage() {
+  if (tenderWorkspacesEnabled()) redirect('/work')
   const viewer = await getWorkspaceViewer()
   let workspaceSnapshot
 

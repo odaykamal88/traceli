@@ -23,6 +23,7 @@ import type { WorkspaceViewer } from '@/lib/workspace-viewer'
 import { createTenderSchema, idempotencyKeySchema, issueAssessmentSchema, issueJudgmentSchema, revisionSchema, saveDraftSchema, tenderIdSchema, TenderError, type TenderDetail, type TenderDraft, type TenderIssuedRecord, type TenderManual, type TenderPacket, type TenderRecordSummary, type TenderSummary } from '@/lib/tenders/contract'
 import { verifyDraftRow, verifyIssuedRow, verifyPacketRow } from '@/lib/tenders/integrity'
 import { authorizeTender, tenderCapabilities, verifyTenderGrantTarget, type TenderAction } from '@/lib/tenders/policy'
+import { tenderOwner, tenderProgress, type TenderWorkflowState } from '@/lib/tenders/workflow'
 import { renderTenderReport } from '@/lib/tenders/report'
 import { hasWorkspaceReadRole } from '@/lib/workspace-policy'
 
@@ -52,12 +53,86 @@ function fileParts(input: FileParts) {
   const mediaType = resolveExtractionMedia(fileName,input.mediaType)
   return {fileName,mediaType,bytes:input.bytes,sha256:sha256(input.bytes)}
 }
-function summary(procurement: typeof procurements.$inferSelect, workspace: typeof tenderWorkspaces.$inferSelect, latestRecordKind:string|null=null): TenderSummary {
-  return {id:procurement.id,reference:procurement.reference,title:procurement.title,primaryPackId:workspace.primaryPackId,packVersion:workspace.packVersion,revision:workspace.currentRevision,updatedAt:iso(workspace.updatedAt),latestRecordKind}
+function summary(procurement: typeof procurements.$inferSelect, workspace: typeof tenderWorkspaces.$inferSelect, viewer:WorkspaceViewer, capabilities:ReturnType<typeof tenderCapabilities>, state:TenderWorkflowState): TenderSummary {
+  return {id:procurement.id,reference:procurement.reference,title:procurement.title,primaryPackId:workspace.primaryPackId,packVersion:workspace.packVersion,revision:workspace.currentRevision,updatedAt:iso(workspace.updatedAt),latestRecordKind:state==='assessment_current'?'assessment':state==='human_decision_current'?'human_judgment':state==='exception_proposed'?'exception_proposal':null,owner:tenderOwner(workspace.ownerId,viewer.id),progress:tenderProgress(state,capabilities,viewer.mode==='demo'&&resolveExtractionProviderId()==='mock')}
 }
 function manual(row:typeof tenderManualVersions.$inferSelect):TenderManual { return {id:row.id,ordinal:row.ordinal,label:row.label,fileName:row.originalFilename,mediaType:row.mediaType,byteSize:row.byteSize,sha256:row.sha256,hashKind:row.hashKind as TenderManual['hashKind'],recordedAt:iso(row.recordedAt)} }
 function packet(row:typeof tenderPacketReceipts.$inferSelect):TenderPacket { return {receiptId:row.id,checklist:verifyPacketRow(row),packDefinitionHash:row.packDefinitionHash,sourceSha256:row.sourceSha256,createdAt:iso(row.issuedAt)} }
 function recordSummary(row:typeof tenderIssuedRecords.$inferSelect):TenderRecordSummary { return {id:row.id,kind:row.kind as TenderRecordSummary['kind'],draftId:row.draftId,parentRecordId:row.parentRecordId,snapshotHash:row.snapshotHash,packsHash:row.packsHash,payloadHash:row.payloadHash,issuedAt:iso(row.issuedAt)} }
+
+type WorkflowWorkspace = typeof tenderWorkspaces.$inferSelect
+type WorkflowDraft = typeof tenderDraftRevisions.$inferSelect
+type WorkflowPacket = typeof tenderPacketReceipts.$inferSelect
+type WorkflowRecord = typeof tenderIssuedRecords.$inferSelect
+
+function currentWorkflow(workspace:WorkflowWorkspace,draft:WorkflowDraft|null,receipt:WorkflowPacket|null,assessment:WorkflowRecord|null,judgment:WorkflowRecord|null,manualIds:string[]):TenderWorkflowState {
+  const fail = ():never => { throw new TenderError(500,'integrity','The current tender progress failed its integrity check.') }
+  if (!draft) {
+    if(workspace.currentDraftId||workspace.currentRevision!==0||workspace.currentAssessmentId||workspace.currentJudgmentId) return fail()
+    if(receipt) {
+      verifyPacketRow(receipt)
+      if(receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion)return fail()
+    }
+    return receipt?'packet_ready':'no_packet'
+  }
+  if(draft.id!==workspace.currentDraftId||draft.revision!==workspace.currentRevision||!receipt||receipt.id!==draft.packetReceiptId||receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion)return fail()
+  const checklist=verifyPacketRow(receipt),payload=verifyDraftRow(draft)
+  const decisions=sanitizeReviewerDecisions(payload.decisions,checklist.rows)
+  if(!decisions||hashJson(manualIds.sort())!==payload.manualIdsHash)return fail()
+  const incomplete=incompleteCorrectionCount(checklist.rows,decisions)>0
+  if(payload.complete!==!incomplete)return fail()
+  if(incomplete){
+    if(payload.reviewedSnapshot!==null||payload.reviewedSnapshotHash!==null||workspace.currentAssessmentId||workspace.currentJudgmentId)return fail()
+    return 'correction_incomplete'
+  }
+  const snapshot=pinnedSnapshot(draft,receipt),pack=pinnedPack(receipt)
+  if(!workspace.currentAssessmentId){if(workspace.currentJudgmentId)return fail();return 'review_ready'}
+  if(!assessment||assessment.id!==workspace.currentAssessmentId||assessment.kind!=='assessment'||assessment.draftId!==draft.id||assessment.parentRecordId!==null||assessment.snapshotHash!==hashJson(snapshot))return fail()
+  const frozen=verifyIssuedRow(assessment) as ReturnType<typeof freezeAtJudgment>
+  const expectedPack=packToggleForDonorPack(pack)
+  const frozenPacks=frozen.packsInForce.map(({packId,version,name,toggledScope})=>({packId,version,name,toggledScope}))
+  if(frozen.packsInForce.length!==1||hashJson(frozenPacks)!==hashJson([expectedPack]))return fail()
+  const evaluation=evaluateJudgment(snapshot,pack.rules as JudgmentRule[],{evaluatedAt:frozen.frozenAt})
+  const expectedDecision=evaluation.pipelineStatus.readiness==='green'?'accept_assessment':'request_evidence'
+  if(hashJson(evaluation.pipelineStatus)!==hashJson(frozen.pipelineStatus)||frozen.disposition.decision!==expectedDecision||frozen.disposition.waiverRefs.length!==0)return fail()
+  if(!workspace.currentJudgmentId)return 'assessment_current'
+  if(!judgment||judgment.id!==workspace.currentJudgmentId||judgment.draftId!==draft.id||judgment.parentRecordId!==assessment.id||judgment.snapshotHash!==assessment.snapshotHash)return fail()
+  const actual=verifyIssuedRow(judgment)
+  if(judgment.kind==='exception_proposal'){
+    const proposal=actual as Record<string,unknown>
+    if(proposal.assessmentId!==assessment.id||proposal.assessmentHash!==assessment.payloadHash||proposal.draftId!==draft.id||judgment.packsHash!==assessment.packsHash)return fail()
+    return 'exception_proposed'
+  }
+  if(judgment.kind!=='human_judgment')return fail()
+  const child=actual as ReturnType<typeof freezeAtJudgment>
+  if(!['request_evidence','escalate'].includes(child.disposition.decision)||child.disposition.waiverRefs.length!==0||child.supersedesRecordId!==assessment.id||hashJson(child.pipelineStatus)!==hashJson(frozen.pipelineStatus)||hashJson(child.packsInForce.map(({packId,version,name,toggledScope})=>({packId,version,name,toggledScope})))!==hashJson(frozenPacks))return fail()
+  return 'human_decision_current'
+}
+
+/** At most five batched queries per page; no detail reads or historical scans per row. */
+async function workflowStates(tx:TenantTransaction,viewer:WorkspaceViewer,workspaces:WorkflowWorkspace[]):Promise<Map<string,TenderWorkflowState>> {
+  const states=new Map<string,TenderWorkflowState>()
+  if(!workspaces.length)return states
+  const draftIds=workspaces.flatMap(w=>w.currentDraftId?[w.currentDraftId]:[])
+  const drafts=draftIds.length?await tx.select().from(tenderDraftRevisions).where(and(eq(tenderDraftRevisions.organizationId,viewer.organizationId),inArray(tenderDraftRevisions.procurementId,workspaces.map(w=>w.procurementId)),inArray(tenderDraftRevisions.id,draftIds))):[]
+  const packetIds=drafts.map(d=>d.packetReceiptId)
+  const pinnedPackets=packetIds.length?await tx.select().from(tenderPacketReceipts).where(and(eq(tenderPacketReceipts.organizationId,viewer.organizationId),inArray(tenderPacketReceipts.procurementId,workspaces.map(w=>w.procurementId)),inArray(tenderPacketReceipts.id,packetIds))):[]
+  const withoutDraft=workspaces.filter(w=>!w.currentDraftId).map(w=>w.procurementId)
+  const recentPackets=withoutDraft.length?await tx.selectDistinctOn([tenderPacketReceipts.procurementId]).from(tenderPacketReceipts).where(and(eq(tenderPacketReceipts.organizationId,viewer.organizationId),inArray(tenderPacketReceipts.procurementId,withoutDraft))).orderBy(tenderPacketReceipts.procurementId,desc(tenderPacketReceipts.issuedAt),desc(tenderPacketReceipts.id)):[]
+  const recordIds=workspaces.flatMap(w=>[w.currentAssessmentId,w.currentJudgmentId].filter((value):value is string=>value!==null))
+  const records=recordIds.length?await tx.select().from(tenderIssuedRecords).where(and(eq(tenderIssuedRecords.organizationId,viewer.organizationId),inArray(tenderIssuedRecords.procurementId,workspaces.map(w=>w.procurementId)),inArray(tenderIssuedRecords.id,recordIds))):[]
+  const manuals=draftIds.length?await tx.select({draftId:tenderDraftManuals.draftId,procurementId:tenderDraftManuals.procurementId,id:tenderDraftManuals.manualVersionId,retainedId:tenderManualVersions.id}).from(tenderDraftManuals).leftJoin(tenderManualVersions,and(eq(tenderManualVersions.organizationId,tenderDraftManuals.organizationId),eq(tenderManualVersions.procurementId,tenderDraftManuals.procurementId),eq(tenderManualVersions.id,tenderDraftManuals.manualVersionId))).where(and(eq(tenderDraftManuals.organizationId,viewer.organizationId),inArray(tenderDraftManuals.procurementId,workspaces.map(w=>w.procurementId)),inArray(tenderDraftManuals.draftId,draftIds))):[]
+  for(const workspace of workspaces){
+    const draft=drafts.find(d=>d.id===workspace.currentDraftId&&d.procurementId===workspace.procurementId)??null
+    const receipt=(draft?pinnedPackets.find(p=>p.id===draft.packetReceiptId&&p.procurementId===workspace.procurementId):recentPackets.find(p=>p.procurementId===workspace.procurementId))??null
+    const assessment=records.find(r=>r.id===workspace.currentAssessmentId&&r.procurementId===workspace.procurementId)??null
+    const judgment=records.find(r=>r.id===workspace.currentJudgmentId&&r.procurementId===workspace.procurementId)??null
+    const links=manuals.filter(m=>m.draftId===workspace.currentDraftId&&m.procurementId===workspace.procurementId)
+    if(links.some(m=>!m.retainedId)||links.length>32)throw new TenderError(500,'integrity','The saved manual links failed their integrity check.')
+    states.set(workspace.procurementId,currentWorkflow(workspace,draft,receipt,assessment,judgment,links.map(m=>m.id)))
+  }
+  return states
+}
 
 async function lockTender(tx:TenantTransaction,viewer:WorkspaceViewer,tenderId:string,action:TenderAction) {
   await tx.execute(sql`select 1 from tender_workspaces where organization_id = ${viewer.organizationId} and procurement_id = ${tenderId} for update`)
@@ -115,7 +190,7 @@ async function detail(tx:TenantTransaction,viewer:WorkspaceViewer,tenderId:strin
   const procurement=await oneProcurement(tx,viewer,tenderId)
   // A transaction uses one pg client; run its queries sequentially.
   const manualRows = await tx.select().from(tenderManualVersions).where(and(eq(tenderManualVersions.organizationId,viewer.organizationId),eq(tenderManualVersions.procurementId,tenderId))).orderBy(desc(tenderManualVersions.ordinal)).limit(50)
-  const packetRows = await tx.select().from(tenderPacketReceipts).where(and(eq(tenderPacketReceipts.organizationId,viewer.organizationId),eq(tenderPacketReceipts.procurementId,tenderId))).orderBy(desc(tenderPacketReceipts.issuedAt)).limit(50)
+  const packetRows = await tx.select().from(tenderPacketReceipts).where(and(eq(tenderPacketReceipts.organizationId,viewer.organizationId),eq(tenderPacketReceipts.procurementId,tenderId))).orderBy(desc(tenderPacketReceipts.issuedAt),desc(tenderPacketReceipts.id)).limit(50)
   const recordRows = await tx.select().from(tenderIssuedRecords).where(recordScope(viewer.organizationId,tenderId)).orderBy(desc(tenderIssuedRecords.issuedAt)).limit(100)
   const draftRow=workspace.currentDraftId?await oneDraft(tx,viewer,tenderId,workspace.currentDraftId):null
   const currentDraft=draftRow?await draftFromRow(tx,viewer,tenderId,draftRow):null
@@ -133,9 +208,11 @@ async function detail(tx:TenantTransaction,viewer:WorkspaceViewer,tenderId:strin
       manualRows.push(...pinned)
     }
   }
-  const latestId=workspace.currentJudgmentId??workspace.currentAssessmentId
-  const latestKind=recordRows.find(row=>row.id===latestId)?.kind??null
-  return {tender:summary(procurement,workspace,latestKind),revision:workspace.currentRevision,etag:`"tender-${workspace.currentRevision}"`,draft:currentDraft,packets:packetRows.map(packet),manuals:manualRows.map(manual),records:recordRows.map(recordSummary),capabilities:{canEdit:capabilities.canEdit,canAssess:capabilities.canAssess,canJudge:capabilities.canJudge,canProposeException:capabilities.canProposeException,canGrant:capabilities.canGrant,canExport:capabilities.canExport}}
+  const assessment=workspace.currentAssessmentId?(recordRows.find(row=>row.id===workspace.currentAssessmentId)??await oneRecord(tx,viewer,tenderId,workspace.currentAssessmentId)):null
+  const judgment=workspace.currentJudgmentId?(recordRows.find(row=>row.id===workspace.currentJudgmentId)??await oneRecord(tx,viewer,tenderId,workspace.currentJudgmentId)):null
+  const receipt=currentDraft?packetRows.find(row=>row.id===currentDraft.packetReceiptId)??null:packetRows[0]??null
+  const state=currentWorkflow(workspace,draftRow,receipt,assessment,judgment,currentDraft?.manualVersionIds??[])
+  return {tender:summary(procurement,workspace,viewer,capabilities,state),revision:workspace.currentRevision,etag:`"tender-${workspace.currentRevision}"`,draft:currentDraft,packets:packetRows.map(packet),manuals:manualRows.map(manual),records:recordRows.map(recordSummary),capabilities:{canEdit:capabilities.canEdit,canAssess:capabilities.canAssess,canJudge:capabilities.canJudge,canProposeException:capabilities.canProposeException,canGrant:capabilities.canGrant,canExport:capabilities.canExport}}
 }
 
 export async function createTender(viewer:WorkspaceViewer,input:unknown):Promise<TenderDetail> {
@@ -166,10 +243,11 @@ export async function listTenders(viewer:WorkspaceViewer,input:{limit?:number;cu
   return withTenant(viewer.organizationId,async tx=>{
     const base=cursor?and(eq(tenderWorkspaces.organizationId,viewer.organizationId),or(lt(tenderWorkspaces.updatedAt,new Date(cursor.updatedAt)),and(eq(tenderWorkspaces.updatedAt,new Date(cursor.updatedAt)),lt(tenderWorkspaces.procurementId,cursor.id)))):eq(tenderWorkspaces.organizationId,viewer.organizationId)
     const where=['Procurement Director','Workspace Admin'].includes(viewer.role)?base:viewer.role==='Procurement Officer'?and(base,or(isNotNull(tenderAccess.userId),eq(tenderWorkspaces.ownerId,viewer.id))):and(base,isNotNull(tenderAccess.userId))
-    const rows=await tx.select({workspace:tenderWorkspaces,procurement:procurements,access:tenderAccess.access,latestKind:sql<string|null>`(select r.kind from tender_issued_records r where r.organization_id = ${tenderWorkspaces.organizationId} and r.procurement_id = ${tenderWorkspaces.procurementId} and r.id = coalesce(${tenderWorkspaces.currentJudgmentId}, ${tenderWorkspaces.currentAssessmentId}) limit 1)`}).from(tenderWorkspaces).innerJoin(procurements,and(eq(procurements.organizationId,tenderWorkspaces.organizationId),eq(procurements.id,tenderWorkspaces.procurementId))).leftJoin(tenderAccess,and(eq(tenderAccess.organizationId,tenderWorkspaces.organizationId),eq(tenderAccess.procurementId,tenderWorkspaces.procurementId),eq(tenderAccess.userId,viewer.id))).where(where).orderBy(desc(tenderWorkspaces.updatedAt),desc(tenderWorkspaces.procurementId)).limit(limit+1)
+    const rows=await tx.select({workspace:tenderWorkspaces,procurement:procurements,access:tenderAccess.access}).from(tenderWorkspaces).innerJoin(procurements,and(eq(procurements.organizationId,tenderWorkspaces.organizationId),eq(procurements.id,tenderWorkspaces.procurementId))).leftJoin(tenderAccess,and(eq(tenderAccess.organizationId,tenderWorkspaces.organizationId),eq(tenderAccess.procurementId,tenderWorkspaces.procurementId),eq(tenderAccess.userId,viewer.id))).where(where).orderBy(desc(tenderWorkspaces.updatedAt),desc(tenderWorkspaces.procurementId)).limit(limit+1)
     const page=rows.slice(0,limit)
     const last=page.at(-1)?.workspace
-    return {items:page.map(row=>summary(row.procurement,row.workspace,row.latestKind)),nextCursor:rows.length>limit&&last?Buffer.from(JSON.stringify({updatedAt:iso(last.updatedAt),id:last.procurementId})).toString('base64url'):null}
+    const states=await workflowStates(tx,viewer,page.map(row=>row.workspace))
+    return {items:page.map(row=>summary(row.procurement,row.workspace,viewer,tenderCapabilities(viewer,row.access==='read'||row.access==='review'?row.access:null,row.workspace.ownerId===viewer.id),states.get(row.workspace.procurementId)??'unknown')),nextCursor:rows.length>limit&&last?Buffer.from(JSON.stringify({updatedAt:iso(last.updatedAt),id:last.procurementId})).toString('base64url'):null}
   },'read only')
 }
 

@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Knowledge hub',
-  description: 'Choose a Trace-li seeded pack, name one tender, and freeze a citeable golden thread.',
+  description: 'Explore public-control pack references for Trace-li tender reviews.',
   robots: { index: false, follow: false },
 }
 
@@ -46,17 +46,17 @@ export default async function HubPage() {
           <p className={s.eyebrow}>Before the award</p>
           <h1>Knowledge hub</h1>
           <p className={s.lede}>{durable
-            ? 'Start or resume a tender. Choose the public-control pack that will judge its packet, then review and save the checklist before issuing a record.'
+            ? 'Explore the public-control packs available for your tenders. Each tender uses one pinned pack version.'
             : 'This workspace saves tender names and desk work in this browser only. Choose a seeded pack, then start a browser tender.'}</p>
-          <HubPath current="hub" />
+          {!durable ? <HubPath current="hub" /> : null}
         </header>
-        <p className={s.actions}>
+        {!durable ? <p className={s.actions}>
           <Link className={s.primary} href="/hub/tender">Start a tender</Link>
-        </p>
-        <SavedTenders key={gate.viewer.organizationId} organizationId={gate.viewer.organizationId} packNames={Object.fromEntries(seeds.map(seed => [seed.packId, seed.name]))} durable={durable} />
+        </p> : null}
+        {!durable ? <SavedTenders key={gate.viewer.organizationId} organizationId={gate.viewer.organizationId} packNames={Object.fromEntries(seeds.map(seed => [seed.packId, seed.name]))} durable={durable} /> : null}
         <section className={s.section} aria-labelledby="seeded-sources">
-          <h2 id="seeded-sources">Start from a Trace-li pack</h2>
-          <p className={s.help}>{hubSynthesisNote} One pack drives the freeze.</p>
+          <h2 id="seeded-sources">{durable ? "Trace-li pack library" : "Start from a Trace-li pack"}</h2>
+          <p className={s.help}>{hubSynthesisNote} {durable ? "One pack drives each tender assessment." : "One pack drives the freeze."}</p>
           <div className={s.sourceGrid} data-testid="hub-seeds">
             {seeds.map(seed => (
               <article key={seed.packId} className={s.sourceCard}>
@@ -64,9 +64,9 @@ export default async function HubPage() {
                 <h3>{seed.name}</h3>
                 <p>{seed.summary}</p>
                 <p className={s.help}>Version {seed.version}. {seed.ruleCount} deterministic checks.</p>
-                <p className={s.sourceAction}>
-                  <Link className={s.secondary} href={durable ? '/hub/tender' : `/desk?pack=${seed.packId}`}>{durable ? 'Start a tender' : 'Open on the award desk'}</Link>
-                </p>
+                {!durable || ["Procurement Officer", "Procurement Director", "Workspace Admin"].includes(gate.viewer.role) ? <p className={s.sourceAction}>
+                  <Link className={s.secondary} href={durable ? `/work/new?pack=${encodeURIComponent(seed.packId)}` : `/desk?pack=${seed.packId}`} aria-label={durable ? `Start a tender with ${seed.name}` : undefined}>{durable ? 'Start a tender' : 'Open on the award desk'}</Link>
+                </p> : null}
               </article>
             ))}
           </div>
