@@ -39,7 +39,7 @@ Next readiness work is measured held-out extraction performance, a source-linked
 
 ## Tender workspace follow-up
 
-The next hub/desk work is organized into [four delivery sprints](eng/TENDER_WORKSPACE_SPRINTS.md). Sprint 1 fixes tender continuity and inaccessible unfinished corrections while retaining an explicitly browser-local boundary. Durable cross-session saving and server-issued records are Sprint 2 work, not capabilities implied by the first fixes.
+The next hub/desk work is organized into [four delivery sprints](eng/TENDER_WORKSPACE_SPRINTS.md). Sprint 1 fixes tender continuity and inaccessible unfinished corrections while retaining an explicitly browser-local boundary. Durable cross-session saving and server-issued records are Sprint 2 work, not capabilities implied by the first fixes. The Sprint 2 branch now implements an opt-in durable path, validated with disposable synthetic fixtures; [its verification record](eng/TENDER_WORKSPACE_SPRINT2_VERIFICATION.md) describes the rollout and customer-data limits. This branch does not change the production capability register above.
 
 ## Open-change dispositions
 

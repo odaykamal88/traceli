@@ -85,6 +85,12 @@ jobs:
         run: pnpm test:upload-desk
       - name: Test knowledge hub
         run: pnpm test:hub
+      - name: Test saved tender request and client boundaries
+        run: pnpm test:tenders
+      - name: Test durable tender isolation and issuance
+        run: pnpm test:tenders:postgres
+        env:
+          TRACE_EXTRACTION_PROVIDER: mock
       - name: Test AuthKit invite and password-reset entry
         run: pnpm test:authkit
       - name: Test contradiction judgment scaffold

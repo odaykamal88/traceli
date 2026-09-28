@@ -57,6 +57,14 @@ if (isConfigured('TRACELI_SEED_ORGANIZATION_ID') && !databaseConfigured) {
   throw new Error('TRACELI_SEED_ORGANIZATION_ID requires complete database configuration.')
 }
 
+const tenderWorkspaces = process.env.TRACELI_TENDER_WORKSPACES
+if (tenderWorkspaces && !['0', '1'].includes(tenderWorkspaces)) {
+  throw new Error('TRACELI_TENDER_WORKSPACES must be 0 or 1.')
+}
+if (tenderWorkspaces === '1' && !databaseConfigured) {
+  throw new Error('Durable tender workspaces require complete database configuration.')
+}
+
 const hqAccess = process.env.TRACELI_HQ_ACCESS
 const traceMode = process.env.TRACELI_TRACE_MODE
 if (traceMode && !['disabled', 'local', 'workos'].includes(traceMode)) {

@@ -6,15 +6,24 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 import { deskNavigationHref, readActiveDesk } from '@/lib/hub/desk-continuity'
 import { readHubLibraryResult } from '@/lib/hub/library'
+import { readActiveTenderNavigation, tenderNavigationHref, writeActiveTenderNavigation } from '@/lib/tenders/client'
 
 import s from './desk.module.css'
 
-export function DeskNav({ current, organizationId }: { current?: 'hub' | 'desk', organizationId?: string }) {
-  const [deskHref, setDeskHref] = useState('/desk')
+export function DeskNav({ current, organizationId, durable = false }: { current?: 'hub' | 'desk', organizationId?: string, durable?: boolean }) {
+  const [deskHref, setDeskHref] = useState(durable ? '/hub' : '/desk')
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    if (durable) {
+      const fromUrl = pathname === '/desk' ? searchParams.get('tender') : null
+      if (organizationId && fromUrl) writeActiveTenderNavigation(organizationId, fromUrl)
+      const activeTender = organizationId ? readActiveTenderNavigation(organizationId) : null
+      const selected = pathname === '/desk' && fromUrl ? fromUrl : activeTender
+      setDeskHref(tenderNavigationHref(selected))
+      return
+    }
     const active = organizationId ? readActiveDesk(organizationId) : null
     const result = organizationId ? readHubLibraryResult(organizationId) : null
     setDeskHref(deskNavigationHref({
@@ -23,7 +32,7 @@ export function DeskNav({ current, organizationId }: { current?: 'hub' | 'desk',
       library: result?.ok ? result.state : null,
       active,
     }))
-  }, [pathname, searchParams, organizationId])
+  }, [pathname, searchParams, organizationId, durable])
 
   return (
     <div className={s.topbarLeft}>

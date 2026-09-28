@@ -1,6 +1,6 @@
 # Sprint 2 — durable tender workspace contract
 
-Status: implementation contract, 27 September 2026. This does not authorize a production migration. Scope is the signed-in `/hub` → `/desk` workflow; `/demo`, the synthetic Trace fixtures, and published `frozen-decision-record-v1` case hashes stay unchanged.
+Status: implementation contract, 27 September 2026. The Sprint 2 implementation is opt-in and locally verified; see [verification and activation boundaries](TENDER_WORKSPACE_SPRINT2_VERIFICATION.md). This does not authorize a production migration. Scope is the signed-in `/hub` → `/desk` workflow; `/demo`, the synthetic Trace fixtures, and published `frozen-decision-record-v1` case hashes stay unchanged.
 
 ## Boundary and records
 
@@ -42,3 +42,11 @@ Hub lists saved tenders after sign-in and offers Resume. Desk uses the tender UR
 4. Test on a disposable local Postgres with all migrations and `traceli_app` active. Exercise two organizations, two tenders in one organization, every role, absent/removed grant, forged organization/tender/actor/record ids, cross-tender manual/receipt links, old draft revision, duplicate and altered idempotency replay, concurrent saves/freezes, mutated record payload/hash, missing-versus-negative round trip, and a forced failure after each insert to prove cursor/record/audit/command rollback together. Verify PDF uses the retained issued record after a browser payload is changed, rejects an assessment/judgment mismatch, and emits no file bytes or secrets. Run existing v1 hash fixtures unchanged, relevant Desk/Hub tests, typecheck and build. No shared, staging, or production database command is part of this plan.
 
 Owner decisions before customer activation: configure classification and retention periods for sanitized customer excerpts/records and export receipts, and decide who may grant panel/auditor tender access. Defaults: synthetic fixtures only until the customer-data gate is configured, director/admin grants only, and no formal exception approval. Source viewing requires an explicit file-custody design and authorization review later.
+
+## Implementation clarifications
+
+The new path is off unless `TRACELI_TENDER_WORKSPACES=1`. It never falls back to browser saving after a server failure. Packet and manual ingestion currently requires the local fixture identity and mock extraction; customer ingestion is closed in code. Customer classification/retention activation requires follow-on policy implementation and verification, not simply a flag or a document.
+
+An idempotent draft retry returns the saved result while its draft is still current. If another writer has advanced the cursor, the retry returns a 409 and the latest revision rather than mislabelling the caller's stale edits as saved. Issuance receipts remain replayable by exact command.
+
+The reviewed browser import creates a new server tender from the confirmed name and pack. It displays the old manual labels/hashes as unverified; files must be reselected to add verified manual versions. It never promotes browser freezes or imports their authority. Panel/auditor access has grant/revoke endpoints; a membership-management screen remains later UI work.

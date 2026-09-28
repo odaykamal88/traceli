@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 
 import {
@@ -16,6 +16,7 @@ import {
 
 import s from '../../desk/desk.module.css'
 import { deskTenderHref } from '@/lib/hub/desk-continuity'
+import { createTender, tenderIdempotencyKey } from '@/lib/tenders/client'
 
 export type TenderSeed = {
   packId: DonorPackId
@@ -27,11 +28,14 @@ export type TenderSeed = {
 export default function NewTender({
   organizationId,
   seeds,
+  durable = false,
 }: {
   organizationId: string
   seeds: TenderSeed[]
+  durable?: boolean
 }) {
   const router = useRouter()
+  const createKey = useRef<{ signature: string, key: string } | null>(null)
   const nameId = useId()
   const [ready, setReady] = useState(false)
   const [uploads, setUploads] = useState<HubUpload[]>([])
@@ -41,20 +45,37 @@ export default function NewTender({
   const [pending, setPending] = useState(false)
 
   useEffect(() => {
+    if (durable) { setReady(true); return }
     const result = readHubLibraryResult(organizationId)
     if (result.ok) setUploads(result.state.uploads)
     else setError(result.error)
     setReady(true)
-  }, [organizationId])
+  }, [organizationId, durable])
 
   function toggle(id: string) {
     setAttached(current => current.includes(id) ? current.filter(item => item !== id) : [...current, id])
   }
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (pending) return
     const form = new FormData(event.currentTarget)
+    if (durable) {
+      const title = String(form.get('name') ?? '').trim()
+      if (!title || !packId) { setError('Name the tender and choose a pack.'); return }
+      setPending(true)
+      setError(null)
+      const signature = JSON.stringify([title, packId])
+      if (createKey.current?.signature !== signature) createKey.current = { signature, key: tenderIdempotencyKey() }
+      try {
+        const created = await createTender(title, packId, createKey.current.key)
+        router.push(`/desk?tender=${encodeURIComponent(created.tender.id)}`)
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : 'The tender could not be saved. Try again.')
+        setPending(false)
+      }
+      return
+    }
     const libraryResult = readHubLibraryResult(organizationId)
     if (!libraryResult.ok) {
       setError(libraryResult.error)
@@ -104,7 +125,7 @@ export default function NewTender({
           autoComplete="off"
           placeholder="Kenya shelter kits"
         />
-        <p className={s.help}>This name is the procurement reference on the freeze.</p>
+        <p className={s.help}>{durable ? 'The server will assign a stable tender reference.' : 'This name is the procurement reference on the browser freeze.'}</p>
       </div>
       <fieldset>
         <legend>Trace-li pack</legend>
@@ -131,7 +152,7 @@ export default function NewTender({
           ))}
         </div>
       </fieldset>
-      <fieldset>
+      {!durable ? <fieldset>
         <legend>Hub manuals (optional)</legend>
         <p className={s.help}>Optional. Attach these only as conditions in play. They are not evaluated as pack rules.</p>
         {!ready ? <p className={s.help}>Loading manuals…</p> : null}
@@ -159,7 +180,7 @@ export default function NewTender({
             ))}
           </div>
         ) : null}
-      </fieldset>
+      </fieldset> : null}
       {error ? <p className={s.alert} role="alert">{error}</p> : null}
       <div className={s.actions}>
         <button className={s.primary} type="submit" disabled={!ready || pending}>
