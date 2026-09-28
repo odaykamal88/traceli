@@ -26,7 +26,7 @@
     "test:field-registry": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-field-registry.mjs",
     "test:extraction": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-extraction.mjs",
     "test:upload-desk": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/desk/test-upload-desk.mjs scripts/desk/test-reviewer.mjs scripts/field-registry/test-pack-align.mjs",
-    "test:hub": "node --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/hub/test-knowledge-hub.mjs",
+    "test:hub": "node --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/hub/test-knowledge-hub.mjs scripts/hub/test-desk-continuity.mjs",
     "test:authkit": "node --experimental-test-module-mocks --experimental-strip-types --conditions=react-server --import ./scripts/field-registry/register.mjs --test scripts/auth/test-authkit-entry.mjs",
     "test:contradiction": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-contradiction.mjs",
     "test:donor-packs": "node --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/field-registry/test-donor-packs.mjs",

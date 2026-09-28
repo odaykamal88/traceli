@@ -1,9 +1,11 @@
 'use client'
 
-import { useId, useState, type RefObject } from 'react'
+import { useId, useState, type FocusEvent, type RefObject } from 'react'
 
 import {
   decisionIssue,
+  checklistRowVisible,
+  incompleteCorrectionCount,
   openItemCount,
   reviewerActions,
   type ReviewerAction,
@@ -46,7 +48,9 @@ export default function DeskChecklist({
 }) {
   const filterId = useId()
   const [openOnly, setOpenOnly] = useState(false)
+  const [activeCorrectionKey, setActiveCorrectionKey] = useState<string | null>(null)
   const openCount = openItemCount(checklist.rows, decisions)
+  const incompleteCount = incompleteCorrectionCount(checklist.rows, decisions)
   const byKey = new Map(decisions.map(decision => [decision.key, decision]))
   const issues = checklist.rows.flatMap(row => {
     const decision = byKey.get(row.key)
@@ -61,6 +65,7 @@ export default function DeskChecklist({
         <h2 id="checklist-title" ref={headingRef} tabIndex={-1}>Checklist</h2>
         <span className={s.sub} data-testid="open-items" aria-live="polite">
           {openCount === 0 ? 'No open items' : `${openCount} open ${openCount === 1 ? 'item' : 'items'}`}
+          {incompleteCount > 0 ? ` · ${incompleteCount} incomplete ${incompleteCount === 1 ? 'edit' : 'edits'}` : ''}
         </span>
         <button
           className={s.primary}
@@ -93,11 +98,20 @@ export default function DeskChecklist({
         {checklist.rows.map(row => {
           const decision = byKey.get(row.key)
           if (!decision) return null
-          const hidden = openOnly && openItemCount([row], [decision]) === 0
+          const hidden = !checklistRowVisible(openOnly, row, decision, activeCorrectionKey)
           const issue = decisionIssue(row.title, decision)
           const fieldId = `checklist-${row.key.replaceAll('.', '-')}`
           return (
-            <li key={row.key} className={s.checklistRow} hidden={hidden} data-field={row.key}>
+            <li
+              key={row.key}
+              className={s.checklistRow}
+              hidden={hidden}
+              data-field={row.key}
+              onFocusCapture={() => setActiveCorrectionKey(row.key)}
+              onBlurCapture={(event: FocusEvent<HTMLLIElement>) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setActiveCorrectionKey(null)
+              }}
+            >
               <div className={s.checklistSummary}>
                 <h3>{row.title}</h3>
                 <p className={s.key}>{row.key}</p>
@@ -251,7 +265,10 @@ export default function DeskChecklist({
         })}
       </ol>
       <div className={s.checklistBar}>
-        <p>{openCount === 0 ? 'No open items' : `${openCount} open ${openCount === 1 ? 'item' : 'items'}`}</p>
+        <p>
+          {openCount === 0 ? 'No open items' : `${openCount} open ${openCount === 1 ? 'item' : 'items'}`}
+          {incompleteCount > 0 ? ` · ${incompleteCount} incomplete ${incompleteCount === 1 ? 'edit' : 'edits'}` : ''}
+        </p>
         <button
           className={s.primary}
           type="button"

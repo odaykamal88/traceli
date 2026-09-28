@@ -83,6 +83,8 @@ jobs:
         run: pnpm test:extraction
       - name: Test upload desk freeze
         run: pnpm test:upload-desk
+      - name: Test knowledge hub
+        run: pnpm test:hub
       - name: Test AuthKit invite and password-reset entry
         run: pnpm test:authkit
       - name: Test contradiction judgment scaffold

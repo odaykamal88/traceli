@@ -39,8 +39,9 @@ export default async function DeskPage({
     blurb: hubSeedSources[pack.packId].blurb,
   }))
   return (
-    <DeskShell viewer={{ name: gate.viewer.name, role: gate.viewer.role }} showSignOut={gate.viewer.mode === 'workos'} current="desk">
+    <DeskShell viewer={{ name: gate.viewer.name, role: gate.viewer.role, organizationId: gate.viewer.organizationId }} showSignOut={gate.viewer.mode === 'workos'} current="desk">
       <UploadDesk
+        key={JSON.stringify([gate.viewer.organizationId, query.engagement ?? null, query.pack ?? null])}
         viewer={{
           name: gate.viewer.name,
           role: gate.viewer.role,

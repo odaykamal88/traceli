@@ -37,6 +37,10 @@ Founder rehearsals also remain bounded: Global Fund mapped zero pack fields (22 
 
 Next readiness work is measured held-out extraction performance, a source-linked reviewer workflow, explicit role/exception authority, and durable tenant-scoped records with transactional audit and authorized export. The newer desk currently accepts recognized Trace roles and uses a session waiver stub. Customer custody, scanning, retention/deletion and approved provider disclosure require their own verification; do not infer them from WorkOS sign-in or a successful PDF.
 
+## Tender workspace follow-up
+
+The next hub/desk work is organized into [four delivery sprints](eng/TENDER_WORKSPACE_SPRINTS.md). Sprint 1 fixes tender continuity and inaccessible unfinished corrections while retaining an explicitly browser-local boundary. Durable cross-session saving and server-issued records are Sprint 2 work, not capabilities implied by the first fixes.
+
 ## Open-change dispositions
 
 | PR / work | Reconciliation disposition |
