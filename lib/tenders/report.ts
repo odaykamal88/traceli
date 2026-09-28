@@ -39,7 +39,8 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
     page.drawText(`${classification === 'synthetic' ? 'Synthetic fixture' : 'Customer record'} - page ${doc.getPageCount()}`, { x: 42, y: 24, font: regular, size: 8, color: gray })
     y = 765
   }
-  function text(value: unknown, size = 10, font: PDFFont = regular) {
+  function wrappedLines(value: unknown, size: number, font: PDFFont) {
+    const lines: string[] = []
     for (const paragraph of clean(value).split('\n')) {
       let line = ''
       const words = paragraph.split(/\s+/).flatMap(word => {
@@ -54,13 +55,26 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
       })
       for (const word of words) {
         if (line && font.widthOfTextAtSize(`${line} ${word}`, size) > 510) {
-          if (y < 55) newPage()
-          page.drawText(line, { x: 42, y, font, size, color: navy }); y -= size + 5; line = word
+          lines.push(line); line = word
         } else line += `${line ? ' ' : ''}${word}`
       }
+      lines.push(line)
+    }
+    return lines
+  }
+  function text(value: unknown, size = 10, font: PDFFont = regular) {
+    for (const line of wrappedLines(value, size, font)) {
       if (y < 55) newPage()
       page.drawText(line, { x: 42, y, font, size, color: navy }); y -= size + 5
     }
+  }
+  function evidenceBlock(lines: { value: string; bold?: boolean }[]) {
+    const height = lines.reduce((total, line) => total + wrappedLines(line.value, 10, line.bold ? bold : regular).length * 15, 0) + 4
+    // Keep an ordinary row together. A row longer than one page starts fresh
+    // and continues through text's normal pagination without clipping content.
+    if (y - height < 55 && (height <= 710 || y < 765)) newPage()
+    for (const line of lines) text(line.value, 10, line.bold ? bold : regular)
+    y -= 4
   }
   function section(title: string) { y -= 10; text(title, 12, bold); y -= 3 }
   newPage()
@@ -88,19 +102,23 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
   for (const row of detail.draft.checklist.rows) {
     const field = fields.get(row.fieldId)
     const decision = decisions.get(row.key)
-    text(row.title, 10, bold)
+    const lines: { value: string; bold?: boolean }[] = [{ value: row.title, bold: true }]
     if (proposal) {
-      text(`Review: ${decision?.action ?? row.state}`)
-      text(`Value: ${decision?.value || row.valueText}`)
-      text(`Page: ${decision?.page || row.page || 'Not recorded'}`)
-      text(`Citation: ${decision?.quote || row.quote || 'Not recorded'}`)
-      if (decision?.note) text(`Note: ${decision.note}`)
+      const reviewLabels = { confirm: 'Confirm as extracted', present: 'Marked present', negative: 'Marked negative', stated_absent: 'Stated absent', missing: 'Left missing' }
+      lines.push({ value: `Review: ${decision ? reviewLabels[decision.action] : row.state}` })
+      lines.push({ value: `Value: ${decision?.value || row.valueText}` })
+      lines.push({ value: `Page: ${decision?.page || row.page || 'Not recorded'}` })
+      lines.push({ value: `Citation: ${decision?.quote || row.quote || 'Not recorded'}` })
+      if (decision?.note) lines.push({ value: `Note: ${decision.note}` })
     } else {
-      text(`Status: ${field?.value.state ?? row.state}`)
-      text(`Value: ${field ? JSON.stringify(field.value) : row.valueText}`)
-      text(`Citation: ${decision?.quote || row.quote || 'Not recorded'} | page ${decision?.page || row.page || 'not recorded'}`)
+      const value = field?.value
+      const state = value?.state ?? row.state
+      const statuses = { missing: 'Missing evidence', negative: 'Negative finding', present: 'Present' }
+      lines.push({ value: `Status: ${statuses[state]}` })
+      lines.push({ value: value?.state === 'missing' ? `Reason: ${value.reason}` : `Value: ${value ? String(value.value) : row.valueText}` })
+      lines.push({ value: `Citation: ${decision?.quote || row.quote || 'Not recorded'} | page ${decision?.page || row.page || 'not recorded'}` })
     }
-    y -= 4
+    evidenceBlock(lines)
   }
   section('Data policy')
   text(`Classification: ${classification === 'synthetic' ? 'Fictional test data' : 'Sanitized customer material'}`)

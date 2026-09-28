@@ -7,6 +7,8 @@ mock.module('../../lib/trace/access.ts', { namedExports: {
 } })
 const { readTenderCommand, readTenderUpload, requireTenderViewer, tenderHttpError } = await import('../../lib/tenders/http.ts')
 const { TenderError } = await import('../../lib/tenders/contract.ts')
+const { ExtractionError, ExtractionAccessError } = await import('../../lib/field-registry/extract.ts')
+const { TraceAccessError } = await import('../../lib/trace/access.ts')
 const json = (body, headers = {}) => new Request('https://app.example/api/tenders', { method: 'POST', headers: { host: 'app.example', origin: 'https://app.example', 'content-type': 'application/json', ...headers }, body })
 
 test('tender rollout is closed by default and missing database never downgrades', async () => {
@@ -71,4 +73,32 @@ test('policy acknowledgement is required and error responses do not disclose int
   assert.ok(!(await response.text()).includes('private-secret'))
   const stale = tenderHttpError(new TenderError(409,'stale','Another saved version exists.',8))
   assert.equal((await stale.json()).latestRevision,8)
+})
+
+
+test('provider failures retain actionable categories without exposing provider text', async () => {
+  const expected = { not_configured: 501, unimplemented: 501, invalid_input: 400, unsupported_media: 400, too_large: 413, unauthorized: 502, timeout: 504, upstream: 502 }
+  for (const [code, status] of Object.entries(expected)) {
+    const privateText = 'secret-token org_private document-private provider-raw-body'
+    const response = tenderHttpError(new ExtractionError(code, privateText, { status: 500, code: 'private_code', message: privateText, requestId: 'req_private123' }))
+    assert.equal(response.status, status, code)
+    assert.match(response.headers.get('cache-control'), /private, no-store/)
+    const body = await response.json()
+    assert.deepEqual(Object.keys(body).sort(), ['code', 'error'])
+    assert.equal(body.code, code)
+    assert.ok(!JSON.stringify(body).includes('private'), code)
+    assert.ok(!body.error.includes('required fields'), code)
+    assert.ok(!body.error.includes('secret-token'), code)
+    if (code === 'timeout') assert.match(body.error, /same file again/)
+    if (code === 'unauthorized') assert.match(body.error, /workspace administrator/)
+  }
+})
+
+test('application access failures stay generic 403 separately from provider authorization', async () => {
+  for (const error of [new TraceAccessError('org_private'), new ExtractionAccessError()]) {
+    const response = tenderHttpError(error)
+    assert.equal(response.status, 403)
+    assert.deepEqual(await response.json(), { error: 'This tender or action is unavailable for your current access.', code: 'unavailable' })
+    assert.match(response.headers.get('cache-control'), /private, no-store/)
+  }
 })

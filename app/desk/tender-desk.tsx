@@ -29,6 +29,30 @@ function niceKind(kind: TenderRecordSummary['kind']) {
   return 'Human judgment'
 }
 
+function recordFields(value: unknown): Record<string, unknown> | null {
+  return value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : null
+}
+
+function retainedOutcome(record: TenderIssuedRecord) {
+  const payload = recordFields(record.payload)
+  const disposition = recordFields(payload?.disposition)
+  const pipeline = recordFields(payload?.pipelineStatus)
+  const reasonValue = record.kind === 'exception_proposal' ? payload?.reason : disposition?.rationale
+  const reason = typeof reasonValue === 'string' && reasonValue.trim() ? reasonValue : null
+  if (record.kind === 'exception_proposal') {
+    return { outcome: payload?.status === 'approval_not_recorded' ? 'Exception proposed · approval not recorded' : 'Exception proposal status unavailable', readiness: null, reason }
+  }
+  if (record.kind === 'human_judgment') {
+    return { outcome: disposition?.decision === 'request_evidence' ? 'Request evidence' : disposition?.decision === 'escalate' ? 'Escalate' : 'Retained outcome unavailable', readiness: null, reason }
+  }
+  const readiness = pipeline?.readiness
+  return {
+    outcome: disposition?.decision === 'request_evidence' ? 'Request evidence recommended' : disposition?.decision === 'accept_assessment' ? 'No open rule findings' : 'Assessment outcome unavailable',
+    readiness: readiness === 'green' ? 'Green' : readiness === 'amber' ? 'Amber' : readiness === 'red' ? 'Red' : 'Unknown',
+    reason,
+  }
+}
+
 function draftSignature(receiptId: string, decisions: ReviewerDecision[], manualIds: string[], revision: number) {
   return JSON.stringify([receiptId, [...decisions].sort((left, right) => left.key.localeCompare(right.key)).map(item => [item.key, item.action, item.value, item.page, item.quote, item.note]), [...manualIds].sort(), revision])
 }
@@ -476,6 +500,8 @@ export default function DurableTenderDesk({ tenderId, organizationId, viewerId, 
   if (!detail) return null
 
   const pack = packs.find(item => item.packId === detail.tender.primaryPackId)
+  const selectedOutcome = selectedRecord ? retainedOutcome(selectedRecord) : null
+  const selectedAssessmentChild = selectedRecord?.kind === 'assessment' ? detail.records.find(record => record.parentRecordId === selectedRecord.id) : null
   const canFreeze = Boolean(detail.capabilities.canAssess && detail.draft && !currentAssessment && !dirty && saveState === 'saved' && !issuing && !uploading && !addingManual && !deleting && !validationIssue)
   const latestDraftRecord = detail.records.find(record => record.draftId === detail.draft?.id && record.kind !== 'assessment')
   const latestDecisions = conflictDetail?.draft?.decisions ?? []
@@ -620,12 +646,24 @@ export default function DurableTenderDesk({ tenderId, organizationId, viewerId, 
         <a className={s.primary} href={preparedReport.url} download={preparedReport.fileName}>Download prepared PDF</a>
       </div> : null}
       {detail.expiresAt ? <p className={s.help}>Records and reports are available until {new Date(detail.expiresAt).toLocaleString()}, or until this tender is deleted. Download a report before that date if you need your own copy.</p> : <p className={s.help}>This legacy record is preserved under its earlier policy, with no automatic expiry.</p>}
-      {selectedRecord ? <div className={s.card} data-testid="issued-record">
+      {selectedRecord && selectedOutcome ? <div className={s.card} data-testid="issued-record">
         <p className={s.eyebrow}>Verified server record</p>
-        <h3>{niceKind(selectedRecord.kind)}</h3>
-        <p className={s.help}>Issued {new Date(selectedRecord.issuedAt).toLocaleString()}</p><details><summary>Verification identifiers</summary><p className={s.help}>Record {selectedRecord.id} · payload hash {selectedRecord.payloadHash}</p></details>
-        {selectedRecord.kind === 'exception_proposal' ? <p className={s.alert}>Exception proposed; approval not recorded. This record does not authorize an award.</p> : null}
-        {selectedRecord.parentRecordId ? <p className={s.help}>Assessment {selectedRecord.parentRecordId}</p> : null}
+        <h3>{selectedRecord.kind === 'exception_proposal' ? 'Exception proposal' : niceKind(selectedRecord.kind)}</h3>
+        <p><strong>{selectedOutcome.outcome}</strong></p>
+        {selectedRecord.kind === 'assessment' ? <>
+          <p>Saved readiness: {selectedOutcome.readiness}.</p>
+          <p className={s.help}>{selectedAssessmentChild?.kind === 'exception_proposal' ? 'An exception is proposed for this assessment; approval is not recorded. Open that record to read its reason.' : selectedAssessmentChild ? 'A human disposition is recorded for this assessment. Open that record to read the decision.' : 'Human disposition pending for this assessment.'}</p>
+        </> : null}
+        <h4>Retained reason</h4>
+        {selectedOutcome.reason ? <p style={{ whiteSpace: 'pre-wrap' }}>{selectedOutcome.reason}</p> : <p className={s.help}>No retained reason is available.</p>}
+        <p className={s.help}>This record does not authorize an award.</p>
+        <p className={s.help}>Issued {new Date(selectedRecord.issuedAt).toLocaleString()}</p>
+        <details><summary>Verification identifiers</summary>
+          <p className={s.help}>Record {selectedRecord.id} · draft {selectedRecord.draftId}</p>
+          {selectedRecord.parentRecordId ? <p className={s.help}>Parent assessment {selectedRecord.parentRecordId}</p> : null}
+          <p className={s.help}>Payload hash {selectedRecord.payloadHash}</p>
+          <p className={s.help}>Snapshot hash {selectedRecord.snapshotHash} · packs hash {selectedRecord.packsHash}</p>
+        </details>
       </div> : null}
     </section>
     {detail.capabilities.canDelete ? <details className={s.card}>

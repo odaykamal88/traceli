@@ -123,3 +123,49 @@ test('report refuses missing, unknown or mismatched retained classification inst
   delete proposal.detail.draft.checklist.snapshot.classification
   await assert.rejects(renderTenderReport(proposal.detail,proposal.record),error=>error.code==='integrity'&&error.status===409)
 })
+
+
+test('rendered retained values and missing reasons are readable without state JSON',async()=>{
+  const {detail,record}=structuredClone(await reportFixture('customer'))
+  const fields=record.payload.snapshot.fields
+  fields[0].value={state:'missing',reason:'Signed conflict-of-interest declaration was not extracted.'}
+  fields[1].value={state:'negative',value:false}
+  fields[2].value={state:'present',value:'Verified delivery schedule'}
+  const body=(await tenderPdfPageText((await renderTenderReport(detail,record)).bytes)).join('\n')
+  assert.match(body,/Status: Missing evidence\nReason: Signed conflict-of-interest declaration was not extracted\./)
+  assert.match(body,/Status: Negative finding\nValue: false/)
+  assert.match(body,/Status: Present\nValue: Verified delivery schedule/)
+  assert.doesNotMatch(body,/\{"state":|"reason":/)
+})
+
+test('normal wrapped evidence rows keep title, status, reason and citation on one page',async()=>{
+  const {detail,record}=structuredClone(await reportFixture('customer'))
+  for(const [index,row] of detail.draft.checklist.rows.entries()){
+    row.title=`Evidence block ${index}`
+    row.quote=`Citation marker ${index}. ${'Retained source wording for this evidence item. '.repeat(8)}`
+    record.payload.snapshot.fields.find(field=>field.fieldId===row.fieldId).value={state:'missing',reason:'The required signed declaration was not extracted from the retained packet. '.repeat(5)}
+  }
+  const pages=await tenderPdfPageText((await renderTenderReport(detail,record)).bytes)
+  assert.ok(pages.length>3,'Exercise multiple natural page boundaries')
+  for(const [index,row] of detail.draft.checklist.rows.entries()){
+    const titlePage=pages.findIndex(page=>page.split('\n').includes(row.title))
+    assert.ok(titlePage>=0,`Evidence title ${index} rendered`)
+    assert.match(pages[titlePage],new RegExp(`Citation: Citation marker ${index}\\.`),`Evidence citation ${index} stays with its title`)
+    assert.match(pages[titlePage],/Status: Missing evidence/)
+    assert.match(pages[titlePage],/Reason: The required signed declaration/)
+  }
+})
+
+test('oversized evidence blocks continue without losing value or citation',async()=>{
+  const {detail,record}=structuredClone(await reportFixture('customer'))
+  const row=detail.draft.checklist.rows[0]
+  row.title='Oversized retained evidence'
+  row.quote='Final citation after the oversized value.'
+  record.payload.snapshot.fields.find(field=>field.fieldId===row.fieldId).value={state:'present',value:`${'Retained evidence line.\n'.repeat(120)}End of retained evidence.`}
+  const pages=await tenderPdfPageText((await renderTenderReport(detail,record)).bytes),body=pages.join('\n')
+  assert.match(body,/Oversized retained evidence/)
+  assert.equal((body.match(/Retained evidence line\./g)||[]).length,120)
+  assert.match(body,/End of retained evidence/)
+  assert.match(body,/Citation: Final citation after the oversized value/)
+  for(let index=0;index<pages.length;index++)assert.match(pages[index],new RegExp(`Customer record - page ${index+1}`))
+})
