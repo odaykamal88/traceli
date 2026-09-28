@@ -1,0 +1,2 @@
+# Explicitly fictional cron test constant in the first release commit; never an active credential.
+f05dd033eda5c012153c9c86b02446b42bccd652:scripts/tenders/test-retention-job.mjs:generic-api-key:4

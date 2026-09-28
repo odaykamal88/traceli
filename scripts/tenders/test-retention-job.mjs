@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { retentionJobScope } from '../../lib/tenders/retention-job.ts'
-const secret = 'fictional-expiry-secret-01234567890123456789'
+const secret = 'fixture-' + '0'.repeat(32)
 const request = (authorization) => new Request('https://example.invalid/api/cron/tender-retention?organizationId=org_attacker', { headers: authorization ? { authorization } : {} })
 test('expiry job denies absent/short/mismatched secrets before reading tenant configuration', () => {
   for (const env of [{}, { CRON_SECRET: 'short' }, { CRON_SECRET: secret }]) assert.equal(retentionJobScope(request(), env), null)

@@ -28,6 +28,10 @@ Database and extraction checks above use disposable local fixtures, including mo
 
 Created a fictional Global Fund tender, selected its 30-day notice, uploaded the synthetic PDF through the browser, and observed the initial review saved as revision 1. Next open item moved keyboard focus to the first unresolved row. Issued an assessment and a Request evidence disposition, refreshed, returned through My work and reopened the retained human decision. Prepared and downloaded a valid three-page PDF (6,845 bytes). The in-app browser download-event listener timed out, but the downloaded file was present and parsed successfully. The final UI exposes an explicit prepared-download link with bounded in-memory lifetime.
 
+## Deployment packaging
+
+The deployment ignore rule is anchored to the repository-root `/work/` scratch directory. It must not omit application routes under `app/work/`. The secret-scan exclusion names only the historical fingerprint of a fictional cron test constant; no live credential or entire file/path is excluded.
+
 ## Release sequence
 
 1. Apply the reviewed additive migrations through the atomic runner; compare the old source-history fingerprint and row counts before/after.

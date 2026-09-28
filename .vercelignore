@@ -1,5 +1,5 @@
 # Local research, test databases and delivery scratch never belong in a deployment.
-work/
+/work/
 **/__pycache__/
 **/*.pyc
 docs/TRACELI_IMPLEMENTATION_PLAN.md
