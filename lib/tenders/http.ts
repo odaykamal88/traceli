@@ -6,7 +6,7 @@ import { readMultipartForm, uploadFromMultipartForm } from '@/lib/field-registry
 import { requireTraceViewer, TraceAccessError } from '@/lib/trace/access'
 import { privateHeaders } from '@/lib/trace/http'
 import { tenderWorkspacesEnabled } from '@/lib/tenders/config'
-import { idempotencyKeySchema, revisionSchema, TenderError } from '@/lib/tenders/contract'
+import { idempotencyKeySchema, policyAcknowledgementSchema, revisionSchema, TenderError, type TenderPolicyAcknowledgement } from '@/lib/tenders/contract'
 
 export { privateHeaders }
 export async function requireTenderViewer() {
@@ -57,27 +57,27 @@ function singleText(form: FormData, name: string): string | undefined {
   return values.length ? String(values[0]) : undefined
 }
 
-type TenderUpload = { fileName: string; mediaType: string; bytes: Uint8Array<ArrayBuffer>; expectedRevision: number; idempotencyKey: string }
-export function readTenderUpload(request: Request, kind: 'packet'): Promise<TenderUpload & { classification: 'synthetic' }>
+type TenderUpload = TenderPolicyAcknowledgement & { fileName: string; mediaType: string; bytes: Uint8Array<ArrayBuffer>; expectedRevision: number; idempotencyKey: string }
+export function readTenderUpload(request: Request, kind: 'packet'): Promise<TenderUpload>
 export function readTenderUpload(request: Request, kind: 'manual'): Promise<TenderUpload & { label?: string; supersedesId?: string }>
 export async function readTenderUpload(request: Request, kind: 'packet' | 'manual') {
   assertTenderOrigin(request)
   const allowed = new Set(kind === 'packet'
-    ? ['file', 'classification', 'expectedRevision', 'idempotencyKey']
-    : ['file', 'label', 'supersedesId', 'expectedRevision', 'idempotencyKey'])
+    ? ['file', 'classification', 'policyVersion', 'consent', 'expectedRevision', 'idempotencyKey']
+    : ['file', 'label', 'supersedesId', 'classification', 'policyVersion', 'consent', 'expectedRevision', 'idempotencyKey'])
   const form = await readMultipartForm(request, allowed, 'Send only the file and its saved-tender details.')
   for (const key of allowed) if (form.getAll(key).length > 1) throw new TenderError(400, 'invalid', 'Duplicate upload fields are not allowed.')
   const revisionText = singleText(form, 'expectedRevision')
   if (!revisionText || !/^\d+$/.test(revisionText)) throw new TenderError(400, 'invalid', 'The current saved version is required.')
   const expectedRevision = revisionSchema.parse(Number(revisionText))
   const idempotencyKey = idempotencyKeySchema.parse(singleText(form, 'idempotencyKey'))
+  const acknowledgement = policyAcknowledgementSchema.parse({ classification: singleText(form,'classification'), policyVersion: singleText(form,'policyVersion'), consent: singleText(form,'consent') === 'true' })
   const upload = await uploadFromMultipartForm(form)
   if (!upload.bytes) throw new TenderError(400, 'invalid', 'Choose a file to upload.')
-  const common = { fileName: upload.fileName, mediaType: upload.mediaType, bytes: upload.bytes, expectedRevision, idempotencyKey }
+  if (upload.bytes.byteLength > 4 * 1024 * 1024) throw new TenderError(413, 'too_large', 'Choose a file no larger than 4 MB.')
+  const common = { fileName: upload.fileName, mediaType: upload.mediaType, bytes: upload.bytes, expectedRevision, idempotencyKey, ...acknowledgement }
   if (kind === 'packet') {
-    const classification = singleText(form, 'classification')
-    if (classification !== 'synthetic') throw new TenderError(403, 'customer_data_disabled', 'Customer evidence storage is not enabled. Use a fictional test packet in the local fixture workspace.')
-    return { ...common, classification: 'synthetic' as const }
+    return common
   }
   const label = z.string().trim().min(1).max(160).optional().parse(singleText(form, 'label'))
   const supersedesId = z.uuid().optional().parse(singleText(form, 'supersedesId'))

@@ -1,31 +1,38 @@
 import Link from 'next/link'
 import { DatabaseZap } from 'lucide-react'
+import { getWorkOS } from '@workos-inc/authkit-nextjs'
+import { openSignedInDesk } from '@/lib/desk/gate'
+import { DeskAccessRequired, DeskUnavailable } from '@/app/desk/shell'
+import { tenderWorkspacesEnabled } from '@/lib/tenders/config'
 
-export default function WorkspaceSetupRequiredPage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f7f4ed] px-5 py-16 text-[#071d39]">
-      <section className="w-full max-w-xl rounded-2xl border border-[#d8d5cc] bg-white p-8 shadow-[0_24px_80px_rgba(7,29,57,0.08)] sm:p-10">
-        <span className="flex size-11 items-center justify-center rounded-xl bg-[#e0f1eb] text-[#237161]">
-          <DatabaseZap className="size-5" aria-hidden="true" />
-        </span>
-        <p className="mt-7 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#64727b]">
-          Protected workspace
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.035em]">
-          This organization is not provisioned yet.
-        </h1>
-        <p className="mt-4 text-sm leading-6 text-[#64727b]">
-          Your identity is valid, but Traceli has not opened a tenant-isolated data space for this organization. No other organization&apos;s procurement data has been shown.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/demo" className="rounded-lg bg-[#071d39] px-5 py-3 text-sm font-semibold text-white">
-            Open fictional demo
-          </Link>
-          <Link href="/" className="rounded-lg border border-[#cfd3d1] px-5 py-3 text-sm font-semibold">
-            Back to Traceli
-          </Link>
-        </div>
-      </section>
-    </main>
-  )
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'Workspace setup', robots: { index: false, follow: false } }
+
+export default async function WorkspaceSetupRequiredPage() {
+  const gate = await openSignedInDesk()
+  if (gate.status === 'unavailable') return <DeskUnavailable />
+  if (gate.status === 'denied') return <DeskAccessRequired />
+  const viewer = gate.viewer
+  const administrator = viewer.role === 'Workspace Admin' && viewer.mode === 'workos'
+  let organizationName: string | null = null
+  if (administrator) {
+    try {
+      const organization = await getWorkOS().organizations.getOrganization(viewer.organizationId)
+      if (organization.id === viewer.organizationId && organization.name.trim()) organizationName = organization.name
+    } catch { /* Keep the session reference available without guessing an organization name. */ }
+  }
+  return <main className="flex min-h-screen items-center justify-center bg-[#f7f4ed] px-5 py-16 text-[#071d39]">
+    <section className="w-full max-w-xl rounded-2xl border border-[#d8d5cc] bg-white p-8 shadow-[0_24px_80px_rgba(7,29,57,0.08)] sm:p-10">
+      <span className="flex size-11 items-center justify-center rounded-xl bg-[#e0f1eb] text-[#237161]"><DatabaseZap className="size-5" aria-hidden="true" /></span>
+      <p className="mt-7 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#64727b]">Protected workspace</p>
+      <h1 className="mt-3 text-3xl font-semibold tracking-[-0.035em]">Your workspace setup is unavailable.</h1>
+      {organizationName ? <p className="mt-4 text-sm font-semibold">Current organization: {organizationName}</p> : null}
+      <p className="mt-4 text-sm leading-6 text-[#64727b]">You are signed in, but this workspace cannot open its procurement overview yet. It may need setup, or may have no procurement records available. Your workspace administrator can ask Traceli to check the current organization.</p>
+      {administrator ? <details className="mt-5 text-sm leading-6"><summary className="cursor-pointer font-semibold">Organization reference for support</summary><p className="mt-2 break-all">{viewer.organizationId}</p>{!organizationName ? <p className="mt-2 text-[#64727b]" role="status">The organization name could not be verified right now. The reference above comes from your current authenticated session.</p> : null}</details> : null}
+      <div className="mt-8 flex flex-wrap gap-3">
+        {tenderWorkspacesEnabled() ? <Link href="/work" className="rounded-lg bg-[#071d39] px-5 py-3 text-sm font-semibold text-white">Open My work</Link> : <Link href="/hub" className="rounded-lg bg-[#071d39] px-5 py-3 text-sm font-semibold text-white">Open knowledge hub</Link>}
+        <Link href="/demo" className="rounded-lg border border-[#cfd3d1] px-5 py-3 text-sm font-semibold">Open fictional demo</Link>
+      </div>
+    </section>
+  </main>
 }

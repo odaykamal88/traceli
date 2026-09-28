@@ -10,6 +10,9 @@ export const tenderWorkspaces = pgTable('tender_workspaces', {
   primaryPackId: text('primary_pack_id').notNull(), packVersion: text('pack_version').notNull(),
   currentRevision: integer('current_revision').default(0).notNull(), currentDraftId: text('current_draft_id'),
   currentAssessmentId: text('current_assessment_id'), currentJudgmentId: text('current_judgment_id'), updatedAt: at('updated_at'),
+  classification: text('classification').notNull(), policy: jsonb('policy').$type<Record<string,unknown>>(), policyHash: text('policy_hash'),
+  retentionState: text('retention_state').notNull(), createdAt: at('created_at'), expiresAt: timestamp('expires_at', { withTimezone: true }),
+  deletionRequestedAt: timestamp('deletion_requested_at', { withTimezone: true }),
 }, t => [primaryKey({ columns: [t.organizationId, t.procurementId] }), index('tender_workspaces_owner_idx').on(t.organizationId,t.ownerId,t.updatedAt)])
 
 export const tenderAccess = pgTable('tender_access', {
@@ -60,3 +63,14 @@ export const tenderExportReceipts = pgTable('tender_export_receipts', {
   id: text('id').primaryKey(), organizationId: org(), procurementId: procurement(), recordId: text('record_id').notNull(),
   actorId: text('actor_id').notNull(), pdfSha256: text('pdf_sha256').notNull(), exportedAt: at('exported_at'),
 })
+
+export const tenderDeletionRequests = pgTable('tender_deletion_requests', {
+  id: text('id').primaryKey(), organizationId: org(), procurementId: procurement(),
+  idempotencyKey: text('idempotency_key').notNull(), inputHash: text('input_hash').notNull(), requestedAt: at('requested_at'),
+}, t => [uniqueIndex('tender_delete_request_key').on(t.organizationId,t.procurementId,t.idempotencyKey)])
+
+export const tenderDeletionReceipts = pgTable('tender_deletion_receipts', {
+  id: text('id').primaryKey(), organizationId: org(), procurementId: procurement(),
+  idempotencyKey: text('idempotency_key'), inputHash: text('input_hash'), reason: text('reason').notNull(),
+  deletedAt: at('deleted_at'), expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+}, t => [uniqueIndex('tender_delete_receipt_key').on(t.organizationId,t.procurementId,t.idempotencyKey)])

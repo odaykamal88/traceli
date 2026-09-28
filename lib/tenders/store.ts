@@ -1,10 +1,10 @@
 import 'server-only'
 
 import { createHash, randomUUID } from 'node:crypto'
-import { and, desc, eq, inArray, isNotNull, lt, or, sql } from 'drizzle-orm'
+import { and, desc, eq, inArray, isNotNull, isNull, gt, lt, or, sql } from 'drizzle-orm'
 
 import { procurements } from '@/db/schema'
-import { tenderAccess, tenderCommands, tenderDraftManuals, tenderDraftRevisions, tenderExportReceipts, tenderIssuedRecords, tenderManualVersions, tenderPacketReceipts, tenderWorkspaces } from '@/db/tender-schema'
+import { tenderAccess, tenderCommands, tenderDeletionRequests, tenderDeletionReceipts, tenderDraftManuals, tenderDraftRevisions, tenderExportReceipts, tenderIssuedRecords, tenderManualVersions, tenderPacketReceipts, tenderWorkspaces } from '@/db/tender-schema'
 import { applyReviewerDecisions } from '@/lib/desk/review-apply'
 import { incompleteCorrectionCount, sanitizeReviewerDecisions } from '@/lib/desk/review'
 import { prepareUploadChecklist } from '@/lib/desk/freeze-upload'
@@ -20,14 +20,15 @@ import { packToggleForDonorPack, type DonorPack } from '@/lib/field-registry/pac
 import { resolveExtractionProviderId } from '@/lib/field-registry/extract-provider'
 import { dispositionSchema, type ActorRole, type AwardRegistrySnapshot } from '@/lib/field-registry/schema'
 import type { WorkspaceViewer } from '@/lib/workspace-viewer'
-import { createTenderSchema, idempotencyKeySchema, issueAssessmentSchema, issueJudgmentSchema, revisionSchema, saveDraftSchema, tenderIdSchema, TenderError, type TenderDetail, type TenderDraft, type TenderIssuedRecord, type TenderManual, type TenderPacket, type TenderRecordSummary, type TenderSummary } from '@/lib/tenders/contract'
+import { createTenderSchema, deleteTenderSchema, idempotencyKeySchema, issueAssessmentSchema, issueJudgmentSchema, revisionSchema, saveDraftSchema, tenderIdSchema, TenderError, type TenderPolicyAcknowledgement, type TenderDetail, type TenderDraft, type TenderIssuedRecord, type TenderManual, type TenderPacket, type TenderRecordSummary, type TenderSummary } from '@/lib/tenders/contract'
 import { verifyDraftRow, verifyIssuedRow, verifyPacketRow } from '@/lib/tenders/integrity'
 import { authorizeTender, tenderCapabilities, verifyTenderGrantTarget, type TenderAction } from '@/lib/tenders/policy'
 import { tenderOwner, tenderProgress, type TenderWorkflowState } from '@/lib/tenders/workflow'
 import { renderTenderReport } from '@/lib/tenders/report'
 import { hasWorkspaceReadRole } from '@/lib/workspace-policy'
+import { acknowledgeTenderPolicy, acknowledgeTenderUpload, retainedTenderPolicy, assertTenderActive, tenderExpiry } from '@/lib/tenders/retention'
 
-const MAX_FILE_BYTES = 8 * 1024 * 1024
+const MAX_FILE_BYTES = 4 * 1024 * 1024
 const MAX_JSON_BYTES = 180000
 type FileParts = { fileName: string; mediaType: string; bytes: Uint8Array<ArrayBuffer> }
 type CommandAction = 'create' | 'manual' | 'packet' | 'draft' | 'assessment' | 'judgment' | 'grant' | 'revoke'
@@ -48,13 +49,13 @@ function boundedJson(value: unknown) {
   if (Buffer.byteLength(JSON.stringify(value),'utf8') > MAX_JSON_BYTES) throw new TenderError(413,'too_large','The saved record is too large.')
 }
 function fileParts(input: FileParts) {
-  if (!(input.bytes instanceof Uint8Array) || input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_FILE_BYTES) throw new TenderError(400,'invalid_file','Choose a file smaller than 8 MB.')
+  if (!(input.bytes instanceof Uint8Array) || input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_FILE_BYTES) throw new TenderError(400,'invalid_file','Choose a file no larger than 4 MB.')
   const fileName = extractionFileName(input.fileName)
   const mediaType = resolveExtractionMedia(fileName,input.mediaType)
   return {fileName,mediaType,bytes:input.bytes,sha256:sha256(input.bytes)}
 }
 function summary(procurement: typeof procurements.$inferSelect, workspace: typeof tenderWorkspaces.$inferSelect, viewer:WorkspaceViewer, capabilities:ReturnType<typeof tenderCapabilities>, state:TenderWorkflowState): TenderSummary {
-  return {id:procurement.id,reference:procurement.reference,title:procurement.title,primaryPackId:workspace.primaryPackId,packVersion:workspace.packVersion,revision:workspace.currentRevision,updatedAt:iso(workspace.updatedAt),latestRecordKind:state==='assessment_current'?'assessment':state==='human_decision_current'?'human_judgment':state==='exception_proposed'?'exception_proposal':null,owner:tenderOwner(workspace.ownerId,viewer.id),progress:tenderProgress(state,capabilities,viewer.mode==='demo'&&resolveExtractionProviderId()==='mock')}
+  return {id:procurement.id,reference:procurement.reference,title:procurement.title,primaryPackId:workspace.primaryPackId,packVersion:workspace.packVersion,classification:workspace.classification as 'synthetic'|'customer',expiresAt:workspace.expiresAt?iso(workspace.expiresAt):null,revision:workspace.currentRevision,updatedAt:iso(workspace.updatedAt),latestRecordKind:state==='assessment_current'?'assessment':state==='human_decision_current'?'human_judgment':state==='exception_proposed'?'exception_proposal':null,owner:tenderOwner(workspace.ownerId,viewer.id),progress:tenderProgress(state,capabilities,viewer.mode==='demo'&&resolveExtractionProviderId()==='mock')}
 }
 function manual(row:typeof tenderManualVersions.$inferSelect):TenderManual { return {id:row.id,ordinal:row.ordinal,label:row.label,fileName:row.originalFilename,mediaType:row.mediaType,byteSize:row.byteSize,sha256:row.sha256,hashKind:row.hashKind as TenderManual['hashKind'],recordedAt:iso(row.recordedAt)} }
 function packet(row:typeof tenderPacketReceipts.$inferSelect):TenderPacket { return {receiptId:row.id,checklist:verifyPacketRow(row),packDefinitionHash:row.packDefinitionHash,sourceSha256:row.sourceSha256,createdAt:iso(row.issuedAt)} }
@@ -71,11 +72,11 @@ function currentWorkflow(workspace:WorkflowWorkspace,draft:WorkflowDraft|null,re
     if(workspace.currentDraftId||workspace.currentRevision!==0||workspace.currentAssessmentId||workspace.currentJudgmentId) return fail()
     if(receipt) {
       verifyPacketRow(receipt)
-      if(receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion)return fail()
+      if(receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion||receipt.classification!==workspace.classification)return fail()
     }
     return receipt?'packet_ready':'no_packet'
   }
-  if(draft.id!==workspace.currentDraftId||draft.revision!==workspace.currentRevision||!receipt||receipt.id!==draft.packetReceiptId||receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion)return fail()
+  if(draft.id!==workspace.currentDraftId||draft.revision!==workspace.currentRevision||!receipt||receipt.id!==draft.packetReceiptId||receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion||receipt.classification!==workspace.classification)return fail()
   const checklist=verifyPacketRow(receipt),payload=verifyDraftRow(draft)
   const decisions=sanitizeReviewerDecisions(payload.decisions,checklist.rows)
   if(!decisions||hashJson(manualIds.sort())!==payload.manualIdsHash)return fail()
@@ -212,23 +213,25 @@ async function detail(tx:TenantTransaction,viewer:WorkspaceViewer,tenderId:strin
   const judgment=workspace.currentJudgmentId?(recordRows.find(row=>row.id===workspace.currentJudgmentId)??await oneRecord(tx,viewer,tenderId,workspace.currentJudgmentId)):null
   const receipt=currentDraft?packetRows.find(row=>row.id===currentDraft.packetReceiptId)??null:packetRows[0]??null
   const state=currentWorkflow(workspace,draftRow,receipt,assessment,judgment,currentDraft?.manualVersionIds??[])
-  return {tender:summary(procurement,workspace,viewer,capabilities,state),revision:workspace.currentRevision,etag:`"tender-${workspace.currentRevision}"`,draft:currentDraft,packets:packetRows.map(packet),manuals:manualRows.map(manual),records:recordRows.map(recordSummary),capabilities:{canEdit:capabilities.canEdit,canAssess:capabilities.canAssess,canJudge:capabilities.canJudge,canProposeException:capabilities.canProposeException,canGrant:capabilities.canGrant,canExport:capabilities.canExport}}
+  assertTenderActive(workspace)
+  return {tender:summary(procurement,workspace,viewer,capabilities,state),policy:retainedTenderPolicy(workspace),expiresAt:workspace.expiresAt?iso(workspace.expiresAt):null,revision:workspace.currentRevision,etag:`"tender-${workspace.currentRevision}"`,draft:currentDraft,packets:packetRows.map(packet),manuals:manualRows.map(manual),records:recordRows.map(recordSummary),capabilities:{canEdit:capabilities.canEdit,canAssess:capabilities.canAssess,canJudge:capabilities.canJudge,canProposeException:capabilities.canProposeException,canGrant:capabilities.canGrant,canExport:capabilities.canExport,canDelete:capabilities.canDelete&&workspace.retentionState==='managed'}}
 }
 
 export async function createTender(viewer:WorkspaceViewer,input:unknown):Promise<TenderDetail> {
   assertViewer(viewer)
   if (!['Procurement Officer','Procurement Director','Workspace Admin'].includes(viewer.role)) throw new TenderError(403,'forbidden','This role cannot create tenders.')
   const command=createTenderSchema.parse(input)
+  const policy=acknowledgeTenderPolicy(viewer,command)
   const pack=getDonorPack(command.primaryPackId)
   return withTenant(viewer.organizationId,async tx=>{
     await commandLock(tx,viewer,'create',command.idempotencyKey)
-    const {prior,inputHash}=await commandReplay(tx,viewer,'create',command.idempotencyKey,{title:command.title,primaryPackId:command.primaryPackId})
+    const {prior,inputHash}=await commandReplay(tx,viewer,'create',command.idempotencyKey,{title:command.title,primaryPackId:command.primaryPackId,classification:command.classification,policyVersion:command.policyVersion,consent:command.consent})
     if(prior) return detail(tx,viewer,prior.responseId)
     const tenderId=randomUUID(), now=new Date()
     await tx.insert(procurements).values({id:tenderId,organizationId:viewer.organizationId,reference:`TENDER-${tenderId}`,title:command.title,region:'Unknown',status:'draft',evidenceCoverage:0,blockerSummary:'',version:1,createdAt:now,updatedAt:now})
-    await tx.insert(tenderWorkspaces).values({organizationId:viewer.organizationId,procurementId:tenderId,ownerId:viewer.id,primaryPackId:command.primaryPackId,packVersion:pack.version,currentRevision:0,updatedAt:now})
+    await tx.insert(tenderWorkspaces).values({organizationId:viewer.organizationId,procurementId:tenderId,ownerId:viewer.id,primaryPackId:command.primaryPackId,packVersion:pack.version,currentRevision:0,updatedAt:now,retentionState:'managed',classification:policy.classification,policy:policy as unknown as Record<string,unknown>,policyHash:hashJson(policy),createdAt:now,expiresAt:tenderExpiry(now,policy)})
     await tx.insert(tenderAccess).values({organizationId:viewer.organizationId,procurementId:tenderId,userId:viewer.id,access:'review',grantedBy:viewer.id,grantedAt:now})
-    await audit(tx,viewer,tenderId,'tender.created',{title:command.title,primaryPackId:command.primaryPackId,packVersion:pack.version})
+    await audit(tx,viewer,tenderId,'tender.created',{primaryPackId:command.primaryPackId,packVersion:pack.version,classification:policy.classification,policyVersion:policy.version,expiresAt:tenderExpiry(now,policy).toISOString()})
     await saveCommand(tx,viewer,tenderId,'create',command.idempotencyKey,inputHash,tenderId)
     return detail(tx,viewer,tenderId)
   })
@@ -242,7 +245,8 @@ export async function listTenders(viewer:WorkspaceViewer,input:{limit?:number;cu
   if(input.cursor){try{const parsed=JSON.parse(Buffer.from(input.cursor,'base64url').toString('utf8'));if(typeof parsed.updatedAt==='string'&&!Number.isNaN(new Date(parsed.updatedAt).valueOf())&&tenderIdSchema.safeParse(parsed.id).success)cursor=parsed}catch{/* invalid */} if(!cursor)throw new TenderError(400,'invalid_cursor','The list cursor is invalid.')}
   return withTenant(viewer.organizationId,async tx=>{
     const base=cursor?and(eq(tenderWorkspaces.organizationId,viewer.organizationId),or(lt(tenderWorkspaces.updatedAt,new Date(cursor.updatedAt)),and(eq(tenderWorkspaces.updatedAt,new Date(cursor.updatedAt)),lt(tenderWorkspaces.procurementId,cursor.id)))):eq(tenderWorkspaces.organizationId,viewer.organizationId)
-    const where=['Procurement Director','Workspace Admin'].includes(viewer.role)?base:viewer.role==='Procurement Officer'?and(base,or(isNotNull(tenderAccess.userId),eq(tenderWorkspaces.ownerId,viewer.id))):and(base,isNotNull(tenderAccess.userId))
+    const active=and(base,isNull(tenderWorkspaces.deletionRequestedAt),or(isNull(tenderWorkspaces.expiresAt),gt(tenderWorkspaces.expiresAt,new Date())))
+    const where=['Procurement Director','Workspace Admin'].includes(viewer.role)?active:viewer.role==='Procurement Officer'?and(active,or(isNotNull(tenderAccess.userId),eq(tenderWorkspaces.ownerId,viewer.id))):and(active,isNotNull(tenderAccess.userId))
     const rows=await tx.select({workspace:tenderWorkspaces,procurement:procurements,access:tenderAccess.access}).from(tenderWorkspaces).innerJoin(procurements,and(eq(procurements.organizationId,tenderWorkspaces.organizationId),eq(procurements.id,tenderWorkspaces.procurementId))).leftJoin(tenderAccess,and(eq(tenderAccess.organizationId,tenderWorkspaces.organizationId),eq(tenderAccess.procurementId,tenderWorkspaces.procurementId),eq(tenderAccess.userId,viewer.id))).where(where).orderBy(desc(tenderWorkspaces.updatedAt),desc(tenderWorkspaces.procurementId)).limit(limit+1)
     const page=rows.slice(0,limit)
     const last=page.at(-1)?.workspace
@@ -253,9 +257,8 @@ export async function listTenders(viewer:WorkspaceViewer,input:{limit?:number;cu
 
 export async function readTender(viewer:WorkspaceViewer,tenderId:string):Promise<TenderDetail> { assertViewer(viewer);id(tenderId);return withTenant(viewer.organizationId,tx=>detail(tx,viewer,tenderId),'read only') }
 
-export async function addManualVersion(viewer:WorkspaceViewer,tenderId:string,input:FileParts&{label?:string;supersedesId?:string;expectedRevision:number;idempotencyKey:string}):Promise<TenderManual> {
+export async function addManualVersion(viewer:WorkspaceViewer,tenderId:string,input:FileParts&TenderPolicyAcknowledgement&{label?:string;supersedesId?:string;expectedRevision:number;idempotencyKey:string}):Promise<TenderManual> {
   assertViewer(viewer);id(tenderId)
-  if(viewer.mode!=='demo') throw new TenderError(403,'retention_gate','Customer file metadata cannot be retained until a retention policy is configured.')
   const parts=fileParts(input), expected=revisionSchema.parse(input.expectedRevision), key=idempotencyKeySchema.parse(input.idempotencyKey)
   const label=typeof input.label==='string'?input.label.trim():parts.fileName
   if(label.length<1||label.length>160)throw new TenderError(400,'invalid_label','Name the manual in 160 characters or fewer.')
@@ -263,7 +266,8 @@ export async function addManualVersion(viewer:WorkspaceViewer,tenderId:string,in
   return withTenant(viewer.organizationId,async tx=>{
     await commandLock(tx,viewer,'manual',key)
     const {workspace}=await lockTender(tx,viewer,tenderId,'edit')
-    const {prior,inputHash}=await commandReplay(tx,viewer,'manual',key,{tenderId,label,fileName:parts.fileName,mediaType:parts.mediaType,sha256:parts.sha256,expected,supersedesId})
+    acknowledgeTenderUpload(viewer,workspace,input)
+    const {prior,inputHash}=await commandReplay(tx,viewer,'manual',key,{tenderId,label,fileName:parts.fileName,mediaType:parts.mediaType,sha256:parts.sha256,expected,supersedesId,classification:input.classification,policyVersion:input.policyVersion,consent:input.consent})
     if(prior){const [row]=await tx.select().from(tenderManualVersions).where(and(eq(tenderManualVersions.organizationId,viewer.organizationId),eq(tenderManualVersions.procurementId,tenderId),eq(tenderManualVersions.id,prior.responseId))).limit(1);if(!row)throw new TenderError(500,'integrity','The manual receipt is unavailable.');return manual(row)}
     if(workspace.currentRevision!==expected)throw new TenderError(409,'stale_revision','A newer revision exists.',workspace.currentRevision)
     if(supersedesId){const [old]=await tx.select().from(tenderManualVersions).where(and(eq(tenderManualVersions.organizationId,viewer.organizationId),eq(tenderManualVersions.procurementId,tenderId),eq(tenderManualVersions.id,supersedesId))).limit(1);if(!old)throw new TenderError(400,'invalid_link','The prior manual is unavailable for this tender.')}
@@ -276,15 +280,14 @@ export async function addManualVersion(viewer:WorkspaceViewer,tenderId:string,in
   })
 }
 
-export async function issuePacket(viewer:WorkspaceViewer,tenderId:string,input:FileParts&{classification:'synthetic';expectedRevision:number;idempotencyKey:string}):Promise<TenderPacket> {
+export async function issuePacket(viewer:WorkspaceViewer,tenderId:string,input:FileParts&TenderPolicyAcknowledgement&{expectedRevision:number;idempotencyKey:string}):Promise<TenderPacket> {
   assertViewer(viewer);id(tenderId)
-  if(viewer.mode!=='demo'||input.classification!=='synthetic')throw new TenderError(403,'retention_gate','Packet persistence is available for local synthetic fixtures only.')
-  if(resolveExtractionProviderId()!=='mock')throw new TenderError(403,'retention_gate','Synthetic packet persistence requires the local mock extractor.')
   const parts=fileParts(input),expected=revisionSchema.parse(input.expectedRevision),key=idempotencyKeySchema.parse(input.idempotencyKey)
   // Authorization precedes the provider call. The write transaction checks it again.
   const context=await withTenant(viewer.organizationId,async tx=>{
     const {workspace}=await authorizeTender(tx,viewer,tenderId,'edit')
-    const {prior}=await commandReplay(tx,viewer,'packet',key,{tenderId,fileName:parts.fileName,mediaType:parts.mediaType,sha256:parts.sha256,expected,classification:'synthetic'})
+    acknowledgeTenderUpload(viewer,workspace,input)
+    const {prior}=await commandReplay(tx,viewer,'packet',key,{tenderId,fileName:parts.fileName,mediaType:parts.mediaType,sha256:parts.sha256,expected,classification:input.classification,policyVersion:input.policyVersion,consent:input.consent})
     if(prior){const row=await onePacket(tx,viewer,tenderId,prior.responseId);return {packId:null,packVersion:null,reference:null,replay:packet(row)} as const}
     if(workspace.currentRevision!==expected)throw new TenderError(409,'stale_revision','A newer revision exists.',workspace.currentRevision)
     const procurement=await oneProcurement(tx,viewer,tenderId)
@@ -294,19 +297,22 @@ export async function issuePacket(viewer:WorkspaceViewer,tenderId:string,input:F
   if(!context.packId||!isDonorPackId(context.packId)||!context.reference)throw new TenderError(500,'integrity','The saved pack is unavailable.')
   const packDefinition=structuredClone(getDonorPack(context.packId)) as Record<string,unknown>
   if(packDefinition.version!==context.packVersion)throw new TenderError(409,'pack_changed','The pinned pack version is unavailable for new extraction.')
-  const extraction=await extractParsedUpload({fileName:parts.fileName,mediaType:parts.mediaType,bytes:parts.bytes,awardId:`award.${tenderId}`},{organizationId:viewer.organizationId})
+  const expectedProvider=resolveExtractionProviderId()
+  const extraction=await extractParsedUpload({fileName:parts.fileName,mediaType:parts.mediaType,bytes:parts.bytes,awardId:`award.${tenderId}`,packId:context.packId},{organizationId:viewer.organizationId})
+  if(extraction.providerId!==expectedProvider)throw new TenderError(500,'integrity','The extraction provider did not match the acknowledged processing route.')
   if(extraction.sourceFileHash!==parts.sha256)throw new TenderError(500,'integrity','The extracted file hash did not match the uploaded bytes.')
-  const checklist=prepareUploadChecklist({extraction,packId:context.packId,organizationId:viewer.organizationId,procurementReference:context.reference})
+  const checklist=prepareUploadChecklist({extraction,packId:context.packId,organizationId:viewer.organizationId,procurementReference:context.reference,classification:input.classification})
   const payload={checklist}
   boundedJson(payload);boundedJson(packDefinition)
   return withTenant(viewer.organizationId,async tx=>{
     await commandLock(tx,viewer,'packet',key)
     const {workspace}=await lockTender(tx,viewer,tenderId,'edit')
-    const {prior,inputHash}=await commandReplay(tx,viewer,'packet',key,{tenderId,fileName:parts.fileName,mediaType:parts.mediaType,sha256:parts.sha256,expected,classification:'synthetic'})
+    acknowledgeTenderUpload(viewer,workspace,input)
+    const {prior,inputHash}=await commandReplay(tx,viewer,'packet',key,{tenderId,fileName:parts.fileName,mediaType:parts.mediaType,sha256:parts.sha256,expected,classification:input.classification,policyVersion:input.policyVersion,consent:input.consent})
     if(prior){const row=await onePacket(tx,viewer,tenderId,prior.responseId);return packet(row)}
     if(workspace.currentRevision!==expected)throw new TenderError(409,'stale_revision','A newer revision exists.',workspace.currentRevision)
     if(workspace.primaryPackId!==context.packId||workspace.packVersion!==context.packVersion)throw new TenderError(409,'pack_changed','The tender pack changed during extraction.')
-    const row={id:randomUUID(),organizationId:viewer.organizationId,procurementId:tenderId,packId:context.packId,packVersion:context.packVersion,packDefinition,packDefinitionHash:hashJson(packDefinition),sourceSha256:parts.sha256,originalFilename:parts.fileName,mediaType:parts.mediaType,byteSize:parts.bytes.byteLength,providerId:extraction.providerId,classification:'synthetic',payload,payloadHash:hashJson(payload),issuedBy:viewer.id,issuedAt:new Date()}
+    const row={id:randomUUID(),organizationId:viewer.organizationId,procurementId:tenderId,packId:context.packId,packVersion:context.packVersion,packDefinition,packDefinitionHash:hashJson(packDefinition),sourceSha256:parts.sha256,originalFilename:parts.fileName,mediaType:parts.mediaType,byteSize:parts.bytes.byteLength,providerId:extraction.providerId,classification:input.classification,payload,payloadHash:hashJson(payload),issuedBy:viewer.id,issuedAt:new Date()}
     await tx.insert(tenderPacketReceipts).values(row)
     await audit(tx,viewer,tenderId,'tender.packet_issued',{packetReceiptId:row.id,sourceSha256:row.sourceSha256,packDefinitionHash:row.packDefinitionHash,classification:row.classification})
     await saveCommand(tx,viewer,tenderId,'packet',key,inputHash,row.id)
@@ -325,7 +331,7 @@ export async function saveDraft(viewer:WorkspaceViewer,tenderId:string,input:unk
     if(prior){const [saved]=await tx.select({revision:tenderDraftRevisions.revision}).from(tenderDraftRevisions).where(and(eq(tenderDraftRevisions.organizationId,viewer.organizationId),eq(tenderDraftRevisions.procurementId,tenderId),eq(tenderDraftRevisions.id,prior.responseId))).limit(1);if(!saved)throw new TenderError(500,'integrity','The original saved draft is unavailable.');if(workspace.currentRevision!==saved.revision)throw new TenderError(409,'stale_revision','This command succeeded, but a newer revision now exists.',workspace.currentRevision);return detail(tx,viewer,tenderId)}
     if(workspace.currentRevision!==command.expectedRevision)throw new TenderError(409,'stale_revision','A newer revision exists.',workspace.currentRevision)
     const receipt=await onePacket(tx,viewer,tenderId,command.packetReceiptId)
-    if(receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion)throw new TenderError(400,'invalid_link','The packet pack does not match this tender.')
+    if(receipt.packId!==workspace.primaryPackId||receipt.packVersion!==workspace.packVersion||receipt.classification!==workspace.classification)throw new TenderError(400,'invalid_link','The packet policy or pack does not match this tender.')
     const checklist=verifyPacketRow(receipt)
     const decisions=sanitizeReviewerDecisions(command.decisions,checklist.rows)
     if(!decisions)throw new TenderError(400,'invalid_decisions','The checklist decisions do not match the packet.')
@@ -478,7 +484,7 @@ export async function issueJudgment(viewer:WorkspaceViewer,tenderId:string,input
 
 export async function readTenderRecord(viewer:WorkspaceViewer,tenderId:string,recordId:string):Promise<TenderIssuedRecord> {
   assertViewer(viewer);id(tenderId);id(recordId)
-  return withTenant(viewer.organizationId,async tx=>{await authorizeTender(tx,viewer,tenderId,'read');const row=await oneRecord(tx,viewer,tenderId,recordId);await checkRecordLineage(tx,viewer,tenderId,row);return issued(row)},'read only')
+  return withTenant(viewer.organizationId,async tx=>{await authorizeTender(tx,viewer,tenderId,'read');const row=await oneRecord(tx,viewer,tenderId,recordId);await checkRecordLineage(tx,viewer,tenderId,row);await authorizeTender(tx,viewer,tenderId,'read');return issued(row)},'read only')
 }
 
 export async function downloadTenderReport(viewer:WorkspaceViewer,tenderId:string,recordId:string):Promise<{bytes:Uint8Array;fileName:string}> {
@@ -494,6 +500,7 @@ export async function downloadTenderReport(viewer:WorkspaceViewer,tenderId:strin
     if(manualRows.length!==exactDraft.manualVersionIds.length)throw new TenderError(500,'integrity','A referenced manual version is unavailable.')
     const renderDetail={...current,draft:exactDraft,manuals:manualRows.map(manual)}
     const result=await renderTenderReport(renderDetail,issued(row))
+    assertTenderActive((await authorizeTender(tx,viewer,tenderId,'export')).workspace)
     await tx.insert(tenderExportReceipts).values({id:randomUUID(),organizationId:viewer.organizationId,procurementId:tenderId,recordId,actorId:viewer.id,pdfSha256:sha256(result.bytes),exportedAt:new Date()})
     await audit(tx,viewer,tenderId,'tender.record_exported',{recordId,pdfSha256:sha256(result.bytes)})
     return result
@@ -531,5 +538,46 @@ export async function revokeTenderAccess(viewer:WorkspaceViewer,tenderId:string,
     await audit(tx,viewer,tenderId,'tender.access_revoked',{userId:input.userId})
     await saveCommand(tx,viewer,tenderId,'revoke',key,inputHash,input.userId)
     return {userId:input.userId,revoked:true}
+  })
+}
+
+/** Explicit owner-approved deletion applies only to new managed tenders. No browser-supplied tenant or actor. */
+export async function deleteTender(viewer:WorkspaceViewer,tenderId:string,input:unknown):Promise<{deleted:true;receiptId:string;deletedAt:string}> {
+  assertViewer(viewer);id(tenderId)
+  if (!['Procurement Director','Workspace Admin'].includes(viewer.role)) throw new TenderError(403,'forbidden','This role cannot delete tenders.')
+  const command=deleteTenderSchema.parse(input)
+  const inputHash=hashJson({actorId:viewer.id,tenderId,action:'delete'})
+  return withTenant(viewer.organizationId,async tx=>{
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`${viewer.organizationId}:delete:${command.idempotencyKey}`}, 7))`)
+    const [prior]=await tx.select().from(tenderDeletionReceipts).where(and(eq(tenderDeletionReceipts.organizationId,viewer.organizationId),eq(tenderDeletionReceipts.procurementId,tenderId),eq(tenderDeletionReceipts.idempotencyKey,command.idempotencyKey),gt(tenderDeletionReceipts.expiresAt,new Date()))).limit(1)
+    if(prior){
+      if(prior.inputHash!==inputHash)throw new TenderError(409,'idempotency_conflict','This deletion key was already used for another actor.')
+      return {deleted:true,receiptId:prior.id,deletedAt:iso(prior.deletedAt)}
+    }
+    await lockTender(tx,viewer,tenderId,'delete')
+    const requestId=randomUUID(),receiptId=randomUUID()
+    await tx.insert(tenderDeletionRequests).values({id:requestId,organizationId:viewer.organizationId,procurementId:tenderId,idempotencyKey:command.idempotencyKey,inputHash})
+    const result=await tx.execute(sql`select * from public.tender_purge(${viewer.organizationId},${tenderId},${receiptId},${requestId})`)
+    const receipt=result.rows[0]
+    if(!receipt||receipt.id!==receiptId)throw new TenderError(500,'integrity','The deletion receipt is unavailable.')
+    return {deleted:true,receiptId,deletedAt:iso(new Date(String(receipt.deleted_at)))}
+  })
+}
+
+/** Called only by the trusted operator route; keeps tenant scope and cleanup independent of the UI rollout. */
+export async function expireTenderBatch(organizationId:string,input:{limit?:number}={}):Promise<{deleted:number;receiptsExpired:number}> {
+  if(!/^org_[A-Za-z0-9_-]+$/.test(organizationId))throw new TenderError(400,'invalid','Invalid retention scope.')
+  const limit=input.limit??50
+  if(!Number.isInteger(limit)||limit<1||limit>100)throw new TenderError(400,'invalid','Invalid retention batch size.')
+  return withTenant(organizationId,async tx=>{
+    const expired=await tx.execute(sql`select procurement_id from tender_workspaces where organization_id=${organizationId} and retention_state='managed' and expires_at<=clock_timestamp() order by expires_at limit ${limit} for update skip locked`)
+    let deleted=0
+    for(const row of expired.rows){
+      const receiptId=randomUUID()
+      const result=await tx.execute(sql`select * from public.tender_purge(${organizationId},${String(row.procurement_id)},${receiptId},null)`)
+      if(result.rows[0]?.id===receiptId)deleted++
+    }
+    const receiptResult=await tx.execute(sql`select public.tender_expire_deletion_receipts(${organizationId},${limit}) as count`)
+    return {deleted,receiptsExpired:Number(receiptResult.rows[0]?.count??0)}
   })
 }

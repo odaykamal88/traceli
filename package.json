@@ -44,8 +44,9 @@
     "test:hq:worker": "node --test workers/hq/worker.test.mjs workers/hq/source-collector.test.mjs",
     "test:hq:sources": "node scripts/db/test-hq-source-collection.mjs",
     "test:hq:jev": "node --experimental-test-module-mocks --conditions=react-server --import ./scripts/agent/register.mjs --test scripts/hq/test-jev.mjs scripts/hq/test-jev-smoke.mjs",
-    "test:tenders": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/tenders/test-http.mjs scripts/tenders/test-client-state.mjs scripts/tenders/test-workflow.mjs scripts/tenders/test-unsaved-navigation.mjs scripts/tenders/test-pending-draft.mjs",
-    "test:tenders:postgres": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/tenders/test-postgres.mjs && node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/tenders/test-access.mjs"
+    "test:tenders": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/tenders/test-http.mjs scripts/tenders/test-client-state.mjs scripts/tenders/test-workflow.mjs scripts/tenders/test-unsaved-navigation.mjs scripts/tenders/test-pending-draft.mjs scripts/tenders/test-retention.mjs scripts/tenders/test-retention-job.mjs scripts/tenders/test-env.mjs",
+    "test:tenders:postgres": "node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/tenders/test-postgres.mjs && node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs --test scripts/tenders/test-access.mjs && node --experimental-test-module-mocks --conditions=react-server --experimental-strip-types --import ./scripts/field-registry/register.mjs scripts/tenders/test-retention-postgres.mjs && node scripts/tenders/test-production-migration.mjs",
+    "test:migrations": "node scripts/db/test-migration-runner.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

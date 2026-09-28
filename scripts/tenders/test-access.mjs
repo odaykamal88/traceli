@@ -32,7 +32,9 @@ mock.module('@workos-inc/authkit-nextjs', {
   },
 })
 const { TenderError } = await import('../../lib/tenders/contract.ts')
-const { createTender, grantTenderAccess, readTender, revokeTenderAccess } = await import('../../lib/tenders/store.ts')
+const { createTender: createTenderStored, grantTenderAccess, readTender, revokeTenderAccess } = await import('../../lib/tenders/store.ts')
+const { getTenderPolicies } = await import('../../lib/tenders/retention.ts')
+const createTender = (viewer,input) => createTenderStored(viewer,{classification:'synthetic',policyVersion:getTenderPolicies(viewer).policies[0].version,consent:true,...input})
 
 function idempotencyKey(label) { return `${label}-${randomUUID()}` }
 function member(userId, organizationId, status = 'active', slug = 'panel-member') {

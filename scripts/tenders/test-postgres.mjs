@@ -5,17 +5,23 @@ import pg from 'pg'
 import { getDatabasePool } from '../../lib/db/client.ts'
 import { TenderError } from '../../lib/tenders/contract.ts'
 import {
-  addManualVersion,
-  createTender,
+  addManualVersion as addManualVersionStored,
+  createTender as createTenderStored,
   downloadTenderReport,
   issueAssessment,
   issueJudgment,
-  issuePacket,
+  issuePacket as issuePacketStored,
   listTenders,
   readTender,
   readTenderRecord,
   saveDraft,
 } from '../../lib/tenders/store.ts'
+
+import { getTenderPolicies } from '../../lib/tenders/retention.ts'
+const acknowledgement = viewer => ({classification:'synthetic',policyVersion:getTenderPolicies(viewer).policies[0].version,consent:true})
+const createTender = (viewer,input) => createTenderStored(viewer,{...acknowledgement(viewer),...input})
+const issuePacket = (viewer,id,input) => issuePacketStored(viewer,id,{...acknowledgement(viewer),...input})
+const addManualVersion = (viewer,id,input) => addManualVersionStored(viewer,id,{...acknowledgement(viewer),...input})
 
 const databaseUrl = process.env.DATABASE_URL
 let parsedUrl
@@ -147,7 +153,7 @@ try {
     await assert.rejects(issuePacket(director, firstId, {
       fileName: 'customer.txt', mediaType: 'text/plain', bytes: source, classification: 'customer',
       expectedRevision: 0, idempotencyKey: key('customer-packet'),
-    }), tenderError('retention_gate', 403))
+    }), tenderError('customer_data_disabled', 403))
   })
 
   const rows = packet.checklist.rows

@@ -65,6 +65,28 @@ if (tenderWorkspaces === '1' && !databaseConfigured) {
   throw new Error('Durable tender workspaces require complete database configuration.')
 }
 
+function tenderOrganizations(name) {
+  const values = (process.env[name] ?? '').split(',').map(value => value.trim()).filter(Boolean)
+  if (values.length > 50 || values.some(value => !/^org_[A-Za-z0-9_-]{1,120}$/.test(value))) {
+    throw new Error(`${name} must contain at most 50 valid organization IDs.`)
+  }
+  return new Set(values)
+}
+const admittedTenders = tenderOrganizations('TRACELI_TENDER_ORGANIZATIONS')
+const customerTenders = tenderOrganizations('TRACELI_TENDER_CUSTOMER_ORGANIZATIONS')
+if (admittedTenders.size && (!databaseConfigured || (process.env.CRON_SECRET?.length ?? 0) < 32)) {
+  throw new Error('Hosted tender retention requires a database and a CRON_SECRET of at least 32 characters.')
+}
+if (tenderWorkspaces === '1' && process.env.TRACELI_TRACE_MODE === 'workos' && !admittedTenders.size) {
+  throw new Error('Hosted tender workspaces require explicitly admitted retention organizations.')
+}
+if (customerTenders.size) {
+  if ([...customerTenders].some(id => !admittedTenders.has(id))) throw new Error('Customer tender organizations must also be admitted for retention cleanup.')
+  if (process.env.TRACELI_TENDER_CUSTOMER_RETENTION_DAYS !== '30' || !isConfigured('TRACELI_TENDER_CUSTOMER_POLICY_VERSION') || !isConfigured('TRACELI_TENDER_CUSTOMER_PROVIDER_DISCLOSURE') || process.env.TRACE_EXTRACTION_PROVIDER !== 'talonic') {
+    throw new Error('Customer tender intake requires the approved 30-day policy, version, provider disclosure and Talonic route.')
+  }
+}
+
 const hqAccess = process.env.TRACELI_HQ_ACCESS
 const traceMode = process.env.TRACELI_TRACE_MODE
 if (traceMode && !['disabled', 'local', 'workos'].includes(traceMode)) {

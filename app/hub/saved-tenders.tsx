@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation'
 
 import { deskTenderHref } from '@/lib/hub/desk-continuity'
 import { readHubLibraryResult, type HubEngagement } from '@/lib/hub/library'
-import { createTender, listTenders, tenderIdempotencyKey } from '@/lib/tenders/client'
+import TenderPolicyChoice from '@/app/work/tender-policy'
+import { createTender, listTenders, tenderIdempotencyKey, type TenderPolicyAcceptance } from '@/lib/tenders/client'
 import type { TenderSummary } from '@/lib/tenders/contract'
 
 import s from '../desk/desk.module.css'
@@ -73,6 +74,7 @@ function DurableSavedTenders({ organizationId, packNames, canCreate }: { organiz
   const [candidateName, setCandidateName] = useState('')
   const [candidatePack, setCandidatePack] = useState('')
   const [manualNames, setManualNames] = useState<Record<string, string>>({})
+  const [acceptance, setAcceptance] = useState<TenderPolicyAcceptance | null>(null)
   const [importing, setImporting] = useState(false)
 
   useEffect(() => {
@@ -113,17 +115,18 @@ function DurableSavedTenders({ organizationId, packNames, canCreate }: { organiz
     setCandidatePack(item.primaryPackId)
     setError(null)
     importKey.current = null
+    setAcceptance(null)
   }
 
   async function importCandidate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!candidate || importing) return
+    if (!candidate || importing || !acceptance) return
     setImporting(true)
     setError(null)
-    const signature = JSON.stringify([candidate.id, candidateName.trim(), candidatePack])
+    const signature = JSON.stringify([candidate.id, candidateName.trim(), candidatePack, acceptance])
     if (importKey.current?.signature !== signature) importKey.current = { signature, key: tenderIdempotencyKey() }
     try {
-      const created = await createTender(candidateName.trim(), candidatePack, importKey.current.key)
+      const created = await createTender(candidateName.trim(), candidatePack, importKey.current.key, acceptance)
       router.push(`/work/${encodeURIComponent(created.tender.id)}`)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'The tender could not be created. Your browser copy is still here.')
@@ -143,6 +146,7 @@ function DurableSavedTenders({ organizationId, packNames, canCreate }: { organiz
             <p className={s.tag}>{tender.progress.status}</p>
             <strong>{tender.title}</strong>
             <p className={s.help}>Owner: {tender.owner.label} · {tender.progress.nextAction}</p>
+            <p className={s.help}>{tender.classification === 'synthetic' ? 'Synthetic demonstration' : 'Sanitized customer documents'} · {tender.expiresAt ? `expires ${new Date(tender.expiresAt).toLocaleString()}` : 'Legacy record · earlier policy'}</p>
             <p className={s.help}>{tender.reference} · {packNames[tender.primaryPackId] ?? tender.primaryPackId} · updated {new Date(tender.updatedAt).toLocaleString()}</p>
           </div>
           <Link className={s.secondary} href={`/work/${encodeURIComponent(tender.id)}#${tender.progress.section}`} aria-label={`${tender.progress.nextAction}: ${tender.title}`}>{tender.progress.nextAction}</Link>
@@ -161,18 +165,19 @@ function DurableSavedTenders({ organizationId, packNames, canCreate }: { organiz
         </ul> : <form onSubmit={importCandidate}>
           <div className={s.named}>
             <label className={s.fieldLabel} htmlFor="import-name">Tender name</label>
-            <input id="import-name" className={s.textInput} value={candidateName} onChange={event => setCandidateName(event.target.value)} required maxLength={160} />
+            <input id="import-name" className={s.textInput} value={candidateName} disabled={importing} onChange={event => setCandidateName(event.target.value)} required maxLength={160} />
           </div>
           <fieldset>
             <legend>Pack for the new draft</legend>
-            <select className={s.textInput} value={candidatePack} onChange={event => setCandidatePack(event.target.value)} required>
+            <select className={s.textInput} value={candidatePack} disabled={importing} onChange={event => setCandidatePack(event.target.value)} required>
               {Object.entries(packNames).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
             </select>
           </fieldset>
           <p className={s.help}>Browser manual labels: {candidate.attachedUploadIds.length ? candidate.attachedUploadIds.map(id => manualNames[id] ?? 'Unknown browser manual').join(', ') : 'none'}. No manual reference or hash will be imported. Reselect each file in the tender to verify it.</p>
+          <TenderPolicyChoice key={candidate.id} disabled={importing} onChange={setAcceptance} />
           <p className={s.help}>Import creates an empty server draft. It does not import a checklist, judgment, PDF or browser freeze.</p>
           <div className={s.actions}>
-            <button className={s.primary} type="submit" disabled={importing}>{importing ? 'Creating draft…' : 'Create reviewed draft'}</button>
+            <button className={s.primary} type="submit" disabled={importing || !acceptance}>{importing ? 'Creating draft…' : 'Create reviewed draft'}</button>
             <button className={s.secondary} type="button" onClick={() => setCandidate(null)} disabled={importing}>Cancel</button>
           </div>
         </form>}
