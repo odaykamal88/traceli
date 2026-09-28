@@ -36,11 +36,7 @@ Each sprint produces a small reviewable pull request with exact checks and limit
 
 ## Current dispatch
 
-- `s1_tender_continuity`: GPT-6 Sol, high effort — Sprint 1 implementation.
-- `s1_checklist_filter`: GPT-6 Luna, medium effort — narrow review-blocker fix.
-- `s2_persistence_contract`: GPT-6 Sol, high effort — precise schema/API/authorization plan, no database mutation.
-
-Sprint 1 implementation is complete and prepared for draft PR review. The three dispatched workers have finished; they are not running later sprints in the background. The [Sprint 2 persistence contract](tender-workspace-persistence-plan.md) is ready for implementation after review. Later sprints are dependency-ordered delivery units; no calendar duration or quota guarantee is implied.
+Sprint 3 implementation and local verification are complete. The workers have finished; later sprints are not running in the background. Sprint 1 is draft PR #63 and Sprint 2 is draft PR #64; Sprint 3 is stacked on Sprint 2. Each requires its own applicable merge/release authorization. Later sprints remain dependency-ordered delivery units, without a calendar duration or quota guarantee.
 
 ## Sprint 1 verification — 27 September 2026
 
@@ -54,6 +50,16 @@ Sprint 1 implementation is complete and prepared for draft PR review. The three 
 
 Implemented on a branch stacked on Sprint 1, with GPT-6 Sol (backend), GPT-6 Sol (UI) and GPT-6 Luna (negative tests and verification notes). No additional Astra agent was dispatched. The coordinator integrated API gates, server-record PDF rendering and release checks.
 
-The opt-in path now persists named tenders, exact packet/manual references and draft revisions; incomplete corrections save without becoming issuable. Server issuance and exports reload retained inputs, enforce current permissions, and retain audit/command/export receipts. The browser path is preserved when rollout is disabled. [Verification and activation limits](TENDER_WORKSPACE_SPRINT2_VERIFICATION.md) document actual evidence. Sprint 3 navigation work has not started.
+The opt-in path now persists named tenders, exact packet/manual references and draft revisions; incomplete corrections save without becoming issuable. Server issuance and exports reload retained inputs, enforce current permissions, and retain audit/command/export receipts. The browser path is preserved when rollout is disabled. [Verification and activation limits](TENDER_WORKSPACE_SPRINT2_VERIFICATION.md) document actual evidence. Sprint 3 navigation is recorded in the subsequent delivery entry below.
 
 End-of-implementation account usage: 34% used / 66% remaining weekly (27% used at Sprint 2 start). These are account-wide readings, not attributed per-agent charges. No reset credit was used.
+
+## Sprint 3 delivery — 28 September 2026
+
+Implemented with two GPT-6 Sol medium workers (server progress and tender navigation) and one GPT-6 Luna medium worker (workflow inventory and focused review). No additional Astra agent was dispatched. The coordinator integrated product entry, accessible unsaved-navigation controls, verification and release documentation.
+
+The opt-in product now starts at My work, with server-authorized saved tenders, truthful current progress, owner references and concrete next actions. Knowledge hub is the library, and every tender has a stable URL with Details → Evidence → Review → Decision → Record navigation. Failed saves remain explicit; a short-lived, viewer-scoped in-memory copy recovers pending checklist edits after in-app Back navigation. [Verification and limits](TENDER_WORKSPACE_SPRINT3_VERIFICATION.md) distinguish durable saves from this temporary recovery.
+
+Local validation passed: 16 tender unit tests, 22 Postgres integration tests, 18 auth tests, 12 Hub tests, 22 Desk tests, type checking and production build. Browser checks covered creation, saved/failed/recovered review, Stay/Escape/Leave, Back and resume, recorded human decision, list error/retry, legacy URL redirect and 375 px layouts. Live WorkOS and 200% zoom remain unverified for this sprint. No production activation or merge is included.
+
+Account usage moved from 35% used / 65% remaining to 41% used / 59% remaining weekly during the work. These are shared-account observations, not measured per-agent charges. No reset credit was used. Sprint 4 remains evidence-focused review and pilot readiness.

@@ -11,7 +11,7 @@ export const saveDraftSchema = z.strictObject({ packetReceiptId: tenderIdSchema,
 export const issueAssessmentSchema = z.strictObject({ expectedRevision: revisionSchema, idempotencyKey: idempotencyKeySchema })
 export const issueJudgmentSchema = z.strictObject({ expectedRevision: revisionSchema, assessmentId: tenderIdSchema, assessmentHash: z.string().regex(/^[a-f0-9]{64}$/), action: z.enum(['request','escalate','exception']), reason: z.string().trim().min(20).max(2000), idempotencyKey: idempotencyKeySchema })
 
-export type TenderSummary = { id: string; reference: string; title: string; primaryPackId: string; packVersion: string; revision: number; updatedAt: string; latestRecordKind: string | null }
+export type TenderSummary = { id: string; reference: string; title: string; primaryPackId: string; packVersion: string; revision: number; updatedAt: string; latestRecordKind: string | null; owner: { id: string; label: string; isCurrentUser: boolean }; progress: { stage: 'evidence' | 'review' | 'decision' | 'record'; status: string; nextAction: string; section: 'evidence' | 'review' | 'decision' | 'record' } }
 export type TenderManual = { id: string; ordinal: number; label: string; fileName: string; mediaType: string; byteSize: number; sha256: string; hashKind: 'server_verified_upload' | 'client_declared_unverified'; recordedAt: string }
 export type TenderPacket = { receiptId: string; checklist: UploadChecklist; packDefinitionHash: string; sourceSha256: string; createdAt: string }
 export type TenderDraft = { id: string; revision: number; packetReceiptId: string; checklist: UploadChecklist; decisions: ReviewerDecision[]; manualVersionIds: string[]; reviewedSnapshotHash: string | null; createdAt: string }

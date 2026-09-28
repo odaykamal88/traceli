@@ -1160,3 +1160,12 @@
   .spinner,
   .dotLive { animation: none; }
 }
+
+/* Stable tender steps and progressively revealed supporting detail. */
+.section[id] { scroll-margin-top: 12rem; }
+.card summary { cursor: pointer; font-weight: 600; line-height: 1.5; }
+.card[open] summary { margin-bottom: 16px; }
+.card summary:focus-visible, .path a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+.path a { color: inherit; }
+.path [aria-current="step"] { font-weight: 700; }
+.uploadItem > div { min-width: 0; overflow-wrap: anywhere; }

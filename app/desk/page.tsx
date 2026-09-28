@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { tenderIdSchema } from '@/lib/tenders/contract'
 
 import { openSignedInDesk } from '@/lib/desk/gate'
 import { resolveExtractionProviderId } from '@/lib/field-registry/extract-provider'
@@ -8,7 +10,6 @@ import { tenderWorkspacesEnabled } from '@/lib/tenders/config'
 
 import { DeskAccessRequired, DeskShell, DeskUnavailable } from './shell'
 import UploadDesk, { type DeskPackOption } from './upload-desk'
-import DurableTenderDesk from './tender-desk'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,14 +28,18 @@ export default async function DeskPage({
   if (gate.status === 'unavailable') return <DeskUnavailable />
   if (gate.status === 'denied') return <DeskAccessRequired />
 
+  const query = await searchParams
+  const durable = tenderWorkspacesEnabled()
+  if (durable) {
+    const tender = Array.isArray(query.tender) ? query.tender[0] : query.tender
+    redirect(tender && tenderIdSchema.safeParse(tender).success ? `/work/${encodeURIComponent(tender)}` : '/work')
+  }
   let providerId = 'mock'
   try {
     providerId = resolveExtractionProviderId()
   } catch {
     return <DeskUnavailable />
   }
-  const query = await searchParams
-  const durable = tenderWorkspacesEnabled()
   const packs: DeskPackOption[] = listDonorPacks().map(pack => ({
     packId: pack.packId,
     name: pack.name,
@@ -43,7 +48,7 @@ export default async function DeskPage({
   }))
   return (
     <DeskShell viewer={{ name: gate.viewer.name, role: gate.viewer.role, organizationId: gate.viewer.organizationId }} showSignOut={gate.viewer.mode === 'workos'} current="desk" durable={durable}>
-      {durable ? <DurableTenderDesk key={JSON.stringify([gate.viewer.organizationId, query.tender ?? null])} tenderId={Array.isArray(query.tender) ? query.tender[0] : query.tender ?? null} packs={packs} fixtureMode={gate.viewer.mode === 'demo'} /> : <UploadDesk
+      <UploadDesk
         key={JSON.stringify([gate.viewer.organizationId, query.engagement ?? null, query.pack ?? null])}
         viewer={{
           name: gate.viewer.name,
@@ -55,7 +60,7 @@ export default async function DeskPage({
         packs={packs}
         initialPackId={hubPackParam(query.pack)}
         engagementId={hubEngagementParam(query.engagement)}
-      />}
+      />
     </DeskShell>
   )
 }

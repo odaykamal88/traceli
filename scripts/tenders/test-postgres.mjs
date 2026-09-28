@@ -305,6 +305,66 @@ try {
     assert.equal(proposed.payload.status, 'approval_not_recorded')
   })
 
+  await check('list progress follows current retained state, roles and exact record lineage', async () => {
+    const fixture=await create(director, 'Synthetic progress fixture')
+    const tenderId=fixture.tender.id
+    await seedAccess(tenderId, auditor, 'read')
+    await seedAccess(tenderId, panelReviewer, 'review')
+    const summaryFor=async viewer=>{
+      const page=await listTenders(viewer,{limit:50})
+      const item=page.items.find(item=>item.id===tenderId)
+      assert.ok(item)
+      assert.deepEqual(item.progress,(await readTender(viewer,tenderId)).tender.progress)
+      return item
+    }
+    let summary=await summaryFor(director)
+    assert.equal(summary.owner.label,'You')
+    assert.equal(summary.progress.status,'No packet retained')
+    assert.equal(summary.progress.nextAction,'Add a synthetic fixture packet')
+    const readSummary=await summaryFor(auditor)
+    assert.match(readSummary.owner.label,/^Member [a-f0-9]{8}$/)
+    assert.equal(readSummary.owner.id,director.id)
+    assert.equal(readSummary.owner.isCurrentUser,false)
+    assert.equal(readSummary.progress.nextAction,'View evidence')
+    const receipt=await issuePacket(director,tenderId,{fileName:'progress-fixture.txt',mediaType:'text/plain',bytes:source,classification:'synthetic',expectedRevision:0,idempotencyKey:key('progress-packet')})
+    assert.equal((await summaryFor(director)).progress.status,'Packet retained · review not saved')
+    assert.equal((await summaryFor(auditor)).progress.nextAction,'View packet checklist')
+    const correction={key:receipt.checklist.rows[0].key,action:'negative',value:'',page:'',quote:'',note:''}
+    const incomplete=await saveDraft(director,tenderId,{packetReceiptId:receipt.receiptId,decisions:[correction],manualVersionIds:[],expectedRevision:0,idempotencyKey:key('progress-incomplete')})
+    assert.equal((await summaryFor(director)).progress.status,'Saved review has incomplete corrections')
+    assert.equal((await summaryFor(auditor)).progress.nextAction,'View checklist corrections')
+    const missing={...correction,action:'missing'}
+    const reviewed=await saveDraft(director,tenderId,{packetReceiptId:receipt.receiptId,decisions:[missing],manualVersionIds:[],expectedRevision:incomplete.revision,idempotencyKey:key('progress-ready')})
+    assert.equal((await summaryFor(director)).progress.status,'Saved review ready for assessment')
+    assert.equal((await summaryFor(panelReviewer)).progress.nextAction,'View saved review')
+    const issued=await issueAssessment(director,tenderId,{expectedRevision:reviewed.revision,idempotencyKey:key('progress-assessment')})
+    summary=await summaryFor(director)
+    assert.equal(summary.progress.status,'Assessment issued · human decision needed')
+    assert.equal(summary.latestRecordKind,'assessment')
+    assert.equal((await summaryFor(auditor)).progress.nextAction,'View assessment')
+    const decision=await issueJudgment(director,tenderId,{expectedRevision:reviewed.revision,assessmentId:issued.id,assessmentHash:issued.payloadHash,action:'request',reason:'Synthetic review requests another source before the next decision.',idempotencyKey:key('progress-decision')})
+    assert.equal((await summaryFor(director)).progress.status,'Human decision recorded')
+    const later=await saveDraft(director,tenderId,{packetReceiptId:receipt.receiptId,decisions:[missing],manualVersionIds:[],expectedRevision:reviewed.revision,idempotencyKey:key('progress-later')})
+    summary=await summaryFor(director)
+    assert.equal(summary.progress.status,'Saved review ready for assessment')
+    assert.equal(summary.latestRecordKind,null)
+    assert.ok(later.records.some(row=>row.id===decision.id))
+    // Same-tender foreign keys alone cannot establish currentness after a later draft.
+    await pool.query('update tender_workspaces set current_assessment_id=$1,current_judgment_id=$2 where organization_id=$3 and procurement_id=$4',[issued.id,decision.id,org,tenderId])
+    try {
+      await assert.rejects(listTenders(director,{limit:50}),tenderError('integrity',500))
+      await assert.rejects(readTender(director,tenderId),tenderError('integrity',500))
+    } finally {
+      await pool.query('update tender_workspaces set current_assessment_id=NULL,current_judgment_id=NULL where organization_id=$1 and procurement_id=$2',[org,tenderId])
+    }
+    const laterAssessment=await issueAssessment(director,tenderId,{expectedRevision:later.revision,idempotencyKey:key('progress-assessment-later')})
+    await issueJudgment(director,tenderId,{expectedRevision:later.revision,assessmentId:laterAssessment.id,assessmentHash:laterAssessment.payloadHash,action:'exception',reason:'Synthetic proposal awaits separately recorded approval authority.',idempotencyKey:key('progress-exception')})
+    summary=await summaryFor(director)
+    assert.equal(summary.progress.status,'Exception proposed · approval not recorded')
+    assert.equal(summary.latestRecordKind,'exception_proposal')
+    assert.equal(summary.progress.nextAction,'View exception proposal')
+  })
+
   await check('same-organization cross-tender receipt, draft, issued-record, and cursor links fail closed', async () => {
     const current = await readTender(director, firstId)
     await assert.rejects(saveDraft(director, firstId, {
@@ -391,12 +451,14 @@ try {
       await pool.query("update tender_packet_receipts set source_sha256=$2 where id=$1", [packet.receiptId, 'b'.repeat(64)])
     } finally { await pool.query('alter table tender_packet_receipts enable trigger tender_no_mutation') }
     await assert.rejects(readTender(director, firstId), tenderError('integrity', 500))
+    await assert.rejects(listTenders(director, { limit: 50 }), tenderError('integrity', 500))
     await pool.query('alter table tender_packet_receipts disable trigger tender_no_mutation')
     try {
       await pool.query('update tender_packet_receipts set source_sha256=$2 where id=$1', [packet.receiptId, packetRow.rows[0].source_sha256])
       await pool.query("update tender_packet_receipts set pack_definition_hash=$2 where id=$1", [packet.receiptId, 'c'.repeat(64)])
     } finally { await pool.query('alter table tender_packet_receipts enable trigger tender_no_mutation') }
     await assert.rejects(readTender(director, firstId), tenderError('integrity', 500))
+    await assert.rejects(listTenders(director, { limit: 50 }), tenderError('integrity', 500))
     await pool.query('alter table tender_packet_receipts disable trigger tender_no_mutation')
     try {
       await pool.query('update tender_packet_receipts set pack_definition_hash=$2 where id=$1', [packet.receiptId, packetRow.rows[0].pack_definition_hash])

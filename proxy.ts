@@ -20,7 +20,7 @@ function isKnowledgeHubPage(pathname: string) {
 }
 
 function isSignedInAppPage(pathname: string) {
-  return isUploadDeskPage(pathname) || isKnowledgeHubPage(pathname)
+  return isUploadDeskPage(pathname) || isKnowledgeHubPage(pathname) || pathname === '/work' || pathname.startsWith('/work/')
 }
 
 function isUploadDeskApi(pathname: string) {

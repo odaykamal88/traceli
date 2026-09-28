@@ -14,6 +14,8 @@ import type { TenderDetail, TenderIssuedRecord, TenderPacket, TenderRecordSummar
 
 import type { DeskPackOption } from './upload-desk'
 import s from './desk.module.css'
+import { TenderNavigationGuard } from './tender-navigation-guard'
+import { clearPendingDraft, clearPendingDraftIfMatching, keepPendingDraft, readPendingDraft, type PendingDraft } from '@/lib/tenders/pending-draft'
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'failed' | 'conflict'
 type Classification = '' | 'synthetic' | 'customer'
@@ -28,7 +30,10 @@ function message(cause: unknown, fallback: string) {
   return cause instanceof Error ? cause.message : fallback
 }
 
-export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { tenderId: string | null, packs: DeskPackOption[], fixtureMode: boolean }) {
+export default function DurableTenderDesk({ tenderId, organizationId, viewerId, packs, fixtureMode }: { tenderId: string | null, organizationId: string, viewerId: string, packs: DeskPackOption[], fixtureMode: boolean }) {
+  const pendingScope = { organizationId, viewerId, tenderId: tenderId ?? '' }
+  const pendingRef = useRef<PendingDraft | null>(null)
+  const [recovered, setRecovered] = useState(false)
   const [detail, setDetail] = useState<TenderDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -65,7 +70,9 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
   const [reportPending, setReportPending] = useState(false)
   const checklistHeadingRef = useRef<HTMLHeadingElement>(null)
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (discard = false) => {
+    const scope = { organizationId, viewerId, tenderId: tenderId ?? '' }
+    if (discard) { clearPendingDraft(scope); pendingRef.current = null; setRecovered(false) }
     if (!tenderId) { setLoading(false); return }
     setLoading(true)
     setLoadError(null)
@@ -82,12 +89,34 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
       setSaveState(loaded.draft ? 'saved' : 'idle')
       setSaveError(null)
       setConflictDetail(null)
+      if (!loaded.capabilities.canEdit) clearPendingDraft(scope)
+      const pending = loaded.capabilities.canEdit && !discard ? readPendingDraft(scope) : null
+      if (pending) {
+        const receipt = loaded.packets.find(item => item.receiptId === pending.packetReceiptId)
+        if (receipt) {
+          setPacket(receipt)
+          setDecisions(decisionsForRows(receipt.checklist.rows, pending.decisions))
+          setManualIds(pending.manualVersionIds)
+          const missingManuals = pending.manualVersionIds.filter(id => !loaded.manuals.some(item => item.id === id))
+          versionRef.current = 1
+          setVersion(1)
+          setRecovered(true)
+          if (loaded.revision !== pending.expectedRevision || missingManuals.length > 0) {
+            setConflictDetail(loaded)
+            setSaveState('conflict')
+            setSaveError(missingManuals.length > 0
+              ? 'Recovered manual selections are unavailable in the current tender detail. Your original selections remain here. Reload the latest draft and reselect manual versions before saving.'
+              : 'Recovered unsaved edits differ from a newer server revision. Compare before choosing which draft to keep.')
+          } else setSaveState('idle')
+        } else clearPendingDraft(scope)
+      }
     } catch (cause) {
+      if (cause instanceof TenderRequestError && (cause.status === 403 || cause.status === 404)) clearPendingDraft(scope)
       setLoadError(cause instanceof TenderRequestError && (cause.status === 403 || cause.status === 404)
         ? 'This tender is unavailable or you do not have access to it.'
         : message(cause, 'The tender could not be loaded. Try again.'))
     } finally { setLoading(false) }
-  }, [tenderId])
+  }, [tenderId, organizationId, viewerId])
 
   useEffect(() => { void load() }, [load])
 
@@ -114,7 +143,7 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
     setDecisions(receipt.receiptId === detail?.draft?.packetReceiptId
       ? decisionsForRows(receipt.checklist.rows, detail.draft.decisions)
       : decisionsForRows(receipt.checklist.rows, null))
-    changed()
+    if (detail?.capabilities.canEdit) changed()
   }
 
   const checklist = packet?.checklist ?? null
@@ -123,34 +152,16 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
     return decision ? decisionIssue(row.title, decision) : `Review “${row.title}”.`
   }).find(Boolean) ?? null
   const dirty = version !== savedVersionRef.current
-
+  pendingRef.current = !loading && dirty && detail?.capabilities.canEdit && packet ? {
+    packetReceiptId: packet.receiptId, decisions, manualVersionIds: manualIds,
+    expectedRevision: saveState === 'conflict' ? (readPendingDraft(pendingScope)?.expectedRevision ?? detail.revision) : detail.revision,
+  } : null
   useEffect(() => {
-    if (!dirty && saveState !== 'saving') return
-    const warnUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault()
-      event.returnValue = ''
-    }
-    const warnInternalLink = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
-      const target = event.target
-      const link = target instanceof Element ? target.closest('a[href]') : null
-      if (!link || link.hasAttribute('download') || (link.getAttribute('target') && link.getAttribute('target') !== '_self')) return
-      const destination = new URL(link.getAttribute('href') ?? '', window.location.href)
-      const here = window.location
-      if (destination.origin !== here.origin) return
-      if (destination.pathname === here.pathname && destination.search === here.search) return
-      if (!window.confirm('Leave this tender and discard unsaved edits?')) {
-        event.preventDefault()
-        event.stopImmediatePropagation()
-      }
-    }
-    window.addEventListener('beforeunload', warnUnload)
-    document.addEventListener('click', warnInternalLink, true)
-    return () => {
-      window.removeEventListener('beforeunload', warnUnload)
-      document.removeEventListener('click', warnInternalLink, true)
-    }
-  }, [dirty, saveState])
+    const scope = { organizationId, viewerId, tenderId: tenderId ?? '' }
+    if (pendingRef.current) keepPendingDraft(scope, pendingRef.current)
+    return () => { if (pendingRef.current) keepPendingDraft(scope, pendingRef.current) }
+  }, [organizationId, viewerId, tenderId, version, saveState])
+
 
   function commandKey(scope: string, signature: string) {
     const existing = commandKeys.current[scope]
@@ -199,6 +210,11 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
       }
       setDetail(updated)
       savedVersionRef.current = targetVersion
+      if (versionRef.current === targetVersion) {
+        clearPendingDraftIfMatching(pendingScope, { packetReceiptId: packet.receiptId, decisions: submittedDecisions, manualVersionIds: submittedManualIds, expectedRevision })
+        pendingRef.current = null
+        setRecovered(false)
+      }
       setSaveState('saved')
     } catch (cause) {
       if (cause instanceof TenderRequestError && cause.status === 409) {
@@ -378,9 +394,9 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
     finally { setReportPending(false) }
   }
 
-  if (!tenderId) return <div className={s.page}><h1>Award desk</h1><p className={s.empty}>Choose a saved tender before working on a packet.</p><Link className={s.primary} href="/hub">Open Knowledge hub</Link></div>
+  if (!tenderId) return <div className={s.page}><h1>Award desk</h1><p className={s.empty}>Choose a saved tender before working on a packet.</p><Link className={s.primary} href="/work">Open My work</Link></div>
   if (loading && !detail) return <div className={s.page}><h1>Award desk</h1><p className={s.empty} role="status">Loading tender…</p></div>
-  if (loadError && !detail) return <div className={s.page}><h1>Award desk</h1><p className={s.alert} role="alert">{loadError}</p><button className={s.secondary} type="button" onClick={() => void load()}>Try again</button><Link href="/hub">Knowledge hub</Link></div>
+  if (loadError && !detail) return <div className={s.page}><h1>Award desk</h1><p className={s.alert} role="alert">{loadError}</p><button className={s.secondary} type="button" onClick={() => void load()}>Try again</button><Link href="/work">My work</Link></div>
   if (!detail) return null
 
   const pack = packs.find(item => item.packId === detail.tender.primaryPackId)
@@ -395,15 +411,28 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
     return sameReviewerDecision(latest, mine) ? [] : [{ key, latest, mine }]
   })
 
+  const progress = dirty || saveState === 'saving' || saveState === 'conflict'
+    ? { ...detail.tender.progress, stage: 'review', section: 'review',
+      status: saveState === 'conflict' ? 'Saved versions need comparison' : saveState === 'failed' ? 'Your latest edits have not saved' : saveState === 'saving' ? 'Saving your latest edits' : 'Your latest edits are not yet saved',
+      nextAction: saveState === 'conflict' ? 'Compare saved versions' : saveState === 'failed' ? 'Retry saving your review' : 'Continue review' }
+    : detail.tender.progress
+
   return <div className={s.page} data-testid="durable-tender-desk">
+    <TenderNavigationGuard enabled={dirty || saveState === 'saving'} />
+    <nav aria-label="Breadcrumb"><Link href="/work">My work</Link> / <span>{detail.tender.title}</span></nav>
     <header className={s.intro}>
       <p className={s.eyebrow}>Saved tender · {detail.tender.reference}</p>
       <h1>{detail.tender.title}</h1>
-      <p className={s.lede}>{pack?.name ?? detail.tender.primaryPackId} · pinned version {detail.tender.packVersion}. Review the packet, save the checklist, then issue an assessment. The packet bytes are discarded after extraction.</p>
-      <p className={s.help}>Revision {detail.revision} · updated {new Date(detail.tender.updatedAt).toLocaleString()} · <Link href="/hub">All tenders</Link></p>
+      <p className={s.lede}>{progress.status}. {progress.nextAction}.</p>
+      <p className={s.actions}><a className={s.primary} href={`#${progress.section}`}>{progress.nextAction}</a></p>
+      <nav aria-label="Tender workflow"><ol className={s.path}>{(["evidence", "review", "decision", "record"] as const).map(step => <li key={step} aria-current={progress.stage === step ? "step" : undefined}><a href={`#${step}`}>{step[0].toUpperCase() + step.slice(1)}</a></li>)}</ol></nav>
+      <section className={s.card} aria-labelledby="tender-details"><h2 id="tender-details">Details</h2><p>{pack?.name ?? detail.tender.primaryPackId} · pinned version {detail.tender.packVersion}</p><p className={s.help}>Owner: {detail.tender.owner.label} · Reference: {detail.tender.reference}</p><details><summary>Saved version information</summary><p className={s.help}>Revision {detail.revision} · updated {new Date(detail.tender.updatedAt).toLocaleString()}</p><p className={s.help}>Packet bytes are discarded after extraction.</p></details></section>
     </header>
+    {recovered ? <p className={s.alert} role="status">Recovered unsaved edits from this session. They become server saved only after saving succeeds.</p> : null}
     {loadError ? <p className={s.alert} role="alert">{loadError}</p> : null}
 
+    <section id="evidence" className={s.section} aria-labelledby="evidence-heading">
+    <h2 id="evidence-heading">Evidence</h2>
     {!fixtureMode ? <p className={s.alert} role="status">New packet and manual uploads are available only for local synthetic fixtures. Customer retention is not configured.</p> : null}
     {detail.capabilities.canEdit && fixtureMode ? <section className={s.card} aria-labelledby="packet-heading">
       <h2 id="packet-heading">Packet</h2>
@@ -418,21 +447,21 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
         <label className={s.fieldLabel} htmlFor="durable-packet">Packet file</label>
         <input ref={packetFileRef} id="durable-packet" type="file" accept=".pdf,.docx,.xlsx,.eml,.msg,.txt,.png,.jpg,.jpeg,application/pdf,text/plain" onChange={(event: ChangeEvent<HTMLInputElement>) => setFile(event.target.files?.[0] ?? null)} disabled={uploading} />
         <div className={s.actions}><button className={s.primary} type="submit" disabled={!file || classification !== 'synthetic' || uploading || dirty || saveState === 'saving' || saveState === 'conflict'}>{uploading ? 'Extracting…' : 'Extract packet'}</button></div>
-        {uploadError ? <p className={s.alert} role="alert">{uploadError} <button className={s.secondary} type="button" onClick={() => void load()}>Reload tender</button></p> : null}
+        {uploadError ? <p className={s.alert} role="alert">{uploadError} <button className={s.secondary} type="button" onClick={() => void load(true)}>Reload tender</button></p> : null}
       </form>
     </section> : null}
 
-    {detail.packets.length ? <section className={s.section} aria-labelledby="packet-receipts">
-      <h2 id="packet-receipts">Packet receipts</h2>
+    {detail.packets.length ? <details className={s.card} open={!packet ? true : undefined}>
+      <summary>Packet receipt history ({detail.packets.length})</summary>
       <p className={s.help}>Select a saved extraction to review it again. Reusing a receipt does not reread the file.</p>
       <ul className={s.uploadList}>{detail.packets.map(receipt => <li className={s.uploadItem} key={receipt.receiptId}>
         <div><strong>{receipt.checklist.fileName}</strong><p className={s.help}>Synthetic fixture · extracted {new Date(receipt.createdAt).toLocaleString()} · {receipt.checklist.rows.length} checklist rows</p></div>
-        <button className={s.secondary} type="button" onClick={() => selectPacket(receipt)} disabled={!detail.capabilities.canEdit || dirty || saveState === 'saving' || packet?.receiptId === receipt.receiptId}>{packet?.receiptId === receipt.receiptId ? 'In review' : 'Review receipt'}</button>
+        <button className={s.secondary} type="button" onClick={() => selectPacket(receipt)} disabled={dirty || saveState === 'saving' || packet?.receiptId === receipt.receiptId}>{packet?.receiptId === receipt.receiptId ? 'In review' : 'Review receipt'}</button>
       </li>)}</ul>
-    </section> : null}
+    </details> : null}
 
-    <section className={s.section} aria-labelledby="manual-heading">
-      <h2 id="manual-heading">Manual versions · optional</h2>
+    <details className={s.card}>
+      <summary>Manual versions · optional ({detail.manuals.length})</summary>
       <p className={s.help}>Manuals are references, not pack rules. Each uploaded version is immutable; only metadata and a verified hash are retained.</p>
       {detail.manuals.length ? <ul className={s.uploadList}>{detail.manuals.map(manual => <li className={s.uploadItem} key={manual.id}>
         <label><input type="checkbox" checked={manualIds.includes(manual.id)} onChange={() => toggleManual(manual.id)} disabled={!detail.capabilities.canEdit} /> <strong>{manual.label}</strong> · version {manual.ordinal}</label>
@@ -446,10 +475,13 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
         <input ref={manualFileRef} id="manual-file" type="file" accept=".pdf,.docx,.xlsx,.eml,.msg,.txt,.png,.jpg,.jpeg,application/pdf,text/plain" onChange={event => setManualFile(event.target.files?.[0] ?? null)} />
         <label className={s.radioOption}><input type="checkbox" checked={syntheticManual} onChange={event => setSyntheticManual(event.target.checked)} /> I confirm this is a synthetic fixture, not a customer document.</label>
         <div className={s.actions}><button className={s.secondary} type="submit" disabled={!manualFile || !syntheticManual || addingManual}>{addingManual ? 'Recording…' : 'Record manual version'}</button></div>
-        {manualError ? <p className={s.alert} role="alert">{manualError} <button className={s.secondary} type="button" onClick={() => { if (!dirty || window.confirm('Reload this tender and discard unsaved edits?')) void load() }}>Reload tender</button></p> : null}
+        {manualError ? <p className={s.alert} role="alert">{manualError} <button className={s.secondary} type="button" onClick={() => { if (!dirty || window.confirm('Reload this tender and discard unsaved edits?')) void load(true) }}>Reload tender</button></p> : null}
       </form> : null}
+    </details>
     </section>
 
+    <section id="review" className={s.section} aria-labelledby="review-heading">
+    <h2 id="review-heading">Review</h2>
     {checklist ? <>
       <div className={s.card} role="status" aria-live="polite">
         <strong>{saveState === 'saving' ? 'Saving…' : saveState === 'saved' && !dirty ? `Saved · revision ${detail.revision}${detail.draft ? ` · ${new Date(detail.draft.createdAt).toLocaleString()}` : ''}` : saveState === 'failed' ? 'Could not save — retry' : saveState === 'conflict' ? 'Save conflict' : 'Unsaved edits'}</strong>
@@ -457,7 +489,7 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
         {saveState === 'failed' ? <button className={s.secondary} type="button" onClick={() => { setSaveState('idle'); void persistDraft(true) }}>Retry save</button> : null}
         {saveState === 'conflict' ? <div className={s.actions}>
           <button className={s.secondary} type="button" onClick={() => void compare()}>Compare with latest</button>
-          <button className={s.secondary} type="button" onClick={() => void load()}>Reload latest and discard my edits</button>
+          <button className={s.secondary} type="button" onClick={() => void load(true)}>Reload latest and discard my edits</button>
         </div> : null}
         {conflictDetail ? <div className={s.card}>
           <h3>Latest saved revision {conflictDetail.revision}</h3>
@@ -466,13 +498,19 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
           {changedRows.length === 0 ? <p className={s.help}>No reviewed row values differ. The conflict may be a packet or manual change.</p> : null}
           <ul className={s.plainList}>{changedRows.map(({ key, latest, mine }) =>
             <li key={key}><strong>{key}</strong>: latest “{latest?.action ?? 'not reviewed'}”{latest?.value ? `, ${latest.value.slice(0, 120)}` : ''}{latest?.page ? `, page ${latest.page}` : ''}; yours “{mine?.action ?? 'not reviewed'}”{mine?.value ? `, ${mine.value.slice(0, 120)}` : ''}{mine?.page ? `, page ${mine.page}` : ''}.</li>)}</ul>
-          <div className={s.actions}><button className={s.primary} type="button" onClick={keepMyEdits}>Replace latest draft with my packet and edits</button><button className={s.secondary} type="button" onClick={() => void load()}>Use latest saved revision</button></div>
+          <div className={s.actions}><button className={s.primary} type="button" onClick={keepMyEdits}>Replace latest draft with my packet and edits</button><button className={s.secondary} type="button" onClick={() => void load(true)}>Use latest saved revision</button></div>
         </div> : null}
       </div>
       <DeskChecklist checklist={checklist} decisions={decisions} freezing={issuing} error={issueError} headingRef={checklistHeadingRef} onDecision={updateDecision} onFreeze={issueAssessment} freezeDisabled={!canFreeze} readOnly={!detail.capabilities.canEdit} />
       {dirty ? <p className={s.help}>Assessment is available after every edit is saved to the current revision.</p> : null}
-    </> : <p className={s.empty}>No checklist yet. Extract a synthetic packet to start this tender.</p>}
+    </> : <p className={s.empty}>{detail.packets.length ? "Choose a retained packet in Evidence to view its checklist." : detail.capabilities.canEdit && fixtureMode ? "No checklist yet. Add a synthetic fixture packet in Evidence." : "No retained checklist is available for this tender."}</p>}
 
+    </section>
+    <section id="decision" className={s.section} aria-labelledby="decision-heading">
+      <h2 id="decision-heading">Decision</h2>
+      {!currentAssessment ? <p className={s.help}>Complete and save the review, then issue its assessment.</p> : latestDraftRecord ? <p className={s.help}>A disposition has been recorded for this assessment. Open it in Record below.</p> : !detail.capabilities.canJudge ? <p className={s.help}>The saved assessment is ready for an authorized decision-maker.</p> : null}
+    {currentAssessment ? <p className={s.actions}><button className={s.secondary} type="button" onClick={() => void openRecord(currentAssessment.id)} disabled={recordLoading}>Open assessment</button><a href="#record">Go to issued records</a></p> : null}
+    {!currentAssessment && checklist && detail.capabilities.canAssess ? <div className={s.actions}><button className={s.primary} type="button" onClick={() => void issueAssessment()} disabled={!canFreeze}>{issuing ? 'Issuing…' : 'Issue assessment'}</button></div> : null}
     {currentAssessment && !latestDraftRecord && detail.capabilities.canJudge ? <form className={s.card} onSubmit={issueJudgment}>
       <h2>Record a disposition</h2>
       <p className={s.help}>This action uses the server issued assessment {currentAssessment.id}. It does not authorize an award.</p>
@@ -489,18 +527,18 @@ export default function DurableTenderDesk({ tenderId, packs, fixtureMode }: { te
       {issueError ? <p className={s.alert} role="alert">{issueError}</p> : null}
     </form> : null}
 
-    <section className={s.section} aria-labelledby="issued-records">
-      <h2 id="issued-records">Issued records</h2>
+    </section>
+    <section id="record" className={s.section} aria-labelledby="issued-records">
+      <h2 id="issued-records">Record</h2>
       {detail.records.length === 0 ? <p className={s.empty}>No assessment or judgment has been issued.</p> : <ul className={s.uploadList}>{detail.records.map(record => <li className={s.uploadItem} key={record.id}>
-        <div><p className={s.tag}>{niceKind(record.kind)}</p><strong>{record.id}</strong><p className={s.help}>Issued {new Date(record.issuedAt).toLocaleString()} · snapshot {record.snapshotHash.slice(0, 12)}…</p></div>
+        <div><p className={s.tag}>{niceKind(record.kind)}</p><p className={s.help}>Issued {new Date(record.issuedAt).toLocaleString()}</p><details><summary>Record identifiers</summary><p className={s.help}>{record.id} · snapshot {record.snapshotHash.slice(0, 12)}…</p></details></div>
         <div className={s.actions}><button className={s.secondary} type="button" onClick={() => void openRecord(record.id)} disabled={recordLoading}>Open</button>{detail.capabilities.canExport ? <button className={s.secondary} type="button" onClick={() => void download(record.id)} disabled={reportPending}>{reportPending ? 'Preparing…' : 'Download PDF'}</button> : null}</div>
       </li>)}</ul>}
       {recordError ? <p className={s.alert} role="alert">{recordError}</p> : null}
       {selectedRecord ? <div className={s.card} data-testid="issued-record">
         <p className={s.eyebrow}>Verified server record</p>
         <h3>{niceKind(selectedRecord.kind)}</h3>
-        <p>Record {selectedRecord.id}</p>
-        <p className={s.help}>Issued {new Date(selectedRecord.issuedAt).toLocaleString()} · payload hash {selectedRecord.payloadHash}</p>
+        <p className={s.help}>Issued {new Date(selectedRecord.issuedAt).toLocaleString()}</p><details><summary>Verification identifiers</summary><p className={s.help}>Record {selectedRecord.id} · payload hash {selectedRecord.payloadHash}</p></details>
         {selectedRecord.kind === 'exception_proposal' ? <p className={s.alert}>Exception proposed; approval not recorded. This record does not authorize an award.</p> : null}
         {selectedRecord.parentRecordId ? <p className={s.help}>Assessment {selectedRecord.parentRecordId}</p> : null}
       </div> : null}

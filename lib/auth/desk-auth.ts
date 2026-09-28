@@ -6,8 +6,14 @@ import { redirect } from 'next/navigation'
 import { appendAuthkitHandoff, readQueryToken, type AuthkitHandoff } from '@/lib/auth/authkit-handoff'
 import { accountSwitchReturnTo } from '@/lib/auth/public-origin'
 import { isWorkOSConfigured } from '@/lib/workspace-access'
+import { tenderWorkspacesEnabled } from '@/lib/tenders/config'
 
 export const deskReturnPath = '/desk'
+
+/** Fixed product entry; caller-provided return paths never become authority. */
+export function productReturnPath() {
+  return tenderWorkspacesEnabled() ? '/work' : deskReturnPath
+}
 
 export function handoffFromLoginUrl(url: URL): AuthkitHandoff {
   return {
@@ -24,7 +30,7 @@ export function passwordResetTokenFromUrl(url: URL): string | null {
 }
 
 export async function redirectToDeskAuthkit(handoff: AuthkitHandoff = {}) {
-  const authorizationUrl = await getSignInUrl({ returnTo: deskReturnPath })
+  const authorizationUrl = await getSignInUrl({ returnTo: productReturnPath() })
   redirect(appendAuthkitHandoff(authorizationUrl, handoff))
 }
 
@@ -46,13 +52,13 @@ export async function redirectToAccountSwitch(request: Request) {
     await signOut({ returnTo: accountSwitchReturnTo(request) })
   }
 
-  const authorizationUrl = await getSignInUrl({ returnTo: deskReturnPath, prompt: 'consent' })
+  const authorizationUrl = await getSignInUrl({ returnTo: productReturnPath(), prompt: 'consent' })
   redirect(authorizationUrl)
 }
 
 /** Product Login link. A signed-in visitor goes to the desk unless this request is continuing an invite or reset, or switching accounts. */
 export async function redirectToDeskSignIn(request: Request) {
-  if (!isWorkOSConfigured()) redirect('/desk?auth=unavailable')
+  if (!isWorkOSConfigured()) redirect(`${productReturnPath()}?auth=unavailable`)
 
   const url = new URL(request.url)
   const handoff = handoffFromLoginUrl(url)
@@ -66,7 +72,7 @@ export async function redirectToDeskSignIn(request: Request) {
   }
 
   const session = await withAuth()
-  if (session.user) redirect('/desk')
+  if (session.user) redirect(productReturnPath())
   await redirectToDeskAuthkit()
 }
 
@@ -75,7 +81,7 @@ export async function redirectToDeskSignIn(request: Request) {
  * invitation emails can finish PKCE on this host.
  */
 export async function redirectToInitiateLogin(request: Request) {
-  if (!isWorkOSConfigured()) redirect('/desk?auth=unavailable')
+  if (!isWorkOSConfigured()) redirect(`${productReturnPath()}?auth=unavailable`)
   await redirectToDeskAuthkit(handoffFromLoginUrl(new URL(request.url)))
 }
 

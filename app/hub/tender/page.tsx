@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { hubPackParam } from '@/lib/hub/library'
 
 import { DeskAccessRequired, DeskShell, DeskUnavailable } from '@/app/desk/shell'
 import { openSignedInDesk } from '@/lib/desk/gate'
@@ -19,11 +21,15 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default async function NewTenderPage() {
+export default async function NewTenderPage({ searchParams }: { searchParams: Promise<{ pack?: string | string[] }> }) {
   const gate = await openSignedInDesk()
   if (gate.status === 'unavailable') return <DeskUnavailable />
   if (gate.status === 'denied') return <DeskAccessRequired />
   const durable = tenderWorkspacesEnabled()
+  if (durable) {
+    const pack = hubPackParam((await searchParams).pack)
+    redirect(pack ? `/work/new?pack=${encodeURIComponent(pack)}` : "/work/new")
+  }
 
   const seeds = listDonorPacks().map(pack => ({
     packId: pack.packId,

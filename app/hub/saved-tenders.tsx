@@ -11,13 +11,14 @@ import type { TenderSummary } from '@/lib/tenders/contract'
 
 import s from '../desk/desk.module.css'
 
-export default function SavedTenders({ organizationId, packNames, durable = false }: {
+export default function SavedTenders({ organizationId, packNames, durable = false, canCreate = true }: {
   organizationId: string
   packNames: Record<string, string>
   durable?: boolean
+  canCreate?: boolean
 }) {
   return durable
-    ? <DurableSavedTenders organizationId={organizationId} packNames={packNames} />
+    ? <DurableSavedTenders organizationId={organizationId} packNames={packNames} canCreate={canCreate} />
     : <BrowserSavedTenders organizationId={organizationId} packNames={packNames} />
 }
 
@@ -59,12 +60,13 @@ function BrowserSavedTenders({ organizationId, packNames }: {
   )
 }
 
-function DurableSavedTenders({ organizationId, packNames }: { organizationId: string, packNames: Record<string, string> }) {
+function DurableSavedTenders({ organizationId, packNames, canCreate }: { organizationId: string, packNames: Record<string, string>, canCreate: boolean }) {
   const router = useRouter()
   const importKey = useRef<{ signature: string, key: string } | null>(null)
   const [tenders, setTenders] = useState<TenderSummary[] | null>(null)
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [moreError, setMoreError] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [candidates, setCandidates] = useState<HubEngagement[]>([])
   const [candidate, setCandidate] = useState<HubEngagement | null>(null)
@@ -96,11 +98,12 @@ function DurableSavedTenders({ organizationId, packNames }: { organizationId: st
   async function more() {
     if (!nextCursor || loadingMore) return
     setLoadingMore(true)
+    setMoreError(null)
     try {
       const result = await listTenders(nextCursor)
       setTenders(current => [...(current ?? []), ...result.items])
       setNextCursor(result.nextCursor)
-    } catch { setError('More tenders could not be loaded. Try again.') }
+    } catch { setMoreError('More tenders could not be loaded. Retry below; the loaded tenders are still available.') }
     finally { setLoadingMore(false) }
   }
 
@@ -121,7 +124,7 @@ function DurableSavedTenders({ organizationId, packNames }: { organizationId: st
     if (importKey.current?.signature !== signature) importKey.current = { signature, key: tenderIdempotencyKey() }
     try {
       const created = await createTender(candidateName.trim(), candidatePack, importKey.current.key)
-      router.push(`/desk?tender=${encodeURIComponent(created.tender.id)}`)
+      router.push(`/work/${encodeURIComponent(created.tender.id)}`)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'The tender could not be created. Your browser copy is still here.')
     } finally { setImporting(false) }
@@ -133,20 +136,22 @@ function DurableSavedTenders({ organizationId, packNames }: { organizationId: st
       <p className={s.help}>Open a tender to continue from its saved checklist and issued records.</p>
       {tenders === null && !error ? <p className={s.empty} role="status">Loading tenders…</p> : null}
       {error ? <p className={s.alert} role="alert">{error} <button className={s.secondary} type="button" onClick={retry}>Retry list</button></p> : null}
-      {tenders?.length === 0 ? <p className={s.empty}>No server tenders yet. Start one above.</p> : null}
+      {tenders?.length === 0 ? <p className={s.empty}>No saved tenders yet. Start a tender, or ask a procurement owner to share one with you.</p> : null}
       {tenders && tenders.length > 0 ? <ul className={s.uploadList} data-testid="saved-tenders">
         {tenders.map(tender => <li className={s.uploadItem} key={tender.id}>
           <div>
-            <p className={s.tag}>Saved tender · revision {tender.revision}</p>
+            <p className={s.tag}>{tender.progress.status}</p>
             <strong>{tender.title}</strong>
+            <p className={s.help}>Owner: {tender.owner.label} · {tender.progress.nextAction}</p>
             <p className={s.help}>{tender.reference} · {packNames[tender.primaryPackId] ?? tender.primaryPackId} · updated {new Date(tender.updatedAt).toLocaleString()}</p>
           </div>
-          <Link className={s.secondary} href={`/desk?tender=${encodeURIComponent(tender.id)}`}>Resume</Link>
+          <Link className={s.secondary} href={`/work/${encodeURIComponent(tender.id)}#${tender.progress.section}`} aria-label={`${tender.progress.nextAction}: ${tender.title}`}>{tender.progress.nextAction}</Link>
         </li>)}
       </ul> : null}
-      {nextCursor ? <button className={s.secondary} type="button" onClick={() => void more()} disabled={loadingMore}>{loadingMore ? 'Loading…' : 'Load more tenders'}</button> : null}
-      {candidates.length > 0 ? <div className={s.card}>
-        <h3>Browser tenders available to review</h3>
+      {moreError ? <p className={s.alert} role="alert">{moreError}</p> : null}
+      {nextCursor ? <button className={s.secondary} type="button" onClick={() => void more()} disabled={loadingMore}>{loadingMore ? 'Loading…' : moreError ? 'Retry more tenders' : 'Load more tenders'}</button> : null}
+      {canCreate && candidates.length > 0 ? <details className={s.card}>
+        <summary>Browser tenders available to review</summary>
         <p className={s.help}>These names, pack choices and manual labels came from this browser. They are unverified and have not been added to your saved workspace. Old browser freezes cannot become issued records.</p>
         {!candidate ? <ul className={s.uploadList}>
           {candidates.map(item => <li className={s.uploadItem} key={item.id}>
@@ -171,7 +176,7 @@ function DurableSavedTenders({ organizationId, packNames }: { organizationId: st
             <button className={s.secondary} type="button" onClick={() => setCandidate(null)} disabled={importing}>Cancel</button>
           </div>
         </form>}
-      </div> : null}
+      </details> : null}
     </section>
   )
 }
