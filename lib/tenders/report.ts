@@ -76,7 +76,11 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
     for (const line of lines) text(line.value, 10, line.bold ? bold : regular)
     y -= 4
   }
-  function section(title: string) { y -= 10; text(title, 12, bold); y -= 3 }
+  function section(title: string) {
+    const headingAndBodyHeight = 10 + wrappedLines(title, 12, bold).length * 17 + 3 + 30
+    if (y - headingAndBodyHeight < 55) newPage()
+    y -= 10; text(title, 12, bold); y -= 3
+  }
   newPage()
   text(detail.tender.title, 18, bold)
   text(detail.tender.reference, 10)
