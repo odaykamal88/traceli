@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import { randomUUID } from 'node:crypto'
 import { mock } from 'node:test'
 import pg from 'pg'
+import { tenderPdfPageText } from './pdf-text.mjs'
 
 const address = new URL(process.env.DATABASE_URL || 'invalid:')
 if (!['postgres:','postgresql:'].includes(address.protocol) || !['127.0.0.1','localhost','[::1]'].includes(address.hostname) || address.search || address.hash || process.env.NODE_ENV==='production' || process.env.VERCEL) throw new Error('Retention checks require a disposable nonproduction loopback PostgreSQL database.')
@@ -185,14 +186,10 @@ try{
     assert.equal(customer.judgment.payload.snapshot.classification,'customer')
     const detail=await readTender(director,customer.id)
     assert.equal(detail.draft.checklist.snapshot.classification,'customer')
-    const {PDFDocument,PDFName,PDFArray,decodePDFRawStream}=await import('pdf-lib')
-    const pdf=await PDFDocument.load(customer.report.bytes),content=[]
-    for(const page of pdf.getPages()){
-      const streams=page.node.lookup(PDFName.of('Contents'))
-      for(const stream of streams instanceof PDFArray?streams.asArray():[streams])content.push(decodePDFRawStream(pdf.context.lookup(stream)).decode())
-    }
-    const body=Buffer.concat(content.map(chunk=>Buffer.from(chunk))).toString('latin1')
-    assert.ok(body.includes(Buffer.from('Sanitized customer material').toString('hex').toUpperCase())||body.includes('Sanitized customer material'))
+    const pages=await tenderPdfPageText(customer.report.bytes),body=pages.join('\n')
+    assert.match(body,/Classification: Sanitized customer material/)
+    assert.doesNotMatch(body,/Synthetic fixture|Classification: Fictional test data/i)
+    for(let index=0;index<pages.length;index++)assert.match(pages[index],new RegExp(`Customer record - page ${index+1}`))
     await deleteTender(director,customer.id,{idempotencyKey:key()})
     assert.equal(await count('audit_events',customer.id),0)
   })

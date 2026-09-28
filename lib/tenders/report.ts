@@ -8,6 +8,16 @@ import { TenderError } from '@/lib/tenders/contract'
 /** Render only the retained record and its pinned draft. No catalog lookup or browser payload. */
 export async function renderTenderReport(detail: TenderDetail, record: TenderIssuedRecord): Promise<{ bytes: Uint8Array; fileName: string }> {
   if (!detail.draft || detail.draft.id !== record.draftId) throw new TenderError(409, 'integrity', 'The retained record is unavailable.')
+  const proposal = record.kind === 'exception_proposal'
+  const frozen = proposal ? null : record.payload as FrozenDecisionRecord
+  const snapshot = proposal ? detail.draft.checklist.snapshot : frozen?.snapshot
+  const classification = snapshot?.classification
+  if (!snapshot || (classification !== 'synthetic' && classification !== 'customer')
+    || detail.tender.classification !== classification
+    || detail.draft.checklist.snapshot?.classification !== classification
+    || (detail.policy !== null && detail.policy?.classification !== classification)) {
+    throw new TenderError(409, 'integrity', 'The retained record classification is unavailable or inconsistent.')
+  }
   const doc = await PDFDocument.create()
   doc.setTitle(`Trace-li saved record: ${detail.tender.reference}`)
   doc.setAuthor('Trace-li')
@@ -26,7 +36,7 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
     page = doc.addPage([595.28, 841.89])
     page.drawRectangle({ x: 0, y: 790, width: 595.28, height: 51.89, color: rgb(0.97, 0.96, 0.92) })
     page.drawText('TRACE-LI  /  SAVED TENDER RECORD', { x: 42, y: 809, font: bold, size: 10, color: navy })
-    page.drawText(`Synthetic fixture - page ${doc.getPageCount()}`, { x: 42, y: 24, font: regular, size: 8, color: gray })
+    page.drawText(`${classification === 'synthetic' ? 'Synthetic fixture' : 'Customer record'} - page ${doc.getPageCount()}`, { x: 42, y: 24, font: regular, size: 8, color: gray })
     y = 765
   }
   function text(value: unknown, size = 10, font: PDFFont = regular) {
@@ -59,8 +69,6 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
   text(`Issued ${record.issuedAt} | saved draft revision ${detail.draft.revision}`)
   text(`Record ${record.id}`)
   section('Outcome')
-  const proposal = record.kind === 'exception_proposal'
-  const frozen = proposal ? null : record.payload as FrozenDecisionRecord
   if (proposal) {
     text('Exception proposed; approval not recorded.', 12, bold)
     text((record.payload as Record<string, unknown>).reason ?? (record.payload as Record<string, unknown>).rationale ?? '')
@@ -73,9 +81,8 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
     text(frozen!.disposition.rationale)
     text(`Recorded by ${frozen!.disposition.actorId} (${frozen!.disposition.actorRole})`)
   }
-  text('Synthetic fixture. Trace-li does not authorize the award. Missing evidence is not a negative finding or proof of fraud.')
+  text(`${classification === 'synthetic' ? 'Synthetic fixture. ' : ''}Trace-li does not authorize the award. Missing evidence is not a negative finding or proof of fraud.`)
   section('Reviewed evidence')
-  const snapshot = frozen?.snapshot ?? detail.draft.checklist.snapshot
   const decisions = new Map(detail.draft.decisions.map(d => [d.key, d]))
   const fields = new Map(snapshot.fields.map(f => [f.fieldId, f]))
   for (const row of detail.draft.checklist.rows) {
@@ -96,7 +103,7 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
     y -= 4
   }
   section('Data policy')
-  text(`Classification: ${detail.tender.classification === 'synthetic' ? 'Fictional test data' : 'Sanitized customer material'}`)
+  text(`Classification: ${classification === 'synthetic' ? 'Fictional test data' : 'Sanitized customer material'}`)
   text(detail.expiresAt ? `Traceli record expiry: ${detail.expiresAt}` : 'Earlier record preserved outside the new retention and deletion policy.')
   if (detail.policy) text(detail.policy.providerDisclosure)
   text('Downloaded copies remain under the recipient’s control.')
