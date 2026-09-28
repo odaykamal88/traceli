@@ -16,7 +16,8 @@ import {
 
 import s from '../../desk/desk.module.css'
 import { deskTenderHref } from '@/lib/hub/desk-continuity'
-import { createTender, tenderIdempotencyKey } from '@/lib/tenders/client'
+import TenderPolicyChoice from '@/app/work/tender-policy'
+import { createTender, tenderIdempotencyKey, type TenderPolicyAcceptance } from '@/lib/tenders/client'
 
 export type TenderSeed = {
   packId: DonorPackId
@@ -44,6 +45,7 @@ export default function NewTender({
   const [packId, setPackId] = useState<DonorPackId | ''>(initialPackId ?? '')
   const [attached, setAttached] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [acceptance, setAcceptance] = useState<TenderPolicyAcceptance | null>(null)
   const [pending, setPending] = useState(false)
 
   useEffect(() => {
@@ -64,13 +66,13 @@ export default function NewTender({
     const form = new FormData(event.currentTarget)
     if (durable) {
       const title = String(form.get('name') ?? '').trim()
-      if (!title || !packId) { setError('Name the tender and choose a pack.'); return }
+      if (!title || !packId || !acceptance) { setError('Name the tender, choose a pack and acknowledge the document policy.'); return }
       setPending(true)
       setError(null)
-      const signature = JSON.stringify([title, packId])
+      const signature = JSON.stringify([title, packId, acceptance])
       if (createKey.current?.signature !== signature) createKey.current = { signature, key: tenderIdempotencyKey() }
       try {
-        const created = await createTender(title, packId, createKey.current.key)
+        const created = await createTender(title, packId, createKey.current.key, acceptance)
         router.push(`/work/${encodeURIComponent(created.tender.id)}`)
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : 'The tender could not be saved. Try again.')
@@ -124,6 +126,7 @@ export default function NewTender({
           type="text"
           required
           maxLength={80}
+          disabled={pending}
           autoComplete="off"
           placeholder="Kenya shelter kits"
         />
@@ -137,6 +140,7 @@ export default function NewTender({
             <label className={s.pack} key={seed.packId}>
               <input
                 type="radio"
+                disabled={pending}
                 name="primaryPack"
                 value={seed.packId}
                 required
@@ -183,9 +187,10 @@ export default function NewTender({
           </div>
         ) : null}
       </fieldset> : null}
+      {durable ? <TenderPolicyChoice disabled={pending} onChange={setAcceptance} /> : null}
       {error ? <p className={s.alert} role="alert">{error}</p> : null}
       <div className={s.actions}>
-        <button className={s.primary} type="submit" disabled={!ready || pending}>
+        <button className={s.primary} type="submit" disabled={!ready || pending || (durable && !acceptance)}>
           {pending ? 'Opening tender…' : durable ? 'Create tender and add evidence' : 'Continue to award desk'}
         </button>
       </div>

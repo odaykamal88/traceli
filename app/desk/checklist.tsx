@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState, type FocusEvent, type RefObject } from 'react'
+import { useId, useRef, useState, type FocusEvent, type RefObject } from 'react'
 
 import {
   decisionIssue,
@@ -51,6 +51,8 @@ export default function DeskChecklist({
   readOnly?: boolean
 }) {
   const filterId = useId()
+  const lastFocusedKey = useRef<string | null>(null)
+  const rowElements = useRef(new Map<string, HTMLLIElement>())
   const [openOnly, setOpenOnly] = useState(false)
   const [activeCorrectionKey, setActiveCorrectionKey] = useState<string | null>(null)
   const openCount = openItemCount(checklist.rows, decisions)
@@ -62,6 +64,18 @@ export default function DeskChecklist({
     const issue = decisionIssue(row.title, decision)
     return issue ? [issue] : []
   })
+
+  function nextOpenItem() {
+    const currentIndex = checklist.rows.findIndex(row => row.key === lastFocusedKey.current)
+    const ordered = [...checklist.rows.slice(currentIndex + 1), ...checklist.rows.slice(0, currentIndex + 1)]
+    const next = ordered.find(row => {
+      const decision = byKey.get(row.key)
+      return decision && (decisionIssue(row.title, decision) || openItemCount([row], [decision]) > 0)
+    })
+    if (!next) return
+    setActiveCorrectionKey(next.key)
+    rowElements.current.get(next.key)?.focus()
+  }
 
   return (
     <section className={s.checklist} aria-labelledby="checklist-title" data-testid="checklist">
@@ -83,7 +97,7 @@ export default function DeskChecklist({
         </button>
       </div>
       <p className={s.lead}>
-        Check every pack row before Trace-li freezes the assessment. Open items are rows the packet did not yield. Confirm the extract, or mark what the file actually says. A page number is required when you mark an item present, negative, or stated absent.
+        Check every pack row before Trace-li freezes the assessment. Missing evidence means the packet did not yield an item; it is not a negative finding. Confirm the extract, or mark what the file actually says. A page number is required when you mark an item present, negative, or stated absent.
       </p>
       <p className={s.help}>
         {checklist.rows.length} checklist {checklist.rows.length === 1 ? 'row' : 'rows'} · {checklist.fileName} · {checklist.packName}
@@ -96,6 +110,7 @@ export default function DeskChecklist({
           onChange={event => setOpenOnly(event.target.checked)}
         />
         <label htmlFor={filterId}>Show open items only</label>
+        <button className={s.secondary} type="button" onClick={nextOpenItem} disabled={openCount === 0 && incompleteCount === 0}>Next open item</button>
       </div>
       {error ? <p className={s.alert} role="alert">{error}</p> : null}
       <ol className={s.checklistRows}>
@@ -108,10 +123,12 @@ export default function DeskChecklist({
           return (
             <li
               key={row.key}
+              ref={element => { if (element) rowElements.current.set(row.key, element); else rowElements.current.delete(row.key) }}
+              tabIndex={-1}
               className={s.checklistRow}
               hidden={hidden}
               data-field={row.key}
-              onFocusCapture={() => setActiveCorrectionKey(row.key)}
+              onFocusCapture={() => { lastFocusedKey.current = row.key; setActiveCorrectionKey(row.key) }}
               onBlurCapture={(event: FocusEvent<HTMLLIElement>) => {
                 if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setActiveCorrectionKey(null)
               }}

@@ -175,6 +175,7 @@ export function snapshotFromUpload(
     awardId: string
     procurementReference: string
     asOf: string
+    classification?: 'synthetic' | 'customer'
   },
 ): { snapshot: AwardRegistrySnapshot, fromPacketFieldIds: ReadonlySet<string>, unmappedFragmentCount: number } {
   const draft = fragmentsTowardRegistryDraft(extraction.fragments, {
@@ -194,7 +195,7 @@ export function snapshotFromUpload(
   const snapshot = awardRegistrySnapshotSchema.parse({
     schemaVersion: 'award-registry-snapshot-v1',
     registryVersion: 1,
-    classification: 'synthetic',
+    classification: scope.classification ?? 'synthetic',
     organizationId: scope.organizationId,
     projectId: 'project.upload-desk',
     awardId: scope.awardId,
@@ -248,6 +249,7 @@ export type PrepareUploadChecklistInput = {
   packId: string
   organizationId: string
   procurementReference?: string
+  classification?: 'synthetic' | 'customer'
   /** Override only in tests. The desk uses the request clock. */
   asOf?: string
 }
@@ -275,6 +277,7 @@ export function prepareUploadChecklist(input: PrepareUploadChecklistInput): Uplo
     awardId,
     procurementReference,
     asOf,
+    classification: input.classification,
   })
   const checklist: UploadChecklist = {
     schemaVersion: 'upload-desk-checklist-v1',

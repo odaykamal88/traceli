@@ -4,10 +4,10 @@ import { hashJson, verifyFrozenRecord } from '@/lib/field-registry/freeze'
 import { sanitizeUploadChecklist } from '@/lib/desk/review'
 import { TenderError } from '@/lib/tenders/contract'
 
-export function verifyPacketRow(row: { payload: Record<string,unknown>; payloadHash: string; packDefinition: Record<string,unknown>; packDefinitionHash: string; sourceSha256: string; packId: string; packVersion: string; organizationId:string; procurementId:string; providerId:string; originalFilename:string; mediaType:string }) {
+export function verifyPacketRow(row: { payload: Record<string,unknown>; payloadHash: string; packDefinition: Record<string,unknown>; packDefinitionHash: string; sourceSha256: string; packId: string; packVersion: string; organizationId:string; procurementId:string; providerId:string; classification:string; originalFilename:string; mediaType:string }) {
   if (hashJson(row.payload) !== row.payloadHash || hashJson(row.packDefinition) !== row.packDefinitionHash) throw new TenderError(500,'integrity','The saved packet failed its integrity check.')
   const checklist = sanitizeUploadChecklist(row.payload.checklist)
-  if (!checklist || hashJson(checklist.snapshot) !== checklist.snapshotHash || checklist.sourceFileHash !== row.sourceSha256 || checklist.packId !== row.packId || checklist.packVersion !== row.packVersion || checklist.organizationId !== row.organizationId || checklist.awardId !== `award.${row.procurementId}` || checklist.providerId !== row.providerId || checklist.fileName !== row.originalFilename || checklist.mediaType !== row.mediaType) throw new TenderError(500,'integrity','The saved packet failed its integrity check.')
+  if (!checklist || hashJson(checklist.snapshot) !== checklist.snapshotHash || checklist.sourceFileHash !== row.sourceSha256 || checklist.packId !== row.packId || checklist.packVersion !== row.packVersion || checklist.organizationId !== row.organizationId || checklist.awardId !== `award.${row.procurementId}` || checklist.providerId !== row.providerId || checklist.snapshot.classification !== row.classification || checklist.fileName !== row.originalFilename || checklist.mediaType !== row.mediaType) throw new TenderError(500,'integrity','The saved packet failed its integrity check.')
   if (row.packDefinition.packId !== row.packId || row.packDefinition.version !== row.packVersion) throw new TenderError(500,'integrity','The saved pack failed its integrity check.')
   return checklist
 }

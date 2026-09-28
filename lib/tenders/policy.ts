@@ -6,6 +6,7 @@ import { tenderAccess, tenderWorkspaces } from '@/db/tender-schema'
 import type { TenantTransaction } from '@/lib/db/tenant'
 import { traceRole } from '@/lib/trace/access-policy'
 import type { WorkspaceViewer } from '@/lib/workspace-viewer'
+import { assertTenderActive, retainedTenderPolicy } from '@/lib/tenders/retention'
 import { TenderError } from '@/lib/tenders/contract'
 
 const elevatedRoles = new Set(['Procurement Director', 'Workspace Admin'])
@@ -13,7 +14,7 @@ const editRoles = new Set(['Procurement Officer', 'Panel Member', ...elevatedRol
 const assessRoles = new Set(['Procurement Officer', ...elevatedRoles])
 const allRoles = new Set([...editRoles, 'Auditor'])
 
-export type TenderAction = 'read' | 'edit' | 'assess' | 'judge' | 'grant' | 'export'
+export type TenderAction = 'read' | 'edit' | 'assess' | 'judge' | 'grant' | 'export' | 'delete'
 
 export function tenderCapabilities(viewer: WorkspaceViewer, grant: 'read' | 'review' | null, isOwner = false) {
   const elevated = elevatedRoles.has(viewer.role)
@@ -27,6 +28,7 @@ export function tenderCapabilities(viewer: WorkspaceViewer, grant: 'read' | 'rev
     canProposeException: canEdit && elevated,
     canGrant: canRead && elevated,
     canExport: canRead,
+    canDelete: canRead && elevated,
   }
 }
 
@@ -37,7 +39,10 @@ export async function authorizeTender(tx: TenantTransaction, viewer: WorkspaceVi
   const grant = row?.access === 'read' || row?.access === 'review' ? row.access : null
   const capabilities = tenderCapabilities(viewer,grant,workspace.ownerId===viewer.id)
   if (!capabilities.canRead) throw new TenderError(404,'unavailable','This tender is unavailable.')
-  const allowed = action === 'read' ? capabilities.canRead : action === 'edit' ? capabilities.canEdit : action === 'assess' ? capabilities.canAssess : action === 'judge' ? capabilities.canJudge : action === 'grant' ? capabilities.canGrant : capabilities.canExport
+  retainedTenderPolicy(workspace)
+  if (action !== 'delete') assertTenderActive(workspace)
+  if (action === 'delete' && workspace.retentionState !== 'managed') throw new TenderError(403,'legacy_preserved','This earlier tender is preserved and is outside the new deletion policy.')
+  const allowed = action === 'read' ? capabilities.canRead : action === 'edit' ? capabilities.canEdit : action === 'assess' ? capabilities.canAssess : action === 'judge' ? capabilities.canJudge : action === 'grant' ? capabilities.canGrant : action === 'delete' ? capabilities.canDelete : capabilities.canExport
   if (!allowed) throw new TenderError(403,'forbidden','This action is unavailable for your role.')
   return { workspace, capabilities }
 }

@@ -95,6 +95,11 @@ export async function renderTenderReport(detail: TenderDetail, record: TenderIss
     }
     y -= 4
   }
+  section('Data policy')
+  text(`Classification: ${detail.tender.classification === 'synthetic' ? 'Fictional test data' : 'Sanitized customer material'}`)
+  text(detail.expiresAt ? `Traceli record expiry: ${detail.expiresAt}` : 'Earlier record preserved outside the new retention and deletion policy.')
+  if (detail.policy) text(detail.policy.providerDisclosure)
+  text('Downloaded copies remain under the recipient’s control.')
   section('References retained with this draft')
   text(`Packet: ${detail.draft.checklist.fileName}`)
   text(`Packet SHA-256: ${detail.draft.checklist.sourceFileHash}`)
