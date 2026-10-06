@@ -2,6 +2,10 @@
 
 Reconciled 27 September 2026; tender workflow sections reconciled with main `ac03f2a` on 4 October 2026. This is a dated evidence register, not an instruction to dispatch work. Refresh external state before releasing or selecting a task. Historical reviewed artifacts retain their original bytes and dates.
 
+## Landing video — verified 6 October 2026
+
+The landing page serves the supplied 55.018-second, 1920×1080 promotional film at `/trace-li-promo-1080.mp4`, with a matching preview frame and a 55-second label. Live playback, play/pause controls, byte-range requests and the production smoke check passed. The served MP4 SHA-256 matches the supplied file. This verifies the public video release, not the authenticated tender workflow. The source and dependency reconciliation are tracked in [PR #74](https://github.com/odaykamal88/traceli/pull/74).
+
 ## Saved tender workflow — reconciled 4 October 2026
 
 This section was reconciled against code at main `ac03f2a687ec7ae5e9ce93bf36f4ef8a84f117da` and [the managed tender production flow](eng/TENDER_PRODUCTION_FLOW.md). No production system was queried on 4 October; every deployment statement below is a dated observation copied from that record.
@@ -46,7 +50,7 @@ Production Trace mode is `workos`. WorkOS and extraction configuration keys are 
 
 | Surface | Implemented at this baseline | Boundary / next evidence |
 | --- | --- | --- |
-| `/` and `/demo` | Six-week, one-file pilot offer; 52-second film; fictional Award desk, disposition and frozen record | Public fictional request-evidence journey reached verified freeze in the 27 September browser review. |
+| `/` and `/demo` | Six-week, one-file pilot offer; 55-second promotional film; fictional Award desk, disposition and frozen record | Public fictional request-evidence journey reached verified freeze in the 27 September browser review. |
 | `/method` | Eight fictional evidence/policy/human-review scenarios | No live model calls or real award decisions. |
 | `/login`, `/desk` | Invitation-based WorkOS entry; packet extraction; one selected donor pack; cited reviewer checklist, assessment, human disposition and pilot PDF | Live login redirect observed. Authenticated end-to-end journey remains to be verified for this release. Since 28 September, the saved `/work` path supersedes this flow when its rollout flag is on (see the 4 October section above). |
 | `/hub`, `/hub/tender` | Tender setup, four seeded packs, optional manual metadata | One selected pack is evaluated. Manual bytes/rules are not retained/compiled. |

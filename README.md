@@ -6,7 +6,7 @@ Traceli is the award-assurance layer for donor-funded procurement. It keeps the 
 
 Start with [the dated current-state register](./docs/CURRENT_STATE.md) for deployment evidence, open work and operating status. Older HQ handoffs retain their historical dates.
 
-- A public award-assurance story at `/` and a 52-second illustrative film.
+- A public award-assurance story at `/` and a 55-second promotional film.
 - The public Award desk at `/demo`: a fictional award under reconstruction, overnight agent prep, a human disposition and a shareable decision record.
 - Public Case Cards at `/cases`. A card cites a frozen Field Registry record, with the same facts at `/cases/[slug].json`. Global Fund OIG GF-OIG-25-005 publishes founder Freeze #1. OIOS 2025/098 publishes founder Freeze #2. UNFPA IA/2025-29 publishes founder Freeze #3. Two UNFPA cards and OIOS 2020/005 remain labeled fixtures awaiting a founder freeze. See [the phase 0 definition of done](./docs/case-card-phase0.md) and [the UNFPA / OCHA case factory](./docs/case-factory-unfpa-ocha.md).
 - A workspace **Rule library** at `/workspace/library`: switchboard of governing packs the desk may cite. Public `/demo` stays Award desk.
@@ -59,6 +59,8 @@ corepack enable          # once per machine; may need elevated permissions
 corepack pnpm install --frozen-lockfile
 corepack pnpm dev        # http://localhost:3000
 ```
+
+Component utilities are owned locally in `app/component-utilities.css`, copied unchanged from shadcn 4.19.0 with its MIT license. The generator CLI is not required to build or run the app.
 
 WorkOS and database variables are required for the protected workspace. Without them, the app fails closed and keeps the clearly labelled fictional demo separate and portable. Create `.env.local` from `.env.example` only when deliberately configuring a non-production workspace. Keep `TRACE_EXTRACTION_PROVIDER` unset (offline mock) and the `TRACELI_TENDER_*` rollout variables unset unless a task explicitly requires them.
 
