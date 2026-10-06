@@ -283,7 +283,7 @@ export default function LandingPage() {
                 </a>
                 <button type="button" onClick={startFilm} className="group inline-flex min-h-12 items-center gap-3 px-2 text-sm font-semibold text-white/78 transition hover:text-white">
                   <Play className="size-3.5 fill-current" aria-hidden="true" />
-                  See the 52-second proof path
+                  See the 55-second proof path
                 </button>
               </div>
               <p className="mt-6 flex max-w-[600px] items-start gap-2 text-xs leading-5 text-white/42"><Clock3 className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />A bounded six-week paid pilot. Your existing process remains authoritative, and no sensitive files move before the data route is agreed.</p>
@@ -298,8 +298,8 @@ export default function LandingPage() {
                   loop
                   playsInline
                   preload="auto"
-                  poster="/traceli-award-desk-proof-poster.png"
-                  aria-label="Traceli product film showing the Award desk from the rule library through disposition to a frozen record"
+                  poster="/trace-li-promo-1080-poster.png"
+                  aria-label="Traceli promotional video"
                   onCanPlay={(event) => {
                     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && event.currentTarget.paused) {
                       void event.currentTarget.play()
@@ -309,12 +309,12 @@ export default function LandingPage() {
                   onPause={() => setFilmPlaying(false)}
                   className="aspect-video w-full bg-[#f8f4eb] object-cover"
                 >
-                  <source src="/traceli-award-desk-proof.mp4" type="video/mp4" />
+                  <source src="/trace-li-promo-1080.mp4" type="video/mp4" />
                 </video>
 
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#061a33]/72 to-transparent" aria-hidden="true" />
                 <div className="absolute left-3 top-3 rounded-full border border-white/45 bg-[#061a33]/72 px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.13em] text-white backdrop-blur-md sm:left-4 sm:top-4">
-                  Product film · 52 sec
+                  Product film · 55 sec
                 </div>
                 <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 sm:inset-x-4 sm:bottom-4">
                   <button type="button" onClick={toggleFilm} aria-label={filmPlaying ? 'Pause product film' : 'Play product film'} className="flex size-11 items-center justify-center rounded-full border border-white/25 bg-[#061a33]/82 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-[#071d39]">
