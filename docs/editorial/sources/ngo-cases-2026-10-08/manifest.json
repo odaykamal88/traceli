@@ -1,0 +1,45 @@
+{
+  "retrievedOn": "2026-10-08",
+  "sources": [
+    {
+      "file": "ifrc-ebola-2017-2018.pdf",
+      "url": "https://adore.ifrc.org/Download.aspx?FileId=255776",
+      "publisher": "IFRC; independent auditor report by KPMG",
+      "title": "Combined Ebola appeal financial statements, 1 January 2017\u201331 October 2018",
+      "publishedOn": "2019-09-03",
+      "locator": "Printed p. 12 (PDF p. 13), note 9a: Guinea",
+      "sha256": "acf3202b9e44252a2e5e6b4402799eab218390b6f1375e02dfc126da5299d8b4",
+      "retrievedAt": "2026-10-08T12:31:32.758Z"
+    },
+    {
+      "file": "hrw-sldp-2022.html",
+      "url": "https://www.hrw.org/news/2022/01/27/hrw-and-sldp-guide-human-rights-compliant-procurement-processes-syria",
+      "publisher": "Human Rights Watch and Syrian Legal Development Programme",
+      "title": "HRW and SLDP Guide on Human Rights-Compliant Procurement Processes in Syria",
+      "publishedOn": "2022-01-27",
+      "locator": "Introduction; question 6, phases 0 and II; recommendations",
+      "sha256": "8ea3ef40e9718339b45ea3b3ce8314c879faac5c0921e178262bc97044afda6c",
+      "retrievedAt": "2026-10-08T12:31:37.849Z"
+    },
+    {
+      "file": "irc-doj-2021.pdf",
+      "url": "https://oig.usaid.gov/sites/default/files/2022-02/Department-of-Justice-PressRelease-031921.pdf",
+      "publisher": "US Department of Justice; retained by USAID Office of Inspector General",
+      "title": "IRC agrees to settle allegations concerning USAID-funded procurement",
+      "publishedOn": "2021-03-19",
+      "locator": "PDF p. 1, paragraphs 1\u20134; DOJ press release 21-040",
+      "sha256": "af3dd802c764c18d6094e0c1ddf91a2ee45ca35e6bdb820a25a70cc3d415c1fa",
+      "retrievedAt": "2026-10-08T12:31:34.953Z"
+    },
+    {
+      "file": "irc-oig-followup.html",
+      "url": "https://oig.usaid.gov/node/4625",
+      "publisher": "USAID Office of Inspector General",
+      "title": "Weaknesses in Oversight of USAID\u2019s Syria Response, 8-000-21-001-P",
+      "publishedOn": "2021-03-04",
+      "locator": "Recommendation 2 and closure dates for recommendations 1\u20134; checked 8 October 2026",
+      "sha256": "2f38a6c7e1779ae9feb0e01a3db653ea8de4b77e8eb8cd8e675ffd9c6cb3b75a",
+      "retrievedAt": "2026-10-08T12:31:39.575Z"
+    }
+  ]
+}

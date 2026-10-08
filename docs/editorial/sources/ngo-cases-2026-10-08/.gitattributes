@@ -1,0 +1,2 @@
+# Retained source bytes must match their SHA-256; do not normalize third-party HTML.
+*.html -text -diff

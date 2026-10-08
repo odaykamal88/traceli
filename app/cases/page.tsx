@@ -26,7 +26,7 @@ export default function CaseCardsPage() {
         <div className="mx-auto max-w-[1100px]">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2f8876]">Trace-li · pre-signature award assurance</p>
           <h1 className="mt-4 font-display text-5xl leading-none tracking-[-0.03em] sm:text-7xl">Case cards</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-[#52696a]">Each card separates the official findings from a Trace-li rehearsal or fixture checklist. Published cards cite a frozen rehearsal record. Fixtures awaiting a freeze are labelled and have no freeze hashes.</p>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-[#52696a]">Each card separates the cited findings or research from a Trace-li rehearsal or fixture checklist. Published cards cite a frozen rehearsal record. Fixtures awaiting a freeze are labelled and have no freeze hashes.</p>
         </div>
       </header>
       <div className="px-5 py-12 sm:px-8">

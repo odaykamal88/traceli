@@ -207,7 +207,7 @@ const decisionLabels: Record<FrozenDecisionRecord['disposition']['decision'], st
 const FIXTURE_STATUS = 'Fixture · awaiting founder freeze'
 const FIXTURE_READINESS = 'Not issued. This fixture has not been through a desk freeze, so readiness is left blank rather than shown as unknown, red, amber, or green.'
 const FIXTURE_DISPOSITION = 'No disposition. A founder-confirmed desk freeze has not been recorded.'
-const FIXTURE_HASH = 'Snapshot and packs hashes are omitted. They are produced only by freezeAtJudgment (sha256:sorted-json-v1). The sha256 on the primary source file is the public source PDF, not a freeze hash.'
+const FIXTURE_HASH = 'Snapshot and packs hashes are omitted. They are produced only by freezeAtJudgment (sha256:sorted-json-v1). The sha256 on the primary source file identifies the retained public source file, not a freeze hash.'
 
 /**
  * Build the public export. A null frozen record stays a labeled fixture.

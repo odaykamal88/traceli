@@ -1,4 +1,5 @@
 import { patternTicketSchema, type PatternTicket } from '@/lib/field-registry/case-card'
+import { ngoPatternTickets } from '@/lib/case-cards/ngo-pattern-tickets'
 
 /**
  * Pattern ticket store. Stable ids are the contract for pack, registry,
@@ -8,6 +9,7 @@ import { patternTicketSchema, type PatternTicket } from '@/lib/field-registry/ca
  * `accepted` is a human step. It is not implied by shipping the rule.
  */
 const patternTickets = patternTicketSchema.array().parse([
+  ...ngoPatternTickets,
   {
     schemaVersion: 'pattern-ticket-v1',
     ticketId: 'pt:gf-oig-25-005:competition-exception-docs',
