@@ -32,7 +32,7 @@ Source retrieval date for PC-002 to PC-004: 27 August 2026. PC-001 source and la
 
 Prepared 8 October 2026 at Oday’s request. The [case and claim record](case-factory-ngo-research.md) governs three additions to the case-card library: `ifrc-ebola-supplier-payments`, `hrw-sldp-syria-procurement`, and `irc-syria-procurement-settlement`. Each has retained primary sources, a source hash, attributed findings or research, response/status qualifications, and proposed review questions. HRW is the publisher of research about UN procurement, not the subject of a failure finding.
 
-Owner: Oday. Source check: Codex, 8 October 2026. Review due: 8 January 2027 or before release. Status: research fixtures; no independent legal/comms approval, publication, readiness, or founder freeze recorded. This does not change the controlled short-form wording above.
+Owner: Oday. Source check: Codex, 8 October 2026. Review due: 8 January 2027 or before a material wording/source change. Status: research fixtures; Oday explicitly authorized public release and deployment on 8 October 2026 (“make them live and deploy”). Independent legal/comms review, readiness, and founder-confirmed desk freeze are not recorded. Publication follows PR #76 and Vercel deployment verification. This does not change the controlled short-form wording above.
 
 Each case study should fit on one page and use this order:
 
