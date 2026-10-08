@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import test from 'node:test'
 
 import { getCaseCard, listCaseCards } from '../../lib/case-cards/catalog.ts'
@@ -23,6 +24,7 @@ import { OIOS_2025_098_PDF_SHA256, oios2025098Draft, oios2025098FixtureSnapshot 
 import { listPatternTickets } from '../../lib/case-cards/pattern-tickets.ts'
 import { caseCardSocialMetadata } from '../../lib/case-cards/social.ts'
 import { SITE_OG_TITLE } from '../../lib/site-social.ts'
+import { isDonorPackId } from '../../lib/field-registry/packs/index.ts'
 import { UNFPA_ANNEX4_PDF_SHA256 } from '../../lib/case-cards/unfpa-annex4-13-esa-ip.ts'
 import {
   UNFPA_SUDAN_ACTOR_ROLE,
@@ -50,9 +52,41 @@ const card = getCaseCard('gf-oig-25-005')
 const ochaCard = getCaseCard('oios-2025-098-cbpf-reserve')
 const sudanCard = getCaseCard('unfpa-ia-2025-29-sudan')
 
+test('NGO research fixtures preserve source bytes and never imply an implemented policy or founder judgment', () => {
+  const folder = new URL('../../docs/editorial/sources/ngo-cases-2026-10-08/', import.meta.url)
+  const manifest = JSON.parse(readFileSync(new URL('manifest.json', folder), 'utf8'))
+  for (const source of manifest.sources) {
+    assert.equal(createHash('sha256').update(readFileSync(new URL(source.file, folder))).digest('hex'), source.sha256)
+  }
+  for (const slug of ['ifrc-ebola-supplier-payments', 'hrw-sldp-syria-procurement', 'irc-syria-procurement-settlement']) {
+    const item = getCaseCard(slug)
+    assert.ok(item, slug)
+    const source = manifest.sources.find(source => source.url === item.primarySourceFile.url)
+    assert.ok(source)
+    assert.equal(item.primarySourceFile.sha256, source.sha256)
+    assert.equal(item.fixtureSnapshot.asOf, source.retrievedAt)
+    assert.equal(item.recordKind, 'fixture')
+    assert.equal(item.publicationState, 'awaiting_founder_freeze')
+    assert.equal(item.readiness, null)
+    assert.equal(item.frozenRecord, null)
+    assert.equal(item.snapshotHash, null)
+    assert.equal(item.packsHash, null)
+    assert.equal(item.packsStamped, false)
+    assert.equal(isDonorPackId(item.packsInForce[0].packId), false)
+    assert.match(item.packsInForce[0].name, /proposed/)
+    assert.equal(item.patternTickets.every(ticket => ticket.ruleId === null && ticket.status === 'stub'), true)
+    for (const field of item.fixtureSnapshot.fields) {
+      assert.equal(field.provenance.sourceFileHash, source.sha256)
+      assert.notEqual(field.value.state, 'negative')
+    }
+  }
+  assert.match(getCaseCard('hrw-sldp-syria-procurement').lede, /HRW is the research publisher/)
+  assert.match(getCaseCard('irc-syria-procurement-settlement').lede, /civil settlement, not a criminal verdict/)
+})
+
 test('the public Togo card publishes the founder Freeze #1', () => {
   assert.ok(card)
-  assert.equal(listCaseCards().length, 6)
+  assert.equal(listCaseCards().length, 9)
   const draft = gfOig25005Draft()
   const published = publishCaseCard(draft)
   const record = verifyFrozenRecord(published.frozenRecord)
@@ -344,8 +378,10 @@ test('pattern tickets cite pack rules that exist, except the forensic non-equiva
   const tickets = listPatternTickets()
   const byPack = new Map()
   for (const ticket of tickets) {
-    if (!byPack.has(ticket.packId)) byPack.set(ticket.packId, new Set(getDonorPack(ticket.packId).rules.map(rule => rule.ruleId)))
-    if (ticket.ruleId) assert.equal(byPack.get(ticket.packId).has(ticket.ruleId), true, ticket.ticketId)
+    if (ticket.ruleId) {
+      if (!byPack.has(ticket.packId)) byPack.set(ticket.packId, new Set(getDonorPack(ticket.packId).rules.map(rule => rule.ruleId)))
+      assert.equal(byPack.get(ticket.packId).has(ticket.ruleId), true, ticket.ticketId)
+    }
     assert.equal(ticket.status, 'stub')
   }
   const forensic = tickets.find(ticket => ticket.ticketId === 'pt:oios-2020-005:forensic-backlog-not-presignature')
@@ -394,6 +430,9 @@ test('each case card page has its own social metadata', () => {
   assert.equal(SITE_OG_TITLE, 'Trace-li — Prove the award before you sign it')
   assert.equal(SITE_OG_TITLE.includes('Traceli'), false)
   const images = {
+    'ifrc-ebola-supplier-payments': '/traceli-tender-to-proof-poster.png',
+    'hrw-sldp-syria-procurement': '/traceli-tender-to-proof-poster.png',
+    'irc-syria-procurement-settlement': '/traceli-tender-to-proof-poster.png',
     'gf-oig-25-005': '/research/global-fund/charts/06-value-chain-map.png',
     'unfpa-annex4-13-esa-ip': '/research/unfpa/charts/04-value-chain-map.png',
     'unfpa-annex4-21-arab-vendor': '/research/unfpa/charts/04-value-chain-map.png',
@@ -419,7 +458,7 @@ test('each case card page has its own social metadata', () => {
     assert.equal(social.image.url, images[card.slug])
     assert.equal(social.openGraph.images[0].url, images[card.slug])
     assert.equal(social.twitter.images[0].url, images[card.slug])
-    assert.match(social.image.alt, /^Trace-li value-chain map/)
+    assert.match(social.image.alt, /^Trace-li (value-chain map|fictional workflow illustration)/)
     assert.equal(existsSync(new URL(`../../public${social.image.url}`, import.meta.url)), true)
   }
 })

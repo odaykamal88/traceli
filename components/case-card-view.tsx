@@ -57,7 +57,7 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
         </section>
 
         <section className="mt-8" aria-labelledby="missing-heading">
-          <h2 id="missing-heading" className="text-sm font-semibold text-[#145246]">What the official record found</h2>
+          <h2 id="missing-heading" className="text-sm font-semibold text-[#145246]">What the source found</h2>
           <p className="mt-2 text-lg leading-8 text-[#24343a]">
             <Reader text={officialFinding} seen={seen} />
           </p>
@@ -128,7 +128,7 @@ export function CaseCardView({ card }: { card: CaseCardExport }) {
             </section>
 
             <section aria-labelledby="record-official-heading">
-              <h3 id="record-official-heading" className="text-sm font-semibold">What the official record says</h3>
+              <h3 id="record-official-heading" className="text-sm font-semibold">What the source says</h3>
               <p className="mt-2 text-sm leading-6 text-[#24343a]">
                 <Stored text={card.narrative.officialRecord} seen={seen} />
               </p>

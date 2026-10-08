@@ -17,6 +17,10 @@ export const STATED_ABSENT_REASON_PREFIX = 'Stated absent in this packet'
  * pattern-ticket title. Presentation only. Do not copy these into pack rules.
  */
 export const fieldLabelMap: Record<string, string> = {
+  'research.source_status': 'Source and procedural status',
+  'research.payment_finding': 'Supplier payments described in the source',
+  'research.review_scope': 'Scope of the research',
+  'research.settlement_amount': 'Agreed civil settlement',
   'audit.procurement_controls_rating': 'Procurement and financial controls rating',
   'audit.sample_scope': 'Audit sample',
   'audit.estimated_loss_usd': 'Estimated loss stated in the report',

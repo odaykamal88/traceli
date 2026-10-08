@@ -1,7 +1,17 @@
 export const CASE_CARD_ORIGIN = 'https://www.trace-li.com'
 export const CASE_CARD_SOCIAL_DESCRIPTION_LIMIT = 200
 
+const RESEARCH_FIXTURE_IMAGE = {
+  url: '/traceli-tender-to-proof-poster.png',
+  width: 1280,
+  height: 720,
+  alt: 'Trace-li fictional workflow illustration; not a photograph or record of this case.',
+} as const
+
 const CASE_CARD_IMAGES = {
+  'ifrc-public-source-review': RESEARCH_FIXTURE_IMAGE,
+  'hrw-sldp-public-source-review': RESEARCH_FIXTURE_IMAGE,
+  'irc-public-source-review': RESEARCH_FIXTURE_IMAGE,
   'global-fund': {
     url: '/research/global-fund/charts/06-value-chain-map.png',
     width: 2430,
