@@ -18,7 +18,9 @@ Keep body copy at 16–20 px with comfortable line height. Use mono for concise 
 
 ## Hierarchy, spacing and shape
 
-The first screen has a short category, one promise, one supporting sentence and one dominant file-discussion action. The film is the secondary action. Following the user's 9 October request for institutional weight and less outer whitespace, use a shared 1800 px frame for the header, introduction and experience strip, with 20–48 px side gutters. At wide desktop sizes, the film occupies slightly more than half the frame and the headline grows to 104 px. Keep explanatory text limited to 540 px; scale presence through typography and the film rather than more copy. Use 40–80 px section padding and 32–64 px between text and media. Use 6 px action corners and 12 px media corners, with a simple border and no floating-card shadow.
+The first screen has a short category, one promise, one supporting sentence and one dominant file-discussion action. The film is the secondary action. All landing-page regions—header, hero, experience strip, research, cases, outcomes, FAQ, documentation, pilot panel and footer—must use the same 1800 px outer frame and 20/32/48 px inner gutters at phone/tablet/desktop sizes. Put horizontal gutters inside the frame, never on the section outside it. Use shared desktop columns for the hero, research, cases and FAQ so the transition between sections follows one grid. Individual paragraphs may have narrower reading measures; they do not change the section's alignment.
+
+Use one content-section spacing rule: 48/64/80 px vertical padding at phone/tablet/desktop sizes, with height driven by content rather than a hero-specific minimum. The experience strip and footer are compact bands with 32–40 px padding. At wide desktop sizes, the film occupies slightly more than half the frame and the headline grows to 104 px. Keep explanatory text limited to 540 px; scale presence through typography and the film rather than more copy. Use 32–64 px between text and media, 6 px action corners and 12 px media corners, with a simple border and no floating-card shadow.
 
 Pilot scope, data-route qualification, source cases and professional experience follow the hook. A native disclosure reveals pilot details. Existing institutional marks retain their provenance qualifier and sit below the primary introduction.
 
@@ -48,4 +50,4 @@ Do not: autoplay a competing film beside a paragraph of instructions, add multip
 
 ## Verification
 
-Check the first screen at desktop and mobile widths, keyboard open/close and focus restoration, Escape/backdrop dismissal, media cleanup, disclosure behavior, loading/error text, and no MP4 request before opening. Run type-check, production build and the existing production smoke check. Record release evidence in the PR and dated audit notes.
+Check the complete page at desktop and mobile widths, including every section transition, shared left/right bounds and desktop columns. First-screen-only review is insufficient. Check keyboard open/close and focus restoration, Escape/backdrop dismissal, media cleanup, disclosure behavior, loading/error text, and no MP4 request before opening. Run type-check, production build and the existing production smoke check. Record release evidence in the PR and dated audit notes.
