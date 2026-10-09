@@ -15,3 +15,9 @@ The user requested a clearer first-screen hook and an expandable film, with [Bra
 ## Scope
 
 Changes are limited to the introduction, film interaction and their design guidance. The existing research, case sources, professional-experience qualifiers and server authorization behavior remain intact. No new quantitative product claim or affiliation is introduced.
+
+## Institutional-presence refinement
+
+After the first deployment, the user requested less outer whitespace and more institutional weight in the first impression. The header, introduction and experience strip now share an 1800 px frame. At 1920 × 1080, the introduction begins 108 px from the edge and the film preview measures approximately 852 px wide; the former 1280 px frame would begin at 368 px and provide a 564 px film. The headline scales to 104 px on wide screens. The category uses the established “Award assurance for donor-funded procurement” statement. The film has a simple 12 px border radius without the floating shadow; the primary action uses a restrained 6 px radius. Experience qualifiers remain explicit and are more readable.
+
+Verified the production build at 1920 × 1080, 1440 × 900, 1024 × 768, 390 × 844 and 320 × 740. All fit without horizontal overflow. Wide and standard desktop headlines retain two deliberate lines. At 390 px, the whole preview and its action remain within the initial viewport. The narrowest phone stacks navigation and allows readable headline wrapping. The film's keyboard-open, playback and Escape/focus-return behavior was rechecked. Type-check, production build and the existing local smoke checks passed.

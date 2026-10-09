@@ -53,10 +53,10 @@ export function LandingFilm({ open, onOpen, onClose }: {
         aria-label="Watch the 55-second Traceli film in a larger player"
         aria-haspopup="dialog"
         aria-controls="landing-film"
-        className="group block w-full overflow-hidden rounded-[22px] border border-white/20 bg-[#081f2e] text-left shadow-[0_20px_60px_rgba(0,0,0,0.16)] transition-colors hover:border-white/45 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#78d8c4]"
+        className="group block w-full overflow-hidden rounded-xl border border-white/25 bg-[#081f2e] text-left transition-colors hover:border-white/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#78d8c4]"
       >
         <div className="relative aspect-video">
-          <Image src={filmPoster} alt="Illustrative award file with the award rationale marked as missing" width={1920} height={1080} priority sizes="(min-width: 1024px) 50vw, 100vw" className="h-full w-full object-contain" />
+          <Image src={filmPoster} alt="Illustrative award file with the award rationale marked as missing" width={1920} height={1080} preload sizes="(min-width: 1800px) 852px, (min-width: 1024px) 52vw, 100vw" className="h-full w-full object-contain" />
           <span className="absolute bottom-4 right-4" aria-hidden="true">
             <span className="flex size-12 items-center justify-center rounded-full border border-white/60 bg-[#fbf5ea] text-[#071d39] shadow-lg transition-colors group-hover:bg-white sm:size-14">
               <Play className="ml-0.5 size-5 fill-current" />

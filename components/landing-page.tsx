@@ -199,7 +199,7 @@ export default function LandingPage() {
       <a href="#main-content" className="sr-only z-[80] rounded-lg bg-[#fbf5ea] px-4 py-2 text-[#071d39] focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to main content</a>
 
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061a33]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-x-3 gap-y-3 px-4 py-3 sm:gap-5 sm:px-8 sm:py-4 lg:flex-nowrap lg:px-12">
+        <div className="mx-auto flex max-w-[1800px] flex-wrap items-center justify-between gap-x-3 gap-y-3 px-5 py-3 sm:gap-5 sm:px-8 sm:py-4 lg:flex-nowrap lg:px-12">
           <Link href="/" aria-label="Traceli home"><TraceliMark /></Link>
           <nav aria-label="Public navigation" className="flex items-center gap-1.5 sm:gap-3 lg:gap-5">
             <Link href="/insights" className="hidden whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Research</Link>
@@ -214,7 +214,7 @@ export default function LandingPage() {
           </nav>
         </div>
         <nav aria-label="Mobile public navigation" className="overflow-x-auto border-t border-white/10 sm:hidden">
-          <div className="mx-auto flex min-w-max max-w-[1500px] items-center gap-5 px-4 py-2.5 text-xs font-medium text-white/58">
+          <div className="mx-auto flex min-w-max max-w-[1800px] items-center gap-5 px-5 py-2.5 text-xs font-medium text-white/65">
             <Link href="/insights" className="py-1 hover:text-white">Research</Link>
             <Link href="/docs" className="py-1 hover:text-white">Documentation</Link>
           </div>
@@ -223,18 +223,18 @@ export default function LandingPage() {
 
       <main id="main-content">
         <section aria-labelledby="landing-heading" className="border-b border-white/10 bg-[#061a33]">
-          <div className="mx-auto grid max-w-[1280px] items-center gap-8 px-5 py-10 sm:gap-10 sm:px-8 sm:py-16 lg:min-h-[610px] lg:grid-cols-[1fr_1fr] lg:gap-14 lg:px-12 lg:py-20">
-            <div className="max-w-[540px]">
-              <p className="font-mono text-[11px] font-medium uppercase leading-5 tracking-[0.14em] text-[#78d8c4]">For donor-funded procurement</p>
-              <h1 id="landing-heading" className="mt-5 text-balance font-display text-[clamp(2.75rem,5.7vw,5.25rem)] leading-[0.98] tracking-[-0.035em] text-[#fbf5ea]">
+          <div className="mx-auto grid max-w-[1800px] items-center gap-8 px-5 py-10 sm:gap-10 sm:px-8 sm:py-16 lg:min-h-[620px] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-12 lg:px-12 xl:gap-16 xl:py-20 2xl:min-h-[700px]">
+            <div className="min-w-0">
+              <p className="max-w-[540px] font-mono text-[11px] font-medium uppercase leading-5 tracking-[0.1em] text-white/75 sm:text-xs">Award assurance for donor-funded procurement</p>
+              <h1 id="landing-heading" className="mt-5 text-balance font-display text-[clamp(2.75rem,5.7vw,5.25rem)] leading-[0.98] tracking-[-0.035em] text-[#fbf5ea] lg:text-[clamp(3rem,5.5vw,6.5rem)]">
                 Be ready to
                 <span className="block">explain the award.</span>
               </h1>
-              <p className="mt-6 max-w-[490px] text-base leading-7 text-white/75 sm:text-lg">
+              <p className="mt-6 max-w-[540px] text-base leading-7 text-white/75 sm:text-lg 2xl:text-xl 2xl:leading-8">
                 Traceli connects the rules, evidence and human decisions behind one procurement file—so you can see what’s missing and prepare for review.
               </p>
               <div className="mt-8">
-                <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-12 items-center gap-4 rounded-xl bg-[#fbf5ea] px-5 py-3 text-sm font-semibold text-[#071d39] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#78d8c4]">
+                <a href={bookingHref} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center gap-6 rounded-md bg-[#fbf5ea] px-6 py-3 text-sm font-semibold text-[#071d39] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#78d8c4]">
                   Discuss one file
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </a>
@@ -247,11 +247,11 @@ export default function LandingPage() {
             <LandingFilm open={filmOpen} onOpen={() => setFilmOpen(true)} onClose={() => setFilmOpen(false)} />
           </div>
 
-          <div className="mx-auto max-w-[1500px] border-t border-white/10 px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
+          <div className="mx-auto max-w-[1800px] border-t border-white/10 px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
             <div className="grid gap-7 lg:grid-cols-[280px_1fr] lg:items-center lg:gap-12">
               <div className="max-w-[270px]">
                 <p className="font-display text-[1.7rem] leading-[1.02] tracking-[-0.025em] text-[#fbf5ea]">Built by the people from</p>
-                <p className="mt-3 text-[10px] leading-5 text-white/42">Individual prior experience—not customers, partners or endorsements.</p>
+                <p className="mt-3 text-xs leading-5 text-white/65">Individual prior experience—not customers, partners or endorsements.</p>
               </div>
               <ul aria-label="Organizations where the Traceli team has prior professional experience" className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/14 bg-white/14 shadow-[0_14px_38px_rgba(0,0,0,0.12)] sm:grid-cols-5">
                 {experienceMarks.map(({ name, src, className }) => (
