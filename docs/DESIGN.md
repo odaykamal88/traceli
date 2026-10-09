@@ -18,7 +18,7 @@ Keep body copy at 16–20 px with comfortable line height. Use mono for concise 
 
 ## Hierarchy, spacing and shape
 
-The first screen has a short category, one promise, one supporting sentence and one dominant file-discussion action. The film is the secondary action. Use a centered content width of 1280 px, 20–48 px side gutters, 40–80 px section padding and 32–64 px between text and media. Limit the first-screen copy width to 540 px. Use 12 px action corners and 20–24 px media corners; use borders rather than decorative glows.
+The first screen has a short category, one promise, one supporting sentence and one dominant file-discussion action. The film is the secondary action. Following the user's 9 October request for institutional weight and less outer whitespace, use a shared 1800 px frame for the header, introduction and experience strip, with 20–48 px side gutters. At wide desktop sizes, the film occupies slightly more than half the frame and the headline grows to 104 px. Keep explanatory text limited to 540 px; scale presence through typography and the film rather than more copy. Use 40–80 px section padding and 32–64 px between text and media. Use 6 px action corners and 12 px media corners, with a simple border and no floating-card shadow.
 
 Pilot scope, data-route qualification, source cases and professional experience follow the hook. A native disclosure reveals pilot details. Existing institutional marks retain their provenance qualifier and sit below the primary introduction.
 
