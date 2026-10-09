@@ -68,10 +68,10 @@ Traceli's public value story follows an evidence ladder:
 
 Present measured facts, customer inputs, scenario assumptions, and public consequence examples as visually distinct evidence types. Never place a headline recovery amount beside the pilot price in a way that implies causation or guaranteed avoidance. Do not publish a generic ROI percentage, payback period, `typical finding cost`, `one finding pays`, or `cheap insurance` claim without an approved methodology and evidence under [ROI_VALUE_CASE.md](./ROI_VALUE_CASE.md).
 
-## The 10/44/90 interaction rule
+## The first-screen, film and guided-demo interaction rule
 
 - The first viewport earns attention in ten seconds: one promise, one supporting sentence, one dominant pilot action, and one secondary proof-film action.
-- The 44-second film shows one deterministic tender-to-proof story. The deeper workspace remains available for a guided ninety-second journey after the buyer names a relevant tender or proof gap.
+- The current 55-second promotional film is the asset approved and deployed on 6 October 2026. It opens on request from a still preview. The deeper workspace remains available for a guided ninety-second journey after the buyer names a relevant tender or proof gap.
 - Avoid carousels, competing dashboards, or explanations that duplicate the product visual.
 - Start the walkthrough from a clean tender workspace. Show information appearing only when the corresponding action occurs.
 - End with a low-friction pilot request: `Test one completed tender.` The retrospective pilot tests whether the organization can reconstruct an accepted Award Assurance Pack before Traceli accompanies a live award.

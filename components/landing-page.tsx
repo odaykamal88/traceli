@@ -2,25 +2,22 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import {
   ArrowRight,
   BadgeCheck,
-  Clock3,
   ExternalLink,
   FileInput,
   Fingerprint,
   GitBranch,
   ListChecks,
-  Pause,
-  Play,
-  RotateCcw,
   ScanSearch,
   Waypoints,
   type LucideIcon,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { LandingFilm } from '@/components/landing-film'
 
 const bookingHref = 'https://cal.com/oqemal/30min'
 
@@ -195,43 +192,7 @@ function TraceliMark({ compact = false }: { compact?: boolean }) {
 }
 
 export default function LandingPage() {
-  const filmRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [filmPlaying, setFilmPlaying] = useState(false)
-
-  useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    videoRef.current?.pause()
-    setFilmPlaying(false)
-  }, [])
-
-  const startFilm = () => {
-    const video = videoRef.current
-    if (video) {
-      video.currentTime = 0
-      void video.play()
-    }
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    filmRef.current?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' })
-  }
-
-  const toggleFilm = () => {
-    const video = videoRef.current
-    if (!video) return
-
-    if (video.paused) {
-      void video.play()
-    } else {
-      video.pause()
-    }
-  }
-
-  const replayFilm = () => {
-    const video = videoRef.current
-    if (!video) return
-    video.currentTime = 0
-    void video.play()
-  }
+  const [filmOpen, setFilmOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-[#061a33] text-[#fbf5ea]">
@@ -246,9 +207,9 @@ export default function LandingPage() {
             <Link href="/login" className="inline-flex min-h-11 items-center whitespace-nowrap rounded-xl border border-white/18 px-3 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08] sm:px-4">
               Login
             </Link>
-            <Link href="/demo" className="group inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-xl border border-white/18 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-white transition hover:border-[#78d8c4]/55 hover:bg-white/[0.08] sm:gap-3 sm:px-4">
+            <Link href="/demo" className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-medium text-white/75 transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#78d8c4]">
               Open demo
-              <ArrowRight className="hidden size-4 transition-transform group-hover:translate-x-0.5 sm:block" aria-hidden="true" />
+              <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
             </Link>
           </nav>
         </div>
@@ -261,73 +222,29 @@ export default function LandingPage() {
       </header>
 
       <main id="main-content">
-        <section className="relative isolate overflow-hidden border-b border-white/10">
-          <Image src="/traceli-proof-console-bg.png" alt="" fill priority sizes="100vw" aria-hidden="true" className="pointer-events-none -z-10 object-cover opacity-80" />
-          <div className="mx-auto grid max-w-[1500px] items-center gap-12 px-5 py-14 sm:px-8 sm:py-18 lg:min-h-[720px] lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:px-12 lg:py-20">
-            <div className="max-w-[650px]">
-              <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#78d8c4]/35 bg-[#0a2b46]/70 px-3 py-1.5 font-mono text-[9px] font-semibold uppercase leading-4 tracking-[0.12em] text-[#8be1cf] sm:text-[10px] sm:tracking-[0.16em]">
-                <span className="size-1.5 shrink-0 rounded-full bg-[#78d8c4]" aria-hidden="true" />
-                For procurement and assurance teams accountable for donor-funded awards
-              </div>
-              <h1 className="mt-7 font-display text-[clamp(3rem,6.8vw,7.2rem)] leading-[0.88] tracking-[-0.035em] text-[#fbf5ea]">
+        <section aria-labelledby="landing-heading" className="border-b border-white/10 bg-[#061a33]">
+          <div className="mx-auto grid max-w-[1280px] items-center gap-8 px-5 py-10 sm:gap-10 sm:px-8 sm:py-16 lg:min-h-[610px] lg:grid-cols-[1fr_1fr] lg:gap-14 lg:px-12 lg:py-20">
+            <div className="max-w-[540px]">
+              <p className="font-mono text-[11px] font-medium uppercase leading-5 tracking-[0.14em] text-[#78d8c4]">For donor-funded procurement</p>
+              <h1 id="landing-heading" className="mt-5 text-balance font-display text-[clamp(2.75rem,5.7vw,5.25rem)] leading-[0.98] tracking-[-0.035em] text-[#fbf5ea]">
                 Be ready to
                 <span className="block">explain the award.</span>
               </h1>
-              <p className="mt-7 max-w-[570px] text-lg leading-8 text-white/66 sm:text-xl">
-                We help procurement and grant teams reconstruct the evidence behind an award, identify missing records, and prepare a source-linked file for review. Start with one completed procurement file, the question it needs to answer, and the date the answer is due. We can then agree the scope, evidence deliverable and review responsibilities.
+              <p className="mt-6 max-w-[490px] text-base leading-7 text-white/75 sm:text-lg">
+                Traceli connects the rules, evidence and human decisions behind one procurement file—so you can see what’s missing and prepare for review.
               </p>
-              <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#fbf5ea] px-6 py-3.5 text-sm font-semibold text-[#071d39] shadow-[0_14px_34px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:bg-white">
-                  Discuss one procurement file
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <div className="mt-8">
+                <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-12 items-center gap-4 rounded-xl bg-[#fbf5ea] px-5 py-3 text-sm font-semibold text-[#071d39] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#78d8c4]">
+                  Discuss one file
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </a>
-                <button type="button" onClick={startFilm} className="group inline-flex min-h-12 items-center gap-3 px-2 text-sm font-semibold text-white/78 transition hover:text-white">
-                  <Play className="size-3.5 fill-current" aria-hidden="true" />
-                  See the 55-second proof path
-                </button>
               </div>
-              <p className="mt-6 flex max-w-[600px] items-start gap-2 text-xs leading-5 text-white/42"><Clock3 className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />A bounded six-week paid pilot. Your existing process remains authoritative, and no sensitive files move before the data route is agreed.</p>
+              <details className="mt-5 max-w-[460px] text-sm leading-6 text-white/70">
+                <summary className="w-fit cursor-pointer rounded-sm py-1 underline decoration-white/30 underline-offset-4 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#78d8c4]">How the pilot works</summary>
+                <p className="mt-3">Start with one completed procurement file, the question it needs to answer, and your review date. We agree a bounded six-week paid pilot. Your existing process remains authoritative, and no sensitive files move before the data route is agreed.</p>
+              </details>
             </div>
-
-            <div id="walkthrough" ref={filmRef} className="scroll-mt-28">
-              <div className="relative overflow-hidden rounded-[24px] border border-white/20 bg-[#f8f4eb] shadow-[0_28px_90px_rgba(5,18,37,0.45)]">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  poster="/trace-li-promo-1080-poster.png"
-                  aria-label="Traceli promotional video"
-                  onCanPlay={(event) => {
-                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && event.currentTarget.paused) {
-                      void event.currentTarget.play()
-                    }
-                  }}
-                  onPlay={() => setFilmPlaying(true)}
-                  onPause={() => setFilmPlaying(false)}
-                  className="aspect-video w-full bg-[#f8f4eb] object-cover"
-                >
-                  <source src="/trace-li-promo-1080.mp4" type="video/mp4" />
-                </video>
-
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#061a33]/72 to-transparent" aria-hidden="true" />
-                <div className="absolute left-3 top-3 rounded-full border border-white/45 bg-[#061a33]/72 px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.13em] text-white backdrop-blur-md sm:left-4 sm:top-4">
-                  Product film · 55 sec
-                </div>
-                <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 sm:inset-x-4 sm:bottom-4">
-                  <button type="button" onClick={toggleFilm} aria-label={filmPlaying ? 'Pause product film' : 'Play product film'} className="flex size-11 items-center justify-center rounded-full border border-white/25 bg-[#061a33]/82 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-[#071d39]">
-                    {filmPlaying ? <Pause className="size-4 fill-current" aria-hidden="true" /> : <Play className="ml-0.5 size-4 fill-current" aria-hidden="true" />}
-                  </button>
-                  <button type="button" onClick={replayFilm} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/25 bg-[#061a33]/82 px-4 text-[11px] font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-[#071d39]">
-                    <RotateCcw className="size-3.5" aria-hidden="true" />
-                    Start again
-                  </button>
-                </div>
-              </div>
-              <p className="mt-3 text-center text-[10px] leading-4 text-white/38">Illustrative product film. Tender and supplier data shown are fictional.</p>
-            </div>
+            <LandingFilm open={filmOpen} onOpen={() => setFilmOpen(true)} onClose={() => setFilmOpen(false)} />
           </div>
 
           <div className="mx-auto max-w-[1500px] border-t border-white/10 px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
