@@ -20,6 +20,9 @@ import { cn } from '@/lib/utils'
 import { LandingFilm } from '@/components/landing-film'
 
 const bookingHref = 'https://cal.com/oqemal/30min'
+const landingFrame = 'mx-auto w-full max-w-[1800px] px-5 sm:px-8 lg:px-12'
+const sectionSpacing = 'py-12 sm:py-16 lg:py-20'
+const splitColumns = 'grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-12 xl:gap-16'
 
 const outcomes: Array<{
   title: string
@@ -199,7 +202,7 @@ export default function LandingPage() {
       <a href="#main-content" className="sr-only z-[80] rounded-lg bg-[#fbf5ea] px-4 py-2 text-[#071d39] focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to main content</a>
 
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061a33]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1800px] flex-wrap items-center justify-between gap-x-3 gap-y-3 px-5 py-3 sm:gap-5 sm:px-8 sm:py-4 lg:flex-nowrap lg:px-12">
+        <div className={cn(landingFrame, 'flex flex-wrap items-center justify-between gap-x-3 gap-y-3 py-3 sm:gap-5 sm:py-4 lg:flex-nowrap')}>
           <Link href="/" aria-label="Traceli home"><TraceliMark /></Link>
           <nav aria-label="Public navigation" className="flex items-center gap-1.5 sm:gap-3 lg:gap-5">
             <Link href="/insights" className="hidden whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-white/62 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Research</Link>
@@ -214,7 +217,7 @@ export default function LandingPage() {
           </nav>
         </div>
         <nav aria-label="Mobile public navigation" className="overflow-x-auto border-t border-white/10 sm:hidden">
-          <div className="mx-auto flex min-w-max max-w-[1800px] items-center gap-5 px-5 py-2.5 text-xs font-medium text-white/65">
+          <div className={cn(landingFrame, 'flex min-w-max items-center gap-5 py-2.5 text-xs font-medium text-white/65')}>
             <Link href="/insights" className="py-1 hover:text-white">Research</Link>
             <Link href="/docs" className="py-1 hover:text-white">Documentation</Link>
           </div>
@@ -223,7 +226,7 @@ export default function LandingPage() {
 
       <main id="main-content">
         <section aria-labelledby="landing-heading" className="border-b border-white/10 bg-[#061a33]">
-          <div className="mx-auto grid max-w-[1800px] items-center gap-8 px-5 py-10 sm:gap-10 sm:px-8 sm:py-16 lg:min-h-[620px] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-12 lg:px-12 xl:gap-16 xl:py-20 2xl:min-h-[700px]">
+          <div className={cn(landingFrame, sectionSpacing, splitColumns, 'items-center')}>
             <div className="min-w-0">
               <p className="max-w-[540px] font-mono text-[11px] font-medium uppercase leading-5 tracking-[0.1em] text-white/75 sm:text-xs">Award assurance for donor-funded procurement</p>
               <h1 id="landing-heading" className="mt-5 text-balance font-display text-[clamp(2.75rem,5.7vw,5.25rem)] leading-[0.98] tracking-[-0.035em] text-[#fbf5ea] lg:text-[clamp(3rem,5.5vw,6.5rem)]">
@@ -247,7 +250,7 @@ export default function LandingPage() {
             <LandingFilm open={filmOpen} onOpen={() => setFilmOpen(true)} onClose={() => setFilmOpen(false)} />
           </div>
 
-          <div className="mx-auto max-w-[1800px] border-t border-white/10 px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
+          <div className={cn(landingFrame, 'border-t border-white/10 py-8 lg:py-10')}>
             <div className="grid gap-7 lg:grid-cols-[280px_1fr] lg:items-center lg:gap-12">
               <div className="max-w-[270px]">
                 <p className="font-display text-[1.7rem] leading-[1.02] tracking-[-0.025em] text-[#fbf5ea]">Built by the people from</p>
@@ -270,8 +273,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section aria-labelledby="featured-research-heading" className="border-b border-[#d8d5cc] bg-[#e4ede7] px-5 py-14 text-[#071d39] sm:px-8 lg:px-12 lg:py-20">
-          <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <section aria-labelledby="featured-research-heading" className="border-b border-[#d8d5cc] bg-[#e4ede7] text-[#071d39]">
+          <div className={cn(landingFrame, sectionSpacing, splitColumns, 'items-center')}>
             <div className="max-w-lg">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Featured research · Before You Sign</p>
               <h2 id="featured-research-heading" className="mt-5 font-display text-5xl leading-[0.98] tracking-[-0.025em] sm:text-6xl">The award was signed. The proof was not ready.</h2>
@@ -285,9 +288,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section aria-labelledby="case-evidence-heading" className="border-b border-[#d8d5cc] bg-[#f7f3eb] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
-          <div className="mx-auto max-w-[1320px]">
-            <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <section aria-labelledby="case-evidence-heading" className="border-b border-[#d8d5cc] bg-[#f7f3eb] text-[#071d39]">
+          <div className={cn(landingFrame, sectionSpacing)}>
+            <div className={splitColumns}>
               <div className="max-w-xl">
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Public award-assurance cases</p>
                 <h2 id="case-evidence-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">When award proof breaks down.</h2>
@@ -311,8 +314,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section aria-labelledby="outcomes-heading" className="bg-[#eef2ed] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
-          <div className="mx-auto max-w-[1320px]">
+        <section aria-labelledby="outcomes-heading" className="bg-[#eef2ed] text-[#071d39]">
+          <div className={cn(landingFrame, sectionSpacing)}>
             <div className="max-w-3xl">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">How Traceli supports your award process</p>
               <h2 id="outcomes-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">Make proof a condition of award readiness.</h2>
@@ -334,8 +337,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section aria-labelledby="faq-heading" className="border-t border-[#d8d5cc] bg-[#f7f3eb] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
-          <div className="mx-auto grid max-w-[1320px] gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+        <section aria-labelledby="faq-heading" className="border-t border-[#d8d5cc] bg-[#f7f3eb] text-[#071d39]">
+          <div className={cn(landingFrame, sectionSpacing, splitColumns)}>
             <div className="max-w-lg">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">FAQ</p>
               <h2 id="faq-heading" className="mt-4 font-display text-5xl leading-[0.96] tracking-[-0.025em] sm:text-6xl">What accountable teams ask first.</h2>
@@ -355,8 +358,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="border-y border-white/10 bg-[#071d39] px-5 py-16 sm:px-8 lg:px-12 lg:py-20">
-          <div className="mx-auto grid max-w-[1320px] gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+        <section className="border-y border-white/10 bg-[#071d39]">
+          <div className={cn(landingFrame, sectionSpacing, 'grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center')}>
             <div className="max-w-3xl">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#78d8c4]">Documentation</p>
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">Inspect the control model, evidence and boundaries.</h2>
@@ -369,22 +372,24 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="bg-[#f7f3eb] px-5 py-20 text-[#071d39] sm:px-8 lg:px-12 lg:py-28">
-          <div className="mx-auto max-w-[1060px] rounded-[30px] bg-[#dff1eb] px-6 py-12 text-center sm:px-10 lg:px-16 lg:py-16">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Founding paid pilot</p>
-            <h2 className="mx-auto mt-4 max-w-3xl font-display text-5xl leading-[0.94] tracking-[-0.025em] sm:text-6xl">Bring one completed tender.</h2>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#52696a]">In a six-week retrospective, reconstruct the rules-to-award evidence chain, expose missing proof and test whether an independent reviewer can defend the decision.</p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#071d39] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0d3057]">Test one completed tender<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></a>
-              <Link href="/demo" className="inline-flex min-h-14 items-center px-5 py-3.5 text-sm font-semibold text-[#1f6f61] transition hover:text-[#124c43]">Open Award desk</Link>
+        <section className="bg-[#f7f3eb] text-[#071d39]">
+          <div className={cn(landingFrame, sectionSpacing)}>
+            <div className="rounded-[30px] bg-[#dff1eb] px-6 py-12 text-center sm:px-10 lg:px-16 lg:py-16">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2f8876]">Founding paid pilot</p>
+              <h2 className="mx-auto mt-4 max-w-3xl font-display text-5xl leading-[0.94] tracking-[-0.025em] sm:text-6xl">Bring one completed tender.</h2>
+              <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#52696a]">In a six-week retrospective, reconstruct the rules-to-award evidence chain, expose missing proof and test whether an independent reviewer can defend the decision.</p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a href={bookingHref} target="_blank" rel="noreferrer" className="group inline-flex min-h-14 items-center gap-4 rounded-xl bg-[#071d39] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(7,29,57,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0d3057]">Test one completed tender<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></a>
+                <Link href="/demo" className="inline-flex min-h-14 items-center px-5 py-3.5 text-sm font-semibold text-[#1f6f61] transition hover:text-[#124c43]">Open Award desk</Link>
+              </div>
+              <p className="mx-auto mt-5 max-w-2xl text-xs leading-5 text-[#52696a]">No sensitive document enters Traceli until the NDA, data classification, approved transfer route and security gate are agreed.</p>
             </div>
-            <p className="mx-auto mt-5 max-w-2xl text-xs leading-5 text-[#52696a]">No sensitive document enters Traceli until the NDA, data classification, approved transfer route and security gate are agreed.</p>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/10 bg-[#061a33] px-5 py-8 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1320px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="border-t border-white/10 bg-[#061a33] py-8">
+        <div className={cn(landingFrame, 'flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between')}>
           <TraceliMark compact />
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45"><Link href="/login" className="hover:text-white">Login</Link><Link href="/docs" className="hover:text-white">Documentation</Link><Link href="/cases" className="hover:text-white">Case cards</Link><Link href="/research/global-fund" className="hover:text-white">Global Fund research</Link><Link href="/research/unfpa" className="hover:text-white">UNFPA research</Link><Link href="/research/ocha-cbpf" className="hover:text-white">OCHA research</Link><Link href="/demo" className="hover:text-white">Award desk</Link><Link href="/method" className="hover:text-white">How Trace reasons</Link><a href="mailto:hello@trace-li.com" className="hover:text-white">hello@trace-li.com</a><span>Award assurance for donor-funded procurement</span></div>
         </div>
