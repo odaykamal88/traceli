@@ -1,10 +1,10 @@
 # Sources — OCHA CBPF research
 
-Every quantitative or status claim in [Reserve allocation without a pre-selection freeze.](/research/ocha-cbpf) maps to a primary locator below. OIOS 2025/098 and 2020/005 were downloaded as PDFs and read with `pdftotext -layout` on 24 Sep 2026 (Africa/Cairo). OIOS 2017/014 is noted separately under retrieval.
+Every quantitative or status claim in [Reserve allocation without a pre-selection freeze.](/research/ocha-cbpf) maps to a primary locator below. OIOS 2025/098 and 2020/005 were downloaded as PDFs and read with `pdftotext -layout` on 24 Sep 2026 (Africa/Cairo). OIOS 2017/014 is noted separately under retrieval. On 11 Oct 2026, the full 2025/098 PDF was downloaded again and the selection paragraphs checked visually; its SHA-256 matched the retained 24 Sep file. Fletcher’s 24 Aug 2026 statement was read directly on OCHA’s publication page on 11 Oct 2026.
 
 ---
 
-## Primary PDFs
+## Primary sources
 
 | ID | Title (short) | Date | Type | URL |
 |---|---|---|---|---|
@@ -16,6 +16,7 @@ Every quantitative or status claim in [Reserve allocation without a pre-selectio
 | Annex 7 | Eligibility Guidance Note | With the Dec 2022 guidelines | Annex | https://www.unocha.org/attachments/5e9f8327-9919-4896-bbef-ebe44935323c/Annex%207.%20Eligibility%20Guidance%20Note.pdf |
 | Annex 8 | Non-Compliance Measures | With the Dec 2022 guidelines | Annex | https://www.unocha.org/attachments/6025a8e8-9ca2-45d6-94aa-781aa9465d0f/Annex%208.%20Non-Compliance%20Measures.pdf |
 | Annex 9 | Partner Guidance Note on Financial Misconduct | With the Dec 2022 guidelines | Annex | https://www.unocha.org/attachments/e8c29e0d-4625-48e8-8ae5-a41ac411df28/Annex%209.%20CBPF%20Partner%20Guidance%20Note%20on%20Financial%20Misconduct.pdf |
+| Fletcher, 24 Aug 2026 | Security Council briefing on the humanitarian situation in Ukraine | 24 Aug 2026 | Official as-delivered statement; reporting context | https://www.unocha.org/publications/report/ukraine/mr-tom-fletcher-under-secretary-general-humanitarian-affairs-and-emergency-relief-coordinator-briefing-security-council-humanitarian-situation-ukraine-24-august-2026 |
 
 Landing page for 2025/098: https://oios.un.org/en/audit-management-and-oversight-country-based-pooled-funds-office-coordination-humanitarian-affairs
 
@@ -61,6 +62,14 @@ Landing page for 2025/098: https://oios.un.org/en/audit-management-and-oversight
 | C-19 | As of November 2025, **3,938** projects launched between 2016 and 2023 were at various stages of closure in OneGMS, **35 per cent** of the projects launched in that period | ¶34 and Table 1 | Closure backlog. Not a fraud stock |
 | C-20 | The Secretariat, including OCHA, did not have a formal procedure for sanctioning partners, nor a procedure for sharing information on non-performing or non-compliant partners with other United Nations system organizations. In 2024 the Board of Auditors recommended the Secretariat strengthen such information sharing. OCHA, with other Secretariat entities, was working on such arrangements | ¶37 | Information-sharing gap. Do not invent a UN partner-sanctions list. “Working on” ≠ done |
 | C-21 | PFMB managed a database of suspected and confirmed fraud cases and updated the Board of Auditors, relevant donors, and the Pooled Fund Working Group | ¶37 | A database of cases is not a sanctions regime |
+
+### Current reporting context — OCHA, 24 August 2026
+
+| Claim ID | Statement | Locator | Qualification |
+|---|---|---|---|
+| F-01 | Fletcher called for unified donor tracking to replace parallel reporting | As-delivered Ukraine briefing, paragraph beginning “Ukraine is a strong model” | Reporting priority, not a mandate for a new pre-award product, a procurement rule or an endorsement |
+| F-02 | Reusing a selection record might reduce repeated evidence requests | Trace-li proposal in the new current-context section | Pilot hypothesis. No measured saving or OCHA implementation is claimed |
+| F-03 | OIOS report issued 30 Dec 2025; publicly available 30 Jan 2026 | Report cover; OIOS landing page “Date available” | Issue and public availability are distinct dates |
 
 ### Iraq — OIOS 2020/005
 

@@ -1,0 +1,26 @@
+{
+  "retrievedOn": "2026-10-11",
+  "sources": [
+    {
+      "id": "src:oios-2025-098",
+      "url": "https://oios.un.org/system/files/confidential-files/Reports/2025_098_pd.pdf",
+      "file": "2025_098_pd.pdf",
+      "sha256": "720f0c73cc971e60523c1bd39b5949fedb664429dde172f4a0a45a3e4b8e02f8",
+      "reviewedLocators": [
+        "Executive summary",
+        "paragraph 25",
+        "paragraphs 31\u201332",
+        "paragraph 37"
+      ],
+      "method": "Official OIOS page and linked full PDF; extracted text and visually checked PDF pages 9\u201310. Hash matches original September source."
+    },
+    {
+      "id": "src:ocha-fletcher-2026-08-24",
+      "url": "https://www.unocha.org/publications/report/ukraine/mr-tom-fletcher-under-secretary-general-humanitarian-affairs-and-emergency-relief-coordinator-briefing-security-council-humanitarian-situation-ukraine-24-august-2026",
+      "publishedOn": "2026-08-24",
+      "method": "Official OCHA rendered publication read directly",
+      "locator": "As-delivered statement, paragraph beginning Ukraine is a strong model",
+      "use": "Reporting context; connection to reusable selection evidence is labelled Trace-li proposal."
+    }
+  ]
+}
