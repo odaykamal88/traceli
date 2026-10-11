@@ -108,9 +108,9 @@ export function oios2025098FixtureSnapshot(): AwardRegistrySnapshot {
 export function oios2025098Draft(): CaseCardDraft {
   return {
     slug: SLUG,
-    title: 'CBPF reserve pre-selection and scorecards, OIOS 2025/098',
+    title: 'The partner was selected. Could the file explain why?',
     lede:
-      'OIOS 2025/098 found reserve pre-selection justifications and project scorecards missing from the CBPF file. This card publishes the founder desk freeze of a thin rehearsal packet: evidence requested, readiness red, 20 findings, and no pack fields mapped from the file.',
+      'A reserve allocation moves aid quickly. The next reviewer still needs to see why that partner was chosen. OIOS found that basis undocumented in 5 of 10 single-source reserve allocations reviewed. Oversight was rated effective overall. The red readiness result below is a Trace-li rehearsal, not an OCHA rating.',
     caseId: 'case:oios-2025-098-cbpf-reserve',
     packScope: 'finding-slice',
     findings: [
@@ -125,8 +125,15 @@ export function oios2025098Draft(): CaseCardDraft {
         findingId: 'finding:oios-2025-098:scorecard',
         title: 'Scorecards or alternative selection documents were missing',
         summary:
-          'Project scorecards or alternative project selection documents were missing for 2 standard-allocation projects and 11 reserve-allocation projects. OCHA indicated that project scorecards were not mandatory under reserve allocations. OCHA also accepted a OneGMS feature that would upload mandatory project scorecards before projects are recommended for funding. Accepted is not in force.',
+          'In a sample of 60 projects, scorecards or alternative selection documents were missing for 2 of 35 standard projects and 11 of 25 reserve projects. OCHA said reserve scorecards were not mandatory. It accepted a future OneGMS feature for uploading mandatory scorecards before funding recommendation; the audit does not establish implementation.',
         sourceLabel: 'OIOS 2025/098 ¶31–32',
+      },
+      {
+        findingId: 'finding:oios-2025-098:selection-mismatch',
+        title: 'A recommendation could differ from the score without an explanation',
+        summary:
+          'OIOS found some mismatches between review-committee project scores and the partners recommended for selection, without documented justification. It gives no count. The missing explanation weakens the decision record; it does not establish that the selected partner was ineligible or that the award was improper.',
+        sourceLabel: 'OIOS 2025/098 ¶32',
       },
       {
         findingId: 'finding:oios-2025-098:no-list',
@@ -138,15 +145,15 @@ export function oios2025098Draft(): CaseCardDraft {
     ],
     narrative: {
       officialRecord:
-        'On 30 December 2025 OIOS published the audit of management and oversight of country-based pooled funds, report 2025/098, assignment AN2024-590-02. The audit period is 1 January 2023 to 31 December 2024. OIOS’s overall opinion is that management and oversight mechanisms were effective, and that they needed strengthening in transparency of partner selection and in the completeness of selection and pre-selection documents.',
+        'OIOS rated OCHA’s pooled-fund oversight effective overall, while finding gaps in the record of why partners and projects were selected. Report 2025/098 was issued on 30 December 2025 and made publicly available on 30 January 2026. It covers 1 January 2023 to 31 December 2024. These are grant partner and project selections, distinct from supplier procurement.',
       whatWasMissing:
-        'This slice is the reserve pre-selection justification, the scorecard or alternative selection document, and the OneGMS selection record those documents would occupy. The published freeze is a thin rehearsal of that slice on the OCHA CBPF pack: no pack field was mapped from the packet. The overall “effective” opinion stays in view. A missing document is not a finding that the project was wrongly chosen.',
+        'The selection basis was undocumented in 5 of 10 single-source reserve allocations; selection documents were missing for 11 of 25 reserve projects and 2 of 35 standard projects reviewed; OCHA said reserve scorecards were not mandatory. OIOS also found unexplained differences between committee scores and recommended partners, without giving a count. Missing evidence does not establish an improper award. The separate Trace-li founder freeze is a thin rehearsal with no pack fields mapped from its packet.',
       whatFollowed:
-        'Recommendations 2 and 3 were accepted. OCHA said it would keep monitoring reserve pre-selection and would introduce OneGMS features for allocation strategies and for scorecards before recommendation. This card does not report those features as implemented.',
+        'OCHA accepted recommendations 2 and 3: strengthen selection monitoring, store allocation strategies centrally, and record selection decisions in OneGMS. Its response proposed OneGMS features for allocation strategies and for uploading mandatory scorecards before funding recommendation. Acceptance is recorded at the report date; later implementation or closure has not been established here.',
       assuranceQuestion:
-        'Before a reserve allocation is signed, can a reviewer open the pre-selection justification, the scorecard or alternative selection document, and the OneGMS selection record?',
+        'Before recommending funding, can the financing unit show why each partner was invited, open the scorecard or alternative selection record, and explain any departure from committee scores? Can the next reviewer retrieve that same record without rebuilding the decision?',
       whereTraceLiFits:
-        'The CBPF pack checks those fields, and it requires the Secretariat partner-sanctions regime to be recorded as none. The published freeze left every pack field unmapped, including modality and that regime. Nothing here says Trace-li would have prevented an allocation. These funds are not Trace-li clients.',
+        'The CBPF checklist brings the selection basis, supporting evidence and reviewer decision into one review record. The published rehearsal left every checklist field unmapped; its red status describes that packet. In his 24 August 2026 Ukraine briefing, Tom Fletcher called for unified donor tracking to replace parallel reporting. Our proposed connection is a reusable selection record that reviewers can cite later. A pilot would need to test whether it reduces repeated evidence requests. His statement is reporting context, not an endorsement or a new selection rule. OCHA is not presented as a Trace-li client.',
     },
     patternTicketIds: [...TICKET_IDS],
     patternTickets: patternTicketsFor(TICKET_IDS),
@@ -157,7 +164,15 @@ export function oios2025098Draft(): CaseCardDraft {
         publisher: 'United Nations Office of Internal Oversight Services',
         url: OIOS_2025_098_PDF_URL,
         publishedOn: '2025-12-30',
-        locator: '¶25 reserve pre-selection; ¶31–32 scorecards; ¶37 sanctions procedure',
+        locator: 'Executive summary; ¶25; ¶31–32; ¶37; OIOS landing page for public availability date',
+      },
+      {
+        sourceId: 'src:ocha-fletcher-2026-08-24',
+        title: 'Tom Fletcher — Security Council briefing on the humanitarian situation in Ukraine',
+        publisher: 'United Nations Office for the Coordination of Humanitarian Affairs',
+        url: 'https://www.unocha.org/publications/report/ukraine/mr-tom-fletcher-under-secretary-general-humanitarian-affairs-and-emergency-relief-coordinator-briefing-security-council-humanitarian-situation-ukraine-24-august-2026',
+        publishedOn: '2026-08-24',
+        locator: 'As-delivered statement, paragraph beginning “Ukraine is a strong model”; unified donor tracking',
       },
     ],
     primarySourceFile: {
@@ -181,7 +196,7 @@ export function oios2025098Draft(): CaseCardDraft {
       ],
     },
     claimBoundary:
-      'Trace-li cites OIOS. This card is a pre-signature missing-evidence surface. It does not say Trace-li prevents fraud, does not certify a country-based pooled fund, and does not imply that OCHA is a customer or endorser. An audit is not a criminal verdict. An accepted recommendation is not an implemented control.',
+      'Trace-li cites OIOS. This card is a pre-signature missing-evidence surface. It does not say Trace-li prevents fraud, does not certify a country-based pooled fund, and does not imply that OCHA is a customer or endorser. An audit is not a criminal verdict. An accepted recommendation is not an implemented control. This is grant-selection assurance. Fletcher’s reporting proposal is context; any reduction in reporting work remains a pilot hypothesis.',
     fixtureSnapshot: oios2025098FixtureSnapshot(),
     frozenRecord: oios2025098FrozenRecord(),
   }

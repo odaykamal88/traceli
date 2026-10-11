@@ -1,6 +1,6 @@
 export const articleBodyHtml = `<div class="topbar">
     <div><strong>Trace-li</strong> &nbsp;·&nbsp; Research Desk</div>
-    <div>BEFORE YOU SIGN / OCHA RESEARCH &nbsp;·&nbsp; Public OIOS sources only</div>
+    <div>BEFORE YOU SIGN / OCHA RESEARCH &nbsp;·&nbsp; Public OIOS and OCHA sources</div>
   </div>
 
   <header class="hero-band">
@@ -8,7 +8,7 @@ export const articleBodyHtml = `<div class="topbar">
       <p class="kicker">OCHA · OIOS and CBPF · multi-case research</p>
       <h1>Reserve allocation without <span class="hl">a pre-selection freeze.</span></h1>
       <p class="subhead">Three public Office of Internal Oversight Services files on what has to be on the record before a Country-based Pooled Fund award — reserve pre-selection, the scorecard, and the forensic file that arrives after payment.</p>
-      <p class="byline"><strong>Trace-li Research Desk</strong> · 24 Sep 2026 · Africa/Cairo &nbsp;·&nbsp; Primary OIOS PDFs and CBPF Global Guidelines</p>
+      <p class="byline"><strong>Trace-li Research Desk</strong> · 24 Sep 2026 · Updated 11 Oct 2026 · Africa/Cairo &nbsp;·&nbsp; Primary OIOS and OCHA sources</p>
     </div>
   </header>
 
@@ -18,6 +18,7 @@ export const articleBodyHtml = `<div class="topbar">
       <ol>
         <li><a href="#lede">Lede</a></li>
         <li><a href="#method">Method &amp; hygiene</a></li>
+        <li><a href="#current-context">Fletcher’s reporting priority</a></li>
         <li><a href="#pattern">The pattern</a></li>
         <li><a href="#value-chain">Value chain</a></li>
         <li><a href="#reserve">Case 1 · Reserve</a></li>
@@ -68,6 +69,14 @@ export const articleBodyHtml = `<div class="topbar">
         A companion note on Global Fund files is <a href="/research/global-fund">The award was signed. The proof was not ready.</a>
         The UNFPA note is <a href="/research/unfpa">The workplan was signed. The competition file was not.</a>
         The published case card for <a href="/cases/oios-2025-098-cbpf-reserve">OIOS 2025/098</a> is founder Freeze #2, a thin rehearsal with no pack fields mapped from the packet. <a href="/cases/oios-2020-005-iraq-forensic">OIOS 2020/005</a> remains a fixture awaiting a founder freeze. The index is <a href="/cases">/cases</a>.
+      </p>
+
+      <h2 id="current-context">Fletcher’s reporting priority: one record the next reviewer can use</h2>
+      <p>
+        In his <a href="https://www.unocha.org/publications/report/ukraine/mr-tom-fletcher-under-secretary-general-humanitarian-affairs-and-emergency-relief-coordinator-briefing-security-council-humanitarian-situation-ukraine-24-august-2026" target="_blank" rel="noreferrer">24 August 2026 Security Council briefing on Ukraine</a>, Tom Fletcher called for unified donor tracking to replace parallel reporting. That gives this historical audit a current decision-maker’s question: can the selection record serve the next review without being assembled again?
+      </p>
+      <p>
+        The connection is Trace-li’s proposal, not a conclusion of the audit or an endorsement by Fletcher. Start with one reserve allocation: retain the partner-selection basis, supporting documents and the reviewer’s explanation of any departure from committee scores, then test whether later reviewers can retrieve and reuse that record with fewer repeated evidence requests. Reporting time saved is a pilot measure to establish, not a result already demonstrated. CBPF grant selection and supplier procurement have different rules; this case concerns the former.
       </p>
 
       <h2 id="pattern"><span class="secnum">03</span> The pattern across three audits</h2>
@@ -260,7 +269,7 @@ export const articleBodyHtml = `<div class="topbar">
 
       <h2 id="means"><span class="secnum">08</span> What this means for PFMB, financing units, and humanitarian coordinators</h2>
       <p>
-        These audits are public. They are not Trace-li clients. They are useful because reserve allocation is now the majority of CBPF funds, and the selection record is still the thing a later audit samples.
+        These audits are public. They are not Trace-li clients. They are useful because reserve allocations accounted for the majority of CBPF funds awarded in 2023 and 2024, and the selection record is still the thing a later audit samples.
       </p>
       <h3>Practical questions before the funding recommendation</h3>
       <ul class="q-list">
@@ -287,7 +296,7 @@ export const articleBodyHtml = `<div class="topbar">
       <div class="disclaimer">
         <h2>Disclaimer</h2>
         <ul>
-          <li><strong>Public OIOS reports and public Guidelines only.</strong> These cases are not Trace-li clients.</li>
+          <li><strong>Public OIOS reports, Guidelines and OCHA statements only.</strong> These cases are not Trace-li clients.</li>
           <li><strong>Audit ≠ criminal.</strong> None of these three reports is presented as a criminal verdict.</li>
           <li><strong>Missing document ≠ improper award.</strong> Undocumented pre-selection and a missing scorecard are file gaps. Incomplete file is not diversion.</li>
           <li><strong>“No evidence” is narrow.</strong> It is what OIOS reports for two completed Iraq forensic audits. It is not a conclusion about the other 33 cases.</li>
@@ -311,9 +320,10 @@ export const articleBodyHtml = `<div class="topbar">
             <a href="https://oios.un.org/file/6554/download?token=yRcDeSi3" target="_blank" rel="noreferrer">PDF link (404 on direct download, 24 Sep 2026)</a></li>
           <li>OCHA, <em>CBPF Global Guidelines</em> (updated December 2022) and Annexes 4, 7, 8 and 9.
             <a href="https://www.unocha.org/publications/report/world/country-based-pooled-funds-global-guidelines" target="_blank" rel="noreferrer">Guidelines page</a></li>
+          <li>OCHA, Tom Fletcher’s as-delivered Security Council briefing on Ukraine, 24 August 2026 — paragraph calling for unified donor tracking. <a href="https://www.unocha.org/publications/report/ukraine/mr-tom-fletcher-under-secretary-general-humanitarian-affairs-and-emergency-relief-coordinator-briefing-security-council-humanitarian-situation-ukraine-24-august-2026" target="_blank" rel="noreferrer">Statement</a>. Read on 11 Oct 2026; used as current reporting context.</li>
           <li>Companion notes: <a href="/research/global-fund">Global Fund</a>, <a href="/research/unfpa">UNFPA</a>. Published case card: <a href="/cases/oios-2025-098-cbpf-reserve">OIOS 2025/098</a>. Fixture case card: <a href="/cases/oios-2020-005-iraq-forensic">OIOS 2020/005</a>.</li>
         </ol>
-        <p>© Trace-li Research Desk · OCHA CBPF research · 24 Sep 2026 Africa/Cairo.</p>
+        <p>© Trace-li Research Desk · OCHA CBPF research · 24 Sep 2026 · Updated 11 Oct 2026 Africa/Cairo.</p>
       </div>
     </div>
   </div>`
